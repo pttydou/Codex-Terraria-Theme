@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-pirate-invasion",
+  "name": "Terraria · 海盗入侵",
+  "stylePreset": "terraria",
+  "variant": "pirate-invasion",
+  "brandSubtitle": "PIRATE INVASION",
+  "tagline": "海盗已经抵达，金币和炮火一同逼近。",
+  "projectPrefix": "选择甲板 · ",
+  "projectLabel": "选择甲板",
+  "statusText": "海盗入侵",
+  "quote": "THE PIRATES HAVE ARRIVED",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.46,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "torch": "torch.png",
+    "accent-1": "event-symbol.png",
+    "accent-2": "event-item.png",
+    "accent-3": "pirate-captain.apng",
+    "companion-pirate-deckhand": "companion-pirate-deckhand.apng",
+    "companion-pirate-corsair": "companion-pirate-corsair.apng",
+    "companion-pirate-deadeye": "companion-pirate-deadeye.apng",
+    "companion-pirate-crossbower": "companion-pirate-crossbower.apng",
+    "companion-pirate-captain": "companion-pirate-captain.apng",
+    "companion-parrot": "companion-parrot.apng",
+    "companion-flying-dutchman": "companion-flying-dutchman.apng",
+    "companion-pirate-s-curse": "companion-pirate-s-curse.apng",
+    "bg-primary": "background.png",
+    "bg-variant-ocean-1": "bg-variant-ocean-1.png",
+    "bg-variant-ocean-2": "bg-variant-ocean-2.png",
+    "bg-variant-ocean-3": "bg-variant-ocean-3.png",
+    "bg-variant-ocean-5": "bg-variant-ocean-5.png"
+  },
+  "companionPool": [
+    "companion-pirate-deckhand",
+    "companion-pirate-corsair",
+    "companion-pirate-deadeye",
+    "companion-pirate-crossbower",
+    "companion-pirate-captain",
+    "companion-parrot",
+    "companion-flying-dutchman",
+    "companion-pirate-s-curse"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#071724",
+    "panel": "#12344a",
+    "panelAlt": "#1e5266",
+    "accent": "#f2c45a",
+    "accentAlt": "#e8913f",
+    "secondary": "#63d8ea",
+    "highlight": "#7c3f2d",
+    "text": "#fff4d8",
+    "muted": "#c7d4d5",
+    "line": "rgba(242, 196, 90, .56)"
+  },
+  "companionWeights": {
+    "companion-pirate-deckhand": 55,
+    "companion-pirate-corsair": 55,
+    "companion-pirate-deadeye": 55,
+    "companion-pirate-crossbower": 55,
+    "companion-pirate-captain": 25,
+    "companion-parrot": 55,
+    "companion-flying-dutchman": 10,
+    "companion-pirate-s-curse": 100
+  },
+  "musicPool": [
+    "pirate-invasion"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-ocean-1",
+    "bg-variant-ocean-2",
+    "bg-variant-ocean-3",
+    "bg-variant-ocean-5"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-invasion"
+  ]
+}

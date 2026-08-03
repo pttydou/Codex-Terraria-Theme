@@ -1,0 +1,1812 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-21T02:56:56.313Z",
+  "source": "https://terraria.wiki.gg/wiki/Items",
+  "behavior": "Four fixed environment-specific item icons; no timed card rotation.",
+  "themes": {
+    "forest-day": {
+      "name": "Terraria · 森林",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "橡实",
+          "sourceFile": "Acorn.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Acorn.png",
+          "file": "card-explore.png",
+          "bytes": 211,
+          "sha256": "2f57d1dc0b6de0481dfbff95daf62eab344464b129a779bfe43e4603d9865f60"
+        },
+        {
+          "role": "build",
+          "zhName": "太阳花",
+          "sourceFile": "Daybloom.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Daybloom.png",
+          "file": "card-build.png",
+          "bytes": 146,
+          "sha256": "3c928834791311ab63e18c82aea4b6249377a31fec48437e8c27c7d8a1111293"
+        },
+        {
+          "role": "review",
+          "zhName": "木材",
+          "sourceFile": "Wood.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Wood.png",
+          "file": "card-review.png",
+          "bytes": 186,
+          "sha256": "27f0eb420c3548763472a95d80e1404bc6dac34257d78dea320126d922d305dc"
+        },
+        {
+          "role": "fix",
+          "zhName": "凝胶",
+          "sourceFile": "Gel.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Gel.png",
+          "file": "card-fix.png",
+          "bytes": 156,
+          "sha256": "1f101b8efc90501f0ff5bda1da3f31f0b5b15708d247705347c0cb1dd9089d2c"
+        }
+      ]
+    },
+    "cavern": {
+      "name": "Terraria · 洞穴",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "生命水晶",
+          "sourceFile": "Life_Crystal.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Life_Crystal.png",
+          "file": "card-explore.png",
+          "bytes": 253,
+          "sha256": "082dd48011c2b6d7e7977b2d7e0e351e457794803ac90c72fb556d7587530ddb"
+        },
+        {
+          "role": "build",
+          "zhName": "金矿",
+          "sourceFile": "Gold_Ore.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Gold_Ore.png",
+          "file": "card-build.png",
+          "bytes": 188,
+          "sha256": "f1c3d0de206c8e3f2f465bdcd9f4343d3c0a272c43dac1c48845bcc76fcb62ac"
+        },
+        {
+          "role": "review",
+          "zhName": "回忆药水",
+          "sourceFile": "Recall_Potion.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Recall_Potion.png",
+          "file": "card-review.png",
+          "bytes": 241,
+          "sha256": "3224478aca3c737b4773704fcd276db3e5c88eaab846b2bfa1481005a44a2aa0"
+        },
+        {
+          "role": "fix",
+          "zhName": "魔镜",
+          "sourceFile": "Magic_Mirror.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Magic_Mirror.png",
+          "file": "card-fix.png",
+          "bytes": 255,
+          "sha256": "32a7456d237743bb13db242f837d7d5a357024af9524008058eda063c0a76589"
+        }
+      ]
+    },
+    "space": {
+      "name": "Terraria · 太空",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "坠落之星",
+          "sourceFile": "Fallen_Star.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Fallen_Star.png",
+          "file": "card-explore.png",
+          "bytes": 243,
+          "sha256": "76a33a8194a5c0b17440848e736be2c11d25596dd12fe0a15ef425f2cb8af619"
+        },
+        {
+          "role": "build",
+          "zhName": "太空枪",
+          "sourceFile": "Space_Gun.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Space_Gun.png",
+          "file": "card-build.png",
+          "bytes": 286,
+          "sha256": "e03c48d47c502d1863a12fcc9df61455fa91bf8005902537bc16e12b8a229c7d"
+        },
+        {
+          "role": "review",
+          "zhName": "陨石锭",
+          "sourceFile": "Meteorite_Bar.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Meteorite_Bar.png",
+          "file": "card-review.png",
+          "bytes": 217,
+          "sha256": "7f6d8db1a3a45e97c0a6caa8d2c30c20a04257f26084dae5249131a3cba6b59a"
+        },
+        {
+          "role": "fix",
+          "zhName": "星怒",
+          "sourceFile": "Starfury.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Starfury.png",
+          "file": "card-fix.png",
+          "bytes": 337,
+          "sha256": "1ab471cf15b573b23d4b073d513b493e7b23c02e158a9b6470ad763a6b74dd72"
+        }
+      ]
+    },
+    "underworld": {
+      "name": "Terraria · 地狱",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "狱石",
+          "sourceFile": "Hellstone.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Hellstone.png",
+          "file": "card-explore.png",
+          "bytes": 171,
+          "sha256": "e1403bce8b3860b6a815a5a10749822a7813c4b3a6a9cef00f4fb2ed835fb150"
+        },
+        {
+          "role": "build",
+          "zhName": "黑曜石",
+          "sourceFile": "Obsidian.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Obsidian.png",
+          "file": "card-build.png",
+          "bytes": 178,
+          "sha256": "6989ea6246c1b555ae39629fc865091b5a941e18cb6d918a208744ea64541460"
+        },
+        {
+          "role": "review",
+          "zhName": "熔岩桶",
+          "sourceFile": "Lava_Bucket.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Lava_Bucket.png",
+          "file": "card-review.png",
+          "bytes": 581,
+          "sha256": "978ce7306f572da9cef1a23b930ac84c1654f8505fe0bc432a30945df9578be7"
+        },
+        {
+          "role": "fix",
+          "zhName": "向导巫毒娃娃",
+          "sourceFile": "Guide_Voodoo_Doll.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Guide_Voodoo_Doll.png",
+          "file": "card-fix.png",
+          "bytes": 281,
+          "sha256": "5d13ee895be748f6293944219d538f60d417beee74d0c93bbda3ecd2d1b99004"
+        }
+      ]
+    },
+    "crimson": {
+      "name": "Terraria · 猩红之地",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "组织样本",
+          "sourceFile": "Tissue_Sample.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Tissue_Sample.png",
+          "file": "card-explore.png",
+          "bytes": 194,
+          "sha256": "25b9a3ed2edf1a75ad465dcdb83cc52cd14ca5aafd4aff059b3534e99701111f"
+        },
+        {
+          "role": "build",
+          "zhName": "猩红矿锭",
+          "sourceFile": "Crimtane_Bar.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Crimtane_Bar.png",
+          "file": "card-build.png",
+          "bytes": 376,
+          "sha256": "1a541a53aa626b4e1e4d0307e406b56c010a37ae579ac2a11d43f1ed00360689"
+        },
+        {
+          "role": "review",
+          "zhName": "灵液",
+          "sourceFile": "Ichor.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Ichor.png",
+          "file": "card-review.png",
+          "bytes": 167,
+          "sha256": "0af8c7541acd8ac9274b9b6ddb3fb22ef92fc20f95fa63bd8a25ef623f60cbe5"
+        },
+        {
+          "role": "fix",
+          "zhName": "椎骨",
+          "sourceFile": "Vertebra.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Vertebra.png",
+          "file": "card-fix.png",
+          "bytes": 181,
+          "sha256": "c8849d967c94128eea0014737e584c5c806e1b85b2e7f263c388854314793981"
+        }
+      ]
+    },
+    "hallow": {
+      "name": "Terraria · 神圣之地",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "水晶碎块",
+          "sourceFile": "Crystal_Shard.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Crystal_Shard.png",
+          "file": "card-explore.png",
+          "bytes": 327,
+          "sha256": "7f11b17e959c2529114f26ccf0d927e2d333901818ac7fd36fdb84d8a8a262ca"
+        },
+        {
+          "role": "build",
+          "zhName": "妖精尘",
+          "sourceFile": "Pixie_Dust.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Pixie_Dust.png",
+          "file": "card-build.png",
+          "bytes": 185,
+          "sha256": "2bc0f1a188ba85d4967e05b7468937623a5b558f4c5a634c94e2cef0672a9872"
+        },
+        {
+          "role": "review",
+          "zhName": "独角兽角",
+          "sourceFile": "Unicorn_Horn.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Unicorn_Horn.png",
+          "file": "card-review.png",
+          "bytes": 119,
+          "sha256": "fabf8fd23095344624fbf3a88ddc857b20fd0b0c6e65ed05d387364cf8fd11a5"
+        },
+        {
+          "role": "fix",
+          "zhName": "光明之魂",
+          "sourceFile": "Soul_of_Light.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Soul_of_Light.png",
+          "file": "card-fix.png",
+          "bytes": 195,
+          "sha256": "e1b90e9f2e967f6f067f4987365224dd0c2bef19999137f7bf7a8f1bcc04cd91"
+        }
+      ]
+    },
+    "corruption": {
+      "name": "Terraria · 腐化之地",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "魔矿锭",
+          "sourceFile": "Demonite_Bar.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Demonite_Bar.png",
+          "file": "card-explore.png",
+          "bytes": 223,
+          "sha256": "adaf88b0ab8770feacdf8e00d3c08111a16abd64864dcb6b21e3c9c0a65ef543"
+        },
+        {
+          "role": "build",
+          "zhName": "腐肉",
+          "sourceFile": "Rotten_Chunk.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Rotten_Chunk.png",
+          "file": "card-build.png",
+          "bytes": 225,
+          "sha256": "14992ada5dfe846ce8721f9d404115904272e06237b845d702978acee67bd94f"
+        },
+        {
+          "role": "review",
+          "zhName": "诅咒焰",
+          "sourceFile": "Cursed_Flame.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Cursed_Flame.png",
+          "file": "card-review.png",
+          "bytes": 128,
+          "sha256": "8ab7cc7bf9c2f69697ce6baab6c74370d2b606f4682675a469a4ec41c70c2285"
+        },
+        {
+          "role": "fix",
+          "zhName": "蠕虫毒牙",
+          "sourceFile": "Worm_Tooth.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Worm_Tooth.png",
+          "file": "card-fix.png",
+          "bytes": 147,
+          "sha256": "18aef282fa14616fdb9157ba1ef398fdfe1507e5344fbd5573316cf4e5fbffb3"
+        }
+      ]
+    },
+    "jungle": {
+      "name": "Terraria · 丛林",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "丛林孢子",
+          "sourceFile": "Jungle_Spores.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Jungle_Spores.png",
+          "file": "card-explore.png",
+          "bytes": 157,
+          "sha256": "32b9872c31f7f1361aa0858dbf647faa4e9a8c8e8108759914a46a0f4f80006b"
+        },
+        {
+          "role": "build",
+          "zhName": "毒刺",
+          "sourceFile": "Stinger.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Stinger.png",
+          "file": "card-build.png",
+          "bytes": 148,
+          "sha256": "c4a180c1816d35f200da8f1e8c5993f32cd779857114e877d02ecfa64eaf7a37"
+        },
+        {
+          "role": "review",
+          "zhName": "生命果",
+          "sourceFile": "Life_Fruit.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Life_Fruit.png",
+          "file": "card-review.png",
+          "bytes": 227,
+          "sha256": "c1206ca5ed5d291f99c43548b97395c789b0cda23d02202be66a93c0323c1294"
+        },
+        {
+          "role": "fix",
+          "zhName": "藤蔓",
+          "sourceFile": "Vine.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Vine.png",
+          "file": "card-fix.png",
+          "bytes": 183,
+          "sha256": "33bc1154cfb11d902086658a28f11e9f311924e11d880f3647b0b012e177d4fa"
+        }
+      ]
+    },
+    "tundra": {
+      "name": "Terraria · 苔原",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "冰雪刃",
+          "sourceFile": "Ice_Blade.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Ice_Blade.png",
+          "file": "card-explore.png",
+          "bytes": 237,
+          "sha256": "b4fb719b02cbdf4eae19334b7e21c9b11f58faa61aff80fc7ddd14d5e497d9cf"
+        },
+        {
+          "role": "build",
+          "zhName": "冰冻箱",
+          "sourceFile": "Frozen_Chest.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Frozen_Chest.png",
+          "file": "card-build.png",
+          "bytes": 269,
+          "sha256": "ef479b790adc290959eec6c65e20484e1d0a51fa3e37b2b931efbf9d056cd22d"
+        },
+        {
+          "role": "review",
+          "zhName": "冰雪块",
+          "sourceFile": "Ice_Block.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Ice_Block.png",
+          "file": "card-review.png",
+          "bytes": 173,
+          "sha256": "ba1faddb77b217ebafa01c30881f54d3e82b803bc3471f721eacfc6a1a06aea0"
+        },
+        {
+          "role": "fix",
+          "zhName": "寒霜核",
+          "sourceFile": "Frost_Core.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Frost_Core.png",
+          "file": "card-fix.png",
+          "bytes": 172,
+          "sha256": "248d40563731fed60e0dfdd1260011b01455fc7d807d354218e18aef07a86779"
+        }
+      ]
+    },
+    "desert": {
+      "name": "Terraria · 沙漠",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "仙人掌",
+          "sourceFile": "Cactus.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Cactus.png",
+          "file": "card-explore.png",
+          "bytes": 119,
+          "sha256": "ca1334f93aff64ff553ca93083f9ea008dcdf8bf561a2f849af9099071836d86"
+        },
+        {
+          "role": "build",
+          "zhName": "沙暴瓶",
+          "sourceFile": "Sandstorm_in_a_Bottle.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Sandstorm_in_a_Bottle.png",
+          "file": "card-build.png",
+          "bytes": 198,
+          "sha256": "353b3b6c64b4a39b50518578f4c8fdb31c5437c7584b75bbd1e10fb964ca5fd3"
+        },
+        {
+          "role": "review",
+          "zhName": "蚁狮上颚",
+          "sourceFile": "Antlion_Mandible.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Antlion_Mandible.png",
+          "file": "card-review.png",
+          "bytes": 164,
+          "sha256": "e990dc67a711a1d44e136edaa9d1e8bdd1aac6bcbd8e794f8f5298c3dcf14567"
+        },
+        {
+          "role": "fix",
+          "zhName": "沙漠化石",
+          "sourceFile": "Desert_Fossil.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Desert_Fossil.png",
+          "file": "card-fix.png",
+          "bytes": 202,
+          "sha256": "017fb81f201a8974f3c2bb68a8b21346b4f07148ee15c6925caf83bcaa4119ad"
+        }
+      ]
+    },
+    "ocean": {
+      "name": "Terraria · 海洋",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "海星",
+          "sourceFile": "Starfish.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Starfish.png",
+          "file": "card-explore.png",
+          "bytes": 226,
+          "sha256": "53a9122fa2115afb0688dff4bfa09c1d54c006c4b24a25bf67bfae65cfbd9228"
+        },
+        {
+          "role": "build",
+          "zhName": "贝壳",
+          "sourceFile": "Seashell.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Seashell.png",
+          "file": "card-build.png",
+          "bytes": 178,
+          "sha256": "03919c7de5aad8256a5c104cafc3ae9a114822856b8fe8130e8b229ded22021e"
+        },
+        {
+          "role": "review",
+          "zhName": "珊瑚",
+          "sourceFile": "Coral.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Coral.png",
+          "file": "card-review.png",
+          "bytes": 196,
+          "sha256": "562e68ff8e4db0f7c87f76f1483ceaa1c4d1441c1fda224e4bc84e86772686b9"
+        },
+        {
+          "role": "fix",
+          "zhName": "鲨鱼鳍",
+          "sourceFile": "Shark_Fin.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Shark_Fin.png",
+          "file": "card-fix.png",
+          "bytes": 179,
+          "sha256": "bc752c5dd94bc24c2e026b56c9c84b67b628d50e3ae3d0845767cfbbdbb2761a"
+        }
+      ]
+    },
+    "glowing-mushroom": {
+      "name": "Terraria · 夜光蘑菇地",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "发光蘑菇",
+          "sourceFile": "Glowing_Mushroom.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Glowing_Mushroom.png",
+          "file": "card-explore.png",
+          "bytes": 216,
+          "sha256": "5553270314d8cc97eb5c470aded0fa2c9f77b7e1a9a15208edf0a4dae5b34b01"
+        },
+        {
+          "role": "build",
+          "zhName": "蘑菇草种子",
+          "sourceFile": "Mushroom_Grass_Seeds.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Mushroom_Grass_Seeds.png",
+          "file": "card-build.png",
+          "bytes": 157,
+          "sha256": "5820d125f51817c95263357b6799d4af61cffcf2caa4bff91be493501493f653"
+        },
+        {
+          "role": "review",
+          "zhName": "松露虫",
+          "sourceFile": "Truffle_Worm.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Truffle_Worm.png",
+          "file": "card-review.png",
+          "bytes": 228,
+          "sha256": "a443c283b397dd4ed71f9d2e84dac1e9da68d28cd3ee858ec51d28ea21c93a3b"
+        },
+        {
+          "role": "fix",
+          "zhName": "蘑菇矿锭",
+          "sourceFile": "Shroomite_Bar.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Shroomite_Bar.png",
+          "file": "card-fix.png",
+          "bytes": 221,
+          "sha256": "6a57e3de2e3bd2b52fec16d2d1d4eee942d7553056c8a1cc84b82df9ebdd6aaf"
+        }
+      ]
+    },
+    "dungeon": {
+      "name": "Terraria · 地牢",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "金钥匙",
+          "sourceFile": "Golden_Key.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Golden_Key.png",
+          "file": "card-explore.png",
+          "bytes": 165,
+          "sha256": "418b6eb56a65ae2b538ee7141ba27dae0d96720558d67cff52fb50dfb40b6e9b"
+        },
+        {
+          "role": "build",
+          "zhName": "水蜡烛",
+          "sourceFile": "Water_Candle.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Water_Candle.png",
+          "file": "card-build.png",
+          "bytes": 183,
+          "sha256": "69e22cd7a8983cfb0d6229563cf03e8a43aa6f23131b278b679e4b185ac753be"
+        },
+        {
+          "role": "review",
+          "zhName": "骨头",
+          "sourceFile": "Bone.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Bone.png",
+          "file": "card-review.png",
+          "bytes": 148,
+          "sha256": "c528c480d77e37ca44ca9a48db8a715a4876f88a78ae709a30db9cf1a911466c"
+        },
+        {
+          "role": "fix",
+          "zhName": "钴护盾",
+          "sourceFile": "Cobalt_Shield.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Cobalt_Shield.png",
+          "file": "card-fix.png",
+          "bytes": 271,
+          "sha256": "8dd3b0d49e412de49f3705a2c115f18a8e930e30f0d97981754a602629bcab80"
+        }
+      ]
+    },
+    "jungle-temple": {
+      "name": "Terraria · 丛林神庙",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "神庙钥匙",
+          "sourceFile": "Temple_Key.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Temple_Key.png",
+          "file": "card-explore.png",
+          "bytes": 233,
+          "sha256": "c54283bbf7824edd768559bdd5827b06748e7f3a335bd876d138b169c5ad705c"
+        },
+        {
+          "role": "build",
+          "zhName": "丛林蜥蜴电池",
+          "sourceFile": "Lihzahrd_Power_Cell.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Lihzahrd_Power_Cell.png",
+          "file": "card-build.png",
+          "bytes": 175,
+          "sha256": "c43b22bd77ba0a5c9f1f627f61ac540b1f8874092c635d3a4c995b8ac73e7e04"
+        },
+        {
+          "role": "review",
+          "zhName": "丛林蜥蜴砖",
+          "sourceFile": "Lihzahrd_Brick.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Lihzahrd_Brick.png",
+          "file": "card-review.png",
+          "bytes": 180,
+          "sha256": "f3e5d75c17d21ed38a4f008587bb7933780f6a4c398748db517c3ee120fe70d2"
+        },
+        {
+          "role": "fix",
+          "zhName": "日耀碑牌碎片",
+          "sourceFile": "Solar_Tablet_Fragment.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Solar_Tablet_Fragment.png",
+          "file": "card-fix.png",
+          "bytes": 207,
+          "sha256": "6a0cdf614f7001724043c8f311c6a747f0541161f81b6296e8c1a80ff860cf17"
+        }
+      ]
+    },
+    "blood-moon": {
+      "name": "Terraria · 血月",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "血泪",
+          "sourceFile": "Bloody_Tear.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Bloody_Tear.png",
+          "file": "card-explore.png",
+          "bytes": 255,
+          "sha256": "58fc98f76c7598bd705dade399d3e993492d504d6f4bd0eacc38c190953a226b"
+        },
+        {
+          "role": "build",
+          "zhName": "鱼饵桶",
+          "sourceFile": "Chum_Bucket.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Chum_Bucket.png",
+          "file": "card-build.png",
+          "bytes": 219,
+          "sha256": "ac5e5c3dbec37fe6dda5ecca9def3243942b87cdfbf5c846493f1d1014d21c59"
+        },
+        {
+          "role": "review",
+          "zhName": "吸血鬼青蛙法杖",
+          "sourceFile": "Vampire_Frog_Staff.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Vampire_Frog_Staff.png",
+          "file": "card-review.png",
+          "bytes": 283,
+          "sha256": "b1caa4c1c5bbfabaefa7417f622c616f199c712cf9eddefee7553ac71109f10e"
+        },
+        {
+          "role": "fix",
+          "zhName": "血月天塔柱",
+          "sourceFile": "Blood_Moon_Monolith.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Blood_Moon_Monolith.png",
+          "file": "card-fix.png",
+          "bytes": 221,
+          "sha256": "868d13a282b21082e18093a5f7ab67cc610db123b359ddb091c3e47790e63baa"
+        }
+      ]
+    },
+    "solar-eclipse": {
+      "name": "Terraria · 日食",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "断裂英雄剑",
+          "sourceFile": "Broken_Hero_Sword.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Broken_Hero_Sword.png",
+          "file": "card-explore.png",
+          "bytes": 244,
+          "sha256": "4ec239bc975418f7afa3d99cba27417d42960c50c2af3e82f41b084e790ad2d3"
+        },
+        {
+          "role": "build",
+          "zhName": "海神贝壳",
+          "sourceFile": "Neptune's_Shell.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Neptune's_Shell.png",
+          "file": "card-build.png",
+          "bytes": 260,
+          "sha256": "66b16fe8008d5e660dcbce3c492eb84e6b86d79f18ca793c0bdba1dbc9053d46"
+        },
+        {
+          "role": "review",
+          "zhName": "月亮石",
+          "sourceFile": "Moon_Stone.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Moon_Stone.png",
+          "file": "card-review.png",
+          "bytes": 269,
+          "sha256": "d152aeba55abff203688d6dc5b145719ca9b954f1b83ab59dbf7089ae4a7a3ad"
+        },
+        {
+          "role": "fix",
+          "zhName": "眼簧",
+          "sourceFile": "Eye_Spring.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Eye_Spring.png",
+          "file": "card-fix.png",
+          "bytes": 215,
+          "sha256": "4d2c9107ec4b93b05d3f6c49564bf5f99ea979bb394dee39810f77baaa6399c3"
+        }
+      ]
+    },
+    "goblin-invasion": {
+      "name": "Terraria · 哥布林入侵",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "尖球",
+          "sourceFile": "Spiky_Ball.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Spiky_Ball.png",
+          "file": "card-explore.png",
+          "bytes": 155,
+          "sha256": "b790b1dfc5e259cb78a6fd0e29fa88a40b226ea95cfcc78ac5a0031d2751522b"
+        },
+        {
+          "role": "build",
+          "zhName": "鱼叉枪",
+          "sourceFile": "Harpoon.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Harpoon.png",
+          "file": "card-build.png",
+          "bytes": 246,
+          "sha256": "64ad0fe518234d5ef0de5d2750ebea9062987a98ea975c2b43abdcfa0c3f3ff4"
+        },
+        {
+          "role": "review",
+          "zhName": "暗影焰刀",
+          "sourceFile": "Shadowflame_Knife.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Shadowflame_Knife.png",
+          "file": "card-review.png",
+          "bytes": 237,
+          "sha256": "06333d7662a974877b64d98604f653fc978e9579e4c57052cc0e8b08173be5d1"
+        },
+        {
+          "role": "fix",
+          "zhName": "破布",
+          "sourceFile": "Tattered_Cloth.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Tattered_Cloth.png",
+          "file": "card-fix.png",
+          "bytes": 223,
+          "sha256": "6eac1d29fed6ff5ab815af32472c39c29c1862c472b8f0482f993df0bc58aef3"
+        }
+      ]
+    },
+    "pirate-invasion": {
+      "name": "Terraria · 海盗入侵",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "海盗地图",
+          "sourceFile": "Pirate_Map.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Pirate_Map.png",
+          "file": "card-explore.png",
+          "bytes": 279,
+          "sha256": "3892331b6ca4f070560ff8daec962cefe1cbe0678b85d9b6b51dbd7d6bcae07a"
+        },
+        {
+          "role": "build",
+          "zhName": "金戒指",
+          "sourceFile": "Gold_Ring.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Gold_Ring.png",
+          "file": "card-build.png",
+          "bytes": 221,
+          "sha256": "8ad25d7344777861adae0dd173d70caccc17e47d10129093c51bb63ef9a66971"
+        },
+        {
+          "role": "review",
+          "zhName": "钱币枪",
+          "sourceFile": "Coin_Gun.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Coin_Gun.png",
+          "file": "card-review.png",
+          "bytes": 253,
+          "sha256": "ab9d37d3eae7475c0c76bc38966762b307bad6571d8025a167599a860c9cfb72"
+        },
+        {
+          "role": "fix",
+          "zhName": "短弯刀",
+          "sourceFile": "Cutlass.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Cutlass.png",
+          "file": "card-fix.png",
+          "bytes": 257,
+          "sha256": "715f38e7b19a1958f97bacc68a250ce0ee6287a2e9b43e2b3494854560e66005"
+        }
+      ]
+    },
+    "martian-invasion": {
+      "name": "Terraria · 火星人入侵",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "火星管道镀层",
+          "sourceFile": "Martian_Conduit_Plating.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Martian_Conduit_Plating.png",
+          "file": "card-explore.png",
+          "bytes": 141,
+          "sha256": "f3e0a118e284614669b0bd584a7b72ebeafcb655d16385505f31497af207d804"
+        },
+        {
+          "role": "build",
+          "zhName": "激光钻头",
+          "sourceFile": "Laser_Drill.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Laser_Drill.png",
+          "file": "card-build.png",
+          "bytes": 241,
+          "sha256": "d3b7352922e1f739fd44b595bf2d349fa7a48a1727ca03d3a40aaced702e630d"
+        },
+        {
+          "role": "review",
+          "zhName": "宇宙车钥匙",
+          "sourceFile": "Cosmic_Car_Key.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Cosmic_Car_Key.png",
+          "file": "card-review.png",
+          "bytes": 298,
+          "sha256": "09e9208519bfe9db55300b93cf18b68656ff96c58508c78e57f9997612bc3507"
+        },
+        {
+          "role": "fix",
+          "zhName": "外星霰弹枪",
+          "sourceFile": "Xenopopper.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Xenopopper.png",
+          "file": "card-fix.png",
+          "bytes": 313,
+          "sha256": "ae8ff69bd3eaeddfeaf8930b5a44c56adfc54b4286b1b4ccf61604b78f8ba74a"
+        }
+      ]
+    },
+    "aether": {
+      "name": "Terraria · 以太",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "无底微光桶",
+          "sourceFile": "Bottomless_Shimmer_Bucket.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Bottomless_Shimmer_Bucket.png",
+          "file": "card-explore.png",
+          "bytes": 296,
+          "sha256": "bd6c75f19faf413029b481e9aa36ac71e38740d417a6ed2595538e35ec83a168"
+        },
+        {
+          "role": "build",
+          "zhName": "以太火把",
+          "sourceFile": "Aether_Torch.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Aether_Torch.png",
+          "file": "card-build.png",
+          "bytes": 212,
+          "sha256": "20fa18365f487fc815d46a3c71aceb92c57591453f9e10c8ce9efde6559858a5"
+        },
+        {
+          "role": "review",
+          "zhName": "和谐杖",
+          "sourceFile": "Rod_of_Harmony.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Rod_of_Harmony.png",
+          "file": "card-review.png",
+          "bytes": 286,
+          "sha256": "d67924abe00e72a36dba9d4b3ec7d7dc6a682ef12f6b7c6e080110162ccd46ca"
+        },
+        {
+          "role": "fix",
+          "zhName": "珍馐",
+          "sourceFile": "Ambrosia.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Ambrosia.png",
+          "file": "card-fix.png",
+          "bytes": 299,
+          "sha256": "f4cf7b7a5c99ca19fb94abc484a222e7f5dc8b685a2bae0b6f4546c02e93a8f0"
+        }
+      ]
+    },
+    "graveyard": {
+      "name": "Terraria · 墓地",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "墓碑",
+          "sourceFile": "Tombstone.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Tombstone.png",
+          "file": "card-explore.png",
+          "bytes": 207,
+          "sha256": "434a59871f586ef10a357d5c38ac00f9bb875d5e5eeb24388721c72399593511"
+        },
+        {
+          "role": "build",
+          "zhName": "掘墓者铲子",
+          "sourceFile": "Gravedigger's_Shovel.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Gravedigger's_Shovel.png",
+          "file": "card-build.png",
+          "bytes": 268,
+          "sha256": "973a501570a45834edbbfba8ed052b1b070bdbf64b8be2c3855186934d2d2082"
+        },
+        {
+          "role": "review",
+          "zhName": "阿比盖尔的花",
+          "sourceFile": "Abigail's_Flower.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Abigail's_Flower.png",
+          "file": "card-review.png",
+          "bytes": 355,
+          "sha256": "a64bbf77fb3be1694535fbe2ad02c5b2d56b2a881b4d9c286aedb342ffc330e0"
+        },
+        {
+          "role": "fix",
+          "zhName": "棺材矿车",
+          "sourceFile": "Coffin_Minecart.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Coffin_Minecart.png",
+          "file": "card-fix.png",
+          "bytes": 265,
+          "sha256": "3acb246227a25e3aca95ba00747da2618996021670dc004dd775102a2c18bdd3"
+        }
+      ]
+    },
+    "pumpkin-moon": {
+      "name": "Terraria · 南瓜月",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "南瓜月勋章",
+          "sourceFile": "Pumpkin_Moon_Medallion.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Pumpkin_Moon_Medallion.png",
+          "file": "card-explore.png",
+          "bytes": 296,
+          "sha256": "b5f4af2be37ac1d9e47fdc50fe9fd0358c00f30dc9b5a337e2fc33141d2e5afc"
+        },
+        {
+          "role": "build",
+          "zhName": "阴森木",
+          "sourceFile": "Spooky_Wood.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Spooky_Wood.png",
+          "file": "card-build.png",
+          "bytes": 206,
+          "sha256": "70fd6b2d3536ec01f1125a6192d13197169f6bf7a343dc14917c0d26c76f5b7b"
+        },
+        {
+          "role": "review",
+          "zhName": "黑色仙尘",
+          "sourceFile": "Black_Fairy_Dust.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Black_Fairy_Dust.png",
+          "file": "card-review.png",
+          "bytes": 199,
+          "sha256": "d4c036756964105f281d66ad85c7cbf0101b933bb71f44efa0d8988751d4178b"
+        },
+        {
+          "role": "fix",
+          "zhName": "乌鸦法杖",
+          "sourceFile": "Raven_Staff.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Raven_Staff.png",
+          "file": "card-fix.png",
+          "bytes": 235,
+          "sha256": "c8da6b8574ca1e780a6fd3b14a48888e88e7d1c053b86ca7fc49ccc29d5be0a4"
+        }
+      ]
+    },
+    "frost-moon": {
+      "name": "Terraria · 霜月",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "调皮礼物",
+          "sourceFile": "Naughty_Present.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Naughty_Present.png",
+          "file": "card-explore.png",
+          "bytes": 242,
+          "sha256": "3758cd39beda15d888780c35bd8e9c9c0c0692759a6598092f474afe51359e6f"
+        },
+        {
+          "role": "build",
+          "zhName": "暴雪法杖",
+          "sourceFile": "Blizzard_Staff.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Blizzard_Staff.png",
+          "file": "card-build.png",
+          "bytes": 241,
+          "sha256": "ad42a961914cbb3cfff14278c383fd79957a00daf0d7bf59f6a6d0c045273d2e"
+        },
+        {
+          "role": "review",
+          "zhName": "链式机枪",
+          "sourceFile": "Chain_Gun.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Chain_Gun.png",
+          "file": "card-review.png",
+          "bytes": 355,
+          "sha256": "24692521a6502e257c47b5fb271f9fb7723a76c48eee75eb96845b4ed9aecb7d"
+        },
+        {
+          "role": "fix",
+          "zhName": "精灵熔枪",
+          "sourceFile": "Elf_Melter.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Elf_Melter.png",
+          "file": "card-fix.png",
+          "bytes": 614,
+          "sha256": "d7ea4dd6c8cadc66cea20b85ab05decfa4bc9d7f1812f88774c4d4bfd9fb542c"
+        }
+      ]
+    },
+    "lunar-solar": {
+      "name": "Terraria · 日耀柱",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "日耀碎片",
+          "sourceFile": "Solar_Fragment.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Solar_Fragment.png",
+          "file": "card-explore.png",
+          "bytes": 178,
+          "sha256": "937974981dc54e105c2f97f2ff67262419f6aad4aa782cbfa54c95b7cd2b2c9a"
+        },
+        {
+          "role": "build",
+          "zhName": "破晓之光",
+          "sourceFile": "Daybreak.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Daybreak.png",
+          "file": "card-build.png",
+          "bytes": 266,
+          "sha256": "afc9a3d377c2785069ccf27826c7a83e2f0cd6fcca714b2a3dae6ccfaf1278c2"
+        },
+        {
+          "role": "review",
+          "zhName": "日耀喷发剑",
+          "sourceFile": "Solar_Eruption.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Solar_Eruption.png",
+          "file": "card-review.png",
+          "bytes": 303,
+          "sha256": "dbdc7d89e5b95eb7f5987acc869d7619c6e493508f9f8aa344aee433b8c01ad5"
+        },
+        {
+          "role": "fix",
+          "zhName": "日耀碑牌",
+          "sourceFile": "Solar_Tablet.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Solar_Tablet.png",
+          "file": "card-fix.png",
+          "bytes": 285,
+          "sha256": "e69bb86e2fbe1821de90509779731add84882c08ca8245af6a18291266be3a97"
+        }
+      ]
+    },
+    "lunar-vortex": {
+      "name": "Terraria · 星旋柱",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "星旋碎片",
+          "sourceFile": "Vortex_Fragment.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Vortex_Fragment.png",
+          "file": "card-explore.png",
+          "bytes": 180,
+          "sha256": "4ed19a96bfb0e70b1a9ed9b99fba2443740d75b2df91d72d91f4fa26887cc138"
+        },
+        {
+          "role": "build",
+          "zhName": "星旋机枪",
+          "sourceFile": "Vortex_Beater.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Vortex_Beater.png",
+          "file": "card-build.png",
+          "bytes": 304,
+          "sha256": "f1a1acd781ee1faf726474112449851415a7908fac6badc37c49442a5b39e444"
+        },
+        {
+          "role": "review",
+          "zhName": "幻影弓",
+          "sourceFile": "Phantasm.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Phantasm.png",
+          "file": "card-review.png",
+          "bytes": 284,
+          "sha256": "4527afe358c433b24a7167e0dd9c6a218fdd0221f822f6e6868d165865601ae6"
+        },
+        {
+          "role": "fix",
+          "zhName": "星旋头盔",
+          "sourceFile": "Vortex_Helmet.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Vortex_Helmet.png",
+          "file": "card-fix.png",
+          "bytes": 220,
+          "sha256": "7c529b6ecbc6d181748c0cfacc062f11f64f440c6118c3ca2082c8bb800db676"
+        }
+      ]
+    },
+    "lunar-nebula": {
+      "name": "Terraria · 星云柱",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "星云碎片",
+          "sourceFile": "Nebula_Fragment.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Nebula_Fragment.png",
+          "file": "card-explore.png",
+          "bytes": 152,
+          "sha256": "252d4673db8a052b2e205c9b5cc001f4895a40d3010dd947d36dcb23647416e0"
+        },
+        {
+          "role": "build",
+          "zhName": "星云烈焰",
+          "sourceFile": "Nebula_Blaze.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Nebula_Blaze.png",
+          "file": "card-build.png",
+          "bytes": 232,
+          "sha256": "3f38745c93f4823b19f6d03480da2f86f34862f0fd6af64b5a9b8e43350985ab"
+        },
+        {
+          "role": "review",
+          "zhName": "星云奥秘",
+          "sourceFile": "Nebula_Arcanum.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Nebula_Arcanum.png",
+          "file": "card-review.png",
+          "bytes": 277,
+          "sha256": "ec97f5aca4f83664e82f9baf1f13cdd51d9760f59ce578141450ecde5682b723"
+        },
+        {
+          "role": "fix",
+          "zhName": "星云头盔",
+          "sourceFile": "Nebula_Helmet.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Nebula_Helmet.png",
+          "file": "card-fix.png",
+          "bytes": 225,
+          "sha256": "a19c252501226c0f348476e842464fad59f76c491ce518e4fc400d63a7a2accd"
+        }
+      ]
+    },
+    "lunar-stardust": {
+      "name": "Terraria · 星尘柱",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "星尘碎片",
+          "sourceFile": "Stardust_Fragment.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Stardust_Fragment.png",
+          "file": "card-explore.png",
+          "bytes": 165,
+          "sha256": "d796e526a0181b7c0f71c4f4d08d1d71e0ee060ba22e328725121c94ca33de1c"
+        },
+        {
+          "role": "build",
+          "zhName": "星尘之龙法杖",
+          "sourceFile": "Stardust_Dragon_Staff.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Stardust_Dragon_Staff.png",
+          "file": "card-build.png",
+          "bytes": 266,
+          "sha256": "51ddd47f142529a8b9bd1dd86c9b76326847268877ddba1deb79187d51c262a1"
+        },
+        {
+          "role": "review",
+          "zhName": "星尘细胞法杖",
+          "sourceFile": "Stardust_Cell_Staff.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Stardust_Cell_Staff.png",
+          "file": "card-review.png",
+          "bytes": 247,
+          "sha256": "defaec4bf5213aa8d8d89fce56ea10c9a99570bc2f73c51628fa075283d99a30"
+        },
+        {
+          "role": "fix",
+          "zhName": "星尘头盔",
+          "sourceFile": "Stardust_Helmet.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Stardust_Helmet.png",
+          "file": "card-fix.png",
+          "bytes": 212,
+          "sha256": "13f6451e7293cee86dc65f3aab3a0c3430689b583f1e5e2e87dede7231202266"
+        }
+      ]
+    },
+    "meteorite": {
+      "name": "Terraria · 陨石",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "陨石",
+          "sourceFile": "Meteorite.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Meteorite.png",
+          "file": "card-explore.png",
+          "bytes": 174,
+          "sha256": "219ec0212efc34074fdb59b9a6ce12b6ba060b95f04add68c1353204689d4544"
+        },
+        {
+          "role": "build",
+          "zhName": "陨石锭",
+          "sourceFile": "Meteorite_Bar.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Meteorite_Bar.png",
+          "file": "card-build.png",
+          "bytes": 217,
+          "sha256": "7f6d8db1a3a45e97c0a6caa8d2c30c20a04257f26084dae5249131a3cba6b59a"
+        },
+        {
+          "role": "review",
+          "zhName": "太空枪",
+          "sourceFile": "Space_Gun.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Space_Gun.png",
+          "file": "card-review.png",
+          "bytes": 286,
+          "sha256": "e03c48d47c502d1863a12fcc9df61455fa91bf8005902537bc16e12b8a229c7d"
+        },
+        {
+          "role": "fix",
+          "zhName": "流星法杖",
+          "sourceFile": "Meteor_Staff.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Meteor_Staff.png",
+          "file": "card-fix.png",
+          "bytes": 270,
+          "sha256": "adac2b7c622ac8e4e8d2884b4c9d91dd026a81d6919244ed925089fed37499ac"
+        }
+      ]
+    },
+    "spider-nest": {
+      "name": "Terraria · 蜘蛛洞",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "蜘蛛牙",
+          "sourceFile": "Spider_Fang.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Spider_Fang.png",
+          "file": "card-explore.png",
+          "bytes": 180,
+          "sha256": "6033da656eb3d26eee686b54feb45ab86c13fe4b0fa0af8c208818d65380f92f"
+        },
+        {
+          "role": "build",
+          "zhName": "蛛丝发射器",
+          "sourceFile": "Web_Slinger.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Web_Slinger.png",
+          "file": "card-build.png",
+          "bytes": 324,
+          "sha256": "7bef53ec009ec89605d680b150a4525a3a13fa922ba6db69b6b26b45e527f74f"
+        },
+        {
+          "role": "review",
+          "zhName": "毒液法杖",
+          "sourceFile": "Poison_Staff.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Poison_Staff.png",
+          "file": "card-review.png",
+          "bytes": 255,
+          "sha256": "1cedcbe8c20f85f4f119e6a7e653aec661df1b24c1c2ca219ebcb67a49d1b2fe"
+        },
+        {
+          "role": "fix",
+          "zhName": "蜘蛛法杖",
+          "sourceFile": "Spider_Staff.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Spider_Staff.png",
+          "file": "card-fix.png",
+          "bytes": 287,
+          "sha256": "c74a9dc6150ac3af8c6df6161cc2484a6118f9564434ec8d85353a3803073351"
+        }
+      ]
+    },
+    "bee-hive": {
+      "name": "Terraria · 蜂巢",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "蜂蜜块",
+          "sourceFile": "Honey_Block.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Honey_Block.png",
+          "file": "card-explore.png",
+          "bytes": 154,
+          "sha256": "6e6a03eea61d95d0f6d13da6b84a7892ef595bb595fe743c476360034a02e1f9"
+        },
+        {
+          "role": "build",
+          "zhName": "蜂窝",
+          "sourceFile": "Honey_Comb.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Honey_Comb.png",
+          "file": "card-build.png",
+          "bytes": 209,
+          "sha256": "1b647ea8f6409c181e495682461e88e02760d02a723b6629a17187a5952e45f6"
+        },
+        {
+          "role": "review",
+          "zhName": "蜜蜂枪",
+          "sourceFile": "Bee_Gun.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Bee_Gun.png",
+          "file": "card-review.png",
+          "bytes": 331,
+          "sha256": "ec86f32d217ae0aadbdc0a36b62656fe4770946546f8fa06b1194f824d6ebd94"
+        },
+        {
+          "role": "fix",
+          "zhName": "养蜂人",
+          "sourceFile": "Bee_Keeper.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Bee_Keeper.png",
+          "file": "card-fix.png",
+          "bytes": 525,
+          "sha256": "775cea8cb566998e42b63c68775156a410e08c3d7a58e73f787be2758ab1c526"
+        }
+      ]
+    },
+    "granite-cave": {
+      "name": "Terraria · 花岗岩洞",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "花岗岩块",
+          "sourceFile": "Granite_Block.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Granite_Block.png",
+          "file": "card-explore.png",
+          "bytes": 171,
+          "sha256": "7b06475c58b2bacb31788fb71c0821f906d0132c467bc68245261c5793b78106"
+        },
+        {
+          "role": "build",
+          "zhName": "晶洞",
+          "sourceFile": "Geode.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Geode.png",
+          "file": "card-build.png",
+          "bytes": 325,
+          "sha256": "22000b801682116aebb3f2403f8aed9c1d62638205c3726933ffc06a20129045"
+        },
+        {
+          "role": "review",
+          "zhName": "夜视头盔",
+          "sourceFile": "Night_Vision_Helmet.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Night_Vision_Helmet.png",
+          "file": "card-review.png",
+          "bytes": 209,
+          "sha256": "1b40914ddd502fd6366b2588f68e101419d2f6d508e5ce95d27e9a10a5f542ad"
+        },
+        {
+          "role": "fix",
+          "zhName": "花岗岩箱",
+          "sourceFile": "Granite_Chest.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Granite_Chest.png",
+          "file": "card-fix.png",
+          "bytes": 243,
+          "sha256": "a3d84b5a2d922329777aeaa2ce5b339c60214ee702cf0ef17760bd577e222f55"
+        }
+      ]
+    },
+    "marble-cave": {
+      "name": "Terraria · 大理石洞",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "大理石块",
+          "sourceFile": "Marble_Block.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Marble_Block.png",
+          "file": "card-explore.png",
+          "bytes": 169,
+          "sha256": "4e97f9b1769795b78cdc8da841192d3fde6f1b6a38eb82719979aac1c11e5965"
+        },
+        {
+          "role": "build",
+          "zhName": "蛇发女妖头",
+          "sourceFile": "Medusa_Head.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Medusa_Head.png",
+          "file": "card-build.png",
+          "bytes": 340,
+          "sha256": "0d37f7645096a6ccf478bc0e2d1134d4e3b786b0934e2c654b867273133002d2"
+        },
+        {
+          "role": "review",
+          "zhName": "角斗士头盔",
+          "sourceFile": "Gladiator_Helmet.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Gladiator_Helmet.png",
+          "file": "card-review.png",
+          "bytes": 244,
+          "sha256": "395a3e7c22be1c8b24ca5add3275853edc2ddabf9da52347604933627fce9326"
+        },
+        {
+          "role": "fix",
+          "zhName": "标枪",
+          "sourceFile": "Javelin.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Javelin.png",
+          "file": "card-fix.png",
+          "bytes": 242,
+          "sha256": "98c72164a7c7f5e4eac304f0cc5cdd0cfdfe8d078f0c3f9ac86f022ae2ae1402"
+        }
+      ]
+    },
+    "forest-night": {
+      "name": "Terraria · 森林 · 夜晚",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "橡实",
+          "sourceFile": "Acorn.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Acorn.png",
+          "file": "card-explore.png",
+          "bytes": 211,
+          "sha256": "2f57d1dc0b6de0481dfbff95daf62eab344464b129a779bfe43e4603d9865f60"
+        },
+        {
+          "role": "build",
+          "zhName": "太阳花",
+          "sourceFile": "Daybloom.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Daybloom.png",
+          "file": "card-build.png",
+          "bytes": 146,
+          "sha256": "3c928834791311ab63e18c82aea4b6249377a31fec48437e8c27c7d8a1111293"
+        },
+        {
+          "role": "review",
+          "zhName": "木材",
+          "sourceFile": "Wood.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Wood.png",
+          "file": "card-review.png",
+          "bytes": 186,
+          "sha256": "27f0eb420c3548763472a95d80e1404bc6dac34257d78dea320126d922d305dc"
+        },
+        {
+          "role": "fix",
+          "zhName": "凝胶",
+          "sourceFile": "Gel.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Gel.png",
+          "file": "card-fix.png",
+          "bytes": 156,
+          "sha256": "1f101b8efc90501f0ff5bda1da3f31f0b5b15708d247705347c0cb1dd9089d2c"
+        }
+      ]
+    },
+    "underground": {
+      "name": "Terraria · 地下层",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "生命水晶",
+          "sourceFile": "Life_Crystal.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Life_Crystal.png",
+          "file": "card-explore.png",
+          "bytes": 253,
+          "sha256": "082dd48011c2b6d7e7977b2d7e0e351e457794803ac90c72fb556d7587530ddb"
+        },
+        {
+          "role": "build",
+          "zhName": "金矿",
+          "sourceFile": "Gold_Ore.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Gold_Ore.png",
+          "file": "card-build.png",
+          "bytes": 188,
+          "sha256": "f1c3d0de206c8e3f2f465bdcd9f4343d3c0a272c43dac1c48845bcc76fcb62ac"
+        },
+        {
+          "role": "review",
+          "zhName": "回忆药水",
+          "sourceFile": "Recall_Potion.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Recall_Potion.png",
+          "file": "card-review.png",
+          "bytes": 241,
+          "sha256": "3224478aca3c737b4773704fcd276db3e5c88eaab846b2bfa1481005a44a2aa0"
+        },
+        {
+          "role": "fix",
+          "zhName": "魔镜",
+          "sourceFile": "Magic_Mirror.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Magic_Mirror.png",
+          "file": "card-fix.png",
+          "bytes": 255,
+          "sha256": "32a7456d237743bb13db242f837d7d5a357024af9524008058eda063c0a76589"
+        }
+      ]
+    },
+    "tundra-night": {
+      "name": "Terraria · 苔原 · 夜晚",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "冰雪刃",
+          "sourceFile": "Ice_Blade.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Ice_Blade.png",
+          "file": "card-explore.png",
+          "bytes": 237,
+          "sha256": "b4fb719b02cbdf4eae19334b7e21c9b11f58faa61aff80fc7ddd14d5e497d9cf"
+        },
+        {
+          "role": "build",
+          "zhName": "冰冻箱",
+          "sourceFile": "Frozen_Chest.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Frozen_Chest.png",
+          "file": "card-build.png",
+          "bytes": 269,
+          "sha256": "ef479b790adc290959eec6c65e20484e1d0a51fa3e37b2b931efbf9d056cd22d"
+        },
+        {
+          "role": "review",
+          "zhName": "冰雪块",
+          "sourceFile": "Ice_Block.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Ice_Block.png",
+          "file": "card-review.png",
+          "bytes": 173,
+          "sha256": "ba1faddb77b217ebafa01c30881f54d3e82b803bc3471f721eacfc6a1a06aea0"
+        },
+        {
+          "role": "fix",
+          "zhName": "寒霜核",
+          "sourceFile": "Frost_Core.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Frost_Core.png",
+          "file": "card-fix.png",
+          "bytes": 172,
+          "sha256": "248d40563731fed60e0dfdd1260011b01455fc7d807d354218e18aef07a86779"
+        }
+      ]
+    },
+    "ice-biome": {
+      "name": "Terraria · 地下冰雪",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "冰雪刃",
+          "sourceFile": "Ice_Blade.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Ice_Blade.png",
+          "file": "card-explore.png",
+          "bytes": 237,
+          "sha256": "b4fb719b02cbdf4eae19334b7e21c9b11f58faa61aff80fc7ddd14d5e497d9cf"
+        },
+        {
+          "role": "build",
+          "zhName": "冰冻箱",
+          "sourceFile": "Frozen_Chest.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Frozen_Chest.png",
+          "file": "card-build.png",
+          "bytes": 269,
+          "sha256": "ef479b790adc290959eec6c65e20484e1d0a51fa3e37b2b931efbf9d056cd22d"
+        },
+        {
+          "role": "review",
+          "zhName": "冰雪块",
+          "sourceFile": "Ice_Block.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Ice_Block.png",
+          "file": "card-review.png",
+          "bytes": 173,
+          "sha256": "ba1faddb77b217ebafa01c30881f54d3e82b803bc3471f721eacfc6a1a06aea0"
+        },
+        {
+          "role": "fix",
+          "zhName": "寒霜核",
+          "sourceFile": "Frost_Core.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Frost_Core.png",
+          "file": "card-fix.png",
+          "bytes": 172,
+          "sha256": "248d40563731fed60e0dfdd1260011b01455fc7d807d354218e18aef07a86779"
+        }
+      ]
+    },
+    "underground-desert": {
+      "name": "Terraria · 地下沙漠",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "仙人掌",
+          "sourceFile": "Cactus.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Cactus.png",
+          "file": "card-explore.png",
+          "bytes": 119,
+          "sha256": "ca1334f93aff64ff553ca93083f9ea008dcdf8bf561a2f849af9099071836d86"
+        },
+        {
+          "role": "build",
+          "zhName": "沙暴瓶",
+          "sourceFile": "Sandstorm_in_a_Bottle.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Sandstorm_in_a_Bottle.png",
+          "file": "card-build.png",
+          "bytes": 198,
+          "sha256": "353b3b6c64b4a39b50518578f4c8fdb31c5437c7584b75bbd1e10fb964ca5fd3"
+        },
+        {
+          "role": "review",
+          "zhName": "蚁狮上颚",
+          "sourceFile": "Antlion_Mandible.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Antlion_Mandible.png",
+          "file": "card-review.png",
+          "bytes": 164,
+          "sha256": "e990dc67a711a1d44e136edaa9d1e8bdd1aac6bcbd8e794f8f5298c3dcf14567"
+        },
+        {
+          "role": "fix",
+          "zhName": "沙漠化石",
+          "sourceFile": "Desert_Fossil.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Desert_Fossil.png",
+          "file": "card-fix.png",
+          "bytes": 202,
+          "sha256": "017fb81f201a8974f3c2bb68a8b21346b4f07148ee15c6925caf83bcaa4119ad"
+        }
+      ]
+    },
+    "jungle-night": {
+      "name": "Terraria · 丛林 · 夜晚",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "丛林孢子",
+          "sourceFile": "Jungle_Spores.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Jungle_Spores.png",
+          "file": "card-explore.png",
+          "bytes": 157,
+          "sha256": "32b9872c31f7f1361aa0858dbf647faa4e9a8c8e8108759914a46a0f4f80006b"
+        },
+        {
+          "role": "build",
+          "zhName": "毒刺",
+          "sourceFile": "Stinger.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Stinger.png",
+          "file": "card-build.png",
+          "bytes": 148,
+          "sha256": "c4a180c1816d35f200da8f1e8c5993f32cd779857114e877d02ecfa64eaf7a37"
+        },
+        {
+          "role": "review",
+          "zhName": "生命果",
+          "sourceFile": "Life_Fruit.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Life_Fruit.png",
+          "file": "card-review.png",
+          "bytes": 227,
+          "sha256": "c1206ca5ed5d291f99c43548b97395c789b0cda23d02202be66a93c0323c1294"
+        },
+        {
+          "role": "fix",
+          "zhName": "藤蔓",
+          "sourceFile": "Vine.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Vine.png",
+          "file": "card-fix.png",
+          "bytes": 183,
+          "sha256": "33bc1154cfb11d902086658a28f11e9f311924e11d880f3647b0b012e177d4fa"
+        }
+      ]
+    },
+    "underground-jungle": {
+      "name": "Terraria · 地下丛林",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "丛林孢子",
+          "sourceFile": "Jungle_Spores.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Jungle_Spores.png",
+          "file": "card-explore.png",
+          "bytes": 157,
+          "sha256": "32b9872c31f7f1361aa0858dbf647faa4e9a8c8e8108759914a46a0f4f80006b"
+        },
+        {
+          "role": "build",
+          "zhName": "毒刺",
+          "sourceFile": "Stinger.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Stinger.png",
+          "file": "card-build.png",
+          "bytes": 148,
+          "sha256": "c4a180c1816d35f200da8f1e8c5993f32cd779857114e877d02ecfa64eaf7a37"
+        },
+        {
+          "role": "review",
+          "zhName": "生命果",
+          "sourceFile": "Life_Fruit.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Life_Fruit.png",
+          "file": "card-review.png",
+          "bytes": 227,
+          "sha256": "c1206ca5ed5d291f99c43548b97395c789b0cda23d02202be66a93c0323c1294"
+        },
+        {
+          "role": "fix",
+          "zhName": "藤蔓",
+          "sourceFile": "Vine.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Vine.png",
+          "file": "card-fix.png",
+          "bytes": 183,
+          "sha256": "33bc1154cfb11d902086658a28f11e9f311924e11d880f3647b0b012e177d4fa"
+        }
+      ]
+    },
+    "hallow-night": {
+      "name": "Terraria · 神圣之地 · 夜晚",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "水晶碎块",
+          "sourceFile": "Crystal_Shard.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Crystal_Shard.png",
+          "file": "card-explore.png",
+          "bytes": 327,
+          "sha256": "7f11b17e959c2529114f26ccf0d927e2d333901818ac7fd36fdb84d8a8a262ca"
+        },
+        {
+          "role": "build",
+          "zhName": "妖精尘",
+          "sourceFile": "Pixie_Dust.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Pixie_Dust.png",
+          "file": "card-build.png",
+          "bytes": 185,
+          "sha256": "2bc0f1a188ba85d4967e05b7468937623a5b558f4c5a634c94e2cef0672a9872"
+        },
+        {
+          "role": "review",
+          "zhName": "独角兽角",
+          "sourceFile": "Unicorn_Horn.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Unicorn_Horn.png",
+          "file": "card-review.png",
+          "bytes": 119,
+          "sha256": "fabf8fd23095344624fbf3a88ddc857b20fd0b0c6e65ed05d387364cf8fd11a5"
+        },
+        {
+          "role": "fix",
+          "zhName": "光明之魂",
+          "sourceFile": "Soul_of_Light.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Soul_of_Light.png",
+          "file": "card-fix.png",
+          "bytes": 195,
+          "sha256": "e1b90e9f2e967f6f067f4987365224dd0c2bef19999137f7bf7a8f1bcc04cd91"
+        }
+      ]
+    },
+    "underground-hallow": {
+      "name": "Terraria · 地下神圣",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "水晶碎块",
+          "sourceFile": "Crystal_Shard.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Crystal_Shard.png",
+          "file": "card-explore.png",
+          "bytes": 327,
+          "sha256": "7f11b17e959c2529114f26ccf0d927e2d333901818ac7fd36fdb84d8a8a262ca"
+        },
+        {
+          "role": "build",
+          "zhName": "妖精尘",
+          "sourceFile": "Pixie_Dust.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Pixie_Dust.png",
+          "file": "card-build.png",
+          "bytes": 185,
+          "sha256": "2bc0f1a188ba85d4967e05b7468937623a5b558f4c5a634c94e2cef0672a9872"
+        },
+        {
+          "role": "review",
+          "zhName": "独角兽角",
+          "sourceFile": "Unicorn_Horn.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Unicorn_Horn.png",
+          "file": "card-review.png",
+          "bytes": 119,
+          "sha256": "fabf8fd23095344624fbf3a88ddc857b20fd0b0c6e65ed05d387364cf8fd11a5"
+        },
+        {
+          "role": "fix",
+          "zhName": "光明之魂",
+          "sourceFile": "Soul_of_Light.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Soul_of_Light.png",
+          "file": "card-fix.png",
+          "bytes": 195,
+          "sha256": "e1b90e9f2e967f6f067f4987365224dd0c2bef19999137f7bf7a8f1bcc04cd91"
+        }
+      ]
+    },
+    "underground-corruption": {
+      "name": "Terraria · 地下腐化",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "魔矿锭",
+          "sourceFile": "Demonite_Bar.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Demonite_Bar.png",
+          "file": "card-explore.png",
+          "bytes": 223,
+          "sha256": "adaf88b0ab8770feacdf8e00d3c08111a16abd64864dcb6b21e3c9c0a65ef543"
+        },
+        {
+          "role": "build",
+          "zhName": "腐肉",
+          "sourceFile": "Rotten_Chunk.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Rotten_Chunk.png",
+          "file": "card-build.png",
+          "bytes": 225,
+          "sha256": "14992ada5dfe846ce8721f9d404115904272e06237b845d702978acee67bd94f"
+        },
+        {
+          "role": "review",
+          "zhName": "诅咒焰",
+          "sourceFile": "Cursed_Flame.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Cursed_Flame.png",
+          "file": "card-review.png",
+          "bytes": 128,
+          "sha256": "8ab7cc7bf9c2f69697ce6baab6c74370d2b606f4682675a469a4ec41c70c2285"
+        },
+        {
+          "role": "fix",
+          "zhName": "蠕虫毒牙",
+          "sourceFile": "Worm_Tooth.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Worm_Tooth.png",
+          "file": "card-fix.png",
+          "bytes": 147,
+          "sha256": "18aef282fa14616fdb9157ba1ef398fdfe1507e5344fbd5573316cf4e5fbffb3"
+        }
+      ]
+    },
+    "underground-crimson": {
+      "name": "Terraria · 地下猩红",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "组织样本",
+          "sourceFile": "Tissue_Sample.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Tissue_Sample.png",
+          "file": "card-explore.png",
+          "bytes": 194,
+          "sha256": "25b9a3ed2edf1a75ad465dcdb83cc52cd14ca5aafd4aff059b3534e99701111f"
+        },
+        {
+          "role": "build",
+          "zhName": "猩红矿锭",
+          "sourceFile": "Crimtane_Bar.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Crimtane_Bar.png",
+          "file": "card-build.png",
+          "bytes": 376,
+          "sha256": "1a541a53aa626b4e1e4d0307e406b56c010a37ae579ac2a11d43f1ed00360689"
+        },
+        {
+          "role": "review",
+          "zhName": "灵液",
+          "sourceFile": "Ichor.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Ichor.png",
+          "file": "card-review.png",
+          "bytes": 167,
+          "sha256": "0af8c7541acd8ac9274b9b6ddb3fb22ef92fc20f95fa63bd8a25ef623f60cbe5"
+        },
+        {
+          "role": "fix",
+          "zhName": "椎骨",
+          "sourceFile": "Vertebra.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Vertebra.png",
+          "file": "card-fix.png",
+          "bytes": 181,
+          "sha256": "c8849d967c94128eea0014737e584c5c806e1b85b2e7f263c388854314793981"
+        }
+      ]
+    },
+    "underground-glowing-mushroom": {
+      "name": "Terraria · 地下夜光蘑菇",
+      "icons": [
+        {
+          "role": "explore",
+          "zhName": "发光蘑菇",
+          "sourceFile": "Glowing_Mushroom.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Glowing_Mushroom.png",
+          "file": "card-explore.png",
+          "bytes": 216,
+          "sha256": "5553270314d8cc97eb5c470aded0fa2c9f77b7e1a9a15208edf0a4dae5b34b01"
+        },
+        {
+          "role": "build",
+          "zhName": "蘑菇草种子",
+          "sourceFile": "Mushroom_Grass_Seeds.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Mushroom_Grass_Seeds.png",
+          "file": "card-build.png",
+          "bytes": 157,
+          "sha256": "5820d125f51817c95263357b6799d4af61cffcf2caa4bff91be493501493f653"
+        },
+        {
+          "role": "review",
+          "zhName": "松露虫",
+          "sourceFile": "Truffle_Worm.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Truffle_Worm.png",
+          "file": "card-review.png",
+          "bytes": 228,
+          "sha256": "a443c283b397dd4ed71f9d2e84dac1e9da68d28cd3ee858ec51d28ea21c93a3b"
+        },
+        {
+          "role": "fix",
+          "zhName": "蘑菇矿锭",
+          "sourceFile": "Shroomite_Bar.png",
+          "sourceUrl": "https://terraria.wiki.gg/images/Shroomite_Bar.png",
+          "file": "card-fix.png",
+          "bytes": 221,
+          "sha256": "6a57e3de2e3bd2b52fec16d2d1d4eee942d7553056c8a1cc84b82df9ebdd6aaf"
+        }
+      ]
+    }
+  }
+}

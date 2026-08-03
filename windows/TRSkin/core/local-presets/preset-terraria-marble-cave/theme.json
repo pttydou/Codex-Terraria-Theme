@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-marble-cave",
+  "name": "Terraria · 大理石洞",
+  "stylePreset": "terraria",
+  "variant": "marble-cave",
+  "brandSubtitle": "THE MARBLE CAVE",
+  "tagline": "古典石柱守望着地下遗迹。",
+  "projectPrefix": "选择大理石域 · ",
+  "projectLabel": "选择大理石域",
+  "statusText": "大理石洞穴",
+  "quote": "THE OLD STONE STILL STANDS",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "none",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.apng",
+    "accent-2": "accent-2.apng",
+    "accent-3": "accent-3.png",
+    "companion-medusa": "companion-medusa.apng",
+    "companion-hoplite": "companion-hoplite.apng",
+    "companion-marble-slime": "companion-marble-slime.png"
+  },
+  "companionPool": [
+    "companion-medusa",
+    "companion-hoplite",
+    "companion-marble-slime"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#201d20",
+    "panel": "#454146",
+    "panelAlt": "#68636a",
+    "accent": "#e3ded7",
+    "accentAlt": "#b6a79b",
+    "secondary": "#d7c7ba",
+    "highlight": "#847a82",
+    "text": "#fffaf4",
+    "muted": "#d1cbc7",
+    "line": "rgba(227, 222, 215, .54)"
+  },
+  "companionWeights": {
+    "companion-medusa": 10,
+    "companion-hoplite": 55,
+    "companion-marble-slime": 100
+  },
+  "musicPool": [
+    "underground",
+    "alternate-underground"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-underground"
+  ]
+}

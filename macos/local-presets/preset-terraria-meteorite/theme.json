@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-meteorite",
+  "name": "Terraria · 陨石",
+  "stylePreset": "terraria",
+  "variant": "meteorite",
+  "brandSubtitle": "THE METEORITE",
+  "tagline": "撞击余热仍在矿坑中闪烁。",
+  "projectPrefix": "选择陨石坑 · ",
+  "projectLabel": "选择陨石坑",
+  "statusText": "陨石生物群落",
+  "quote": "THE SKY LEFT A SCAR",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "none",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.apng",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.apng",
+    "companion-meteor-head": "companion-meteor-head.apng"
+  },
+  "companionPool": [
+    "companion-meteor-head"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#1c111d",
+    "panel": "#3b2443",
+    "panelAlt": "#5c3b62",
+    "accent": "#ff8a45",
+    "accentAlt": "#c76bff",
+    "secondary": "#ffc06c",
+    "highlight": "#854b78",
+    "text": "#fff0e4",
+    "muted": "#d9c0d3",
+    "line": "rgba(255, 138, 69, .58)"
+  },
+  "companionWeights": {
+    "companion-meteor-head": 55
+  },
+  "musicPool": [
+    "eerie"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-eerie"
+  ]
+}

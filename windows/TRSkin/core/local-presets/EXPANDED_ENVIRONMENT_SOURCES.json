@@ -1,0 +1,482 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-20T08:58:13.535Z",
+  "source": "https://terraria.wiki.gg/wiki/Main_Page",
+  "themes": {
+    "aether": {
+      "name": "Terraria · 以太",
+      "assets": [
+        {
+          "role": "background",
+          "file": "background.png",
+          "title": "Aetherium Wall (placed).png",
+          "url": "https://terraria.wiki.gg/images/Aetherium_Wall_%28placed%29.png?6d022e",
+          "size": 1247,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-1",
+          "file": "accent-1.apng",
+          "title": "Faeling.gif",
+          "url": "https://terraria.wiki.gg/images/Faeling.gif?bd1458",
+          "size": 972,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-2",
+          "file": "accent-2.apng",
+          "title": "Shimmer Slime.gif",
+          "url": "https://terraria.wiki.gg/images/Shimmer_Slime.gif?7cb6d8",
+          "size": 62629,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-3",
+          "file": "accent-3.apng",
+          "title": "Shimmerfall Wall (placed).gif",
+          "url": "https://terraria.wiki.gg/images/Shimmerfall_Wall_%28placed%29.gif?418161",
+          "size": 6031,
+          "mime": "image/png"
+        },
+        {
+          "role": "torch",
+          "file": "torch-aether.png",
+          "title": "Aether Torch.png",
+          "url": "https://terraria.wiki.gg/images/Aether_Torch.png?38b061",
+          "size": 250,
+          "mime": "image/png"
+        }
+      ]
+    },
+    "graveyard": {
+      "name": "Terraria · 墓地",
+      "assets": [
+        {
+          "role": "background",
+          "reusedFrom": "preset-terraria-forest-day/background.png",
+          "file": "background.png"
+        },
+        {
+          "role": "accent-1",
+          "file": "accent-1.apng",
+          "title": "Ghost (enemy).gif",
+          "url": "https://terraria.wiki.gg/images/Ghost_%28enemy%29.gif?1e47ca",
+          "size": 2116,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-2",
+          "file": "accent-2.png",
+          "title": "Tombstone.png",
+          "url": "https://terraria.wiki.gg/images/Tombstone.png?607c29",
+          "size": 207,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-3",
+          "file": "accent-3.png",
+          "title": "Ecto Mist.png",
+          "url": "https://terraria.wiki.gg/images/Ecto_Mist.png?acf157",
+          "size": 52207,
+          "mime": "image/png"
+        }
+      ]
+    },
+    "pumpkin-moon": {
+      "name": "Terraria · 南瓜月",
+      "assets": [
+        {
+          "role": "background",
+          "reusedFrom": "preset-terraria-forest-day/background.png",
+          "file": "background.png"
+        },
+        {
+          "role": "accent-1",
+          "file": "accent-1.png",
+          "title": "Pumpkin Moon (moon).png",
+          "url": "https://terraria.wiki.gg/images/Pumpkin_Moon_%28moon%29.png?c78f68",
+          "size": 1209,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-2",
+          "file": "accent-2.apng",
+          "title": "Mourning Wood.gif",
+          "url": "https://terraria.wiki.gg/images/Mourning_Wood.gif?f69799",
+          "size": 21065,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-3",
+          "file": "accent-3.apng",
+          "title": "Pumpking head.gif",
+          "url": "https://terraria.wiki.gg/images/Pumpking_head.gif?acbe43",
+          "size": 16616,
+          "mime": "image/png"
+        }
+      ]
+    },
+    "frost-moon": {
+      "name": "Terraria · 霜月",
+      "assets": [
+        {
+          "role": "background",
+          "reusedFrom": "preset-terraria-tundra/background.png",
+          "file": "background.png"
+        },
+        {
+          "role": "accent-1",
+          "file": "accent-1.png",
+          "title": "Frost Moon (moon).png",
+          "url": "https://terraria.wiki.gg/images/Frost_Moon_%28moon%29.png?7f874b",
+          "size": 390,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-2",
+          "file": "accent-2.apng",
+          "title": "Everscream.gif",
+          "url": "https://terraria.wiki.gg/images/Everscream.gif?a52a99",
+          "size": 71060,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-3",
+          "file": "accent-3.png",
+          "title": "Ice Queen.png",
+          "url": "https://terraria.wiki.gg/images/Ice_Queen.png?4398de",
+          "size": 4221,
+          "mime": "image/png"
+        }
+      ]
+    },
+    "lunar-solar": {
+      "name": "Terraria · 日耀柱",
+      "assets": [
+        {
+          "role": "background",
+          "reusedFrom": "preset-terraria-space/background.png",
+          "file": "background.png"
+        },
+        {
+          "role": "accent-1",
+          "file": "accent-1.png",
+          "title": "Solar Pillar.png",
+          "url": "https://terraria.wiki.gg/images/Solar_Pillar.png?92484c",
+          "size": 4573,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-2",
+          "file": "accent-2.png",
+          "title": "Solar Fragment.png",
+          "url": "https://terraria.wiki.gg/images/Solar_Fragment.png?24b6b3",
+          "size": 188,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-3",
+          "file": "accent-3.png",
+          "title": "Solar Planet.png",
+          "url": "https://terraria.wiki.gg/images/Solar_Planet.png?3df6f9",
+          "size": 312382,
+          "mime": "image/png"
+        }
+      ]
+    },
+    "lunar-vortex": {
+      "name": "Terraria · 星旋柱",
+      "assets": [
+        {
+          "role": "background",
+          "reusedFrom": "preset-terraria-space/background.png",
+          "file": "background.png"
+        },
+        {
+          "role": "accent-1",
+          "file": "accent-1.png",
+          "title": "Vortex Pillar.png",
+          "url": "https://terraria.wiki.gg/images/Vortex_Pillar.png?f063b4",
+          "size": 7322,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-2",
+          "file": "accent-2.png",
+          "title": "Vortex Fragment.png",
+          "url": "https://terraria.wiki.gg/images/Vortex_Fragment.png?86ac67",
+          "size": 188,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-3",
+          "file": "accent-3.png",
+          "title": "Vortex Planet.png",
+          "url": "https://terraria.wiki.gg/images/Vortex_Planet.png?9669c9",
+          "size": 98743,
+          "mime": "image/png"
+        }
+      ]
+    },
+    "lunar-nebula": {
+      "name": "Terraria · 星云柱",
+      "assets": [
+        {
+          "role": "background",
+          "reusedFrom": "preset-terraria-space/background.png",
+          "file": "background.png"
+        },
+        {
+          "role": "accent-1",
+          "file": "accent-1.png",
+          "title": "Nebula Pillar.png",
+          "url": "https://terraria.wiki.gg/images/Nebula_Pillar.png?e8cebc",
+          "size": 7603,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-2",
+          "file": "accent-2.png",
+          "title": "Nebula Fragment.png",
+          "url": "https://terraria.wiki.gg/images/Nebula_Fragment.png?47e02f",
+          "size": 157,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-3",
+          "file": "accent-3.png",
+          "title": "Nebula Planet.png",
+          "url": "https://terraria.wiki.gg/images/Nebula_Planet.png?78ed11",
+          "size": 146076,
+          "mime": "image/png"
+        }
+      ]
+    },
+    "lunar-stardust": {
+      "name": "Terraria · 星尘柱",
+      "assets": [
+        {
+          "role": "background",
+          "reusedFrom": "preset-terraria-space/background.png",
+          "file": "background.png"
+        },
+        {
+          "role": "accent-1",
+          "file": "accent-1.png",
+          "title": "Stardust Pillar.png",
+          "url": "https://terraria.wiki.gg/images/Stardust_Pillar.png?674bd2",
+          "size": 4449,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-2",
+          "file": "accent-2.png",
+          "title": "Stardust Fragment.png",
+          "url": "https://terraria.wiki.gg/images/Stardust_Fragment.png?d34d0e",
+          "size": 173,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-3",
+          "file": "accent-3.png",
+          "title": "Stardust Planet.png",
+          "url": "https://terraria.wiki.gg/images/Stardust_Planet.png?59ca5a",
+          "size": 258714,
+          "mime": "image/png"
+        }
+      ]
+    },
+    "meteorite": {
+      "name": "Terraria · 陨石",
+      "assets": [
+        {
+          "role": "background",
+          "file": "background.png",
+          "title": "Meteorite Brick Wall (placed).png",
+          "url": "https://terraria.wiki.gg/images/Meteorite_Brick_Wall_%28placed%29.png?1bc3ca",
+          "size": 795,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-1",
+          "file": "accent-1.apng",
+          "title": "Meteor Head.gif",
+          "url": "https://terraria.wiki.gg/images/Meteor_Head.gif?b6cbce",
+          "size": 830,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-2",
+          "file": "accent-2.png",
+          "title": "Meteorite.png",
+          "url": "https://terraria.wiki.gg/images/Meteorite.png?e7cc21",
+          "size": 175,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-3",
+          "file": "accent-3.apng",
+          "title": "Ambience Meteor.gif",
+          "url": "https://terraria.wiki.gg/images/Ambience_Meteor.gif?5863ba",
+          "size": 5379,
+          "mime": "image/png"
+        }
+      ]
+    },
+    "spider-nest": {
+      "name": "Terraria · 蜘蛛洞",
+      "assets": [
+        {
+          "role": "background",
+          "file": "background.png",
+          "title": "Spider Wall (placed).png",
+          "url": "https://terraria.wiki.gg/images/Spider_Wall_%28placed%29.png?aa1493",
+          "size": 2146,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-1",
+          "file": "accent-1.apng",
+          "title": "Black Recluse (ground).gif",
+          "url": "https://terraria.wiki.gg/images/Black_Recluse_%28ground%29.gif?4b02f8",
+          "size": 1838,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-2",
+          "file": "accent-2.png",
+          "title": "Spider Fang.png",
+          "url": "https://terraria.wiki.gg/images/Spider_Fang.png?2cac05",
+          "size": 356,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-3",
+          "file": "accent-3.png",
+          "title": "Web Slinger.png",
+          "url": "https://terraria.wiki.gg/images/Web_Slinger.png?c47a08",
+          "size": 564,
+          "mime": "image/png"
+        }
+      ]
+    },
+    "bee-hive": {
+      "name": "Terraria · 蜂巢",
+      "assets": [
+        {
+          "role": "background",
+          "file": "background.png",
+          "title": "Hive Wall (placed).png",
+          "url": "https://terraria.wiki.gg/images/Hive_Wall_%28placed%29.png?e5a745",
+          "size": 627,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-1",
+          "file": "accent-1.apng",
+          "title": "Queen Bee.gif",
+          "url": "https://terraria.wiki.gg/images/Queen_Bee.gif?15e29d",
+          "size": 28925,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-2",
+          "file": "accent-2.apng",
+          "title": "Bee.gif",
+          "url": "https://terraria.wiki.gg/images/Bee.gif?574a23",
+          "size": 842,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-3",
+          "file": "accent-3.png",
+          "title": "Honey Block.png",
+          "url": "https://terraria.wiki.gg/images/Honey_Block.png?e70350",
+          "size": 154,
+          "mime": "image/png"
+        }
+      ]
+    },
+    "granite-cave": {
+      "name": "Terraria · 花岗岩洞",
+      "assets": [
+        {
+          "role": "background",
+          "file": "background.png",
+          "title": "Granite Wall (placed).png",
+          "url": "https://terraria.wiki.gg/images/Granite_Wall_%28placed%29.png?6ade37",
+          "size": 1100,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-1",
+          "file": "accent-1.apng",
+          "title": "Granite Golem.gif",
+          "url": "https://terraria.wiki.gg/images/Granite_Golem.gif?70ba29",
+          "size": 5673,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-2",
+          "file": "accent-2.apng",
+          "title": "Granite Elemental.gif",
+          "url": "https://terraria.wiki.gg/images/Granite_Elemental.gif?fbf98d",
+          "size": 6309,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-3",
+          "file": "accent-3.png",
+          "title": "Geode.png",
+          "url": "https://terraria.wiki.gg/images/Geode.png?d824d5",
+          "size": 335,
+          "mime": "image/png"
+        }
+      ]
+    },
+    "marble-cave": {
+      "name": "Terraria · 大理石洞",
+      "assets": [
+        {
+          "role": "background",
+          "file": "background.png",
+          "title": "Marble Wall (placed).png",
+          "url": "https://terraria.wiki.gg/images/Marble_Wall_%28placed%29.png?ef8912",
+          "size": 1108,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-1",
+          "file": "accent-1.apng",
+          "title": "Medusa.gif",
+          "url": "https://terraria.wiki.gg/images/Medusa.gif?6d8b0f",
+          "size": 13940,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-2",
+          "file": "accent-2.apng",
+          "title": "Hoplite.gif",
+          "url": "https://terraria.wiki.gg/images/Hoplite.gif?8bafd0",
+          "size": 7279,
+          "mime": "image/png"
+        },
+        {
+          "role": "accent-3",
+          "file": "accent-3.png",
+          "title": "Marble Block.png",
+          "url": "https://terraria.wiki.gg/images/Marble_Block.png?2be326",
+          "size": 169,
+          "mime": "image/png"
+        }
+      ]
+    }
+  },
+  "gemTorch-amethyst": "https://terraria.wiki.gg/images/Purple_Torch.png",
+  "gemTorch-topaz": "https://terraria.wiki.gg/images/Yellow_Torch.png",
+  "gemTorch-sapphire": "https://terraria.wiki.gg/images/Blue_Torch.png",
+  "gemTorch-emerald": "https://terraria.wiki.gg/images/Green_Torch.png",
+  "gemTorch-ruby": "https://terraria.wiki.gg/images/Red_Torch.png",
+  "gemTorch-diamond": "https://terraria.wiki.gg/images/White_Torch.png",
+  "gemTorch-amber": "https://terraria.wiki.gg/images/Orange_Torch.png"
+}

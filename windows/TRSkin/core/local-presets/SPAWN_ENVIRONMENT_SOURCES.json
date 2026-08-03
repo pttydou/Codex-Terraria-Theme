@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-24T03:52:16.315Z",
+  "bestiarySource": "https://terraria.wiki.gg/wiki/Bestiary/List",
+  "rarityWeights": {
+    "1": 100,
+    "2": 55,
+    "3": 25,
+    "4": 10,
+    "5": 3
+  },
+  "backgrounds": {
+    "forest-day": {
+      "sourceUrl": null,
+      "reusedFrom": "preset-terraria-forest-day/background.png"
+    },
+    "forest-night": {
+      "sourceUrl": null,
+      "reusedFrom": "preset-terraria-forest-day/background.png"
+    },
+    "underground": {
+      "sourceUrl": "https://terraria.wiki.gg/images/Underground_background_8.png?5db4cb",
+      "reusedFrom": null
+    },
+    "cavern": {
+      "sourceUrl": null,
+      "reusedFrom": "preset-terraria-cavern/background.png"
+    },
+    "tundra": {
+      "sourceUrl": null,
+      "reusedFrom": "preset-terraria-tundra/background.png"
+    },
+    "tundra-night": {
+      "sourceUrl": null,
+      "reusedFrom": "preset-terraria-tundra/background.png"
+    },
+    "ice-biome": {
+      "sourceUrl": "https://terraria.wiki.gg/images/Ice_biome_background_4.png?8fbc82",
+      "reusedFrom": null
+    },
+    "desert": {
+      "sourceUrl": null,
+      "reusedFrom": "preset-terraria-desert/background.png"
+    },
+    "underground-desert": {
+      "sourceUrl": "https://terraria.wiki.gg/images/Sandstone_Wall_%28placed%29.png?ed6267",
+      "reusedFrom": null
+    },
+    "jungle": {
+      "sourceUrl": null,
+      "reusedFrom": "preset-terraria-jungle/background.png"
+    },
+    "jungle-night": {
+      "sourceUrl": null,
+      "reusedFrom": "preset-terraria-jungle/background.png"
+    },
+    "underground-jungle": {
+      "sourceUrl": "https://terraria.wiki.gg/images/Cavern_jungle_background_2.png?353ec5",
+      "reusedFrom": null
+    },
+    "hallow": {
+      "sourceUrl": null,
+      "reusedFrom": "preset-terraria-hallow/background.png"
+    },
+    "hallow-night": {
+      "sourceUrl": null,
+      "reusedFrom": "preset-terraria-hallow/background.png"
+    },
+    "underground-hallow": {
+      "sourceUrl": "https://terraria.wiki.gg/images/Underground_hallow_background_2.png?81ea30",
+      "reusedFrom": null
+    },
+    "corruption": {
+      "sourceUrl": null,
+      "reusedFrom": "preset-terraria-corruption/background.png"
+    },
+    "underground-corruption": {
+      "sourceUrl": "https://terraria.wiki.gg/images/Underground_corruption_background_2.png?882c14",
+      "reusedFrom": null
+    },
+    "crimson": {
+      "sourceUrl": null,
+      "reusedFrom": "preset-terraria-crimson/background.png"
+    },
+    "underground-crimson": {
+      "sourceUrl": "https://terraria.wiki.gg/images/Underground_crimson_background_2.png?8432af",
+      "reusedFrom": null
+    },
+    "glowing-mushroom": {
+      "sourceUrl": null,
+      "reusedFrom": "preset-terraria-glowing-mushroom/background.png"
+    },
+    "underground-glowing-mushroom": {
+      "sourceUrl": "https://terraria.wiki.gg/images/Underground_glowing_mushroom_background_2.png?2946cf",
+      "reusedFrom": null
+    }
+  }
+}

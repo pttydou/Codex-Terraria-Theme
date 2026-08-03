@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-granite-cave",
+  "name": "Terraria · 花岗岩洞",
+  "stylePreset": "terraria",
+  "variant": "granite-cave",
+  "brandSubtitle": "THE GRANITE CAVE",
+  "tagline": "深蓝岩层中回荡着沉重脚步。",
+  "projectPrefix": "选择花岗岩域 · ",
+  "projectLabel": "选择花岗岩域",
+  "statusText": "花岗岩洞穴",
+  "quote": "STONE AWAKENS BELOW",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "none",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.apng",
+    "accent-2": "accent-2.apng",
+    "accent-3": "accent-3.png",
+    "companion-granite-golem": "companion-granite-golem.apng",
+    "companion-granite-elemental": "companion-granite-elemental.apng",
+    "companion-granite-slime": "companion-granite-slime.png"
+  },
+  "companionPool": [
+    "companion-granite-golem",
+    "companion-granite-elemental",
+    "companion-granite-slime"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#101927",
+    "panel": "#263b52",
+    "panelAlt": "#3f5f78",
+    "accent": "#86c9e8",
+    "accentAlt": "#6188b4",
+    "secondary": "#b8e8ff",
+    "highlight": "#50779c",
+    "text": "#f0f9ff",
+    "muted": "#bdcfda",
+    "line": "rgba(134, 201, 232, .54)"
+  },
+  "companionWeights": {
+    "companion-granite-golem": 55,
+    "companion-granite-elemental": 55,
+    "companion-granite-slime": 100
+  },
+  "musicPool": [
+    "underground",
+    "alternate-underground"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-underground"
+  ]
+}

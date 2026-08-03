@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-aether",
+  "name": "Terraria · 以太",
+  "stylePreset": "terraria",
+  "variant": "aether",
+  "brandSubtitle": "THE AETHER",
+  "tagline": "让微光重塑眼前的一切。",
+  "projectPrefix": "选择微光域 · ",
+  "projectLabel": "选择微光域",
+  "statusText": "以太微光层",
+  "quote": "EVERYTHING SHIMMERS ANEW",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.apng",
+    "accent-2": "accent-2.apng",
+    "accent-3": "accent-3.apng",
+    "torch-aether": "torch-aether.png",
+    "companion-shimmer-slime": "companion-shimmer-slime.apng",
+    "companion-faeling": "companion-faeling.apng",
+    "companion-skeleton": "companion-skeleton.apng",
+    "companion-headache-skeleton": "companion-headache-skeleton.apng",
+    "companion-misassembled-skeleton": "companion-misassembled-skeleton.apng",
+    "companion-pantless-skeleton": "companion-pantless-skeleton.apng"
+  },
+  "companionPool": [
+    "companion-shimmer-slime",
+    "companion-faeling",
+    "companion-skeleton",
+    "companion-headache-skeleton",
+    "companion-misassembled-skeleton",
+    "companion-pantless-skeleton"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#17112d",
+    "panel": "#34275c",
+    "panelAlt": "#554383",
+    "accent": "#caa7ff",
+    "accentAlt": "#7cf3e6",
+    "secondary": "#f3a9ff",
+    "highlight": "#7762c8",
+    "text": "#fff4ff",
+    "muted": "#d9cbea",
+    "line": "rgba(202, 167, 255, .58)"
+  },
+  "torchKey": "torch-aether",
+  "companionWeights": {
+    "companion-shimmer-slime": 3,
+    "companion-faeling": 3,
+    "companion-skeleton": 25,
+    "companion-headache-skeleton": 100,
+    "companion-misassembled-skeleton": 100,
+    "companion-pantless-skeleton": 100
+  },
+  "musicPool": [
+    "aether"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-snow"
+  ]
+}

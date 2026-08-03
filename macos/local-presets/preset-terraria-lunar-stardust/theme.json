@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-lunar-stardust",
+  "name": "Terraria · 星尘柱",
+  "stylePreset": "terraria",
+  "variant": "lunar-stardust",
+  "brandSubtitle": "THE STARDUST PILLAR",
+  "tagline": "星尘生命在宇宙中游弋。",
+  "projectPrefix": "选择星尘域 · ",
+  "projectLabel": "选择星尘域",
+  "statusText": "月亮事件·星尘",
+  "quote": "LIFE MOVES AMONG THE STARS",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "none",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "companion-star-cell": "companion-star-cell.apng",
+    "companion-mini-star-cell": "companion-mini-star-cell.apng",
+    "companion-flow-invader": "companion-flow-invader.apng",
+    "companion-twinkle-popper": "companion-twinkle-popper.apng",
+    "companion-twinkle": "companion-twinkle.apng",
+    "companion-stargazer": "companion-stargazer.apng",
+    "companion-stardust-pillar": "companion-stardust-pillar.png"
+  },
+  "companionPool": [
+    "companion-star-cell",
+    "companion-mini-star-cell",
+    "companion-flow-invader",
+    "companion-twinkle-popper",
+    "companion-twinkle",
+    "companion-stargazer",
+    "companion-stardust-pillar"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#08162d",
+    "panel": "#173663",
+    "panelAlt": "#28558b",
+    "accent": "#72b9ff",
+    "accentAlt": "#6f7dff",
+    "secondary": "#b5ddff",
+    "highlight": "#4673bd",
+    "text": "#eef7ff",
+    "muted": "#bed1e3",
+    "line": "rgba(114, 185, 255, .58)"
+  },
+  "companionWeights": {
+    "companion-star-cell": 55,
+    "companion-mini-star-cell": 55,
+    "companion-flow-invader": 55,
+    "companion-twinkle-popper": 55,
+    "companion-twinkle": 100,
+    "companion-stargazer": 55,
+    "companion-stardust-pillar": 10
+  },
+  "musicPool": [
+    "the-towers"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-towers"
+  ]
+}

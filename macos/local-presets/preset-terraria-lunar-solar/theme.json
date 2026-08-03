@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-lunar-solar",
+  "name": "Terraria · 日耀柱",
+  "stylePreset": "terraria",
+  "variant": "lunar-solar",
+  "brandSubtitle": "THE SOLAR PILLAR",
+  "tagline": "日耀之力灼烧着天际。",
+  "projectPrefix": "选择日耀域 · ",
+  "projectLabel": "选择日耀域",
+  "statusText": "月亮事件·日耀",
+  "quote": "THE SUN BURNS BEYOND THE SKY",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "none",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "companion-drakomire": "companion-drakomire.apng",
+    "companion-drakomire-rider": "companion-drakomire-rider.apng",
+    "companion-sroller": "companion-sroller.apng",
+    "companion-corite": "companion-corite.apng",
+    "companion-selenian": "companion-selenian.apng",
+    "companion-solar-pillar": "companion-solar-pillar.png",
+    "companion-drakanian": "companion-drakanian.apng"
+  },
+  "companionPool": [
+    "companion-drakomire",
+    "companion-drakomire-rider",
+    "companion-sroller",
+    "companion-corite",
+    "companion-selenian",
+    "companion-solar-pillar",
+    "companion-drakanian"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#2a0d08",
+    "panel": "#632014",
+    "panelAlt": "#963d1c",
+    "accent": "#ff9d38",
+    "accentAlt": "#ff5432",
+    "secondary": "#ffd16d",
+    "highlight": "#b84920",
+    "text": "#fff2d8",
+    "muted": "#e6bca2",
+    "line": "rgba(255, 157, 56, .60)"
+  },
+  "companionWeights": {
+    "companion-drakomire": 55,
+    "companion-drakomire-rider": 55,
+    "companion-sroller": 55,
+    "companion-corite": 55,
+    "companion-selenian": 55,
+    "companion-solar-pillar": 10,
+    "companion-drakanian": 55
+  },
+  "musicPool": [
+    "the-towers"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-towers"
+  ]
+}

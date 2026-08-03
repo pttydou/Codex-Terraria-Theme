@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-underground-crimson",
+  "name": "Terraria · 地下猩红",
+  "stylePreset": "terraria",
+  "variant": "underground-crimson",
+  "brandSubtitle": "THE UNDERGROUND CRIMSON",
+  "tagline": "血肉洞穴深处传来沉重搏动。",
+  "projectPrefix": "选择血肉域 · ",
+  "projectLabel": "选择血肉域",
+  "statusText": "地下猩红之地",
+  "quote": "THE HEART BEATS BELOW",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.55,
+    "focusY": 0.48,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "torch-crimson": "torch-crimson.png",
+    "torch-ichor": "torch-ichor.png",
+    "torch-red": "torch-red.png",
+    "companion-crimslime-big-crimslime": "companion-crimslime-big-crimslime.apng",
+    "companion-crimera-big-crimera": "companion-crimera-big-crimera.apng",
+    "companion-herpling": "companion-herpling.apng",
+    "companion-face-monster": "companion-face-monster.apng",
+    "companion-floaty-gross": "companion-floaty-gross.apng",
+    "companion-blood-crawler": "companion-blood-crawler.apng",
+    "companion-blood-crawler-on-wall": "companion-blood-crawler-on-wall.apng",
+    "companion-blood-feeder": "companion-blood-feeder.apng",
+    "companion-blood-jelly": "companion-blood-jelly.apng",
+    "companion-ichor-sticker": "companion-ichor-sticker.apng",
+    "companion-crimson-mimic": "companion-crimson-mimic.png",
+    "bg-primary": "background.png",
+    "bg-variant-underground-crimson-1": "bg-variant-underground-crimson-1.png",
+    "bg-variant-underground-crimson-3": "bg-variant-underground-crimson-3.png",
+    "bg-variant-underground-crimson-4": "bg-variant-underground-crimson-4.png",
+    "bg-variant-underground-crimson-5": "bg-variant-underground-crimson-5.png"
+  },
+  "torchKey": "torch-crimson",
+  "companionPool": [
+    "companion-crimslime-big-crimslime",
+    "companion-crimera-big-crimera",
+    "companion-herpling",
+    "companion-face-monster",
+    "companion-floaty-gross",
+    "companion-blood-crawler",
+    "companion-blood-crawler-on-wall",
+    "companion-blood-feeder",
+    "companion-blood-jelly",
+    "companion-ichor-sticker",
+    "companion-crimson-mimic"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#21070b",
+    "panel": "#54171e",
+    "panelAlt": "#7c2831",
+    "accent": "#ff6b70",
+    "accentAlt": "#d34959",
+    "secondary": "#f0a06e",
+    "highlight": "#8f3541",
+    "text": "#fff0e8",
+    "muted": "#e1bcb8",
+    "line": "rgba(255, 107, 112, .55)"
+  },
+  "companionWeights": {
+    "companion-crimslime-big-crimslime": 55,
+    "companion-crimera-big-crimera": 100,
+    "companion-herpling": 55,
+    "companion-face-monster": 55,
+    "companion-floaty-gross": 55,
+    "companion-blood-crawler": 55,
+    "companion-blood-crawler-on-wall": 55,
+    "companion-blood-feeder": 55,
+    "companion-blood-jelly": 55,
+    "companion-ichor-sticker": 55,
+    "companion-crimson-mimic": 3
+  },
+  "musicPool": [
+    "underground-crimson"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-underground-crimson-1",
+    "bg-variant-underground-crimson-3",
+    "bg-variant-underground-crimson-4",
+    "bg-variant-underground-crimson-5"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-underground-crimson"
+  ]
+}

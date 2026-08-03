@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-tundra",
+  "name": "Terraria · 苔原 · 白昼",
+  "stylePreset": "terraria",
+  "variant": "tundra",
+  "brandSubtitle": "THE TUNDRA · DAY",
+  "tagline": "雪光照亮针叶林与冰原。",
+  "projectPrefix": "选择冰原域 · ",
+  "projectLabel": "选择冰原域",
+  "statusText": "雪原地表·白昼",
+  "quote": "A QUIET DAY IN THE SNOW",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.43,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "torch-ice": "torch-ice.png",
+    "torch-blue": "torch-blue.png",
+    "torch-white": "torch-white.png",
+    "companion-ice-slime": "companion-ice-slime.apng",
+    "companion-penguin": "companion-penguin.png",
+    "companion-penguin-black-variant": "companion-penguin-black-variant.png",
+    "companion-ice-elemental": "companion-ice-elemental.apng",
+    "companion-deerclops": "companion-deerclops.png",
+    "bg-primary": "background.png",
+    "bg-variant-snow-1": "bg-variant-snow-1.png",
+    "bg-variant-snow-2": "bg-variant-snow-2.png",
+    "bg-variant-snow-3": "bg-variant-snow-3.png",
+    "bg-variant-snow-4": "bg-variant-snow-4.png",
+    "bg-variant-snow-5": "bg-variant-snow-5.png"
+  },
+  "torchKey": "torch-ice",
+  "companionPool": [
+    "companion-ice-slime",
+    "companion-penguin",
+    "companion-penguin-black-variant",
+    "companion-ice-elemental",
+    "companion-deerclops"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#0c2436",
+    "panel": "#173f58",
+    "panelAlt": "#26627a",
+    "accent": "#9feaff",
+    "accentAlt": "#dffaff",
+    "secondary": "#78bfff",
+    "highlight": "#6a9ed6",
+    "text": "#f5fdff",
+    "muted": "#c2dae5",
+    "line": "rgba(159, 234, 255, .52)"
+  },
+  "companionWeights": {
+    "companion-ice-slime": 100,
+    "companion-penguin": 55,
+    "companion-penguin-black-variant": 55,
+    "companion-ice-elemental": 55,
+    "companion-deerclops": 25
+  },
+  "musicPool": [
+    "snow"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-snow-1",
+    "bg-variant-snow-2",
+    "bg-variant-snow-3",
+    "bg-variant-snow-4",
+    "bg-variant-snow-5"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-snow"
+  ]
+}

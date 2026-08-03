@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-jungle-temple",
+  "name": "Terraria · 丛林神庙",
+  "stylePreset": "terraria",
+  "variant": "jungle-temple",
+  "brandSubtitle": "JUNGLE TEMPLE",
+  "tagline": "机关、石砖与远古太阳。",
+  "projectPrefix": "选择神庙室 · ",
+  "projectLabel": "选择神庙室",
+  "statusText": "丛林神庙",
+  "quote": "AWAKEN THE ANCIENT MACHINE",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "none",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "torch-jungle": "torch-jungle.png",
+    "torch-orange": "torch-orange.png",
+    "torch-yellow": "torch-yellow.png",
+    "companion-lihzahrd": "companion-lihzahrd.apng",
+    "companion-lihzahrd-crawler-form": "companion-lihzahrd-crawler-form.apng",
+    "companion-flying-snake": "companion-flying-snake.apng",
+    "companion-golem-head-free-golem-head": "companion-golem-head-free-golem-head.apng",
+    "companion-golem-head": "companion-golem-head.png"
+  },
+  "torchKey": "torch-jungle",
+  "companionPool": [
+    "companion-lihzahrd",
+    "companion-lihzahrd-crawler-form",
+    "companion-flying-snake",
+    "companion-golem-head-free-golem-head",
+    "companion-golem-head"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#2b1608",
+    "panel": "#51300f",
+    "panelAlt": "#774c17",
+    "accent": "#f0aa3e",
+    "accentAlt": "#d76f2c",
+    "secondary": "#ffd76d",
+    "highlight": "#8d4b17",
+    "text": "#fff0d2",
+    "muted": "#e0bd8a",
+    "line": "rgba(240, 170, 62, .54)"
+  },
+  "companionWeights": {
+    "companion-lihzahrd": 55,
+    "companion-lihzahrd-crawler-form": 55,
+    "companion-flying-snake": 55,
+    "companion-golem-head-free-golem-head": 100,
+    "companion-golem-head": 100
+  },
+  "musicPool": [
+    "temple"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-dungeon"
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-hallow-night",
+  "name": "Terraria · 神圣之地 · 夜晚",
+  "stylePreset": "terraria",
+  "variant": "hallow-night",
+  "brandSubtitle": "THE HALLOW · NIGHT",
+  "tagline": "星光下，腹足怪与七彩草蛉开始发亮。",
+  "projectPrefix": "选择圣域 · ",
+  "projectLabel": "选择圣域",
+  "statusText": "神圣地表·夜晚",
+  "quote": "THE NIGHT GLITTERS",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.58,
+    "focusY": 0.45,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "torch-hallowed": "torch-hallowed.png",
+    "torch-rainbow": "torch-rainbow.png",
+    "torch-pink": "torch-pink.png",
+    "companion-pixie": "companion-pixie.apng",
+    "companion-unicorn": "companion-unicorn.apng",
+    "companion-gastropod": "companion-gastropod.apng",
+    "companion-lightning-bug": "companion-lightning-bug.apng",
+    "companion-empress-of-light": "companion-empress-of-light.apng",
+    "companion-queen-slime": "companion-queen-slime.png",
+    "companion-crystal-slime": "companion-crystal-slime.apng",
+    "companion-bouncy-slime": "companion-bouncy-slime.apng",
+    "companion-heavenly-slime": "companion-heavenly-slime.apng",
+    "companion-prismatic-lacewing": "companion-prismatic-lacewing.apng",
+    "bg-primary": "background.png",
+    "bg-variant-hallow-1": "bg-variant-hallow-1.png",
+    "bg-variant-hallow-2": "bg-variant-hallow-2.png",
+    "bg-variant-hallow-3": "bg-variant-hallow-3.png",
+    "bg-variant-hallow-4": "bg-variant-hallow-4.png",
+    "bg-variant-hallow-5": "bg-variant-hallow-5.apng"
+  },
+  "torchKey": "torch-hallowed",
+  "companionPool": [
+    "companion-pixie",
+    "companion-unicorn",
+    "companion-gastropod",
+    "companion-lightning-bug",
+    "companion-empress-of-light",
+    "companion-queen-slime",
+    "companion-crystal-slime",
+    "companion-bouncy-slime",
+    "companion-heavenly-slime",
+    "companion-prismatic-lacewing"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#17102f",
+    "panel": "#39265f",
+    "panelAlt": "#5b4088",
+    "accent": "#ef9dff",
+    "accentAlt": "#80d5ff",
+    "secondary": "#c9a7ff",
+    "highlight": "#7455ad",
+    "text": "#fff3ff",
+    "muted": "#dbc7e7",
+    "line": "rgba(239, 157, 255, .54)"
+  },
+  "companionWeights": {
+    "companion-pixie": 55,
+    "companion-unicorn": 55,
+    "companion-gastropod": 55,
+    "companion-lightning-bug": 25,
+    "companion-empress-of-light": 3,
+    "companion-queen-slime": 10,
+    "companion-crystal-slime": 55,
+    "companion-bouncy-slime": 55,
+    "companion-heavenly-slime": 55,
+    "companion-prismatic-lacewing": 25
+  },
+  "musicPool": [
+    "night"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-hallow-1",
+    "bg-variant-hallow-2",
+    "bg-variant-hallow-3",
+    "bg-variant-hallow-4",
+    "bg-variant-hallow-5"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-forest-night"
+  ]
+}

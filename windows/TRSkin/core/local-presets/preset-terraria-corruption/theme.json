@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-corruption",
+  "name": "Terraria · 地表腐化",
+  "stylePreset": "terraria",
+  "variant": "corruption",
+  "brandSubtitle": "THE SURFACE CORRUPTION",
+  "tagline": "裂隙与黑檀石侵入地表。",
+  "projectPrefix": "选择腐化域 · ",
+  "projectLabel": "选择腐化域",
+  "statusText": "地表腐化之地",
+  "quote": "THE CHASM SPREADS",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.52,
+    "focusY": 0.5,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "torch-corrupt": "torch-corrupt.png",
+    "torch-cursed": "torch-cursed.png",
+    "torch-purple": "torch-purple.png",
+    "companion-eater-of-souls-big-eater": "companion-eater-of-souls-big-eater.png",
+    "companion-slimeling": "companion-slimeling.apng",
+    "companion-eater-of-souls": "companion-eater-of-souls.apng",
+    "companion-corrupt-slime": "companion-corrupt-slime.apng",
+    "companion-corruptor": "companion-corruptor.apng",
+    "companion-slimer": "companion-slimer.apng",
+    "bg-primary": "background.png",
+    "bg-variant-corruption-1": "bg-variant-corruption-1.png",
+    "bg-variant-corruption-2": "bg-variant-corruption-2.png",
+    "bg-variant-corruption-3": "bg-variant-corruption-3.png",
+    "bg-variant-corruption-4": "bg-variant-corruption-4.png",
+    "bg-variant-corruption-5": "bg-variant-corruption-5.png"
+  },
+  "torchKey": "torch-corrupt",
+  "companionPool": [
+    "companion-eater-of-souls-big-eater",
+    "companion-slimeling",
+    "companion-eater-of-souls",
+    "companion-corrupt-slime",
+    "companion-corruptor",
+    "companion-slimer"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#170d26",
+    "panel": "#2d1744",
+    "panelAlt": "#4a2465",
+    "accent": "#b66cff",
+    "accentAlt": "#70e75d",
+    "secondary": "#d7a4ff",
+    "highlight": "#5c2c83",
+    "text": "#f8efff",
+    "muted": "#cbb6db",
+    "line": "rgba(182, 108, 255, .54)"
+  },
+  "companionWeights": {
+    "companion-eater-of-souls-big-eater": 100,
+    "companion-slimeling": 55,
+    "companion-eater-of-souls": 100,
+    "companion-corrupt-slime": 55,
+    "companion-corruptor": 55,
+    "companion-slimer": 55
+  },
+  "musicPool": [
+    "corruption"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-corruption-1",
+    "bg-variant-corruption-2",
+    "bg-variant-corruption-3",
+    "bg-variant-corruption-4",
+    "bg-variant-corruption-5"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-corruption"
+  ]
+}

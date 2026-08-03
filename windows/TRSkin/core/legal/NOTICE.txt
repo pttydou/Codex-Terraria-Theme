@@ -1,0 +1,23 @@
+# Notices
+
+Codex Terraria Skin Switcher is an unofficial local customization project. It is not affiliated with, endorsed by, or sponsored by OpenAI, Re-Logic, or the Terraria Wiki.
+
+## Software
+
+The scripts, CSS, injectors, and project documentation may be distributed under the repository's software license. The Windows package includes unmodified official Node.js 22.23.1 portable executables for x64 and arm64 under the upstream Node.js license recorded in `runtime/LICENSE.node.txt`. It does not include Codex, Electron, or modified OpenAI application files.
+
+## Terraria materials
+
+`local-presets/preset-terraria-*` contains Terraria-related images obtained from the Terraria Wiki at the user's request. These third-party files are not covered by the software license and this project does not grant redistribution or commercial-use rights for them.
+
+The exact source URLs and integrity information are recorded in:
+
+- `local-presets/COMPANION_SOURCES.json`
+- `local-presets/CARD_ICON_SOURCES.json`
+- `local-presets/EXPANDED_ENVIRONMENT_SOURCES.json`
+
+Terraria and wiki content terms apply to the third-party assets included in this package.
+
+## Security model
+
+The switcher does not modify WindowsApps, `app.asar`, Codex signatures, authentication data, API keys, or provider settings. It opens a Chromium DevTools Protocol endpoint on `127.0.0.1` only while a themed Codex session is active. Use the restore entry when the skin is not needed.

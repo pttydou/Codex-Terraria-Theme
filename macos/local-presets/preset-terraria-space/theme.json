@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-space",
+  "name": "Terraria · 太空",
+  "stylePreset": "terraria",
+  "variant": "space",
+  "brandSubtitle": "SPACE",
+  "tagline": "今天要飞向哪颗星？",
+  "projectPrefix": "选择星域 · ",
+  "projectLabel": "选择星域",
+  "statusText": "高空星域",
+  "quote": "REACH FOR THE STARS",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "none",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "torch-aether": "torch-aether.png",
+    "torch-rainbow": "torch-rainbow.png",
+    "torch-ultrabright": "torch-ultrabright.png",
+    "companion-eye-of-cthulhu": "companion-eye-of-cthulhu.apng",
+    "companion-servant-of-cthulhu": "companion-servant-of-cthulhu.apng",
+    "companion-harpy": "companion-harpy.apng",
+    "companion-retinazer": "companion-retinazer.apng",
+    "companion-spazmatism": "companion-spazmatism.apng",
+    "companion-skeletron-prime": "companion-skeletron-prime.apng",
+    "companion-martian-probe": "companion-martian-probe.apng"
+  },
+  "companionPool": [
+    "companion-eye-of-cthulhu",
+    "companion-servant-of-cthulhu",
+    "companion-harpy",
+    "companion-retinazer",
+    "companion-spazmatism",
+    "companion-skeletron-prime",
+    "companion-martian-probe"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#070b2b",
+    "panel": "#111a46",
+    "panelAlt": "#1d2d66",
+    "accent": "#72d9ff",
+    "accentAlt": "#9e8cff",
+    "secondary": "#ffd86a",
+    "highlight": "#6ee7ff",
+    "text": "#f4f7ff",
+    "muted": "#bac8ef",
+    "line": "rgba(114, 217, 255, .5)"
+  },
+  "companionWeights": {
+    "companion-eye-of-cthulhu": 55,
+    "companion-servant-of-cthulhu": 100,
+    "companion-harpy": 55,
+    "companion-retinazer": 10,
+    "companion-spazmatism": 10,
+    "companion-skeletron-prime": 10,
+    "companion-martian-probe": 10
+  },
+  "musicPool": [
+    "space-day",
+    "space-night"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-space"
+  ]
+}

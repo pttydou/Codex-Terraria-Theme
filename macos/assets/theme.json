@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-package-fallback",
+  "name": "Terraria · 森林",
+  "stylePreset": "terraria",
+  "variant": "forest-day",
+  "brandSubtitle": "THE FOREST",
+  "tagline": "今天要探索哪一片世界？",
+  "projectPrefix": "选择世界 · ",
+  "projectLabel": "选择世界",
+  "statusText": "森林",
+  "quote": "THE ADVENTURE BEGINS",
+  "image": "portal-hero.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.54,
+    "focusY": 0.48,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  }
+}

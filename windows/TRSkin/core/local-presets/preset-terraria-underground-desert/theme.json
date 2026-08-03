@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-underground-desert",
+  "name": "Terraria · 地下沙漠",
+  "stylePreset": "terraria",
+  "variant": "underground-desert",
+  "brandSubtitle": "THE UNDERGROUND DESERT",
+  "tagline": "硬化沙层深处，蚁狮巢穴仍在扩张。",
+  "projectPrefix": "选择沙海域 · ",
+  "projectLabel": "选择沙海域",
+  "statusText": "地下沙漠",
+  "quote": "THE SAND MOVES BELOW",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.52,
+    "focusY": 0.45,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "torch-desert": "torch-desert.png",
+    "torch-orange": "torch-orange.png",
+    "torch-yellow": "torch-yellow.png",
+    "companion-antlion": "companion-antlion.apng",
+    "companion-mummy": "companion-mummy.apng",
+    "companion-giant-antlion-charger": "companion-giant-antlion-charger.apng",
+    "companion-giant-antlion-swarmer": "companion-giant-antlion-swarmer.apng",
+    "companion-ghoul": "companion-ghoul.apng",
+    "companion-lamia-light-lamia": "companion-lamia-light-lamia.apng",
+    "companion-lamia-dark-lamia": "companion-lamia-dark-lamia.apng",
+    "companion-sand-poacher": "companion-sand-poacher.apng",
+    "companion-sand-poacher-on-wall": "companion-sand-poacher-on-wall.apng",
+    "companion-basilisk": "companion-basilisk.apng",
+    "companion-sand-slime": "companion-sand-slime.apng",
+    "companion-antlion-larva": "companion-antlion-larva.apng"
+  },
+  "torchKey": "torch-desert",
+  "companionPool": [
+    "companion-antlion",
+    "companion-mummy",
+    "companion-giant-antlion-charger",
+    "companion-giant-antlion-swarmer",
+    "companion-ghoul",
+    "companion-lamia-light-lamia",
+    "companion-lamia-dark-lamia",
+    "companion-sand-poacher",
+    "companion-sand-poacher-on-wall",
+    "companion-basilisk",
+    "companion-sand-slime",
+    "companion-antlion-larva"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#241506",
+    "panel": "#51351b",
+    "panelAlt": "#79522a",
+    "accent": "#f4c763",
+    "accentAlt": "#d98a37",
+    "secondary": "#f0ad66",
+    "highlight": "#8f5a2c",
+    "text": "#fff0d1",
+    "muted": "#ddc19b",
+    "line": "rgba(244, 199, 99, .55)"
+  },
+  "companionWeights": {
+    "companion-antlion": 100,
+    "companion-mummy": 55,
+    "companion-giant-antlion-charger": 55,
+    "companion-giant-antlion-swarmer": 55,
+    "companion-ghoul": 55,
+    "companion-lamia-light-lamia": 55,
+    "companion-lamia-dark-lamia": 55,
+    "companion-sand-poacher": 55,
+    "companion-sand-poacher-on-wall": 55,
+    "companion-basilisk": 55,
+    "companion-sand-slime": 55,
+    "companion-antlion-larva": 100
+  },
+  "musicPool": [
+    "underground-desert"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-desert"
+  ]
+}

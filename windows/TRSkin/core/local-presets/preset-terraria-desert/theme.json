@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-desert",
+  "name": "Terraria · 地表沙漠",
+  "stylePreset": "terraria",
+  "variant": "desert",
+  "brandSubtitle": "THE SURFACE DESERT",
+  "tagline": "烈日与黄沙守住世界的干旱地带。",
+  "projectPrefix": "选择沙海域 · ",
+  "projectLabel": "选择沙海域",
+  "statusText": "地表沙漠",
+  "quote": "THE DUNES REMEMBER",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.52,
+    "focusY": 0.45,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "torch-orange": "torch-orange.png",
+    "torch-yellow": "torch-yellow.png",
+    "companion-vulture": "companion-vulture.png",
+    "companion-antlion": "companion-antlion.apng",
+    "companion-mummy": "companion-mummy.apng",
+    "companion-scorpion-black-scorpion": "companion-scorpion-black-scorpion.apng",
+    "companion-scorpion": "companion-scorpion.apng",
+    "companion-pupfish": "companion-pupfish.apng",
+    "companion-grebe": "companion-grebe.png",
+    "companion-grebe-2": "companion-grebe-2.png",
+    "bg-primary": "background.png",
+    "bg-variant-desert-1": "bg-variant-desert-1.png",
+    "bg-variant-desert-2": "bg-variant-desert-2.png",
+    "bg-variant-desert-3": "bg-variant-desert-3.png",
+    "bg-variant-desert-4": "bg-variant-desert-4.apng",
+    "bg-variant-desert-5": "bg-variant-desert-5.png"
+  },
+  "companionPool": [
+    "companion-vulture",
+    "companion-antlion",
+    "companion-mummy",
+    "companion-scorpion-black-scorpion",
+    "companion-scorpion",
+    "companion-pupfish",
+    "companion-grebe",
+    "companion-grebe-2"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#2a1b0c",
+    "panel": "#503319",
+    "panelAlt": "#765126",
+    "accent": "#f3c55e",
+    "accentAlt": "#e28d39",
+    "secondary": "#ffe09a",
+    "highlight": "#a85f2b",
+    "text": "#fff5d9",
+    "muted": "#dfc49a",
+    "line": "rgba(243, 197, 94, .54)"
+  },
+  "companionWeights": {
+    "companion-vulture": 100,
+    "companion-antlion": 100,
+    "companion-mummy": 55,
+    "companion-scorpion-black-scorpion": 100,
+    "companion-scorpion": 100,
+    "companion-pupfish": 55,
+    "companion-grebe": 55,
+    "companion-grebe-2": 55
+  },
+  "musicPool": [
+    "desert"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-desert-1",
+    "bg-variant-desert-2",
+    "bg-variant-desert-3",
+    "bg-variant-desert-4",
+    "bg-variant-desert-5"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-desert"
+  ]
+}

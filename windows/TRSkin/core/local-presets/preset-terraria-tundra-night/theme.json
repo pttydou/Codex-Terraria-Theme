@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-tundra-night",
+  "name": "Terraria · 苔原 · 夜晚",
+  "stylePreset": "terraria",
+  "variant": "tundra-night",
+  "brandSubtitle": "THE TUNDRA · NIGHT",
+  "tagline": "寒夜降临，狼群在雪线外徘徊。",
+  "projectPrefix": "选择冰原域 · ",
+  "projectLabel": "选择冰原域",
+  "statusText": "雪原地表·夜晚",
+  "quote": "THE FROZEN NIGHT HOWLS",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.43,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "torch-ice": "torch-ice.png",
+    "torch-blue": "torch-blue.png",
+    "torch-white": "torch-white.png",
+    "companion-penguin": "companion-penguin.png",
+    "companion-penguin-black-variant": "companion-penguin-black-variant.png",
+    "companion-wolf": "companion-wolf.apng",
+    "companion-frozen-zombie": "companion-frozen-zombie.apng",
+    "companion-ice-elemental": "companion-ice-elemental.apng",
+    "companion-frozen-zombie-armed-frozen-": "companion-frozen-zombie-armed-frozen-.apng",
+    "companion-deerclops": "companion-deerclops.png",
+    "bg-primary": "background.png",
+    "bg-variant-snow-1": "bg-variant-snow-1.png",
+    "bg-variant-snow-2": "bg-variant-snow-2.png",
+    "bg-variant-snow-3": "bg-variant-snow-3.png",
+    "bg-variant-snow-4": "bg-variant-snow-4.png",
+    "bg-variant-snow-5": "bg-variant-snow-5.png"
+  },
+  "torchKey": "torch-ice",
+  "companionPool": [
+    "companion-penguin",
+    "companion-penguin-black-variant",
+    "companion-wolf",
+    "companion-frozen-zombie",
+    "companion-ice-elemental",
+    "companion-frozen-zombie-armed-frozen-",
+    "companion-deerclops"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#071827",
+    "panel": "#153a55",
+    "panelAlt": "#265776",
+    "accent": "#c4efff",
+    "accentAlt": "#7899e8",
+    "secondary": "#7edcff",
+    "highlight": "#4b66a1",
+    "text": "#f5fbff",
+    "muted": "#c4d8e5",
+    "line": "rgba(196, 239, 255, .52)"
+  },
+  "companionWeights": {
+    "companion-penguin": 55,
+    "companion-penguin-black-variant": 55,
+    "companion-wolf": 55,
+    "companion-frozen-zombie": 55,
+    "companion-ice-elemental": 55,
+    "companion-frozen-zombie-armed-frozen-": 55,
+    "companion-deerclops": 25
+  },
+  "musicPool": [
+    "snow"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-snow-1",
+    "bg-variant-snow-2",
+    "bg-variant-snow-3",
+    "bg-variant-snow-4",
+    "bg-variant-snow-5"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-snow"
+  ]
+}

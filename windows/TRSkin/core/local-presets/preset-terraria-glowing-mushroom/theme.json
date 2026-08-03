@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-glowing-mushroom",
+  "name": "Terraria · 地表夜光蘑菇",
+  "stylePreset": "terraria",
+  "variant": "glowing-mushroom",
+  "brandSubtitle": "THE SURFACE MUSHROOM",
+  "tagline": "蓝色菌光在开放天空下蔓延。",
+  "projectPrefix": "选择菌光域 · ",
+  "projectLabel": "选择菌光域",
+  "statusText": "地表夜光蘑菇地",
+  "quote": "SPORES UNDER OPEN SKY",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.55,
+    "focusY": 0.5,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.png",
+    "accent-3": "accent-3.png",
+    "torch-mushroom": "torch-mushroom.png",
+    "torch-blue": "torch-blue.png",
+    "torch-purple": "torch-purple.png",
+    "companion-spore-zombie-mushroom-zombi": "companion-spore-zombie-mushroom-zombi.apng",
+    "companion-spore-zombie-hat-mushroom-z": "companion-spore-zombie-hat-mushroom-z.apng",
+    "companion-fungo-fish": "companion-fungo-fish.apng",
+    "companion-anomura-fungus": "companion-anomura-fungus.apng",
+    "companion-mushi-ladybug": "companion-mushi-ladybug.apng",
+    "companion-fungi-bulb": "companion-fungi-bulb.png",
+    "companion-giant-fungi-bulb": "companion-giant-fungi-bulb.png",
+    "companion-glowing-snail": "companion-glowing-snail.apng",
+    "bg-primary": "background.png",
+    "bg-variant-mushroom-1": "bg-variant-mushroom-1.png",
+    "bg-variant-mushroom-2": "bg-variant-mushroom-2.png",
+    "bg-variant-mushroom-3": "bg-variant-mushroom-3.apng",
+    "bg-variant-mushroom-4": "bg-variant-mushroom-4.png"
+  },
+  "torchKey": "torch-mushroom",
+  "companionPool": [
+    "companion-spore-zombie-mushroom-zombi",
+    "companion-spore-zombie-hat-mushroom-z",
+    "companion-fungo-fish",
+    "companion-anomura-fungus",
+    "companion-mushi-ladybug",
+    "companion-fungi-bulb",
+    "companion-giant-fungi-bulb",
+    "companion-glowing-snail"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#11102f",
+    "panel": "#232052",
+    "panelAlt": "#343078",
+    "accent": "#67e8ff",
+    "accentAlt": "#b56bff",
+    "secondary": "#ff82da",
+    "highlight": "#5142a2",
+    "text": "#f0f7ff",
+    "muted": "#c1c2e6",
+    "line": "rgba(103, 232, 255, .54)"
+  },
+  "companionWeights": {
+    "companion-spore-zombie-mushroom-zombi": 55,
+    "companion-spore-zombie-hat-mushroom-z": 55,
+    "companion-fungo-fish": 55,
+    "companion-anomura-fungus": 55,
+    "companion-mushi-ladybug": 55,
+    "companion-fungi-bulb": 100,
+    "companion-giant-fungi-bulb": 55,
+    "companion-glowing-snail": 25
+  },
+  "musicPool": [
+    "mushrooms"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-mushroom-1",
+    "bg-variant-mushroom-2",
+    "bg-variant-mushroom-3",
+    "bg-variant-mushroom-4"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-mushrooms"
+  ]
+}

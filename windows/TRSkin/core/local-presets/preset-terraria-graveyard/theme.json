@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-graveyard",
+  "name": "Terraria · 墓地",
+  "stylePreset": "terraria",
+  "variant": "graveyard",
+  "brandSubtitle": "THE GRAVEYARD",
+  "tagline": "雾气贴地，墓碑保持沉默。",
+  "projectPrefix": "选择墓园 · ",
+  "projectLabel": "选择墓园",
+  "statusText": "墓地迷雾",
+  "quote": "THE MIST REMEMBERS",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.54,
+    "focusY": 0.48,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.apng",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "companion-the-groom": "companion-the-groom.apng",
+    "companion-raven": "companion-raven.png",
+    "companion-hoppin-jack": "companion-hoppin-jack.apng",
+    "companion-ghost": "companion-ghost.apng",
+    "companion-the-bride": "companion-the-bride.apng",
+    "companion-maggot": "companion-maggot.apng",
+    "companion-rat": "companion-rat.apng",
+    "companion-maggot-zombie": "companion-maggot-zombie.apng",
+    "companion-statue": "companion-statue.png",
+    "companion-moss-zombie": "companion-moss-zombie.png",
+    "bg-primary": "background.png",
+    "bg-variant-forest-1": "bg-variant-forest-1.png",
+    "bg-variant-forest-2": "bg-variant-forest-2.png",
+    "bg-variant-forest-3": "bg-variant-forest-3.png",
+    "bg-variant-forest-4": "bg-variant-forest-4.apng",
+    "bg-variant-forest-5": "bg-variant-forest-5.png"
+  },
+  "companionPool": [
+    "companion-the-groom",
+    "companion-raven",
+    "companion-hoppin-jack",
+    "companion-ghost",
+    "companion-the-bride",
+    "companion-maggot",
+    "companion-rat",
+    "companion-maggot-zombie",
+    "companion-statue",
+    "companion-moss-zombie"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#151918",
+    "panel": "#303735",
+    "panelAlt": "#4b5651",
+    "accent": "#bcc7bb",
+    "accentAlt": "#8ca99b",
+    "secondary": "#a7b8c7",
+    "highlight": "#66736e",
+    "text": "#f3f4e9",
+    "muted": "#c5cbc4",
+    "line": "rgba(188, 199, 187, .52)"
+  },
+  "companionWeights": {
+    "companion-the-groom": 3,
+    "companion-raven": 55,
+    "companion-hoppin-jack": 55,
+    "companion-ghost": 100,
+    "companion-the-bride": 3,
+    "companion-maggot": 100,
+    "companion-rat": 100,
+    "companion-maggot-zombie": 100,
+    "companion-statue": 100,
+    "companion-moss-zombie": 10
+  },
+  "musicPool": [
+    "graveyard"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-forest-1",
+    "bg-variant-forest-2",
+    "bg-variant-forest-3",
+    "bg-variant-forest-4",
+    "bg-variant-forest-5"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-eerie"
+  ]
+}
