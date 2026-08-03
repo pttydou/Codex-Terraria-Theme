@@ -81,14 +81,20 @@ try {
 
   const symlink = path.join(tempRoot, "symlink");
   await fs.mkdir(symlink);
-  await fs.symlink(outside, path.join(symlink, "background.png"));
-  await fs.writeFile(
-    path.join(symlink, "theme.json"),
-    `${JSON.stringify({ schemaVersion: 1, id: "bad-link", image: "background.png" })}\n`,
-  );
-  const symlinkStage = path.join(tempRoot, "symlink-stage");
-  await fs.mkdir(symlinkStage);
-  await assert.rejects(runStage(symlink, symlinkStage), /symbolic link/);
+  try {
+    await fs.symlink(outside, path.join(symlink, "background.png"));
+    await fs.writeFile(
+      path.join(symlink, "theme.json"),
+      `${JSON.stringify({ schemaVersion: 1, id: "bad-link", image: "background.png" })}\n`,
+    );
+    const symlinkStage = path.join(tempRoot, "symlink-stage");
+    await fs.mkdir(symlinkStage);
+    await assert.rejects(runStage(symlink, symlinkStage), /symbolic link/);
+  } catch (error) {
+    // Windows runners without Developer Mode cannot create symlinks. Unix CI
+    // still executes the rejection assertion above.
+    if (error?.code !== "EPERM") throw error;
+  }
 
   const badIconPool = path.join(tempRoot, "bad-icon-pool");
   const badIconPoolStage = path.join(tempRoot, "bad-icon-pool-stage");

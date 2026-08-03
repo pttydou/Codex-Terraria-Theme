@@ -75,6 +75,7 @@ INSTALLED_VERSION="$(read_version "$INSTALL_ROOT/VERSION" 2>/dev/null || true)"
 INSTALLED_COMPLETE="false"
 if [ -x "$INSTALLED_CONSOLE" ] &&
   [ -x "$INSTALL_ROOT/scripts/common-macos.sh" ] &&
+  [ -x "$INSTALL_ROOT/scripts/update-macos.sh" ] &&
   [ -x "$INSTALL_ROOT/scripts/one-click-dream-skin-macos.sh" ] &&
   [ -x "$INSTALL_ROOT/scripts/install-dream-skin-macos.sh" ]; then
   INSTALLED_COMPLETE="true"

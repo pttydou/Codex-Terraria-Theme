@@ -62,11 +62,12 @@ app_stage="$stage/Codex 皮肤控制台.app"
 native_source="$PROJECT_ROOT/control-app/bin/CodexThemeConsole"
 native_swift_source="$PROJECT_ROOT/control-app/CodexThemeConsole.swift"
 native_target="$app_stage/Contents/MacOS/CodexThemeConsole"
+native_payload="$app_stage/Contents/Resources/CodexThemeConsoleNative"
 if [ -x "$native_source" ] \
   && { [ ! -f "$native_swift_source" ] || [ "$native_source" -nt "$native_swift_source" ]; }; then
-  /bin/cp "$native_source" "$native_target"
+  /bin/cp "$native_source" "$native_payload"
 elif [ -x /usr/bin/swiftc ] \
-  && "$SCRIPT_DIR/build-theme-console-binary-macos.sh" "$native_target" >/dev/null 2>&1; then
+  && "$SCRIPT_DIR/build-theme-console-binary-macos.sh" "$native_payload" >/dev/null 2>&1; then
   :
 else
   /usr/bin/printf '%s\n' \
@@ -100,8 +101,29 @@ else
     '  show_alert "$detail"' \
     'fi' \
     'exit "$status"' \
-    > "$native_target"
+    > "$native_payload"
 fi
+/bin/chmod 700 "$native_payload"
+/usr/bin/printf '%s\n' \
+  '#!/bin/bash' \
+  "# $MANAGED_MARKER" \
+  'set -u' \
+  'app_root="$(cd "$(dirname "$0")/.." && pwd -P)"' \
+  'payload="$app_root/Resources/CodexThemeConsoleNative"' \
+  'engine="${CODEX_DREAM_SKIN_ENGINE:-$HOME/.codex/codex-dream-skin-studio}"' \
+  'updater="$engine/scripts/update-macos.sh"' \
+  'log_root="$HOME/Library/Logs/CodexDreamSkinStudio"' \
+  'log_path="$log_root/update.log"' \
+  '/bin/mkdir -p "$log_root"' \
+  'if [ -x "$updater" ]; then' \
+  '  "$updater" --check-and-install >> "$log_path" 2>&1 || true' \
+  'fi' \
+  'if [ ! -x "$payload" ]; then' \
+  '  /usr/bin/osascript -e '"'"'display alert "TR Skin" message "控制台文件不完整，请重新安装 TR Skin。" as warning'"'"' >/dev/null 2>&1 || true' \
+  '  exit 1' \
+  'fi' \
+  'exec "$payload"' \
+  > "$native_target"
 /bin/chmod 700 "$native_target"
 /usr/bin/plutil -lint "$app_stage/Contents/Info.plist" >/dev/null
 

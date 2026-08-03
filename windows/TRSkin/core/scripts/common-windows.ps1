@@ -62,6 +62,7 @@ function Get-DreamSkinRuntimeEnginePaths {
     Purge = Join-Path $scripts 'purge-dream-skin-state.ps1'
     Tray = Join-Path $scripts 'tray-dream-skin.ps1'
     ControlPanel = Join-Path $scripts 'control-panel-windows.ps1'
+    Updater = Join-Path $scripts 'update-windows.ps1'
   }
 }
 
@@ -262,6 +263,9 @@ function Install-DreamSkinRuntimeEngine {
   }
   $runtimeDirectories = @('assets', 'scripts', 'local-presets', 'runtime')
   $runtimeFiles = @('VERSION')
+  if (Test-Path -LiteralPath (Join-Path $sourceRoot 'BUILD-INFO.json') -PathType Leaf) {
+    $runtimeFiles += 'BUILD-INFO.json'
+  }
   foreach ($directoryName in $runtimeDirectories) {
     $sourceDirectory = Join-Path $sourceRoot $directoryName
     if ((Test-DreamSkinPathEqual -Left $fullStateRoot -Right $sourceDirectory) -or

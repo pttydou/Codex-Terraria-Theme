@@ -11,12 +11,12 @@
 ## 一、先核对再运行
 
 1. 确认 ZIP 来自你信任的人，不要使用群聊里被二次转发、重新打包或改名的版本。
-2. 将 ZIP 与旁边的 `.sha256` 文件放在同一目录。
+2. 将 ZIP 与 Release 中的 `SHA256SUMS.txt` 放在同一目录。
 3. 打开“终端”，进入该目录，例如：
 
    ```bash
    cd "$HOME/Downloads"
-   shasum -a 256 -c TRSkin-macOS-2.6.0.12-private-music.zip.sha256
+   grep 'TRSkin-macOS-' SHA256SUMS.txt | shasum -a 256 -c -
    ```
 
 4. 只有看到 `OK` 才继续。若校验失败，删除文件并重新获取，不要放行。
