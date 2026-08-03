@@ -2,7 +2,7 @@
 
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd -P)"
-NODE="${NODE:-$(/usr/bin/command -v node || true)}"
+NODE="${NODE:-$(command -v node || true)}"
 [ -n "$NODE" ] || { printf 'Node.js is required for package source tests.\n' >&2; exit 1; }
 
 for script in "$ROOT"/*.command "$ROOT"/scripts/*.sh; do
