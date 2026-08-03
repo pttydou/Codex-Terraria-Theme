@@ -1,0 +1,69 @@
+name: Finalize draft release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing draft Release tag
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ inputs.tag }}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - id: identity
+        name: Validate tag and source identity
+        shell: bash
+        run: |
+          node release/validate-release.mjs --tag '${{ inputs.tag }}'
+          printf 'version=%s\n' "$(tr -d '[:space:]' < windows/TRSkin/core/VERSION)" >> "$GITHUB_OUTPUT"
+          printf 'commit=%s\n' "$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Read draft Release asset digests by ID
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          state="$(gh release view '${{ inputs.tag }}' \
+            --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft)"
+          [[ "$state" == "true" ]] || { echo 'The requested Release is not a draft.' >&2; exit 1; }
+          release_id="$(gh release view '${{ inputs.tag }}' \
+            --repo "$GITHUB_REPOSITORY" --json databaseId --jq .databaseId)"
+          gh api "repos/$GITHUB_REPOSITORY/releases/$release_id" > release.json
+      - name: Generate update manifest and checksums
+        run: |
+          node release/generate-release-metadata.mjs \
+            release.json dist '${{ steps.identity.outputs.version }}' \
+            '${{ inputs.tag }}' '${{ steps.identity.outputs.commit }}'
+      - name: Attest manifest and checksums
+        uses: actions/attest@508db95dd578ae2727ebd6217d5ba78e4fbda05d # v4
+        with:
+          subject-path: |
+            dist/SHA256SUMS.txt
+            dist/update-manifest.json
+      - name: Upload metadata and publish Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release upload '${{ inputs.tag }}' \
+            dist/SHA256SUMS.txt dist/update-manifest.json \
+            --repo "$GITHUB_REPOSITORY" --clobber
+          gh release edit '${{ inputs.tag }}' \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "TRSkin ${{ steps.identity.outputs.version }}" \
+            --notes-file dist/RELEASE-NOTES.md \
+            --draft=false
