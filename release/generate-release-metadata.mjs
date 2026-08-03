@@ -15,6 +15,7 @@ if (tag !== `v${version}` || !/^[a-f0-9]{40}$/.test(sourceCommit ?? "")) {
 }
 
 const dist = path.resolve(distArg);
+await fs.mkdir(dist, { recursive: true });
 const config = JSON.parse(await fs.readFile(path.join(root, "release/release-config.json"), "utf8"));
 const release = JSON.parse(await fs.readFile(path.resolve(releaseJsonArg), "utf8"));
 if (!Array.isArray(release.assets) || release.tag_name !== tag || release.draft !== true) {

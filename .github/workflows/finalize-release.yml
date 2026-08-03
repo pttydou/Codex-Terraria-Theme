@@ -45,6 +45,7 @@ jobs:
           gh api "repos/$GITHUB_REPOSITORY/releases/$release_id" > release.json
       - name: Generate update manifest and checksums
         run: |
+          mkdir -p dist
           node release/generate-release-metadata.mjs \
             release.json dist '${{ steps.identity.outputs.version }}' \
             '${{ inputs.tag }}' '${{ steps.identity.outputs.commit }}'
