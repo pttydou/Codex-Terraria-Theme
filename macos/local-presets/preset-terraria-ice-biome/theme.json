@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-ice-biome",
+  "name": "Terraria · 地下冰雪",
+  "stylePreset": "terraria",
+  "variant": "ice-biome",
+  "brandSubtitle": "THE ICE BIOME",
+  "tagline": "冰层之下，寒气凝结成另一座洞穴。",
+  "projectPrefix": "选择冰原域 · ",
+  "projectLabel": "选择冰原域",
+  "statusText": "地下冰雪生物群落",
+  "quote": "ICE RUNS DEEP",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.43,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "torch-ice": "torch-ice.png",
+    "torch-blue": "torch-blue.png",
+    "torch-white": "torch-white.png",
+    "companion-ice-bat": "companion-ice-bat.apng",
+    "companion-ice-tortoise": "companion-ice-tortoise.apng",
+    "companion-undead-viking": "companion-undead-viking.apng",
+    "companion-ice-elemental": "companion-ice-elemental.apng",
+    "companion-spiked-ice-slime": "companion-spiked-ice-slime.apng",
+    "companion-snow-flinx": "companion-snow-flinx.apng",
+    "companion-armored-viking": "companion-armored-viking.apng",
+    "companion-icy-merman": "companion-icy-merman.apng",
+    "companion-cyan-beetle": "companion-cyan-beetle.apng",
+    "companion-ice-mimic": "companion-ice-mimic.png",
+    "bg-primary": "background.png",
+    "bg-variant-ice-1": "bg-variant-ice-1.png",
+    "bg-variant-ice-2": "bg-variant-ice-2.png",
+    "bg-variant-ice-3": "bg-variant-ice-3.png",
+    "bg-variant-ice-4": "bg-variant-ice-4.png",
+    "bg-variant-ice-5": "bg-variant-ice-5.png"
+  },
+  "torchKey": "torch-ice",
+  "companionPool": [
+    "companion-ice-bat",
+    "companion-ice-tortoise",
+    "companion-undead-viking",
+    "companion-ice-elemental",
+    "companion-spiked-ice-slime",
+    "companion-snow-flinx",
+    "companion-armored-viking",
+    "companion-icy-merman",
+    "companion-cyan-beetle",
+    "companion-ice-mimic"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#071a28",
+    "panel": "#16425e",
+    "panelAlt": "#286d89",
+    "accent": "#b9f3ff",
+    "accentAlt": "#65bfff",
+    "secondary": "#d8eaff",
+    "highlight": "#4d83b4",
+    "text": "#f5fdff",
+    "muted": "#c4dce8",
+    "line": "rgba(185, 243, 255, .56)"
+  },
+  "companionWeights": {
+    "companion-ice-bat": 100,
+    "companion-ice-tortoise": 55,
+    "companion-undead-viking": 55,
+    "companion-ice-elemental": 55,
+    "companion-spiked-ice-slime": 55,
+    "companion-snow-flinx": 25,
+    "companion-armored-viking": 55,
+    "companion-icy-merman": 25,
+    "companion-cyan-beetle": 25,
+    "companion-ice-mimic": 3
+  },
+  "musicPool": [
+    "ice"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-ice-1",
+    "bg-variant-ice-2",
+    "bg-variant-ice-3",
+    "bg-variant-ice-4",
+    "bg-variant-ice-5"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-ice"
+  ]
+}

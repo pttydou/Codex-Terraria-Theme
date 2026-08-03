@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-spider-nest",
+  "name": "Terraria · 蜘蛛洞",
+  "stylePreset": "terraria",
+  "variant": "spider-nest",
+  "brandSubtitle": "THE SPIDER NEST",
+  "tagline": "蛛网覆盖着洞穴的每一道出口。",
+  "projectPrefix": "选择蛛网巢 · ",
+  "projectLabel": "选择蛛网巢",
+  "statusText": "蜘蛛洞穴",
+  "quote": "EVERY THREAD IS WATCHING",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "none",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.apng",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "companion-black-recluse": "companion-black-recluse.apng",
+    "companion-wall-creeper": "companion-wall-creeper.apng",
+    "companion-wall-creeper-on-wall": "companion-wall-creeper-on-wall.apng",
+    "companion-black-recluse-on-wall": "companion-black-recluse-on-wall.apng"
+  },
+  "companionPool": [
+    "companion-black-recluse",
+    "companion-wall-creeper",
+    "companion-wall-creeper-on-wall",
+    "companion-black-recluse-on-wall"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#15121b",
+    "panel": "#30273b",
+    "panelAlt": "#51425e",
+    "accent": "#d4c9df",
+    "accentAlt": "#9b72bf",
+    "secondary": "#e0b5ff",
+    "highlight": "#715780",
+    "text": "#fbf4ff",
+    "muted": "#cec4d3",
+    "line": "rgba(212, 201, 223, .52)"
+  },
+  "companionWeights": {
+    "companion-black-recluse": 55,
+    "companion-wall-creeper": 55,
+    "companion-wall-creeper-on-wall": 55,
+    "companion-black-recluse-on-wall": 55
+  },
+  "musicPool": [
+    "underground",
+    "alternate-underground"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-underground"
+  ]
+}

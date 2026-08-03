@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-underground-corruption",
+  "name": "Terraria · 地下腐化",
+  "stylePreset": "terraria",
+  "variant": "underground-corruption",
+  "brandSubtitle": "THE UNDERGROUND CORRUPTION",
+  "tagline": "诅咒焰在黑檀石洞穴中燃烧。",
+  "projectPrefix": "选择腐化域 · ",
+  "projectLabel": "选择腐化域",
+  "statusText": "地下腐化之地",
+  "quote": "CURSED FIRE BELOW",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.52,
+    "focusY": 0.5,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "torch-corrupt": "torch-corrupt.png",
+    "torch-cursed": "torch-cursed.png",
+    "torch-purple": "torch-purple.png",
+    "companion-eater-of-souls-big-eater": "companion-eater-of-souls-big-eater.png",
+    "companion-slimeling": "companion-slimeling.apng",
+    "companion-eater-of-souls": "companion-eater-of-souls.apng",
+    "companion-corrupt-slime": "companion-corrupt-slime.apng",
+    "companion-corruptor": "companion-corruptor.apng",
+    "companion-clinger": "companion-clinger.apng",
+    "companion-slimer": "companion-slimer.apng",
+    "companion-corrupt-mimic": "companion-corrupt-mimic.png",
+    "bg-primary": "background.png",
+    "bg-variant-underground-corruption-1": "bg-variant-underground-corruption-1.png",
+    "bg-variant-underground-corruption-3": "bg-variant-underground-corruption-3.png",
+    "bg-variant-underground-corruption-4": "bg-variant-underground-corruption-4.png"
+  },
+  "torchKey": "torch-corrupt",
+  "companionPool": [
+    "companion-eater-of-souls-big-eater",
+    "companion-slimeling",
+    "companion-eater-of-souls",
+    "companion-corrupt-slime",
+    "companion-corruptor",
+    "companion-clinger",
+    "companion-slimer",
+    "companion-corrupt-mimic"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#130b24",
+    "panel": "#34205c",
+    "panelAlt": "#563783",
+    "accent": "#b07cff",
+    "accentAlt": "#72dc72",
+    "secondary": "#d29aff",
+    "highlight": "#6d4aa0",
+    "text": "#f9efff",
+    "muted": "#d0bedc",
+    "line": "rgba(176, 124, 255, .54)"
+  },
+  "companionWeights": {
+    "companion-eater-of-souls-big-eater": 100,
+    "companion-slimeling": 55,
+    "companion-eater-of-souls": 100,
+    "companion-corrupt-slime": 55,
+    "companion-corruptor": 55,
+    "companion-clinger": 55,
+    "companion-slimer": 55,
+    "companion-corrupt-mimic": 3
+  },
+  "musicPool": [
+    "underground-corruption"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-underground-corruption-1",
+    "bg-variant-underground-corruption-3",
+    "bg-variant-underground-corruption-4"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-underground-corruption"
+  ]
+}

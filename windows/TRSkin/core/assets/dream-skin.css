@@ -1,0 +1,2814 @@
+:root.codex-dream-skin {
+  color-scheme: dark !important;
+  --ds-bg: #111318;
+  --ds-panel: #191c22;
+  --ds-panel-2: #20242b;
+  --ds-green: #8298a3;
+  --ds-lime: #a0adb3;
+  --ds-cyan: #8da397;
+  --ds-purple: #9d94a3;
+  --ds-text: #edf0f1;
+  --ds-muted: #a3aaae;
+  --ds-line: rgba(130, 152, 163, .24);
+  --ds-bg-rgb: 17 19 24;
+  --ds-panel-rgb: 25 28 34;
+  --ds-panel-2-rgb: 32 36 43;
+  --ds-text-rgb: 237 240 241;
+  --ds-muted-rgb: 163 170 174;
+  --ds-accent-rgb: 130 152 163;
+  --ds-secondary-rgb: 141 163 151;
+  --ds-highlight-rgb: var(--ds-secondary-rgb);
+  --ds-accent: var(--ds-green);
+  --ds-accent-soft: var(--ds-lime);
+  --ds-secondary: var(--ds-cyan);
+  --ds-highlight: var(--ds-purple);
+  --ds-on-accent: rgb(var(--ds-bg-rgb) / 1);
+  --ds-focus-x: var(--dream-skin-focus-x, var(--dream-art-focus-x, 50%));
+  --ds-focus-y: var(--dream-skin-focus-y, var(--dream-art-focus-y, 50%));
+  --ds-art-position: var(--dream-art-position, var(--dream-skin-art-position, var(--ds-focus-x) var(--ds-focus-y)));
+  --ds-safe-side: left;
+  --ds-hero-scrim: linear-gradient(90deg,
+    rgb(var(--ds-bg-rgb) / .90) 0%,
+    rgb(var(--ds-bg-rgb) / .76) 50%,
+    rgb(var(--ds-bg-rgb) / .18) 84%,
+    transparent 100%);
+  --ds-task-shade: linear-gradient(90deg,
+    rgb(var(--ds-bg-rgb) / .56) 0%,
+    rgb(var(--ds-bg-rgb) / .36) 48%,
+    rgb(var(--ds-bg-rgb) / .12) 100%);
+  --ds-task-fade: linear-gradient(180deg,
+    rgb(var(--ds-bg-rgb) / .10) 0%,
+    rgb(var(--ds-bg-rgb) / .18) 32%,
+    rgb(var(--ds-bg-rgb) / .76) 68%,
+    rgb(var(--ds-bg-rgb) / 1) 100%);
+  --ds-immersive-edge: rgb(var(--ds-bg-rgb) / .40);
+  --ds-immersive-mid: rgb(var(--ds-bg-rgb) / .26);
+  --ds-immersive-far: rgb(var(--ds-bg-rgb) / .16);
+  --ds-immersive-sidebar: rgb(var(--ds-panel-rgb) / .46);
+  --ds-task-immersive-sidebar: rgb(var(--ds-panel-rgb) / .70);
+  --ds-immersive-chrome: rgb(var(--ds-panel-rgb) / .28);
+  --ds-immersive-composer: rgb(var(--ds-panel-rgb) / .44);
+  --ds-immersive-composer-solid: color-mix(in srgb,
+    rgb(var(--ds-panel-2-rgb)) 88%,
+    rgb(var(--ds-muted-rgb)) 12%);
+  --ds-immersive-line: rgb(var(--ds-muted-rgb) / .42);
+  --ds-task-immersive-edge: rgb(var(--ds-bg-rgb) / .82);
+  --ds-task-immersive-mid: rgb(var(--ds-bg-rgb) / .74);
+  --ds-task-immersive-far: rgb(var(--ds-bg-rgb) / .60);
+}
+
+html.codex-dream-skin[data-dream-shell="light"] {
+  color-scheme: light !important;
+  --ds-bg: #f3f5f6;
+  --ds-panel: #fafbfb;
+  --ds-panel-2: #e9edef;
+  --ds-text: #22272a;
+  --ds-muted: #687176;
+  --ds-line: rgba(91, 111, 121, .18);
+  --ds-bg-rgb: 243 245 246;
+  --ds-panel-rgb: 250 251 251;
+  --ds-panel-2-rgb: 233 237 239;
+  --ds-text-rgb: 34 39 42;
+  --ds-muted-rgb: 104 113 118;
+  --ds-accent-rgb: 84 112 126;
+  --ds-secondary-rgb: 102 128 116;
+  --ds-highlight-rgb: var(--ds-secondary-rgb);
+  --ds-on-accent: rgb(var(--ds-panel-rgb) / 1);
+  --ds-hero-scrim: linear-gradient(90deg,
+    rgb(var(--ds-panel-rgb) / .96) 0%,
+    rgb(var(--ds-panel-rgb) / .82) 50%,
+    rgb(var(--ds-panel-rgb) / .20) 84%,
+    transparent 100%);
+  --ds-task-shade: linear-gradient(90deg,
+    rgb(var(--ds-bg-rgb) / .68) 0%,
+    rgb(var(--ds-bg-rgb) / .40) 48%,
+    rgb(var(--ds-bg-rgb) / .12) 100%);
+  --ds-task-fade: linear-gradient(180deg,
+    rgb(var(--ds-bg-rgb) / .08) 0%,
+    rgb(var(--ds-bg-rgb) / .22) 34%,
+    rgb(var(--ds-bg-rgb) / .78) 70%,
+    rgb(var(--ds-bg-rgb) / 1) 100%);
+  --ds-immersive-edge: rgb(var(--ds-panel-rgb) / .44);
+  --ds-immersive-mid: rgb(var(--ds-panel-rgb) / .28);
+  --ds-immersive-far: rgb(var(--ds-panel-rgb) / .14);
+  --ds-immersive-sidebar: rgb(var(--ds-panel-rgb) / .48);
+  --ds-task-immersive-sidebar: rgb(var(--ds-panel-rgb) / .72);
+  --ds-immersive-chrome: rgb(var(--ds-panel-rgb) / .34);
+  --ds-immersive-composer: rgb(var(--ds-panel-rgb) / .46);
+  --ds-immersive-composer-solid: rgb(var(--ds-panel-rgb) / .74);
+  --ds-immersive-line: rgb(var(--ds-accent-rgb) / .24);
+  --ds-task-immersive-edge: rgb(var(--ds-panel-rgb) / .86);
+  --ds-task-immersive-mid: rgb(var(--ds-panel-rgb) / .78);
+  --ds-task-immersive-far: rgb(var(--ds-panel-rgb) / .66);
+}
+
+html.codex-dream-skin:is([data-dream-art-safe="left"], [data-dream-art-safe-area="left"]) {
+  --ds-safe-side: left;
+  --ds-art-position: 100% var(--ds-focus-y);
+}
+
+html.codex-dream-skin:is([data-dream-art-safe="right"], [data-dream-art-safe-area="right"]) {
+  --ds-safe-side: right;
+  --ds-art-position: 0% var(--ds-focus-y);
+  --ds-hero-scrim: linear-gradient(270deg,
+    rgb(var(--ds-bg-rgb) / .90) 0%,
+    rgb(var(--ds-bg-rgb) / .76) 50%,
+    rgb(var(--ds-bg-rgb) / .18) 84%,
+    transparent 100%);
+  --ds-task-shade: linear-gradient(270deg,
+    rgb(var(--ds-bg-rgb) / .56) 0%,
+    rgb(var(--ds-bg-rgb) / .36) 48%,
+    rgb(var(--ds-bg-rgb) / .12) 100%);
+}
+
+html.codex-dream-skin[data-dream-shell="light"]:is([data-dream-art-safe="right"], [data-dream-art-safe-area="right"]) {
+  --ds-hero-scrim: linear-gradient(270deg,
+    rgb(var(--ds-panel-rgb) / .96) 0%,
+    rgb(var(--ds-panel-rgb) / .82) 50%,
+    rgb(var(--ds-panel-rgb) / .20) 84%,
+    transparent 100%);
+  --ds-task-shade: linear-gradient(270deg,
+    rgb(var(--ds-bg-rgb) / .68) 0%,
+    rgb(var(--ds-bg-rgb) / .40) 48%,
+    rgb(var(--ds-bg-rgb) / .12) 100%);
+}
+
+html.codex-dream-skin:is([data-dream-art-safe="center"], [data-dream-art-safe-area="center"]) {
+  --ds-safe-side: center;
+  --ds-hero-scrim: linear-gradient(90deg,
+    transparent 0%,
+    rgb(var(--ds-bg-rgb) / .68) 25%,
+    rgb(var(--ds-bg-rgb) / .78) 50%,
+    rgb(var(--ds-bg-rgb) / .68) 75%,
+    transparent 100%);
+  --ds-task-shade: radial-gradient(ellipse at center,
+    rgb(var(--ds-bg-rgb) / .48) 0%,
+    rgb(var(--ds-bg-rgb) / .30) 52%,
+    rgb(var(--ds-bg-rgb) / .10) 100%);
+}
+
+html.codex-dream-skin[data-dream-shell="light"]:is([data-dream-art-safe="center"], [data-dream-art-safe-area="center"]) {
+  --ds-hero-scrim: linear-gradient(90deg,
+    transparent 0%,
+    rgb(var(--ds-panel-rgb) / .72) 25%,
+    rgb(var(--ds-panel-rgb) / .88) 50%,
+    rgb(var(--ds-panel-rgb) / .72) 75%,
+    transparent 100%);
+  --ds-task-shade: radial-gradient(ellipse at center,
+    rgb(var(--ds-bg-rgb) / .58) 0%,
+    rgb(var(--ds-bg-rgb) / .34) 52%,
+    rgb(var(--ds-bg-rgb) / .10) 100%);
+}
+
+html.codex-dream-skin:is([data-dream-art-safe="none"], [data-dream-art-safe-area="none"]) {
+  --ds-safe-side: none;
+  --ds-hero-scrim: linear-gradient(180deg,
+    rgb(var(--ds-bg-rgb) / .34),
+    rgb(var(--ds-bg-rgb) / .20));
+  --ds-task-shade: linear-gradient(180deg,
+    rgb(var(--ds-bg-rgb) / .28),
+    rgb(var(--ds-bg-rgb) / .14));
+}
+
+html.codex-dream-skin[data-dream-shell="light"]:is([data-dream-art-safe="none"], [data-dream-art-safe-area="none"]) {
+  --ds-hero-scrim: linear-gradient(180deg,
+    rgb(var(--ds-panel-rgb) / .46),
+    rgb(var(--ds-panel-rgb) / .28));
+  --ds-task-shade: linear-gradient(180deg,
+    rgb(var(--ds-bg-rgb) / .34),
+    rgb(var(--ds-bg-rgb) / .16));
+}
+
+html.codex-dream-skin body {
+  background: var(--ds-bg) !important;
+  color: var(--ds-text) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei UI", "Segoe UI", system-ui, sans-serif !important;
+}
+
+html.codex-dream-skin body::before {
+  content: none;
+}
+
+html.codex-dream-skin aside.app-shell-left-panel {
+  background:
+    linear-gradient(180deg,
+      rgb(var(--ds-panel-rgb) / .98),
+      rgb(var(--ds-bg-rgb) / .96)) !important;
+  border: 1px solid var(--ds-line) !important;
+  border-left: 0 !important;
+  border-radius: 0 16px 16px 0 !important;
+  box-shadow: 10px 0 30px rgb(var(--ds-bg-rgb) / .22) !important;
+  color: var(--ds-text) !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-dream-skin aside.app-shell-left-panel nav { background: transparent !important; }
+
+html.codex-dream-skin aside.app-shell-left-panel button,
+html.codex-dream-skin aside.app-shell-left-panel a {
+  color: var(--ds-text) !important;
+  transition: background-color .18s cubic-bezier(.22, 1, .36, 1),
+    border-color .18s cubic-bezier(.22, 1, .36, 1),
+    color .18s cubic-bezier(.22, 1, .36, 1) !important;
+}
+
+html.codex-dream-skin aside.app-shell-left-panel [class*="text-token-foreground"] {
+  color: var(--ds-text) !important;
+}
+
+html.codex-dream-skin aside.app-shell-left-panel [class*="text-token-input-placeholder-foreground"] {
+  color: rgb(var(--ds-muted-rgb) / .92) !important;
+}
+
+html.codex-dream-skin aside.app-shell-left-panel svg {
+  color: rgb(var(--ds-muted-rgb) / .96) !important;
+}
+
+html.codex-dream-skin aside.app-shell-left-panel button:hover,
+html.codex-dream-skin aside.app-shell-left-panel a:hover {
+  background: rgb(var(--ds-accent-rgb) / .09) !important;
+  color: var(--ds-text) !important;
+  transform: none !important;
+}
+
+html.codex-dream-skin aside.app-shell-left-panel button:hover svg,
+html.codex-dream-skin aside.app-shell-left-panel a:hover svg {
+  color: var(--ds-accent) !important;
+}
+
+html.codex-dream-skin aside.app-shell-left-panel button[aria-label^="切换模式"] {
+  background: transparent !important;
+  border: 0 !important;
+  color: var(--ds-accent) !important;
+  font-family: inherit !important;
+  font-size: 19px !important;
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin aside.app-shell-left-panel button[aria-label^="切换模式"]::after {
+  content: " ·";
+  color: var(--ds-secondary);
+}
+
+html.codex-dream-skin aside.app-shell-left-panel [class~="bg-token-list-hover-background"],
+html.codex-dream-skin aside.app-shell-left-panel [aria-current="page"] {
+  background: rgb(var(--ds-accent-rgb) / .12) !important;
+  border: 1px solid rgb(var(--ds-accent-rgb) / .22) !important;
+  box-shadow: 0 4px 16px rgb(var(--ds-bg-rgb) / .12) !important;
+  color: var(--ds-text) !important;
+}
+
+html.codex-dream-skin aside.app-shell-left-panel [aria-current="page"] svg {
+  color: var(--ds-accent) !important;
+}
+
+html.codex-dream-skin main.trskin-main-surface {
+  position: relative !important;
+  isolation: isolate;
+  overflow: hidden !important;
+  background: var(--ds-bg) !important;
+  border: 1px solid var(--ds-line) !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: 16px 0 0 0 !important;
+  box-shadow: -8px 0 28px rgb(var(--ds-bg-rgb) / .18) !important;
+}
+
+html.codex-dream-skin main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--ds-task-fade), var(--ds-task-shade), var(--dream-skin-art);
+  background-repeat: no-repeat;
+  background-position: center, center, var(--ds-art-position);
+  background-size: 100% 100%, 100% 100%, cover;
+  opacity: .78;
+}
+
+html.codex-dream-skin[data-dream-shell="light"] main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  opacity: .72;
+}
+
+html.codex-dream-skin:is([data-dream-art-wide="true"], [data-dream-art-aspect="wide"], [data-dream-art-aspect="ultrawide"])
+  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  background-position: center, center, var(--ds-art-position);
+  background-size: 100% 100%, 100% 100%, cover;
+}
+
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])
+  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  inset: 0;
+  height: auto;
+}
+
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(main.trskin-main-surface:not(.dream-skin-home-shell)) body {
+  background-image: var(--dream-skin-art) !important;
+  background-position: var(--ds-art-position) !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+}
+
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(main.trskin-main-surface:not(.dream-skin-home-shell))
+  aside.app-shell-left-panel {
+  background: linear-gradient(90deg,
+    var(--ds-task-immersive-sidebar),
+    var(--ds-task-immersive-edge) 100%) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Native sidebar resize chrome inherits the sidebar background and extends
+   20px into the main surface. Keeping it clear preserves one continuous image. */
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(main.trskin-main-surface:not(.dream-skin-home-shell))
+  aside.app-shell-left-panel::after {
+  background: transparent !important;
+}
+
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(main.trskin-main-surface:not(.dream-skin-home-shell))
+  main.trskin-main-surface:not(.dream-skin-home-shell) {
+  background: linear-gradient(90deg,
+    var(--ds-task-immersive-edge),
+    var(--ds-task-immersive-mid) 64%,
+    var(--ds-task-immersive-far)) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  content: none;
+}
+
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(main.trskin-main-surface:not(.dream-skin-home-shell))
+  .composer-surface-chrome {
+  background: var(--ds-immersive-composer-solid) !important;
+  border: 0 !important;
+  box-shadow:
+    0 10px 30px rgb(var(--ds-bg-rgb) / .20),
+    inset 0 0 0 1px var(--ds-immersive-line),
+    inset 0 1px rgb(var(--ds-text-rgb) / .12) !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(main.trskin-main-surface:not(.dream-skin-home-shell))
+  main.trskin-main-surface > header.trskin-app-header {
+  background: transparent !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]
+  main.trskin-main-surface:not(.dream-skin-home-shell) [class*="_markdown"] {
+  color: var(--ds-text) !important;
+  text-shadow:
+    0 1px 2px rgb(var(--ds-bg-rgb) / .82),
+    0 0 10px rgb(var(--ds-bg-rgb) / .58);
+}
+
+html.codex-dream-skin[data-dream-shell="light"]:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]
+  main.trskin-main-surface:not(.dream-skin-home-shell) [class*="_markdown"] {
+  text-shadow:
+    0 1px 2px rgb(var(--ds-panel-rgb) / .92),
+    0 0 10px rgb(var(--ds-panel-rgb) / .72);
+}
+
+html.codex-dream-skin:is([data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])
+  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  inset: 0 0 auto;
+  height: clamp(280px, 46vh, 520px);
+  background-position: center top, center top, var(--ds-art-position);
+  background-size: 100% 100%, 100% 100%, cover;
+}
+
+html.codex-dream-skin:is([data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"]):is([data-dream-art-wide="true"], [data-dream-art-aspect="wide"], [data-dream-art-aspect="ultrawide"])
+  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  inset: 0;
+  height: auto;
+  background-position: center, center, var(--ds-art-position);
+  background-size: 100% 100%, 100% 100%, cover;
+}
+
+html.codex-dream-skin:is([data-dream-task-mode="off"], [data-dream-art-task-mode="off"])
+  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  content: none;
+}
+
+html.codex-dream-skin main.trskin-main-surface:not(.dream-skin-home-shell) > :not(header.trskin-app-header) {
+  position: relative;
+  z-index: 1;
+}
+
+html.codex-dream-skin main.trskin-main-surface:not(.dream-skin-home-shell) [role="main"] {
+  background: transparent !important;
+  color: var(--ds-text) !important;
+  text-shadow:
+    0 1px 2px rgb(var(--ds-bg-rgb) / .72),
+    0 0 10px rgb(var(--ds-bg-rgb) / .46);
+}
+
+html.codex-dream-skin[data-dream-shell="light"] main.trskin-main-surface:not(.dream-skin-home-shell) [role="main"] {
+  text-shadow: none;
+}
+
+html.codex-dream-skin main.trskin-main-surface:not(.dream-skin-home-shell) article {
+  border: 1px solid rgb(var(--ds-muted-rgb) / .12);
+  background: rgb(var(--ds-panel-rgb) / .44);
+  box-shadow: 0 8px 24px rgb(var(--ds-bg-rgb) / .10);
+  backdrop-filter: blur(7px) saturate(105%);
+}
+
+html.codex-dream-skin[data-dream-shell="light"] main.trskin-main-surface:not(.dream-skin-home-shell) article {
+  background: rgb(var(--ds-panel-rgb) / .72);
+}
+
+html.codex-dream-skin main.trskin-main-surface > header.trskin-app-header {
+  /* Preserve Codex's native fixed header geometry and side-panel controls. */
+  background: rgb(var(--ds-panel-rgb) / .90) !important;
+  border-bottom: 1px solid var(--ds-line) !important;
+  backdrop-filter: blur(14px) saturate(108%) !important;
+}
+
+#codex-dream-skin-chrome {
+  position: fixed;
+  z-index: 31;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: 16px 0 0 0;
+}
+
+.dream-skin-brand {
+  position: absolute;
+  left: 22px;
+  top: 4px;
+  height: 40px;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  color: var(--ds-text);
+}
+
+#codex-dream-skin-chrome.dream-skin-home-shell .dream-skin-brand { display: none !important; }
+
+.dream-skin-portal-mark {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(var(--ds-accent-rgb) / .44);
+  border-radius: 50%;
+  color: var(--ds-accent);
+  background: rgb(var(--ds-accent-rgb) / .08);
+  font-size: 18px;
+  box-shadow: 0 0 0 4px rgb(var(--ds-accent-rgb) / .05);
+}
+
+.dream-skin-brand b {
+  display: block;
+  color: var(--ds-accent);
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+.dream-skin-brand small {
+  display: block;
+  margin-top: 2px;
+  color: var(--ds-muted);
+  font-size: 9px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.dream-skin-brand small,
+.dream-skin-status { display: none !important; }
+
+.dream-skin-status {
+  position: absolute;
+  right: 84px;
+  top: 13px;
+  display: none;
+  align-items: center;
+  gap: 7px;
+  color: var(--ds-muted);
+  font: 700 10px/1 ui-monospace, "SFMono-Regular", Consolas, monospace;
+  letter-spacing: 0;
+}
+
+.dream-skin-status i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ds-accent);
+  box-shadow: 0 0 8px rgb(var(--ds-accent-rgb) / .42);
+}
+
+.dream-skin-quote,
+.dream-skin-orbit { display: none !important; }
+
+html.codex-dream-skin [role="main"] {
+  background: transparent !important;
+  scrollbar-color: rgb(var(--ds-accent-rgb) / .38) transparent;
+}
+
+html.codex-dream-skin .dream-skin-home {
+  --thread-content-max-width: min(1180px, calc(100cqw - 44px)) !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  overscroll-behavior: none;
+}
+
+/* The renderer marks the live home structure instead of assuming the first
+   child is the landing content. Current Codex builds prepend an optional
+   home-banners slot, and future compatibility slots must not absorb the hero. */
+.dream-skin-home > .dream-skin-home-content {
+  min-height: 0 !important;
+  height: auto !important;
+  flex: 1 1 0% !important;
+  padding-top: 15px !important;
+}
+
+.dream-skin-home .dream-skin-home-hero-rail {
+  flex: 0 0 440px !important;
+  min-height: 440px !important;
+  align-items: flex-start !important;
+  padding-bottom: 0 !important;
+}
+
+.dream-skin-home .dream-skin-home-hero {
+  position: relative !important;
+  isolation: isolate;
+  width: calc(100% - 44px) !important;
+  max-width: none !important;
+  height: clamp(248px, 31cqw, 376px) !important;
+  min-height: 248px !important;
+  flex: 0 1 auto !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  border: 1px solid rgb(var(--ds-accent-rgb) / .30) !important;
+  border-radius: 22px !important;
+  background-color: var(--ds-panel) !important;
+  background-image: var(--dream-skin-art) !important;
+  background-repeat: no-repeat !important;
+  background-position: var(--ds-art-position) !important;
+  background-size: cover !important;
+  box-shadow: 0 16px 38px rgb(var(--ds-bg-rgb) / .30) !important;
+}
+
+.dream-skin-home .dream-skin-home-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 0;
+  width: 62%;
+  border-radius: 21px 0 0 21px;
+  pointer-events: none;
+  background: var(--ds-hero-scrim);
+}
+
+html.codex-dream-skin:is([data-dream-art-safe="right"], [data-dream-art-safe-area="right"])
+  .dream-skin-home .dream-skin-home-hero::before {
+  inset: 0 0 0 auto;
+}
+
+html.codex-dream-skin:is([data-dream-art-safe="center"], [data-dream-art-safe-area="center"])
+  .dream-skin-home .dream-skin-home-hero::before {
+  inset: 0 14%;
+  width: auto;
+  border-radius: 0;
+}
+
+html.codex-dream-skin:is([data-dream-art-safe="none"], [data-dream-art-safe-area="none"])
+  .dream-skin-home .dream-skin-home-hero::before {
+  inset: 0;
+  width: auto;
+  border-radius: 21px;
+}
+
+.dream-skin-home .dream-skin-home-hero-inner {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding: 0 38px;
+}
+
+html.codex-dream-skin:is([data-dream-art-safe="right"], [data-dream-art-safe-area="right"])
+  .dream-skin-home .dream-skin-home-hero-inner {
+  justify-content: flex-end !important;
+}
+
+html.codex-dream-skin:is([data-dream-art-safe="center"], [data-dream-art-safe-area="center"])
+  .dream-skin-home .dream-skin-home-hero-inner {
+  justify-content: center !important;
+}
+
+.dream-skin-home .dream-skin-home-copy {
+  width: min(46%, 520px) !important;
+  align-items: flex-start !important;
+  gap: 0 !important;
+}
+
+html.codex-dream-skin:is([data-dream-art-safe="right"], [data-dream-art-safe-area="right"])
+  .dream-skin-home .dream-skin-home-copy {
+  align-items: flex-end !important;
+  text-align: right !important;
+}
+
+html.codex-dream-skin:is([data-dream-art-safe="center"], [data-dream-art-safe-area="center"])
+  .dream-skin-home .dream-skin-home-copy {
+  width: min(58%, 640px) !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+.dream-skin-home [data-testid="home-icon"] { display: none !important; }
+
+.dream-skin-home [data-feature="game-source"] {
+  display: block !important;
+  max-width: 100% !important;
+  color: var(--ds-text) !important;
+  font-size: clamp(19px, 1.85vw, 27px) !important;
+  line-height: 1.28 !important;
+  font-weight: 760 !important;
+  text-align: inherit !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.dream-skin-home [data-feature="game-source"]::before {
+  content: none;
+}
+
+.dream-skin-home [data-feature="game-source"]::after {
+  content: var(--dream-skin-tagline, "把喜欢的画面变成可交互的 Codex 工作台。");
+  display: block;
+  margin-top: 13px;
+  color: rgb(var(--ds-text-rgb) / .76);
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.dream-skin-home [data-feature="game-source"] button {
+  margin: 0 5px;
+  padding: 2px 9px 3px;
+  border: 1px solid rgb(var(--ds-accent-rgb) / .36);
+  border-radius: 999px;
+  background: rgb(var(--ds-accent-rgb) / .10);
+  color: var(--ds-accent) !important;
+  text-decoration-color: rgb(var(--ds-accent-rgb) / .56) !important;
+  text-underline-offset: 5px;
+}
+
+.dream-skin-home [data-feature="game-source"] button::before {
+  content: var(--dream-skin-project-prefix, "选择项目 · ");
+  font-size: .46em;
+  font-weight: 700;
+  vertical-align: middle;
+  opacity: .86;
+}
+
+.dream-skin-home .dream-skin-home-suggestions {
+  left: 14px !important;
+  right: 14px !important;
+  top: 100% !important;
+  margin-top: 13px !important;
+}
+
+.dream-skin-home .dream-skin-home-suggestions { overflow: visible !important; }
+
+.dream-skin-home .dream-skin-home-suggestions button {
+  position: relative !important;
+  min-height: 118px !important;
+  padding: 14px 13px 12px !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  text-align: center !important;
+  border: 1px solid rgb(var(--ds-muted-rgb) / .18) !important;
+  border-radius: 18px !important;
+  background: rgb(var(--ds-panel-rgb) / .90) !important;
+  color: var(--ds-text) !important;
+  font-weight: 600 !important;
+  line-height: 1.45 !important;
+  box-shadow: 0 8px 22px rgb(var(--ds-bg-rgb) / .18) !important;
+  backdrop-filter: blur(10px) saturate(105%) !important;
+  transform: translateY(0);
+  transition: transform .18s cubic-bezier(.22, 1, .36, 1),
+    box-shadow .18s cubic-bezier(.22, 1, .36, 1),
+    border-color .18s cubic-bezier(.22, 1, .36, 1) !important;
+}
+
+.dream-skin-home .dream-skin-home-suggestions button:hover {
+  transform: translateY(-2px) !important;
+  border-color: rgb(var(--ds-accent-rgb) / .42) !important;
+  box-shadow: 0 12px 28px rgb(var(--ds-bg-rgb) / .24) !important;
+}
+
+.dream-skin-home .dream-skin-home-suggestions button > span:first-child > span:first-child {
+  width: 38px;
+  height: 38px;
+  display: grid !important;
+  place-items: center;
+  margin: 0 auto;
+  border: 1px solid rgb(var(--ds-accent-rgb) / .24);
+  border-radius: 50%;
+  color: var(--ds-accent) !important;
+  background: rgb(var(--ds-accent-rgb) / .12);
+  box-shadow: 0 0 0 6px rgb(var(--ds-accent-rgb) / .05);
+}
+
+.dream-skin-home .dream-skin-home-suggestions button svg {
+  width: 21px !important;
+  height: 21px !important;
+  color: var(--ds-accent) !important;
+}
+
+.dream-skin-home .dream-skin-home-suggestions button > span:first-child { justify-content: center !important; }
+.dream-skin-home .dream-skin-home-suggestions button > span:last-child { align-items: center !important; text-align: center !important; }
+
+html.codex-dream-skin .composer-surface-chrome {
+  overflow: visible !important;
+  border: 1px solid rgb(var(--ds-muted-rgb) / .18) !important;
+  border-radius: 22px !important;
+  background: rgb(var(--ds-panel-rgb) / .94) !important;
+  box-shadow: 0 10px 28px rgb(var(--ds-bg-rgb) / .24) !important;
+  backdrop-filter: blur(16px) saturate(108%) !important;
+}
+
+html.codex-dream-skin .composer-surface-chrome::before { content: none !important; }
+
+/* A wide image can carry the home screen too. The native hero remains live,
+   but the artwork is painted once on the window instead of repeated in a card. */
+html.codex-dream-skin[data-dream-art-wide="true"]:has(main.trskin-main-surface.dream-skin-home-shell) body {
+  background-image: var(--dream-skin-art) !important;
+  background-position: var(--ds-art-position) !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"]:has(main.trskin-main-surface.dream-skin-home-shell)
+  aside.app-shell-left-panel {
+  background: linear-gradient(90deg,
+    var(--ds-immersive-sidebar),
+    var(--ds-immersive-edge) 100%) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"]:has(main.trskin-main-surface.dream-skin-home-shell)
+  aside.app-shell-left-panel::after {
+  background: transparent !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface.dream-skin-home-shell {
+  background: linear-gradient(90deg,
+    var(--ds-immersive-edge),
+    var(--ds-immersive-mid) 64%,
+    var(--ds-immersive-far)) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface.dream-skin-home-shell
+  > header.trskin-app-header {
+  background: transparent !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface
+  > header.trskin-app-header {
+  color: var(--ds-text) !important;
+  text-shadow:
+    0 1px 2px rgb(var(--ds-bg-rgb) / .86),
+    0 0 8px rgb(var(--ds-bg-rgb) / .52) !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface
+  > header.trskin-app-header svg {
+  color: rgb(var(--ds-muted-rgb) / .96) !important;
+  filter: drop-shadow(0 1px 2px rgb(var(--ds-bg-rgb) / .72));
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface.dream-skin-home-shell
+  .dream-skin-home .dream-skin-home-hero {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface.dream-skin-home-shell
+  .dream-skin-home .dream-skin-home-hero::before {
+  content: none !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface.dream-skin-home-shell
+  .dream-skin-home .dream-skin-home-suggestions button {
+  background: rgb(var(--ds-panel-rgb) / .56) !important;
+  box-shadow:
+    0 8px 22px rgb(var(--ds-bg-rgb) / .16),
+    inset 0 0 0 1px rgb(var(--ds-muted-rgb) / .20) !important;
+  backdrop-filter: blur(8px) saturate(104%) !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"] .composer-surface-chrome {
+  background: var(--ds-immersive-composer-solid) !important;
+  border: 0 !important;
+  box-shadow:
+    0 10px 30px rgb(var(--ds-bg-rgb) / .20),
+    inset 0 0 0 1px var(--ds-immersive-line),
+    inset 0 1px rgb(var(--ds-text-rgb) / .12) !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-dream-skin[data-dream-shell="light"][data-dream-art-wide="true"]
+  .composer-surface-chrome {
+  box-shadow:
+    0 10px 28px rgb(var(--ds-bg-rgb) / .14),
+    inset 0 0 0 1px var(--ds-immersive-line),
+    inset 0 1px rgb(var(--ds-panel-rgb) / .72) !important;
+  backdrop-filter: blur(8px) saturate(102%) !important;
+}
+
+html.codex-dream-skin[data-dream-shell="light"]
+  .composer-surface-chrome p.placeholder::after {
+  color: rgb(var(--ds-muted-rgb) / .78) !important;
+  opacity: 1 !important;
+}
+
+/* Current Codex builds render the home project picker as a separate opaque
+   cap above the composer. Join both native controls into one continuous
+   surface while leaving task and utility-route inputs untouched. */
+html.codex-dream-skin .dream-skin-home-utility {
+  top: 0 !important;
+  width: 100% !important;
+  margin-inline: 0 !important;
+  padding-inline: 18px !important;
+  border-radius: 22px 22px 0 0 !important;
+  background: rgb(var(--ds-panel-rgb) / .94) !important;
+  box-shadow:
+    inset 1px 0 rgb(var(--ds-muted-rgb) / .18),
+    inset -1px 0 rgb(var(--ds-muted-rgb) / .18),
+    inset 0 1px rgb(var(--ds-muted-rgb) / .18) !important;
+  backdrop-filter: blur(16px) saturate(108%) !important;
+}
+
+html.codex-dream-skin .dream-skin-home:has(.dream-skin-home-utility)
+  .composer-surface-chrome {
+  border: 0 !important;
+  border-radius: 0 0 22px 22px !important;
+  box-shadow:
+    0 10px 28px rgb(var(--ds-bg-rgb) / .24),
+    inset 1px 0 rgb(var(--ds-muted-rgb) / .18),
+    inset -1px 0 rgb(var(--ds-muted-rgb) / .18),
+    inset 0 -1px rgb(var(--ds-muted-rgb) / .18) !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"] .dream-skin-home-utility {
+  background: var(--ds-immersive-composer-solid) !important;
+  box-shadow:
+    inset 1px 0 var(--ds-immersive-line),
+    inset -1px 0 var(--ds-immersive-line),
+    inset 0 1px rgb(var(--ds-text-rgb) / .12) !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"]
+  .dream-skin-home:has(.dream-skin-home-utility) .composer-surface-chrome {
+  box-shadow:
+    0 10px 30px rgb(var(--ds-bg-rgb) / .20),
+    inset 1px 0 var(--ds-immersive-line),
+    inset -1px 0 var(--ds-immersive-line),
+    inset 0 -1px var(--ds-immersive-line) !important;
+}
+
+html.codex-dream-skin[data-dream-shell="light"][data-dream-art-wide="true"]
+  .dream-skin-home-utility {
+  box-shadow:
+    inset 1px 0 var(--ds-immersive-line),
+    inset -1px 0 var(--ds-immersive-line),
+    inset 0 1px rgb(var(--ds-panel-rgb) / .72) !important;
+  backdrop-filter: blur(8px) saturate(102%) !important;
+}
+
+html.codex-dream-skin .dream-skin-home-utility button,
+html.codex-dream-skin .composer-surface-chrome button:not([class~="bg-token-foreground"]) {
+  color: var(--ds-muted) !important;
+}
+
+html.codex-dream-skin .dream-skin-home-utility button svg,
+html.codex-dream-skin .composer-surface-chrome button svg {
+  color: currentColor !important;
+}
+
+html.codex-dream-skin .dream-skin-home-utility button *,
+html.codex-dream-skin .composer-surface-chrome button:not([class~="bg-token-foreground"]) * {
+  color: currentColor !important;
+}
+
+html.codex-dream-skin .dream-skin-home-utility button:hover,
+html.codex-dream-skin .composer-surface-chrome button:not([class~="bg-token-foreground"]):hover {
+  color: var(--ds-text) !important;
+  background: rgb(var(--ds-accent-rgb) / .10) !important;
+}
+
+html.codex-dream-skin .composer-surface-chrome p.placeholder::after {
+  color: rgb(var(--ds-muted-rgb) / .82) !important;
+  opacity: 1 !important;
+}
+
+/* Search routes ship an opaque sticky band and input surface. Keep the
+   control legible while allowing the selected image to remain continuous. */
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"])[data-dream-art-wide="true"]
+  main.trskin-main-surface:not(.dream-skin-home-shell) div.sticky:has(input[type="text"]) {
+  background: transparent !important;
+}
+
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"])[data-dream-art-wide="true"]
+  main.trskin-main-surface:not(.dream-skin-home-shell) div.sticky:has(input[type="text"])::after {
+  background: transparent !important;
+}
+
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"])[data-dream-art-wide="true"]
+  main.trskin-main-surface:not(.dream-skin-home-shell) div.no-drag:has(> input[type="text"]) {
+  background: var(--ds-immersive-composer) !important;
+  border: 0 !important;
+  box-shadow:
+    0 8px 22px rgb(var(--ds-bg-rgb) / .16),
+    inset 0 0 0 1px var(--ds-immersive-line) !important;
+  backdrop-filter: none !important;
+}
+
+/* Pull Requests and similar utility routes wrap their content in a native
+   full-size opaque surface. Only clear full-window wrappers, not cards. */
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"])[data-dream-art-wide="true"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  [class~="bg-token-main-surface-primary"][class~="h-full"][class~="w-full"] {
+  background: transparent !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface
+  .app-shell-main-content-frame {
+  border-top: 0 !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface
+  .app-shell-main-content-top-fade {
+  display: none !important;
+  background: transparent !important;
+}
+
+/* Codex paints a second opaque fade behind the sticky composer. The composer
+   already owns its readable surface, so retaining this layer creates a false
+   bottom panel and makes the control look duplicated. */
+html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface
+  .thread-scroll-container .bg-gradient-to-t.from-token-main-surface-primary {
+  background: transparent !important;
+}
+
+.dream-skin-home div:has(> .horizontal-scroll-fade-mask .group\/project-selector) {
+  position: relative;
+  padding-top: 28px !important;
+  border: 1px solid rgb(var(--ds-muted-rgb) / .16);
+  border-bottom: 0;
+  background: rgb(var(--ds-panel-rgb) / .92) !important;
+}
+
+.dream-skin-home div:has(> .horizontal-scroll-fade-mask .group\/project-selector)::before {
+  content: var(--dream-skin-project-label, "选择项目");
+  position: absolute;
+  left: 13px;
+  top: 6px;
+  z-index: 2;
+  color: var(--ds-muted);
+  font-size: 12px;
+  font-weight: 720;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.dream-skin-home .group\/project-selector > button {
+  border-color: rgb(var(--ds-accent-rgb) / .22) !important;
+  background: rgb(var(--ds-accent-rgb) / .08) !important;
+  color: var(--ds-text) !important;
+  box-shadow: 0 3px 12px rgb(var(--ds-bg-rgb) / .12) !important;
+}
+
+html.codex-dream-skin .ProseMirror {
+  color: var(--ds-text) !important;
+  caret-color: var(--ds-accent) !important;
+}
+
+html.codex-dream-skin button[class~="bg-token-foreground"] {
+  background: var(--ds-accent) !important;
+  color: var(--ds-on-accent) !important;
+  box-shadow: 0 5px 14px rgb(var(--ds-accent-rgb) / .20) !important;
+}
+
+html.codex-dream-skin article,
+html.codex-dream-skin [data-message-author-role] { border-radius: 16px; }
+
+/* Terraria local theme ---------------------------------------------------
+   This layer is gated by theme metadata. It only restyles native Codex
+   controls; no clicks, labels, routes, or accessibility semantics are
+   replaced. Pixel artwork comes from the self-contained local theme pack. */
+html.codex-dream-skin[data-dream-style="terraria"] {
+  --terraria-blue: #163d68;
+  --terraria-blue-light: #2f6ca1;
+  --terraria-blue-dark: #0b2344;
+  --terraria-gold: #f4d65e;
+  --terraria-reading-bg: rgb(5 16 30 / .92);
+  --terraria-reading-text: #fff5d8;
+  --terraria-reading-muted: #c8dce8;
+  --terraria-reading-link: #68d8ff;
+  --biome-sidebar-art-position: var(--ds-art-position);
+  --biome-task-art-position: var(--ds-art-position);
+  /* Codex may remain in its native light appearance while a dark wallpaper is
+     active. Remap the native semantic tokens at their source so even layered
+     Tailwind !text-token-* utilities inherit a dark-theme-safe value. */
+  --color-text-foreground: var(--terraria-reading-text) !important;
+  --color-text-foreground-secondary: var(--terraria-reading-muted) !important;
+  --color-text-foreground-tertiary: #a9c3d2 !important;
+  --color-token-foreground: var(--terraria-reading-text) !important;
+  --color-token-description-foreground: var(--terraria-reading-muted) !important;
+  --color-token-disabled-foreground: #9fb8c8 !important;
+  --color-token-input-foreground: var(--terraria-reading-text) !important;
+  --color-token-input-placeholder-foreground: #afc7d5 !important;
+  --color-token-icon-foreground: var(--terraria-reading-muted) !important;
+  --color-token-link: var(--terraria-reading-link) !important;
+  --color-token-conversation-body: var(--terraria-reading-muted) !important;
+  --color-token-conversation-header: #a9c3d2 !important;
+  --color-token-conversation-summary-leading: var(--terraria-reading-muted) !important;
+  --color-token-conversation-summary-trailing: #aec6d4 !important;
+  --color-token-non-assistant-body-descendant: var(--terraria-reading-muted) !important;
+  --color-token-list-active-selection-foreground: var(--terraria-reading-text) !important;
+  --color-token-list-active-selection-icon-foreground: var(--terraria-reading-text) !important;
+  --color-token-editor-foreground: var(--terraria-reading-text) !important;
+  --color-token-terminal-ansi-black: var(--terraria-reading-muted) !important;
+  --color-token-terminal-ansi-bright-black: #d9e7ee !important;
+  --color-token-git-decoration-added-resource-foreground: #72e89a !important;
+  --color-token-git-decoration-deleted-resource-foreground: #ff8a84 !important;
+  --color-token-git-decoration-modified-resource-foreground: #ffd27d !important;
+  --color-token-git-decoration-renamed-resource-foreground: #ffd27d !important;
+  --color-token-git-decoration-untracked-resource-foreground: #72e89a !important;
+  --color-token-main-surface-primary: #07182a !important;
+  --color-token-bg-primary: #07182a !important;
+  --color-token-bg-secondary: rgb(9 29 50 / .96) !important;
+  --color-token-bg-tertiary: rgb(13 39 65 / .96) !important;
+  --color-token-input-background: rgb(9 29 50 / .96) !important;
+  --color-token-editor-background: #061421 !important;
+  --color-token-diff-surface: rgb(8 25 43 / .98) !important;
+  --color-token-dropdown-background: rgb(9 29 50 / .98) !important;
+  --color-token-dropdown-foreground: var(--terraria-reading-text) !important;
+  --color-token-menu-background: rgb(9 29 50 / .98) !important;
+  --terraria-frame:
+    inset 0 0 0 2px rgb(255 255 255 / .18),
+    inset 0 0 0 4px rgb(8 18 38 / .64),
+    4px 5px 0 rgb(7 13 27 / .34);
+  color-scheme: dark !important;
+}
+
+/* Forest and Cavern deliberately use different scene grammars instead of
+   sharing one blue shell with a swapped wallpaper. */
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"] {
+  --terraria-reading-bg: rgb(5 28 31 / .91);
+  --color-token-main-surface-primary: #071f24 !important;
+  --color-token-bg-primary: #071f24 !important;
+  --color-token-bg-secondary: rgb(10 43 45 / .96) !important;
+  --color-token-bg-tertiary: rgb(19 63 59 / .96) !important;
+  --color-token-input-background: rgb(9 43 48 / .97) !important;
+  --color-token-editor-background: #061c22 !important;
+  --color-token-diff-surface: rgb(7 33 37 / .98) !important;
+  --color-token-dropdown-background: rgb(9 39 43 / .98) !important;
+  --color-token-menu-background: rgb(9 39 43 / .98) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"] {
+  --terraria-blue: #382249;
+  --terraria-blue-light: #67417b;
+  --terraria-blue-dark: #170f22;
+  --terraria-gold: #ffbd55;
+  --terraria-reading-bg: rgb(20 12 28 / .94);
+  --terraria-reading-link: #8dcaff;
+  --color-token-main-surface-primary: #160f20 !important;
+  --color-token-bg-primary: #160f20 !important;
+  --color-token-bg-secondary: rgb(40 25 50 / .97) !important;
+  --color-token-bg-tertiary: rgb(60 37 70 / .97) !important;
+  --color-token-input-background: rgb(41 25 50 / .98) !important;
+  --color-token-editor-background: #130d1b !important;
+  --color-token-diff-surface: rgb(29 18 38 / .98) !important;
+  --color-token-dropdown-background: rgb(39 24 49 / .99) !important;
+  --color-token-menu-background: rgb(39 24 49 / .99) !important;
+  --terraria-frame:
+    inset 0 0 0 2px rgb(255 201 115 / .24),
+    inset 0 0 0 5px rgb(18 9 27 / .76),
+    4px 5px 0 rgb(9 5 14 / .46);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] body {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas,
+    "PingFang SC", "Microsoft YaHei UI", monospace !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] aside.app-shell-left-panel {
+  border: 2px solid rgb(255 255 255 / .18) !important;
+  border-left: 0 !important;
+  border-radius: 0 5px 5px 0 !important;
+  background:
+    linear-gradient(180deg, rgb(var(--ds-panel-2-rgb) / .76), rgb(var(--ds-panel-rgb) / .88)),
+    var(--dream-skin-art) var(--biome-sidebar-art-position) / cover no-repeat !important;
+  box-shadow:
+    inset -3px 0 rgb(7 15 34 / .62),
+    5px 0 0 rgb(8 14 28 / .28) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"]
+  aside.app-shell-left-panel {
+  border-right-color: rgb(141 221 85 / .56) !important;
+  background:
+    linear-gradient(180deg, rgb(38 111 155 / .70) 0%, rgb(25 91 117 / .78) 58%, rgb(18 75 65 / .88) 100%),
+    var(--dream-skin-art) var(--biome-sidebar-art-position) / cover no-repeat !important;
+  box-shadow:
+    inset -3px 0 rgb(8 40 48 / .72),
+    inset 0 -5px rgb(88 147 55 / .28),
+    5px 0 0 rgb(8 31 35 / .30) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
+  aside.app-shell-left-panel {
+  border-right-color: rgb(255 189 85 / .48) !important;
+  background:
+    linear-gradient(180deg, rgb(48 31 62 / .70), rgb(28 18 38 / .88)),
+    var(--dream-asset-track) left bottom / 32px 32px repeat-x,
+    var(--dream-skin-art) center / 640px 384px repeat !important;
+  box-shadow:
+    inset -3px 0 rgb(10 6 16 / .82),
+    inset 0 -8px rgb(255 173 67 / .12),
+    5px 0 0 rgb(8 5 13 / .42) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] aside.app-shell-left-panel button,
+html.codex-dream-skin[data-dream-style="terraria"] aside.app-shell-left-panel a {
+  border-radius: 3px !important;
+  text-shadow: 1px 2px 0 rgb(5 12 28 / .75) !important;
+}
+
+/* Codex can paint foreground utility tokens independently from the theme
+   variables. Pin native sidebar labels to the readable Terraria palette so a
+   selected project never turns dark on the blue panel. */
+html.codex-dream-skin[data-dream-style="terraria"] aside.app-shell-left-panel
+  :is(div, button, a, span, p, [class*="text-token-"]) {
+  color: var(--terraria-reading-text) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] aside.app-shell-left-panel button:hover,
+html.codex-dream-skin[data-dream-style="terraria"] aside.app-shell-left-panel a:hover,
+html.codex-dream-skin[data-dream-style="terraria"] aside.app-shell-left-panel [aria-current="page"] {
+  border: 2px solid rgb(var(--ds-accent-rgb) / .74) !important;
+  background: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98),
+    rgb(var(--ds-panel-rgb) / .96)) !important;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / .14),
+    2px 3px 0 rgb(5 12 28 / .42) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] main.trskin-main-surface {
+  border: 2px solid rgb(255 255 255 / .17) !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: 5px 0 0 0 !important;
+  box-shadow: inset 3px 0 rgb(7 15 34 / .60) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home .dream-skin-home-hero {
+  border: 3px solid rgb(var(--ds-accent-rgb) / .76) !important;
+  border-radius: 6px !important;
+  image-rendering: pixelated;
+  box-shadow: var(--terraria-frame) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"]
+  .dream-skin-home .dream-skin-home-hero {
+  border-color: #b9ef70 !important;
+  box-shadow:
+    inset 0 0 0 2px rgb(255 250 182 / .24),
+    inset 0 -7px rgb(42 119 63 / .52),
+    4px 5px 0 rgb(7 32 35 / .40) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
+  .dream-skin-home .dream-skin-home-hero {
+  border-color: #ffbd55 !important;
+  background-position: center !important;
+  background-size: 640px 384px !important;
+  background-repeat: repeat !important;
+  box-shadow:
+    inset 0 0 0 3px rgb(76 40 91 / .74),
+    inset 0 0 36px rgb(255 159 66 / .16),
+    5px 6px 0 rgb(10 6 15 / .52) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home .dream-skin-home-hero::before {
+  width: 68%;
+  border-radius: 3px 0 0 3px;
+  background: linear-gradient(90deg,
+    rgb(7 18 40 / .88) 0%,
+    rgb(12 34 65 / .70) 58%,
+    transparent 100%);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home [data-feature="game-source"] {
+  color: #fff7d2 !important;
+  font-weight: 800 !important;
+  text-shadow:
+    2px 2px 0 #15101f,
+    -1px -1px 0 rgb(255 255 255 / .18) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home [data-feature="game-source"]::before {
+  content: "";
+  display: block;
+  width: min(300px, 36vw);
+  aspect-ratio: 421 / 140;
+  margin-bottom: 10px;
+  background: var(--dream-asset-logo) center / contain no-repeat;
+  image-rendering: pixelated;
+  filter: drop-shadow(3px 4px 0 rgb(7 12 25 / .44));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home [data-feature="game-source"]::after {
+  color: #fff7d2;
+  font-weight: 700;
+  text-shadow: 1px 2px 0 rgb(9 13 28 / .82);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home [data-feature="game-source"] button {
+  border: 2px solid rgb(var(--ds-accent-rgb) / .78);
+  border-radius: 3px;
+  background: rgb(var(--ds-panel-rgb) / .94);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 2px 3px 0 rgb(5 12 28 / .38);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home .dream-skin-home-suggestions button {
+  min-height: 124px !important;
+  border: 3px solid rgb(255 255 255 / .26) !important;
+  border-radius: 5px !important;
+  background: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98),
+    rgb(var(--ds-panel-rgb) / .98)) !important;
+  box-shadow: var(--terraria-frame) !important;
+  backdrop-filter: none !important;
+  text-shadow: 1px 2px 0 rgb(5 12 28 / .76);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home .dream-skin-home-suggestions button:hover {
+  transform: translate(-2px, -2px) !important;
+  border-color: var(--terraria-gold) !important;
+  filter: brightness(1.14);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"]
+  .dream-skin-home .dream-skin-home-suggestions button {
+  border-color: rgb(185 239 112 / .58) !important;
+  background: linear-gradient(180deg, rgb(32 103 112 / .99), rgb(17 72 67 / .99)) !important;
+  box-shadow:
+    inset 0 0 0 2px rgb(218 255 167 / .14),
+    inset 0 -5px rgb(8 45 43 / .44),
+    4px 5px 0 rgb(5 27 31 / .42) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
+  .dream-skin-home .dream-skin-home-suggestions button {
+  border-color: rgb(255 189 85 / .62) !important;
+  background:
+    var(--dream-asset-ore) calc(100% - 12px) 11px / 24px 24px no-repeat,
+    linear-gradient(180deg, rgb(66 41 78 / .99), rgb(37 23 49 / .99)) !important;
+  box-shadow:
+    inset 0 0 0 3px rgb(22 11 30 / .62),
+    inset 0 -6px rgb(12 7 18 / .38),
+    4px 5px 0 rgb(8 5 13 / .52) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home .dream-skin-home-suggestions button > span:first-child > span:first-child {
+  width: 50px;
+  height: 50px;
+  border: 2px solid rgb(255 255 255 / .26);
+  border-radius: 4px;
+  background-color: rgb(9 28 57 / .72);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 36px 36px;
+  image-rendering: pixelated;
+  box-shadow: inset 0 0 0 2px rgb(5 12 28 / .46);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home .dream-skin-home-suggestions button[data-dream-card-index="1"] > span:first-child > span:first-child {
+  background-image: var(--dream-card-icon, var(--dream-asset-explore));
+}
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home .dream-skin-home-suggestions button[data-dream-card-index="2"] > span:first-child > span:first-child {
+  background-image: var(--dream-card-icon, var(--dream-asset-build));
+}
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home .dream-skin-home-suggestions button[data-dream-card-index="3"] > span:first-child > span:first-child {
+  background-image: var(--dream-card-icon, var(--dream-asset-review));
+}
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home .dream-skin-home-suggestions button[data-dream-card-index="4"] > span:first-child > span:first-child {
+  background-image: var(--dream-card-icon, var(--dream-asset-fix));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home .dream-skin-home-suggestions button svg {
+  opacity: 0 !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] .dream-skin-home-utility,
+html.codex-dream-skin[data-dream-style="terraria"] .composer-surface-chrome {
+  border: 3px solid rgb(255 255 255 / .25) !important;
+  border-radius: 5px !important;
+  background: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98),
+    rgb(var(--ds-panel-rgb) / .98)) !important;
+  box-shadow: var(--terraria-frame) !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"]
+  :is(.dream-skin-home-utility, .composer-surface-chrome) {
+  border-color: rgb(185 239 112 / .54) !important;
+  background: linear-gradient(180deg, rgb(27 94 111 / .99), rgb(15 67 68 / .99)) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
+  :is(.dream-skin-home-utility, .composer-surface-chrome) {
+  border-color: rgb(255 189 85 / .54) !important;
+  background: linear-gradient(180deg, rgb(62 38 74 / .99), rgb(34 21 45 / .99)) !important;
+  box-shadow:
+    var(--terraria-frame),
+    0 0 24px rgb(255 160 64 / .10) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home:has(.dream-skin-home-utility) .dream-skin-home-utility {
+  border-bottom: 0 !important;
+  border-radius: 5px 5px 0 0 !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home:has(.dream-skin-home-utility) .composer-surface-chrome {
+  border-top: 0 !important;
+  border-radius: 0 0 5px 5px !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] .composer-surface-chrome button {
+  border-radius: 3px !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] button[class~="bg-token-foreground"] {
+  border: 2px solid #fff2a8 !important;
+  border-radius: 4px !important;
+  box-shadow: inset 0 0 0 2px rgb(82 53 8 / .35), 2px 3px 0 rgb(5 12 28 / .38) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  content: "" !important;
+  image-rendering: pixelated;
+  background-image: var(--dream-skin-art) !important;
+  background-position: var(--biome-task-art-position) !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  opacity: .96;
+}
+
+/* Stable reading layer: scenery remains visible, but text never depends on
+   the brightness of a forest, cave, snow, or future day/night wallpaper. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgb(5 15 29 / .72), rgb(5 16 30 / .82));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)::after {
+  background: linear-gradient(180deg, rgb(4 24 31 / .58), rgb(4 27 29 / .76));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)::after {
+  background:
+    radial-gradient(circle at 12% 82%, rgb(255 156 61 / .14), transparent 26%),
+    linear-gradient(180deg, rgb(17 10 25 / .58), rgb(18 11 25 / .78));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell) > header.trskin-app-header {
+  color: var(--terraria-reading-text) !important;
+  background: rgb(7 24 43 / .90) !important;
+  border-bottom: 2px solid rgb(var(--ds-accent-rgb) / .46) !important;
+  box-shadow: 0 3px 0 rgb(4 11 22 / .42) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-platform="windows"]
+  .dream-skin-header-leading {
+  width: 72px !important;
+  min-width: 72px !important;
+  flex-basis: 72px !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] .dream-skin-header-title-rail {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  padding-right: 0 !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] .dream-skin-header-title-rail > * {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-platform="macos"]
+  :is(.dream-skin-header-title-rail, .dream-skin-header-trailing)
+  [class~="bg-token-bg-fog"] {
+  color: var(--terraria-reading-text) !important;
+  background: rgb(var(--ds-panel-rgb) / .88) !important;
+  border-color: rgb(var(--ds-accent-rgb) / .54) !important;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / .08),
+    0 2px 0 rgb(3 10 20 / .34) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-platform="macos"]
+  :is(.dream-skin-header-title-rail, .dream-skin-header-trailing)
+  [class~="bg-token-bg-fog"]:is(:hover, [data-state="open"]) {
+  color: var(--terraria-reading-text) !important;
+  background: rgb(var(--ds-panel-2-rgb) / .96) !important;
+  border-color: rgb(var(--ds-accent-rgb) / .78) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-open-location-group {
+  color: var(--terraria-reading-text) !important;
+  background: rgb(var(--ds-panel-rgb) / .92) !important;
+  border: 1px solid rgb(var(--ds-accent-rgb) / .58) !important;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / .08),
+    0 2px 0 rgb(var(--ds-bg-rgb) / .34) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-open-location-control {
+  color: var(--terraria-reading-text) !important;
+  background: rgb(var(--ds-panel-rgb) / .92) !important;
+  border-color: rgb(var(--ds-accent-rgb) / .58) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-open-location-control:is(:hover, [data-state="open"]) {
+  color: rgb(var(--ds-accent-alt-rgb)) !important;
+  background: rgb(var(--ds-panel-2-rgb) / .98) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-open-location-control svg {
+  color: currentColor !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-header-title-rail :is(h1, h2, [class*="truncate"], [class*="text-ellipsis"]) {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"]
+  main.trskin-main-surface:not(.dream-skin-home-shell) > header.trskin-app-header {
+  background: rgb(6 37 48 / .92) !important;
+  border-bottom-color: rgb(185 239 112 / .52) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
+  main.trskin-main-surface:not(.dream-skin-home-shell) > header.trskin-app-header {
+  background: rgb(28 17 38 / .95) !important;
+  border-bottom-color: rgb(255 189 85 / .56) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is([role="main"], [class*="text-token-foreground"],
+    [class*="text-token-text-primary"], [class*="_markdown"],
+    [data-message-author-role]) {
+  color: var(--terraria-reading-text) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is([class*="text-token-text-secondary"],
+    [class*="text-token-input-placeholder-foreground"], time) {
+  color: var(--terraria-reading-muted) !important;
+}
+
+/* Agent activity rows use a separate token family and sometimes place the
+   text directly in otherwise-unclassified spans. Keep the whole native row
+   legible, then restore brighter semantic diff colors below. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is([class*="activity-header"] :is(span, p),
+    [class*="text-token-conversation-"],
+    [class*="text-token-description-foreground"],
+    [class*="text-token-text-tertiary"], .loading-shimmer-pure-text) {
+  color: var(--terraria-reading-muted) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  [class*="git-decoration-added"] {
+  color: #72e89a !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  [class*="git-decoration-deleted"] {
+  color: #ff8a84 !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is([class*="_markdown"], [data-message-author-role])
+  :where(h1, h2, h3, h4, h5, h6, p, li, blockquote, strong, em) {
+  color: inherit !important;
+  text-shadow: 1px 2px 0 rgb(3 9 18 / .74);
+}
+
+/* Mermaid renders labels inside SVG foreignObject nodes.  Those labels must
+   keep the diagram's light-card contrast instead of inheriting the skin's
+   cream prose color and dark text shadow from the surrounding Markdown. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  svg[aria-roledescription]
+  :is(.nodeLabel, .edgeLabel),
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  svg[aria-roledescription]
+  :is(.nodeLabel, .edgeLabel) :where(p, span, strong, em) {
+  color: #172033 !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is([class*="_markdown"], [data-message-author-role])
+  :where(li)::marker {
+  color: var(--terraria-reading-muted) !important;
+  text-shadow: 1px 2px 0 rgb(3 9 18 / .74);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is([class*="_markdown"], [data-message-author-role]) a {
+  color: var(--terraria-reading-link) !important;
+  text-decoration-color: rgb(104 216 255 / .70) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(textarea, input, [contenteditable="true"]) {
+  color: var(--terraria-reading-text) !important;
+  caret-color: var(--terraria-gold) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  background-repeat: repeat !important;
+  background-position: center !important;
+  background-size: 640px 384px !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] main.trskin-main-surface:not(.dream-skin-home-shell) article,
+html.codex-dream-skin[data-dream-style="terraria"] [data-message-author-role] {
+  border: 2px solid rgb(255 255 255 / .20) !important;
+  border-radius: 4px !important;
+  color: var(--terraria-reading-text) !important;
+  background: var(--terraria-reading-bg) !important;
+  box-shadow: inset 0 0 0 2px rgb(5 12 28 / .38), 3px 4px 0 rgb(5 12 28 / .28) !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"]
+  :is(main.trskin-main-surface:not(.dream-skin-home-shell) article, [data-message-author-role]) {
+  border-color: rgb(185 239 112 / .34) !important;
+  box-shadow: inset 0 0 0 2px rgb(4 30 31 / .54), 3px 4px 0 rgb(3 20 23 / .32) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
+  :is(main.trskin-main-surface:not(.dream-skin-home-shell) article, [data-message-author-role]) {
+  border-color: rgb(255 189 85 / .36) !important;
+  box-shadow: inset 0 0 0 2px rgb(16 8 23 / .66), 3px 4px 0 rgb(8 4 12 / .42) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] pre,
+html.codex-dream-skin[data-dream-style="terraria"] [class*="_diff"] {
+  border: 2px solid rgb(var(--ds-accent-rgb) / .46) !important;
+  border-radius: 3px !important;
+  box-shadow: inset 0 0 0 2px rgb(5 12 28 / .36) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] #codex-dream-skin-chrome {
+  border-radius: 5px 0 0 0;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] .terraria-hud {
+  position: static;
+  z-index: auto;
+  display: flex;
+  flex: 0 0 auto;
+  min-width: 0;
+  height: 44px;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-app-header > .terraria-hud-native {
+  align-self: center;
+  margin-inline: 8px;
+}
+
+/* The native header can be absent for a few frames while Codex changes
+   routes. Keep the HUD usable without letting the transient fallback define
+   the steady-state title-bar layout. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  body > .terraria-hud-fallback {
+  position: fixed;
+  z-index: 2147483001;
+  top: 0;
+  right: 82px;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] .terraria-hud > * {
+  pointer-events: auto;
+}
+
+#codex-dream-skin-music-toggle {
+  position: static;
+  display: grid;
+  flex: none;
+  box-sizing: border-box;
+  width: 112px;
+  height: 44px;
+  place-items: center;
+  padding: 0 12px;
+  border: 2px solid rgb(var(--ds-accent-rgb) / .72);
+  border-radius: 7px;
+  background: rgb(var(--ds-panel-rgb) / .86);
+  color: var(--terraria-reading-text, var(--ds-text));
+  font: 700 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .04em;
+  white-space: nowrap;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 2px 2px 0 rgb(4 10 22 / .52);
+  cursor: pointer;
+  image-rendering: pixelated;
+  -webkit-app-region: no-drag !important;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#codex-dream-skin-music-toggle:hover {
+  border-color: rgb(var(--ds-accent-alt-rgb) / .95);
+  background: rgb(var(--ds-panel-2-rgb) / .94);
+}
+
+#codex-dream-skin-music-toggle:active {
+  transform: translate(1px, 1px);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 1px 1px 0 rgb(4 10 22 / .52);
+}
+
+#codex-dream-skin-music-toggle:focus-visible {
+  outline: 3px solid rgb(var(--ds-accent-alt-rgb) / .9);
+  outline-offset: 2px;
+}
+
+#codex-dream-skin-music-toggle[data-state="playing"] {
+  border-color: rgb(var(--ds-accent-alt-rgb) / .94);
+  background: rgb(var(--ds-panel-2-rgb) / .96);
+  color: rgb(var(--ds-accent-alt-rgb));
+  text-shadow: 0 0 7px rgb(var(--ds-accent-rgb) / .68);
+}
+
+#codex-dream-skin-music-toggle[data-state="unavailable"],
+#codex-dream-skin-music-toggle[data-state="error"] {
+  opacity: .82;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] .dream-skin-orbit {
+  position: absolute;
+  right: 12px;
+  bottom: 122px;
+  display: block !important;
+  width: 56px;
+  height: 38px;
+  object-fit: contain;
+  object-position: center;
+  background: none !important;
+  image-rendering: pixelated;
+  filter: drop-shadow(2px 3px 0 rgb(4 10 22 / .48));
+  animation: terraria-slime-bob 2.4s steps(2, jump-none) infinite;
+}
+
+/*
+ * Chromium can expose an animated GIF's rectangular disposal canvas when the
+ * file is painted as a CSS background. Companions therefore render through a
+ * real img element. GIF/WebP files also skip extra compositor effects because
+ * their own frames already contain motion; static PNG companions keep the
+ * decorative bob and shadow.
+ */
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-companion-animated="true"]
+  .dream-skin-orbit {
+  filter: none !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
+  .dream-skin-orbit {
+  right: 10px;
+  bottom: 126px;
+  width: 70px;
+  height: 48px;
+  filter: drop-shadow(2px 4px 0 rgb(5 3 9 / .66)) drop-shadow(0 0 8px rgb(255 174 71 / .16));
+  animation: terraria-cart-rattle 1.1s steps(2, jump-none) infinite;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-torch]
+  #codex-dream-skin-chrome::after {
+  content: "";
+  position: absolute;
+  left: 17px;
+  bottom: 15px;
+  width: 28px;
+  height: 32px;
+  background: var(--dream-active-torch) center / contain no-repeat;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 8px var(--ds-accent));
+}
+
+/* Additional Terraria biomes share readability and interaction safeguards,
+   while each variant supplies its own palette, texture and lighting grammar. */
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="space"],
+  [data-dream-variant="underworld"],
+  [data-dream-variant="crimson"],
+  [data-dream-variant="hallow"],
+  [data-dream-variant="corruption"],
+  [data-dream-variant="jungle"],
+  [data-dream-variant="tundra"],
+  [data-dream-variant="desert"],
+  [data-dream-variant="ocean"],
+  [data-dream-variant="glowing-mushroom"],
+  [data-dream-variant="dungeon"],
+  [data-dream-variant="jungle-temple"],
+  [data-dream-variant="blood-moon"], [data-dream-variant="solar-eclipse"],
+  [data-dream-variant="goblin-invasion"], [data-dream-variant="pirate-invasion"],
+  [data-dream-variant="martian-invasion"], [data-dream-variant="aether"],
+  [data-dream-variant="graveyard"], [data-dream-variant="pumpkin-moon"],
+  [data-dream-variant="frost-moon"], [data-dream-variant="lunar-solar"],
+  [data-dream-variant="lunar-vortex"], [data-dream-variant="lunar-nebula"],
+  [data-dream-variant="lunar-stardust"], [data-dream-variant="meteorite"],
+  [data-dream-variant="spider-nest"], [data-dream-variant="bee-hive"],
+  [data-dream-variant="granite-cave"], [data-dream-variant="marble-cave"]
+) {
+  --terraria-blue: var(--ds-panel);
+  --terraria-blue-light: var(--ds-panel-2);
+  --terraria-blue-dark: var(--ds-bg);
+  --terraria-gold: var(--ds-accent);
+  --terraria-reading-bg: rgb(var(--ds-bg-rgb) / .94);
+  --terraria-reading-link: var(--ds-accent);
+  --color-token-main-surface-primary: var(--ds-bg) !important;
+  --color-token-bg-primary: var(--ds-bg) !important;
+  --color-token-bg-secondary: rgb(var(--ds-panel-rgb) / .97) !important;
+  --color-token-bg-tertiary: rgb(var(--ds-panel-2-rgb) / .97) !important;
+  --color-token-input-background: rgb(var(--ds-panel-rgb) / .98) !important;
+  --color-token-editor-background: var(--ds-bg) !important;
+  --color-token-diff-surface: rgb(var(--ds-bg-rgb) / .98) !important;
+  --color-token-dropdown-background: rgb(var(--ds-panel-rgb) / .99) !important;
+  --color-token-menu-background: rgb(var(--ds-panel-rgb) / .99) !important;
+  --biome-sidebar: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98), rgb(var(--ds-panel-rgb) / .99));
+  --biome-card: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .99), rgb(var(--ds-panel-rgb) / .99));
+  --biome-overlay: linear-gradient(180deg,
+    rgb(var(--ds-bg-rgb) / .76), rgb(var(--ds-bg-rgb) / .91));
+  --biome-hero-overlay: linear-gradient(90deg,
+    rgb(var(--ds-bg-rgb) / .90) 0%, rgb(var(--ds-bg-rgb) / .64) 58%, transparent 100%);
+  --biome-glow: rgb(var(--ds-accent-rgb) / .20);
+  --biome-decoration-filter: drop-shadow(2px 3px 0 rgb(4 8 18 / .60));
+  --terraria-frame:
+    inset 0 0 0 2px rgb(255 255 255 / .16),
+    inset 0 0 0 5px rgb(var(--ds-bg-rgb) / .68),
+    4px 5px 0 rgb(var(--ds-bg-rgb) / .46);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="space"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(23 39 98 / .98), rgb(8 13 48 / .99));
+  --biome-card: radial-gradient(circle at 84% 12%, rgb(114 217 255 / .18), transparent 26%),
+    linear-gradient(180deg, rgb(31 47 105 / .99), rgb(15 23 68 / .99));
+  --biome-overlay: radial-gradient(circle at 78% 14%, rgb(114 217 255 / .14), transparent 24%),
+    linear-gradient(180deg, rgb(5 8 35 / .78), rgb(7 10 38 / .93));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(5 8 35 / .94), rgb(12 18 62 / .68) 60%, transparent);
+  --biome-glow: rgb(114 217 255 / .28);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="underworld"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(112 36 16 / .99), rgb(55 13 9 / .99));
+  --biome-card: radial-gradient(circle at 50% 120%, rgb(255 137 42 / .32), transparent 45%),
+    linear-gradient(180deg, rgb(116 39 15 / .99), rgb(64 18 10 / .99));
+  --biome-overlay: radial-gradient(ellipse at 50% 100%, rgb(255 87 27 / .22), transparent 38%),
+    linear-gradient(180deg, rgb(45 9 7 / .75), rgb(37 8 6 / .92));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(44 9 7 / .94), rgb(93 25 12 / .66) 58%, transparent);
+  --biome-glow: rgb(255 100 34 / .34);
+  --biome-decoration-filter: drop-shadow(0 0 8px rgb(255 91 32 / .65));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="crimson"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(121 31 47 / .99), rgb(58 11 20 / .99));
+  --biome-card: radial-gradient(ellipse at 90% 25%, rgb(255 108 119 / .24), transparent 34%),
+    linear-gradient(180deg, rgb(119 32 47 / .99), rgb(66 15 28 / .99));
+  --biome-overlay: radial-gradient(circle at 82% 24%, rgb(216 59 84 / .18), transparent 30%),
+    linear-gradient(180deg, rgb(49 9 18 / .78), rgb(35 7 13 / .93));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(48 8 17 / .94), rgb(103 24 39 / .69) 60%, transparent);
+  --biome-glow: rgb(255 95 112 / .28);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="hallow"] {
+  --biome-sidebar: linear-gradient(160deg, rgb(89 61 139 / .99), rgb(39 24 76 / .99));
+  --biome-card: linear-gradient(135deg, rgb(255 155 244 / .13), rgb(127 244 255 / .15)),
+    linear-gradient(180deg, rgb(86 57 132 / .99), rgb(50 31 91 / .99));
+  --biome-overlay: radial-gradient(circle at 78% 12%, rgb(255 155 244 / .18), transparent 28%),
+    linear-gradient(180deg, rgb(29 18 59 / .72), rgb(25 15 50 / .90));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(30 18 61 / .93), rgb(74 47 116 / .55) 58%, transparent);
+  --biome-glow: rgb(255 155 244 / .34);
+  --biome-decoration-filter: drop-shadow(0 0 9px rgb(127 244 255 / .74));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="corruption"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(74 36 101 / .99), rgb(31 14 48 / .99));
+  --biome-card: radial-gradient(circle at 88% 18%, rgb(112 231 93 / .14), transparent 28%),
+    linear-gradient(180deg, rgb(75 37 101 / .99), rgb(42 20 61 / .99));
+  --biome-overlay: radial-gradient(circle at 78% 24%, rgb(182 108 255 / .18), transparent 30%),
+    linear-gradient(180deg, rgb(29 13 47 / .77), rgb(22 10 35 / .93));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(28 13 46 / .94), rgb(72 34 98 / .64) 60%, transparent);
+  --biome-glow: rgb(182 108 255 / .30);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="jungle"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(34 95 52 / .99), rgb(12 49 28 / .99));
+  --biome-card: radial-gradient(ellipse at 95% 0%, rgb(224 195 79 / .16), transparent 32%),
+    linear-gradient(180deg, rgb(38 100 54 / .99), rgb(18 62 34 / .99));
+  --biome-overlay: radial-gradient(circle at 74% 16%, rgb(142 228 90 / .14), transparent 28%),
+    linear-gradient(180deg, rgb(9 42 24 / .74), rgb(7 34 20 / .91));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(8 39 22 / .94), rgb(30 88 45 / .62) 58%, transparent);
+  --biome-glow: rgb(142 228 90 / .25);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="tundra"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(44 103 130 / .99), rgb(16 55 78 / .99));
+  --biome-card: linear-gradient(145deg, rgb(223 250 255 / .20), transparent 34%),
+    linear-gradient(180deg, rgb(44 106 132 / .99), rgb(24 70 94 / .99));
+  --biome-overlay: radial-gradient(circle at 75% 8%, rgb(223 250 255 / .18), transparent 30%),
+    linear-gradient(180deg, rgb(10 38 57 / .72), rgb(8 31 48 / .91));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(9 36 54 / .93), rgb(39 93 118 / .56) 60%, transparent);
+  --biome-glow: rgb(159 234 255 / .30);
+  --biome-decoration-filter: drop-shadow(0 0 8px rgb(223 250 255 / .64));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="desert"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(120 82 37 / .99), rgb(67 39 17 / .99));
+  --biome-card: radial-gradient(ellipse at 80% 110%, rgb(255 224 154 / .20), transparent 42%),
+    linear-gradient(180deg, rgb(122 84 40 / .99), rgb(74 46 23 / .99));
+  --biome-overlay: radial-gradient(circle at 78% 8%, rgb(243 197 94 / .16), transparent 30%),
+    linear-gradient(180deg, rgb(54 32 12 / .70), rgb(42 24 10 / .90));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(55 31 11 / .93), rgb(116 76 34 / .55) 60%, transparent);
+  --biome-glow: rgb(243 197 94 / .27);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="ocean"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(14 111 126 / .99), rgb(7 52 81 / .99));
+  --biome-card: radial-gradient(ellipse at 50% 120%, rgb(82 224 189 / .22), transparent 44%),
+    linear-gradient(180deg, rgb(15 116 132 / .99), rgb(8 65 94 / .99));
+  --biome-overlay: radial-gradient(ellipse at 50% 110%, rgb(82 224 189 / .16), transparent 38%),
+    linear-gradient(180deg, rgb(5 38 63 / .70), rgb(4 29 51 / .91));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(5 37 61 / .93), rgb(12 98 118 / .56) 60%, transparent);
+  --biome-glow: rgb(88 219 255 / .30);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="glowing-mushroom"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(54 48 125 / .99), rgb(25 24 71 / .99));
+  --biome-card: radial-gradient(circle at 84% 20%, rgb(103 232 255 / .27), transparent 33%),
+    linear-gradient(180deg, rgb(56 50 128 / .99), rgb(32 29 80 / .99));
+  --biome-overlay: radial-gradient(circle at 78% 18%, rgb(103 232 255 / .22), transparent 32%),
+    linear-gradient(180deg, rgb(18 16 55 / .74), rgb(15 14 44 / .92));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(18 16 55 / .93), rgb(54 47 123 / .58) 60%, transparent);
+  --biome-glow: rgb(103 232 255 / .38);
+  --biome-decoration-filter: drop-shadow(0 0 11px rgb(103 232 255 / .86));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="dungeon"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(38 72 112 / .99), rgb(15 31 55 / .99));
+  --biome-card: linear-gradient(135deg, rgb(111 186 255 / .12), transparent 40%),
+    linear-gradient(180deg, rgb(40 75 116 / .99), rgb(22 43 74 / .99));
+  --biome-overlay: radial-gradient(circle at 78% 18%, rgb(111 186 255 / .13), transparent 30%),
+    linear-gradient(180deg, rgb(12 25 46 / .76), rgb(10 20 37 / .93));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(12 25 46 / .94), rgb(35 66 105 / .65) 60%, transparent);
+  --biome-glow: rgb(111 186 255 / .26);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="jungle-temple"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(122 76 23 / .99), rgb(66 35 10 / .99));
+  --biome-card: radial-gradient(circle at 82% 18%, rgb(255 215 109 / .18), transparent 30%),
+    linear-gradient(180deg, rgb(124 78 24 / .99), rgb(75 42 13 / .99));
+  --biome-overlay: radial-gradient(circle at 76% 18%, rgb(240 170 62 / .16), transparent 30%),
+    linear-gradient(180deg, rgb(47 24 7 / .77), rgb(37 18 6 / .93));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(48 24 7 / .94), rgb(107 61 17 / .64) 60%, transparent);
+  --biome-glow: rgb(240 170 62 / .30);
+  --biome-decoration-filter: drop-shadow(0 0 9px rgb(240 170 62 / .64));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="blood-moon"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(102 20 30 / .98), rgb(40 7 13 / .99));
+  --biome-card: radial-gradient(circle at 84% 12%, rgb(255 79 94 / .20), transparent 30%),
+    linear-gradient(180deg, rgb(105 22 31 / .98), rgb(55 10 17 / .99));
+  --biome-overlay: radial-gradient(circle at 78% 12%, rgb(255 65 80 / .24), transparent 31%),
+    linear-gradient(180deg, rgb(45 6 12 / .76), rgb(28 4 9 / .94));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(47 7 13 / .95), rgb(111 20 30 / .62) 60%, transparent);
+  --biome-glow: rgb(255 79 94 / .34);
+  --biome-decoration-filter: drop-shadow(0 0 10px rgb(255 79 94 / .72));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="solar-eclipse"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(58 55 38 / .99), rgb(19 19 16 / .99));
+  --biome-card: radial-gradient(circle at 84% 12%, rgb(255 214 90 / .17), transparent 30%),
+    linear-gradient(180deg, rgb(61 58 40 / .99), rgb(31 30 23 / .99));
+  --biome-overlay: radial-gradient(circle at 78% 12%, rgb(255 180 55 / .15), transparent 30%),
+    linear-gradient(180deg, rgb(15 15 13 / .80), rgb(10 10 9 / .95));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(16 16 13 / .96), rgb(67 61 38 / .66) 60%, transparent);
+  --biome-glow: rgb(255 214 90 / .29);
+  --biome-decoration-filter: drop-shadow(0 0 10px rgb(255 214 90 / .68));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="goblin-invasion"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(55 73 35 / .99), rgb(25 34 17 / .99));
+  --biome-card: radial-gradient(circle at 84% 14%, rgb(184 140 255 / .17), transparent 30%),
+    linear-gradient(180deg, rgb(58 75 36 / .99), rgb(34 43 22 / .99));
+  --biome-overlay: radial-gradient(circle at 76% 14%, rgb(167 216 90 / .17), transparent 30%),
+    linear-gradient(180deg, rgb(21 28 14 / .76), rgb(15 20 10 / .93));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(23 30 15 / .95), rgb(62 79 38 / .62) 60%, transparent);
+  --biome-glow: rgb(167 216 90 / .28);
+  --biome-decoration-filter: drop-shadow(0 0 9px rgb(184 140 255 / .62));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="pirate-invasion"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(24 78 100 / .99), rgb(8 34 54 / .99));
+  --biome-card: radial-gradient(circle at 84% 14%, rgb(242 196 90 / .18), transparent 30%),
+    linear-gradient(180deg, rgb(27 82 102 / .99), rgb(13 47 67 / .99));
+  --biome-overlay: radial-gradient(circle at 76% 14%, rgb(99 216 234 / .16), transparent 30%),
+    linear-gradient(180deg, rgb(6 32 49 / .73), rgb(5 24 39 / .92));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(6 33 50 / .95), rgb(24 89 108 / .58) 60%, transparent);
+  --biome-glow: rgb(242 196 90 / .30);
+  --biome-decoration-filter: drop-shadow(0 0 9px rgb(242 196 90 / .64));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="martian-invasion"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(35 44 96 / .99), rgb(12 15 48 / .99));
+  --biome-card: radial-gradient(circle at 84% 14%, rgb(109 255 145 / .22), transparent 30%),
+    linear-gradient(180deg, rgb(39 49 103 / .99), rgb(20 25 65 / .99));
+  --biome-overlay: radial-gradient(circle at 76% 14%, rgb(193 140 255 / .19), transparent 30%),
+    linear-gradient(180deg, rgb(9 12 42 / .76), rgb(6 8 30 / .94));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(9 12 43 / .95), rgb(43 53 113 / .60) 60%, transparent);
+  --biome-glow: rgb(109 255 145 / .34);
+  --biome-decoration-filter: drop-shadow(0 0 11px rgb(109 255 145 / .72));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="aether"] {
+  --biome-sidebar: linear-gradient(155deg, rgb(85 67 131 / .95), rgb(26 18 54 / .98));
+  --biome-card: radial-gradient(circle at 82% 16%, rgb(124 243 230 / .24), transparent 31%),
+    linear-gradient(180deg, rgb(84 65 128 / .97), rgb(45 33 82 / .99));
+  --biome-overlay: radial-gradient(circle at 72% 18%, rgb(243 169 255 / .22), transparent 34%),
+    linear-gradient(180deg, rgb(22 14 49 / .72), rgb(18 12 39 / .91));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(23 15 48 / .94), rgb(94 70 143 / .50) 60%, transparent);
+  --biome-glow: rgb(202 167 255 / .42);
+  --biome-decoration-filter: drop-shadow(0 0 12px rgb(124 243 230 / .82));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="graveyard"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(75 86 81 / .96), rgb(24 29 27 / .99));
+  --biome-card: radial-gradient(ellipse at 50% 115%, rgb(188 199 187 / .18), transparent 42%),
+    linear-gradient(180deg, rgb(73 83 79 / .98), rgb(39 46 43 / .99));
+  --biome-overlay: linear-gradient(180deg, rgb(25 29 28 / .72), rgb(18 22 21 / .93));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(22 27 25 / .95), rgb(77 87 82 / .57) 60%, transparent);
+  --biome-glow: rgb(188 199 187 / .27);
+  --biome-decoration-filter: grayscale(.55) drop-shadow(0 0 9px rgb(188 199 187 / .58));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="pumpkin-moon"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(117 59 23 / .97), rgb(44 18 9 / .99));
+  --biome-card: radial-gradient(circle at 84% 12%, rgb(255 157 54 / .24), transparent 31%),
+    linear-gradient(180deg, rgb(117 57 22 / .98), rgb(61 27 12 / .99));
+  --biome-overlay: radial-gradient(circle at 76% 12%, rgb(232 93 42 / .19), transparent 31%),
+    linear-gradient(180deg, rgb(45 17 8 / .75), rgb(30 10 6 / .94));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(46 18 8 / .95), rgb(126 58 20 / .60) 60%, transparent);
+  --biome-glow: rgb(255 157 54 / .36);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="frost-moon"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(40 93 120 / .98), rgb(10 34 54 / .99));
+  --biome-card: linear-gradient(145deg, rgb(217 232 255 / .19), transparent 35%),
+    linear-gradient(180deg, rgb(42 94 121 / .98), rgb(20 57 81 / .99));
+  --biome-overlay: radial-gradient(circle at 75% 8%, rgb(183 244 255 / .20), transparent 31%),
+    linear-gradient(180deg, rgb(8 29 47 / .72), rgb(6 23 38 / .92));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(8 30 48 / .94), rgb(37 88 115 / .54) 60%, transparent);
+  --biome-glow: rgb(183 244 255 / .34);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="lunar-solar"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(150 61 28 / .98), rgb(55 16 9 / .99));
+  --biome-card: radial-gradient(circle at 82% 14%, rgb(255 209 109 / .22), transparent 32%),
+    linear-gradient(180deg, rgb(151 60 28 / .98), rgb(84 27 14 / .99));
+  --biome-overlay: linear-gradient(180deg, rgb(53 14 8 / .75), rgb(38 10 7 / .94));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(53 15 8 / .95), rgb(150 58 26 / .58) 60%, transparent);
+  --biome-glow: rgb(255 157 56 / .38);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="lunar-vortex"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(22 114 122 / .98), rgb(5 42 50 / .99));
+  --biome-card: radial-gradient(circle at 82% 14%, rgb(73 227 210 / .24), transparent 32%),
+    linear-gradient(180deg, rgb(22 113 122 / .98), rgb(9 65 72 / .99));
+  --biome-overlay: linear-gradient(180deg, rgb(4 43 50 / .74), rgb(3 31 38 / .93));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(4 43 50 / .95), rgb(19 111 119 / .56) 60%, transparent);
+  --biome-glow: rgb(73 227 210 / .38);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="lunar-nebula"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(129 56 132 / .98), rgb(45 13 55 / .99));
+  --biome-card: radial-gradient(circle at 82% 14%, rgb(236 117 231 / .23), transparent 32%),
+    linear-gradient(180deg, rgb(128 55 132 / .98), rgb(74 27 82 / .99));
+  --biome-overlay: linear-gradient(180deg, rgb(43 11 53 / .74), rgb(32 8 40 / .93));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(44 11 54 / .95), rgb(127 54 132 / .55) 60%, transparent);
+  --biome-glow: rgb(236 117 231 / .38);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="lunar-stardust"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(40 85 139 / .98), rgb(8 27 58 / .99));
+  --biome-card: radial-gradient(circle at 82% 14%, rgb(114 185 255 / .23), transparent 32%),
+    linear-gradient(180deg, rgb(40 84 138 / .98), rgb(20 49 92 / .99));
+  --biome-overlay: linear-gradient(180deg, rgb(7 25 55 / .74), rgb(5 18 43 / .93));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(7 26 56 / .95), rgb(38 82 136 / .55) 60%, transparent);
+  --biome-glow: rgb(114 185 255 / .38);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="meteorite"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(92 59 98 / .98), rgb(29 17 31 / .99));
+  --biome-card: radial-gradient(circle at 84% 14%, rgb(255 138 69 / .25), transparent 31%),
+    linear-gradient(180deg, rgb(91 58 97 / .98), rgb(50 30 54 / .99));
+  --biome-overlay: linear-gradient(180deg, rgb(31 18 34 / .76), rgb(23 13 26 / .94));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(31 18 34 / .95), rgb(89 55 96 / .58) 60%, transparent);
+  --biome-glow: rgb(255 138 69 / .36);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="spider-nest"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(81 66 94 / .98), rgb(24 19 30 / .99));
+  --biome-card: linear-gradient(145deg, rgb(212 201 223 / .13), transparent 38%),
+    linear-gradient(180deg, rgb(79 64 92 / .98), rgb(42 34 51 / .99));
+  --biome-overlay: linear-gradient(180deg, rgb(23 19 29 / .76), rgb(17 14 22 / .94));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(23 19 29 / .95), rgb(77 62 90 / .58) 60%, transparent);
+  --biome-glow: rgb(212 201 223 / .27);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="bee-hive"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(134 100 27 / .98), rgb(47 29 6 / .99));
+  --biome-card: radial-gradient(circle at 84% 14%, rgb(255 210 77 / .22), transparent 31%),
+    linear-gradient(180deg, rgb(134 99 27 / .98), rgb(76 52 10 / .99));
+  --biome-overlay: linear-gradient(180deg, rgb(48 30 6 / .74), rgb(36 21 4 / .93));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(49 30 6 / .95), rgb(130 94 24 / .56) 60%, transparent);
+  --biome-glow: rgb(255 210 77 / .36);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="granite-cave"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(63 95 120 / .98), rgb(16 26 42 / .99));
+  --biome-card: linear-gradient(145deg, rgb(134 201 232 / .15), transparent 38%),
+    linear-gradient(180deg, rgb(62 93 118 / .98), rgb(33 51 70 / .99));
+  --biome-overlay: linear-gradient(180deg, rgb(15 25 41 / .76), rgb(11 18 31 / .94));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(15 25 42 / .95), rgb(59 91 117 / .58) 60%, transparent);
+  --biome-glow: rgb(134 201 232 / .31);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="marble-cave"] {
+  --biome-sidebar: linear-gradient(180deg, rgb(104 99 106 / .98), rgb(31 28 32 / .99));
+  --biome-card: linear-gradient(145deg, rgb(227 222 215 / .15), transparent 38%),
+    linear-gradient(180deg, rgb(102 97 104 / .98), rgb(57 53 59 / .99));
+  --biome-overlay: linear-gradient(180deg, rgb(31 28 32 / .76), rgb(23 21 24 / .94));
+  --biome-hero-overlay: linear-gradient(90deg, rgb(31 29 33 / .95), rgb(99 94 101 / .57) 60%, transparent);
+  --biome-glow: rgb(227 222 215 / .28);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="forest-day"], [data-dream-variant="cavern"],
+  [data-dream-variant="space"], [data-dream-variant="underworld"],
+  [data-dream-variant="crimson"], [data-dream-variant="hallow"],
+  [data-dream-variant="corruption"], [data-dream-variant="jungle"],
+  [data-dream-variant="tundra"], [data-dream-variant="desert"],
+  [data-dream-variant="ocean"], [data-dream-variant="glowing-mushroom"],
+  [data-dream-variant="dungeon"], [data-dream-variant="jungle-temple"],
+  [data-dream-variant="blood-moon"], [data-dream-variant="solar-eclipse"],
+  [data-dream-variant="goblin-invasion"], [data-dream-variant="pirate-invasion"],
+  [data-dream-variant="martian-invasion"],
+  [data-dream-variant="aether"], [data-dream-variant="graveyard"],
+  [data-dream-variant="pumpkin-moon"], [data-dream-variant="frost-moon"],
+  [data-dream-variant="lunar-solar"], [data-dream-variant="lunar-vortex"],
+  [data-dream-variant="lunar-nebula"], [data-dream-variant="lunar-stardust"],
+  [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
+  [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
+  [data-dream-variant="marble-cave"]
+) aside.app-shell-left-panel {
+  border-right-color: rgb(var(--ds-accent-rgb) / .56) !important;
+  background:
+    linear-gradient(180deg,
+      rgb(var(--ds-panel-2-rgb) / .76),
+      rgb(var(--ds-panel-rgb) / .88)),
+    var(--dream-skin-art) var(--biome-sidebar-art-position) / cover no-repeat !important;
+  box-shadow:
+    inset -3px 0 rgb(var(--ds-bg-rgb) / .76),
+    inset 0 -5px var(--biome-glow),
+    5px 0 0 rgb(var(--ds-bg-rgb) / .36) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="forest-day"], [data-dream-variant="cavern"],
+  [data-dream-variant="space"], [data-dream-variant="underworld"],
+  [data-dream-variant="crimson"], [data-dream-variant="hallow"],
+  [data-dream-variant="corruption"], [data-dream-variant="jungle"],
+  [data-dream-variant="tundra"], [data-dream-variant="desert"],
+  [data-dream-variant="ocean"], [data-dream-variant="glowing-mushroom"],
+  [data-dream-variant="dungeon"], [data-dream-variant="jungle-temple"],
+  [data-dream-variant="blood-moon"], [data-dream-variant="solar-eclipse"],
+  [data-dream-variant="goblin-invasion"], [data-dream-variant="pirate-invasion"],
+  [data-dream-variant="martian-invasion"],
+  [data-dream-variant="aether"], [data-dream-variant="graveyard"],
+  [data-dream-variant="pumpkin-moon"], [data-dream-variant="frost-moon"],
+  [data-dream-variant="lunar-solar"], [data-dream-variant="lunar-vortex"],
+  [data-dream-variant="lunar-nebula"], [data-dream-variant="lunar-stardust"],
+  [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
+  [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
+  [data-dream-variant="marble-cave"]
+) :is(.dream-skin-home .dream-skin-home-suggestions button,
+     .dream-skin-home-utility, .composer-surface-chrome) {
+  border-color: rgb(var(--ds-accent-rgb) / .56) !important;
+  background: var(--biome-card) !important;
+  box-shadow: var(--terraria-frame), 0 0 22px var(--biome-glow) !important;
+}
+
+/* Keep the composer crisp without the thick dark Terraria card frame. The
+   old 5px inset plus 4x5px drop shadow looked like a black outer shell once
+   environment artwork became visible behind the native input. A blurred
+   glow has the same effect over darker biomes, so the final frame is sharp. */
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
+  main.trskin-main-surface .composer-surface-chrome {
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / .18),
+    0 0 0 2px rgb(var(--ds-accent-rgb) / .48) !important;
+}
+
+/* The native task composer rail leaves 16px below and centers a narrower
+   child inside the sticky dock. With a dark biome behind it, those transparent
+   gaps form a second rectangular shell even when the composer has no shadow.
+   Collapse only the task-route dock; conversation content keeps its max width.
+   Codex also inserts a main-surface fade behind the footer. When progress or
+   tool status expands the footer, that fade becomes a large dark rectangle;
+   Terraria already supplies its own task scrim, so keep the native fade clear. */
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
+  .thread-scroll-container .sticky:has(.composer-surface-chrome) {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  padding-bottom: 0 !important;
+}
+
+/* Current Codex leaves an empty viewport spacer after the last completed
+   turn. Keep it while a response is streaming, then let short completed
+   threads settle directly above the composer. Long threads are unaffected
+   because auto margins collapse when the message stack fills the viewport. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  .thread-scroll-container .dream-skin-idle-thread-messages {
+  margin-top: auto !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .thread-scroll-container .dream-skin-idle-thread-spacer {
+  overflow: hidden !important;
+  min-height: 0 !important;
+  height: 0 !important;
+  max-height: 0 !important;
+}
+
+/* The fade is a decoration-only sibling of the real footer. Hiding that
+   entire layer is more durable than matching its generated Tailwind gradient
+   child: Codex can insert another wrapper when progress/tool rows expand. */
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
+  .thread-scroll-container .sticky:has(.composer-surface-chrome)
+  > .pointer-events-none.absolute {
+  display: none !important;
+  background: none !important;
+}
+
+/* Newer Codex builds nest the progress/tool-status fade several levels inside
+   the footer rail instead of keeping it as a direct sticky child. Keep the
+   actual status pill, but remove its full-width dark gradient backdrop. */
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
+  .thread-scroll-container .sticky:has(.composer-surface-chrome)
+  > .relative.z-10:has(.composer-surface-chrome)
+  .pointer-events-none.absolute.bg-gradient-to-t {
+  display: none !important;
+  background: none !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
+  .thread-scroll-container .sticky:has(.composer-surface-chrome)
+  > .pointer-events-none.absolute
+  > .bg-gradient-to-t {
+  background: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
+  .thread-scroll-container .sticky:has(.composer-surface-chrome)
+  > .relative.z-10:has(.composer-surface-chrome) {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  width: min(100%, var(--dream-skin-composer-safe-width, 100%)) !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+  transform: translateX(var(--dream-skin-composer-shift-x, 0px)) !important;
+}
+
+/* Spawn-specific variants added in 2.1 keep the same native controls but use
+   their own layer/time palette and, for underground biomes, repeat the
+   official pixel background at 4x scale. */
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="forest-night"], [data-dream-variant="underground"],
+  [data-dream-variant="tundra-night"], [data-dream-variant="ice-biome"],
+  [data-dream-variant="underground-desert"], [data-dream-variant="jungle-night"],
+  [data-dream-variant="underground-jungle"], [data-dream-variant="hallow-night"],
+  [data-dream-variant="underground-hallow"], [data-dream-variant="underground-corruption"],
+  [data-dream-variant="underground-crimson"],
+  [data-dream-variant="underground-glowing-mushroom"]
+) {
+  --terraria-blue: var(--ds-panel);
+  --terraria-blue-light: var(--ds-panel-2);
+  --terraria-blue-dark: var(--ds-bg);
+  --terraria-gold: var(--ds-accent);
+  --terraria-reading-bg: rgb(var(--ds-bg-rgb) / .94);
+  --terraria-reading-link: var(--ds-secondary);
+  --color-token-main-surface-primary: var(--ds-bg) !important;
+  --color-token-bg-primary: var(--ds-bg) !important;
+  --color-token-bg-secondary: rgb(var(--ds-panel-rgb) / .97) !important;
+  --color-token-bg-tertiary: rgb(var(--ds-panel-2-rgb) / .97) !important;
+  --color-token-input-background: rgb(var(--ds-panel-rgb) / .98) !important;
+  --color-token-editor-background: var(--ds-bg) !important;
+  --color-token-diff-surface: rgb(var(--ds-bg-rgb) / .98) !important;
+  --color-token-dropdown-background: rgb(var(--ds-panel-rgb) / .99) !important;
+  --color-token-menu-background: rgb(var(--ds-panel-rgb) / .99) !important;
+  --biome-card: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .99), rgb(var(--ds-panel-rgb) / .99));
+  --biome-hero-overlay: linear-gradient(90deg,
+    rgb(var(--ds-bg-rgb) / .92), rgb(var(--ds-bg-rgb) / .62) 60%, transparent);
+  --biome-glow: rgb(var(--ds-accent-rgb) / .24);
+  --terraria-frame:
+    inset 0 0 0 2px rgb(255 255 255 / .16),
+    inset 0 0 0 5px rgb(var(--ds-bg-rgb) / .68),
+    4px 5px 0 rgb(var(--ds-bg-rgb) / .46);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="forest-night"], [data-dream-variant="underground"],
+  [data-dream-variant="tundra-night"], [data-dream-variant="ice-biome"],
+  [data-dream-variant="underground-desert"], [data-dream-variant="jungle-night"],
+  [data-dream-variant="underground-jungle"], [data-dream-variant="hallow-night"],
+  [data-dream-variant="underground-hallow"], [data-dream-variant="underground-corruption"],
+  [data-dream-variant="underground-crimson"],
+  [data-dream-variant="underground-glowing-mushroom"]
+) :is(.dream-skin-home .dream-skin-home-suggestions button,
+     .dream-skin-home-utility, .composer-surface-chrome) {
+  border-color: rgb(var(--ds-accent-rgb) / .56) !important;
+  background: var(--biome-card) !important;
+  box-shadow: var(--terraria-frame), 0 0 22px var(--biome-glow) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="forest-night"], [data-dream-variant="underground"],
+  [data-dream-variant="tundra-night"], [data-dream-variant="ice-biome"],
+  [data-dream-variant="underground-desert"], [data-dream-variant="jungle-night"],
+  [data-dream-variant="underground-jungle"], [data-dream-variant="hallow-night"],
+  [data-dream-variant="underground-hallow"], [data-dream-variant="underground-corruption"],
+  [data-dream-variant="underground-crimson"],
+  [data-dream-variant="underground-glowing-mushroom"]
+) .dream-skin-home .dream-skin-home-hero::before {
+  background: var(--biome-hero-overlay);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="underground"], [data-dream-variant="ice-biome"],
+  [data-dream-variant="underground-jungle"], [data-dream-variant="underground-hallow"],
+  [data-dream-variant="underground-corruption"], [data-dream-variant="underground-crimson"],
+  [data-dream-variant="underground-glowing-mushroom"]
+) main.trskin-main-surface:not(.dream-skin-home-shell)::before,
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="underground"], [data-dream-variant="ice-biome"],
+  [data-dream-variant="underground-jungle"], [data-dream-variant="underground-hallow"],
+  [data-dream-variant="underground-corruption"], [data-dream-variant="underground-crimson"],
+  [data-dream-variant="underground-glowing-mushroom"]
+) .dream-skin-home .dream-skin-home-hero {
+  background-position: center !important;
+  background-size: 640px 384px !important;
+  background-repeat: repeat !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="underground-desert"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)::before,
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="underground-desert"]
+  .dream-skin-home .dream-skin-home-hero {
+  background-position: center !important;
+  background-size: 128px 128px !important;
+  background-repeat: repeat !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="space"], [data-dream-variant="underworld"],
+  [data-dream-variant="crimson"], [data-dream-variant="hallow"],
+  [data-dream-variant="corruption"], [data-dream-variant="jungle"],
+  [data-dream-variant="tundra"], [data-dream-variant="desert"],
+  [data-dream-variant="ocean"], [data-dream-variant="glowing-mushroom"],
+  [data-dream-variant="dungeon"], [data-dream-variant="jungle-temple"],
+  [data-dream-variant="blood-moon"], [data-dream-variant="solar-eclipse"],
+  [data-dream-variant="goblin-invasion"], [data-dream-variant="pirate-invasion"],
+  [data-dream-variant="martian-invasion"],
+  [data-dream-variant="aether"], [data-dream-variant="graveyard"],
+  [data-dream-variant="pumpkin-moon"], [data-dream-variant="frost-moon"],
+  [data-dream-variant="lunar-solar"], [data-dream-variant="lunar-vortex"],
+  [data-dream-variant="lunar-nebula"], [data-dream-variant="lunar-stardust"],
+  [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
+  [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
+  [data-dream-variant="marble-cave"]
+) .dream-skin-home .dream-skin-home-hero {
+  border-color: var(--ds-accent) !important;
+  box-shadow: var(--terraria-frame), 0 0 34px var(--biome-glow) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="space"], [data-dream-variant="underworld"],
+  [data-dream-variant="crimson"], [data-dream-variant="hallow"],
+  [data-dream-variant="corruption"], [data-dream-variant="jungle"],
+  [data-dream-variant="tundra"], [data-dream-variant="desert"],
+  [data-dream-variant="ocean"], [data-dream-variant="glowing-mushroom"],
+  [data-dream-variant="dungeon"], [data-dream-variant="jungle-temple"],
+  [data-dream-variant="blood-moon"], [data-dream-variant="solar-eclipse"],
+  [data-dream-variant="goblin-invasion"], [data-dream-variant="pirate-invasion"],
+  [data-dream-variant="martian-invasion"],
+  [data-dream-variant="aether"], [data-dream-variant="graveyard"],
+  [data-dream-variant="pumpkin-moon"], [data-dream-variant="frost-moon"],
+  [data-dream-variant="lunar-solar"], [data-dream-variant="lunar-vortex"],
+  [data-dream-variant="lunar-nebula"], [data-dream-variant="lunar-stardust"],
+  [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
+  [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
+  [data-dream-variant="marble-cave"]
+) .dream-skin-home .dream-skin-home-hero::before {
+  background: var(--biome-hero-overlay);
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="space"], [data-dream-variant="underworld"],
+  [data-dream-variant="crimson"], [data-dream-variant="hallow"],
+  [data-dream-variant="corruption"], [data-dream-variant="jungle"],
+  [data-dream-variant="tundra"], [data-dream-variant="desert"],
+  [data-dream-variant="ocean"], [data-dream-variant="glowing-mushroom"],
+  [data-dream-variant="dungeon"], [data-dream-variant="jungle-temple"],
+  [data-dream-variant="blood-moon"], [data-dream-variant="solar-eclipse"],
+  [data-dream-variant="goblin-invasion"], [data-dream-variant="pirate-invasion"],
+  [data-dream-variant="martian-invasion"],
+  [data-dream-variant="aether"], [data-dream-variant="graveyard"],
+  [data-dream-variant="pumpkin-moon"], [data-dream-variant="frost-moon"],
+  [data-dream-variant="lunar-solar"], [data-dream-variant="lunar-vortex"],
+  [data-dream-variant="lunar-nebula"], [data-dream-variant="lunar-stardust"],
+  [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
+  [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
+  [data-dream-variant="marble-cave"]
+) main.trskin-main-surface:not(.dream-skin-home-shell)::after {
+  background:
+    radial-gradient(circle at 78% 18%, var(--biome-glow), transparent 34%),
+    linear-gradient(180deg,
+      rgb(var(--ds-bg-rgb) / .58),
+      rgb(var(--ds-bg-rgb) / .78));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="hallow"],
+  [data-dream-variant="tundra"],
+  [data-dream-variant="desert"],
+  [data-dream-variant="blood-moon"],
+  [data-dream-variant="solar-eclipse"],
+  [data-dream-variant="goblin-invasion"],
+  [data-dream-variant="pirate-invasion"]
+) main.trskin-main-surface:not(.dream-skin-home-shell)::after {
+  background: linear-gradient(180deg,
+    rgb(var(--ds-bg-rgb) / .64),
+    rgb(var(--ds-bg-rgb) / .82));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="dungeon"],
+  [data-dream-variant="jungle-temple"]
+) main.trskin-main-surface:not(.dream-skin-home-shell)::after {
+  background: linear-gradient(180deg,
+    rgb(var(--ds-bg-rgb) / .68),
+    rgb(var(--ds-bg-rgb) / .84));
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="space"], [data-dream-variant="underworld"],
+  [data-dream-variant="crimson"], [data-dream-variant="hallow"],
+  [data-dream-variant="corruption"], [data-dream-variant="jungle"],
+  [data-dream-variant="tundra"], [data-dream-variant="desert"],
+  [data-dream-variant="ocean"], [data-dream-variant="glowing-mushroom"],
+  [data-dream-variant="dungeon"], [data-dream-variant="jungle-temple"],
+  [data-dream-variant="blood-moon"], [data-dream-variant="solar-eclipse"],
+  [data-dream-variant="goblin-invasion"], [data-dream-variant="pirate-invasion"],
+  [data-dream-variant="martian-invasion"],
+  [data-dream-variant="aether"], [data-dream-variant="graveyard"],
+  [data-dream-variant="pumpkin-moon"], [data-dream-variant="frost-moon"],
+  [data-dream-variant="lunar-solar"], [data-dream-variant="lunar-vortex"],
+  [data-dream-variant="lunar-nebula"], [data-dream-variant="lunar-stardust"],
+  [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
+  [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
+  [data-dream-variant="marble-cave"]
+) main.trskin-main-surface:not(.dream-skin-home-shell) > header.trskin-app-header {
+  background: rgb(var(--ds-bg-rgb) / .94) !important;
+  border-bottom-color: rgb(var(--ds-accent-rgb) / .58) !important;
+}
+
+/* Official wallpaper tiles remain crisp instead of being enlarged into blur. */
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="space"]
+  .dream-skin-home .dream-skin-home-hero {
+  background-size: 128px 128px !important;
+  background-repeat: repeat !important;
+}
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="space"]
+  aside.app-shell-left-panel {
+  background-size: 100% 100%, 128px 128px !important;
+  background-repeat: no-repeat, repeat !important;
+}
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="space"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  background-size: 128px 128px !important;
+  background-repeat: repeat !important;
+}
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="martian-invasion"]
+  .dream-skin-home .dream-skin-home-hero {
+  background-size: 128px 128px !important;
+  background-repeat: repeat !important;
+}
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="martian-invasion"]
+  aside.app-shell-left-panel {
+  background-size: 100% 100%, 128px 128px !important;
+  background-repeat: no-repeat, repeat !important;
+}
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="martian-invasion"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  background-size: 128px 128px !important;
+  background-repeat: repeat !important;
+}
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="dungeon"]
+  .dream-skin-home .dream-skin-home-hero {
+  background-size: 160px 450px !important;
+  background-repeat: repeat !important;
+}
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="dungeon"]
+  aside.app-shell-left-panel {
+  background-size: 100% 100%, 160px 450px !important;
+  background-repeat: no-repeat, repeat !important;
+}
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="dungeon"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  background-size: 160px 450px !important;
+  background-repeat: repeat !important;
+}
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="jungle-temple"]
+  .dream-skin-home .dream-skin-home-hero {
+  background-size: 128px 128px !important;
+  background-repeat: repeat !important;
+}
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="jungle-temple"]
+  aside.app-shell-left-panel {
+  background-size: 100% 100%, 128px 128px !important;
+  background-repeat: no-repeat, repeat !important;
+}
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="jungle-temple"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  background-size: 128px 128px !important;
+  background-repeat: repeat !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="lunar-solar"], [data-dream-variant="lunar-vortex"],
+  [data-dream-variant="lunar-nebula"], [data-dream-variant="lunar-stardust"],
+  [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
+  [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
+  [data-dream-variant="marble-cave"], [data-dream-variant="aether"]
+) .dream-skin-home .dream-skin-home-hero {
+  background-size: 128px 128px !important;
+  background-repeat: repeat !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="lunar-solar"], [data-dream-variant="lunar-vortex"],
+  [data-dream-variant="lunar-nebula"], [data-dream-variant="lunar-stardust"],
+  [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
+  [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
+  [data-dream-variant="marble-cave"], [data-dream-variant="aether"]
+) aside.app-shell-left-panel {
+  background-size: 100% 100%, 128px 128px !important;
+  background-repeat: no-repeat, repeat !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="lunar-solar"], [data-dream-variant="lunar-vortex"],
+  [data-dream-variant="lunar-nebula"], [data-dream-variant="lunar-stardust"],
+  [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
+  [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
+  [data-dream-variant="marble-cave"], [data-dream-variant="aether"]
+) main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  background-size: 128px 128px !important;
+  background-repeat: repeat !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="space"], [data-dream-variant="underworld"],
+  [data-dream-variant="crimson"], [data-dream-variant="hallow"],
+  [data-dream-variant="corruption"], [data-dream-variant="jungle"],
+  [data-dream-variant="tundra"], [data-dream-variant="desert"],
+  [data-dream-variant="ocean"], [data-dream-variant="glowing-mushroom"],
+  [data-dream-variant="dungeon"], [data-dream-variant="jungle-temple"],
+  [data-dream-variant="blood-moon"], [data-dream-variant="solar-eclipse"],
+  [data-dream-variant="goblin-invasion"], [data-dream-variant="pirate-invasion"],
+  [data-dream-variant="martian-invasion"],
+  [data-dream-variant="aether"], [data-dream-variant="graveyard"],
+  [data-dream-variant="pumpkin-moon"], [data-dream-variant="frost-moon"],
+  [data-dream-variant="lunar-solar"], [data-dream-variant="lunar-vortex"],
+  [data-dream-variant="lunar-nebula"], [data-dream-variant="lunar-stardust"],
+  [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
+  [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
+  [data-dream-variant="marble-cave"]
+) .dream-skin-orbit {
+  right: 12px;
+  bottom: 124px;
+  width: 72px;
+  height: 58px;
+  pointer-events: none;
+  filter: var(--biome-decoration-filter);
+  animation: terraria-biome-hover 3.2s steps(4, jump-none) infinite;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="ocean"] .dream-skin-orbit {
+  width: 102px;
+  height: 48px;
+}
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="hallow"] .dream-skin-orbit,
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="corruption"] .dream-skin-orbit {
+  width: 82px;
+  height: 72px;
+}
+
+/*
+ * A handful of official NPC sheets use a very small logical canvas. Give
+ * those companions a larger paint box instead of scaling with transform, so
+ * animated APNG frames stay crisp and never reveal a compositor rectangle.
+ */
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-companion-size="tiny"]
+  .dream-skin-orbit {
+  min-width: 96px;
+  min-height: 76px;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-companion-size="small"]
+  .dream-skin-orbit {
+  min-width: 84px;
+  min-height: 66px;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-companion-size="wide"]
+  .dream-skin-orbit {
+  min-width: 132px;
+  min-height: 66px;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-companion*="pumpking"], [data-dream-companion*="mourning-wood"],
+  [data-dream-companion*="everscream"], [data-dream-companion*="ice-queen"],
+  [data-dream-companion*="queen-bee"]
+) .dream-skin-orbit {
+  right: 8px;
+  bottom: 116px;
+  width: 118px;
+  height: 92px;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-companion*="blood-eel"]
+  .dream-skin-orbit {
+  width: 150px;
+  height: 56px;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-companion*="pillar"]
+  .dream-skin-orbit {
+  right: 10px;
+  bottom: 112px;
+  width: 74px;
+  height: 118px;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-companion$="mothron"]
+  .dream-skin-orbit {
+  right: 10px;
+  bottom: 116px;
+  width: 112px;
+  height: 86px;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-companion*="martian-saucer"]
+  .dream-skin-orbit {
+  right: 8px;
+  bottom: 116px;
+  width: 176px;
+  height: 78px;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-companion$="wyvern"],
+  [data-dream-companion$="bone-serpent"],
+  [data-dream-companion$="devourer"]
+) .dream-skin-orbit {
+  width: 180px;
+  height: 58px;
+}
+
+@keyframes terraria-biome-hover {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes terraria-slime-bob {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(-5px) scaleY(.92); }
+}
+
+@media (max-width: 900px) {
+  html.codex-dream-skin[data-dream-style="terraria"][data-dream-platform="windows"]
+    .dream-skin-header-leading {
+    width: 52px !important;
+    min-width: 52px !important;
+    flex-basis: 52px !important;
+  }
+  html.codex-dream-skin[data-dream-style="terraria"] .dream-skin-header-title-rail {
+    padding-right: 0 !important;
+  }
+  html.codex-dream-skin[data-dream-style="terraria"] .terraria-hud {
+    gap: 6px;
+  }
+  html.codex-dream-skin[data-dream-style="terraria"]
+    body > .terraria-hud-fallback {
+    right: 68px;
+  }
+  #codex-dream-skin-music-toggle {
+    width: 44px;
+    padding: 0;
+    overflow: hidden;
+    color: transparent;
+    font-size: 0;
+  }
+  #codex-dream-skin-music-toggle::before {
+    content: "♪";
+    color: var(--terraria-reading-text, var(--ds-text));
+    font: 700 16px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  html.codex-dream-skin[data-dream-style="terraria"]
+    .dream-skin-home [data-feature="game-source"]::before {
+    width: min(240px, 48vw);
+  }
+}
+
+@media (max-width: 1120px) {
+  .dream-skin-status { display: none !important; }
+  .dream-skin-home { --thread-content-max-width: min(940px, calc(100cqw - 30px)) !important; }
+  .dream-skin-home .dream-skin-home-hero { width: calc(100% - 28px) !important; }
+}
+
+@media (max-width: 900px) {
+  .dream-skin-brand { left: 15px; }
+  .dream-skin-brand b { font-size: 12px; }
+  .dream-skin-home .dream-skin-home-hero-rail {
+    flex-basis: 408px !important;
+    min-height: 408px !important;
+  }
+  .dream-skin-home .dream-skin-home-hero {
+    height: 232px !important;
+    min-height: 232px !important;
+  }
+  .dream-skin-home .dream-skin-home-hero-inner { padding: 0 26px; }
+  .dream-skin-home .dream-skin-home-copy {
+    width: min(58%, 460px) !important;
+  }
+  .dream-skin-home [data-feature="game-source"] { font-size: 18px !important; }
+  .dream-skin-home [data-feature="game-source"]::before { margin-bottom: 7px; font-size: 10px; }
+  .dream-skin-home [data-feature="game-source"]::after { margin-top: 9px; font-size: 11px; }
+  .dream-skin-home .dream-skin-home-suggestions button { min-height: 112px !important; font-size: 12px !important; }
+}
+
+/* Keep the native home composer fully visible. Banners consume real viewport
+   height, so short windows shrink decorative artwork before allowing the
+   composer dock to leave the viewport. */
+@media (max-height: 760px) {
+  .dream-skin-home .dream-skin-home-hero-rail {
+    flex-basis: 350px !important;
+    min-height: 350px !important;
+  }
+
+  .dream-skin-home .dream-skin-home-hero {
+    height: 248px !important;
+    min-height: 248px !important;
+  }
+
+  .dream-skin-home .dream-skin-home-suggestions button {
+    min-height: 96px !important;
+    padding-block: 10px !important;
+  }
+}
+
+@media (max-height: 640px) {
+  .dream-skin-home .dream-skin-home-hero-rail {
+    flex-basis: 300px !important;
+    min-height: 300px !important;
+  }
+
+  .dream-skin-home .dream-skin-home-hero {
+    height: 200px !important;
+    min-height: 200px !important;
+  }
+
+  .dream-skin-home [data-feature="game-source"]::after {
+    margin-top: 7px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.codex-dream-skin *,
+  html.codex-dream-skin *::before,
+  html.codex-dream-skin *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

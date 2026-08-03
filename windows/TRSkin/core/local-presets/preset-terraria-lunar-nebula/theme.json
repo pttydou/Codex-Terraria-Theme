@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-lunar-nebula",
+  "name": "Terraria · 星云柱",
+  "stylePreset": "terraria",
+  "variant": "lunar-nebula",
+  "brandSubtitle": "THE NEBULA PILLAR",
+  "tagline": "星云意识正在凝聚。",
+  "projectPrefix": "选择星云域 · ",
+  "projectLabel": "选择星云域",
+  "statusText": "月亮事件·星云",
+  "quote": "THE NEBULA THINKS",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "none",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "companion-nebula-floater": "companion-nebula-floater.apng",
+    "companion-brain-suckler": "companion-brain-suckler.apng",
+    "companion-evolution-beast": "companion-evolution-beast.apng",
+    "companion-predictor": "companion-predictor.apng",
+    "companion-nebula-pillar": "companion-nebula-pillar.png"
+  },
+  "companionPool": [
+    "companion-nebula-floater",
+    "companion-brain-suckler",
+    "companion-evolution-beast",
+    "companion-predictor",
+    "companion-nebula-pillar"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#240b2d",
+    "panel": "#55205f",
+    "panelAlt": "#813884",
+    "accent": "#ec75e7",
+    "accentAlt": "#9a78ff",
+    "secondary": "#ffb0ed",
+    "highlight": "#9b4ca8",
+    "text": "#fff0ff",
+    "muted": "#dec4e0",
+    "line": "rgba(236, 117, 231, .58)"
+  },
+  "companionWeights": {
+    "companion-nebula-floater": 55,
+    "companion-brain-suckler": 55,
+    "companion-evolution-beast": 55,
+    "companion-predictor": 55,
+    "companion-nebula-pillar": 10
+  },
+  "musicPool": [
+    "the-towers"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-towers"
+  ]
+}

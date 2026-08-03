@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-underground-hallow",
+  "name": "Terraria · 地下神圣",
+  "stylePreset": "terraria",
+  "variant": "underground-hallow",
+  "brandSubtitle": "THE UNDERGROUND HALLOW",
+  "tagline": "水晶洞壁将每一点光折射成彩虹。",
+  "projectPrefix": "选择圣域 · ",
+  "projectLabel": "选择圣域",
+  "statusText": "地下神圣之地",
+  "quote": "CRYSTAL LIGHT BELOW",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.58,
+    "focusY": 0.45,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "torch-hallowed": "torch-hallowed.png",
+    "torch-rainbow": "torch-rainbow.png",
+    "torch-pink": "torch-pink.png",
+    "companion-chaos-elemental": "companion-chaos-elemental.apng",
+    "companion-illuminant-bat": "companion-illuminant-bat.apng",
+    "companion-illuminant-slime": "companion-illuminant-slime.apng",
+    "companion-hallowed-mimic": "companion-hallowed-mimic.png",
+    "bg-primary": "background.png",
+    "bg-variant-underground-hallow-1": "bg-variant-underground-hallow-1.png",
+    "bg-variant-underground-hallow-3": "bg-variant-underground-hallow-3.png"
+  },
+  "torchKey": "torch-hallowed",
+  "companionPool": [
+    "companion-chaos-elemental",
+    "companion-illuminant-bat",
+    "companion-illuminant-slime",
+    "companion-hallowed-mimic"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#15112b",
+    "panel": "#382b61",
+    "panelAlt": "#5d478f",
+    "accent": "#e6a0ff",
+    "accentAlt": "#7fdcff",
+    "secondary": "#bda5ff",
+    "highlight": "#7157ab",
+    "text": "#fff1ff",
+    "muted": "#d9c9e8",
+    "line": "rgba(230, 160, 255, .55)"
+  },
+  "companionWeights": {
+    "companion-chaos-elemental": 55,
+    "companion-illuminant-bat": 55,
+    "companion-illuminant-slime": 55,
+    "companion-hallowed-mimic": 3
+  },
+  "musicPool": [
+    "underground-hallow"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-underground-hallow-1",
+    "bg-variant-underground-hallow-3"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-underground-hallow"
+  ]
+}

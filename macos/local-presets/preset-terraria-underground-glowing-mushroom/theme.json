@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-underground-glowing-mushroom",
+  "name": "Terraria · 地下夜光蘑菇",
+  "stylePreset": "terraria",
+  "variant": "underground-glowing-mushroom",
+  "brandSubtitle": "THE UNDERGROUND MUSHROOM",
+  "tagline": "发光菌丝照亮潮湿洞壁。",
+  "projectPrefix": "选择菌光域 · ",
+  "projectLabel": "选择菌光域",
+  "statusText": "地下夜光蘑菇地",
+  "quote": "THE CAVERN GLOWS BLUE",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.55,
+    "focusY": 0.5,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.png",
+    "accent-3": "accent-3.png",
+    "torch-mushroom": "torch-mushroom.png",
+    "torch-blue": "torch-blue.png",
+    "torch-purple": "torch-purple.png",
+    "companion-fungo-fish": "companion-fungo-fish.apng",
+    "companion-anomura-fungus": "companion-anomura-fungus.apng",
+    "companion-mushi-ladybug": "companion-mushi-ladybug.apng",
+    "companion-fungi-bulb": "companion-fungi-bulb.png",
+    "companion-giant-fungi-bulb": "companion-giant-fungi-bulb.png",
+    "companion-glowing-snail": "companion-glowing-snail.apng",
+    "companion-truffle-worm": "companion-truffle-worm.apng",
+    "companion-truffle-worm-burrowing": "companion-truffle-worm-burrowing.apng",
+    "companion-spore-bat": "companion-spore-bat.apng",
+    "companion-spore-skeleton": "companion-spore-skeleton.apng",
+    "bg-primary": "background.png",
+    "bg-variant-underground-mushroom-1": "bg-variant-underground-mushroom-1.png"
+  },
+  "torchKey": "torch-mushroom",
+  "companionPool": [
+    "companion-fungo-fish",
+    "companion-anomura-fungus",
+    "companion-mushi-ladybug",
+    "companion-fungi-bulb",
+    "companion-giant-fungi-bulb",
+    "companion-glowing-snail",
+    "companion-truffle-worm",
+    "companion-truffle-worm-burrowing",
+    "companion-spore-bat",
+    "companion-spore-skeleton"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#0c0d2b",
+    "panel": "#20245a",
+    "panelAlt": "#354281",
+    "accent": "#62e9ff",
+    "accentAlt": "#ad68ff",
+    "secondary": "#72a8ff",
+    "highlight": "#5a4fa4",
+    "text": "#eff7ff",
+    "muted": "#bec9e1",
+    "line": "rgba(98, 233, 255, .55)"
+  },
+  "companionWeights": {
+    "companion-fungo-fish": 55,
+    "companion-anomura-fungus": 55,
+    "companion-mushi-ladybug": 55,
+    "companion-fungi-bulb": 100,
+    "companion-giant-fungi-bulb": 55,
+    "companion-glowing-snail": 25,
+    "companion-truffle-worm": 25,
+    "companion-truffle-worm-burrowing": 25,
+    "companion-spore-bat": 100,
+    "companion-spore-skeleton": 100
+  },
+  "musicPool": [
+    "mushrooms"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-underground-mushroom-1"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-mushrooms"
+  ]
+}

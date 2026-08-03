@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-underground",
+  "name": "Terraria · 地下层",
+  "stylePreset": "terraria",
+  "variant": "underground",
+  "brandSubtitle": "THE UNDERGROUND",
+  "tagline": "地表已经远去，矿脉仍在向下延伸。",
+  "projectPrefix": "选择世界 · ",
+  "projectLabel": "选择世界",
+  "statusText": "地下层探索",
+  "quote": "BELOW THE SURFACE",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "none",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "torch": "torch.png",
+    "torch-bone": "torch-bone.png",
+    "torch-ultrabright": "torch-ultrabright.png",
+    "crystal": "life-crystal.png",
+    "ore": "gold-ore.png",
+    "track": "minecart-track.png",
+    "companion-yellow-slime": "companion-yellow-slime.apng",
+    "companion-red-slime": "companion-red-slime.apng",
+    "companion-piranha": "companion-piranha.apng",
+    "companion-toxic-sludge": "companion-toxic-sludge.apng",
+    "companion-mouse": "companion-mouse.apng",
+    "companion-gold-mouse": "companion-gold-mouse.apng",
+    "companion-explosive-bunny": "companion-explosive-bunny.apng",
+    "companion-the-torch-god-dummy": "companion-the-torch-god-dummy.apng",
+    "bg-primary": "background.png",
+    "bg-variant-underground-1": "bg-variant-underground-1.png",
+    "bg-variant-underground-2": "bg-variant-underground-2.png",
+    "bg-variant-underground-3": "bg-variant-underground-3.png",
+    "bg-variant-underground-5": "bg-variant-underground-5.png"
+  },
+  "companionPool": [
+    "companion-yellow-slime",
+    "companion-red-slime",
+    "companion-piranha",
+    "companion-toxic-sludge",
+    "companion-mouse",
+    "companion-gold-mouse",
+    "companion-explosive-bunny",
+    "companion-the-torch-god-dummy"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#17130f",
+    "panel": "#3b3024",
+    "panelAlt": "#594736",
+    "accent": "#e7ba72",
+    "accentAlt": "#b47a49",
+    "secondary": "#8fc7bd",
+    "highlight": "#6d4d36",
+    "text": "#fff0d9",
+    "muted": "#d6c2a8",
+    "line": "rgba(231, 186, 114, .50)"
+  },
+  "companionWeights": {
+    "companion-yellow-slime": 25,
+    "companion-red-slime": 100,
+    "companion-piranha": 100,
+    "companion-toxic-sludge": 55,
+    "companion-mouse": 100,
+    "companion-gold-mouse": 3,
+    "companion-explosive-bunny": 10,
+    "companion-the-torch-god-dummy": 3
+  },
+  "musicPool": [
+    "underground",
+    "alternate-underground"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-underground-1",
+    "bg-variant-underground-2",
+    "bg-variant-underground-3",
+    "bg-variant-underground-5"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-underground"
+  ]
+}

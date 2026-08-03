@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-hallow",
+  "name": "Terraria · 神圣之地 · 白昼",
+  "stylePreset": "terraria",
+  "variant": "hallow",
+  "brandSubtitle": "THE HALLOW · DAY",
+  "tagline": "珍珠木与彩虹照亮明亮地表。",
+  "projectPrefix": "选择圣域 · ",
+  "projectLabel": "选择圣域",
+  "statusText": "神圣地表·白昼",
+  "quote": "LIGHT TAKES ROOT",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.58,
+    "focusY": 0.45,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "torch-hallowed": "torch-hallowed.png",
+    "torch-rainbow": "torch-rainbow.png",
+    "torch-pink": "torch-pink.png",
+    "companion-pixie": "companion-pixie.apng",
+    "companion-unicorn": "companion-unicorn.apng",
+    "companion-queen-slime": "companion-queen-slime.png",
+    "companion-crystal-slime": "companion-crystal-slime.apng",
+    "companion-bouncy-slime": "companion-bouncy-slime.apng",
+    "companion-heavenly-slime": "companion-heavenly-slime.apng",
+    "bg-primary": "background.png",
+    "bg-variant-hallow-1": "bg-variant-hallow-1.png",
+    "bg-variant-hallow-2": "bg-variant-hallow-2.png",
+    "bg-variant-hallow-3": "bg-variant-hallow-3.png",
+    "bg-variant-hallow-4": "bg-variant-hallow-4.png",
+    "bg-variant-hallow-5": "bg-variant-hallow-5.apng"
+  },
+  "torchKey": "torch-hallowed",
+  "companionPool": [
+    "companion-pixie",
+    "companion-unicorn",
+    "companion-queen-slime",
+    "companion-crystal-slime",
+    "companion-bouncy-slime",
+    "companion-heavenly-slime"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#1b1235",
+    "panel": "#39255e",
+    "panelAlt": "#5a3f86",
+    "accent": "#ff9bf4",
+    "accentAlt": "#7ff4ff",
+    "secondary": "#ffe76a",
+    "highlight": "#a987ff",
+    "text": "#fff8ff",
+    "muted": "#ddd0f4",
+    "line": "rgba(255, 155, 244, .52)"
+  },
+  "companionWeights": {
+    "companion-pixie": 55,
+    "companion-unicorn": 55,
+    "companion-queen-slime": 10,
+    "companion-crystal-slime": 55,
+    "companion-bouncy-slime": 55,
+    "companion-heavenly-slime": 55
+  },
+  "musicPool": [
+    "hallow"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-hallow-1",
+    "bg-variant-hallow-2",
+    "bg-variant-hallow-3",
+    "bg-variant-hallow-4",
+    "bg-variant-hallow-5"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-hallow"
+  ]
+}

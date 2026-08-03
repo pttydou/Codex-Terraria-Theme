@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-bee-hive",
+  "name": "Terraria · 蜂巢",
+  "stylePreset": "terraria",
+  "variant": "bee-hive",
+  "brandSubtitle": "THE BEE HIVE",
+  "tagline": "蜂蜜与蜂蜡包围着地下王国。",
+  "projectPrefix": "选择蜂巢室 · ",
+  "projectLabel": "选择蜂巢室",
+  "statusText": "地下蜂巢",
+  "quote": "PROTECT THE HIVE",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "none",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.apng",
+    "accent-2": "accent-2.apng",
+    "accent-3": "accent-3.png",
+    "companion-bee": "companion-bee.apng",
+    "companion-bee-small-bee": "companion-bee-small-bee.apng",
+    "companion-queen-bee": "companion-queen-bee.apng"
+  },
+  "companionPool": [
+    "companion-bee",
+    "companion-bee-small-bee",
+    "companion-queen-bee"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#2a1a06",
+    "panel": "#59400e",
+    "panelAlt": "#86641b",
+    "accent": "#ffd24d",
+    "accentAlt": "#f29b28",
+    "secondary": "#fff0a1",
+    "highlight": "#a87519",
+    "text": "#fff6d5",
+    "muted": "#e5d2a2",
+    "line": "rgba(255, 210, 77, .58)"
+  },
+  "companionWeights": {
+    "companion-bee": 100,
+    "companion-bee-small-bee": 100,
+    "companion-queen-bee": 25
+  },
+  "musicPool": [
+    "underground-jungle"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-jungle"
+  ]
+}

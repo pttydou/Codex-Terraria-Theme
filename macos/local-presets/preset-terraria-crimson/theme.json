@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-crimson",
+  "name": "Terraria · 地表猩红",
+  "stylePreset": "terraria",
+  "variant": "crimson",
+  "brandSubtitle": "THE SURFACE CRIMSON",
+  "tagline": "猩红草与血肉地形吞没地表。",
+  "projectPrefix": "选择血肉域 · ",
+  "projectLabel": "选择血肉域",
+  "statusText": "地表猩红之地",
+  "quote": "THE LAND HAS A PULSE",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.55,
+    "focusY": 0.48,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "torch-crimson": "torch-crimson.png",
+    "torch-ichor": "torch-ichor.png",
+    "torch-red": "torch-red.png",
+    "companion-crimslime-big-crimslime": "companion-crimslime-big-crimslime.apng",
+    "companion-crimera-big-crimera": "companion-crimera-big-crimera.apng",
+    "companion-herpling": "companion-herpling.apng",
+    "companion-face-monster": "companion-face-monster.apng",
+    "companion-blood-crawler": "companion-blood-crawler.apng",
+    "companion-blood-crawler-on-wall": "companion-blood-crawler-on-wall.apng",
+    "companion-blood-feeder": "companion-blood-feeder.apng",
+    "companion-blood-jelly": "companion-blood-jelly.apng",
+    "companion-brain-of-cthulhu": "companion-brain-of-cthulhu.apng",
+    "companion-creeper": "companion-creeper.png",
+    "bg-primary": "background.png",
+    "bg-variant-crimson-1": "bg-variant-crimson-1.png",
+    "bg-variant-crimson-2": "bg-variant-crimson-2.png",
+    "bg-variant-crimson-3": "bg-variant-crimson-3.png",
+    "bg-variant-crimson-4": "bg-variant-crimson-4.png",
+    "bg-variant-crimson-5": "bg-variant-crimson-5.apng"
+  },
+  "torchKey": "torch-crimson",
+  "companionPool": [
+    "companion-crimslime-big-crimslime",
+    "companion-crimera-big-crimera",
+    "companion-herpling",
+    "companion-face-monster",
+    "companion-blood-crawler",
+    "companion-blood-crawler-on-wall",
+    "companion-blood-feeder",
+    "companion-blood-jelly",
+    "companion-brain-of-cthulhu",
+    "companion-creeper"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#24090f",
+    "panel": "#4e1522",
+    "panelAlt": "#7a2230",
+    "accent": "#ff5f70",
+    "accentAlt": "#d83b54",
+    "secondary": "#ffc07a",
+    "highlight": "#9f1d40",
+    "text": "#fff0e8",
+    "muted": "#e7b2b7",
+    "line": "rgba(255, 95, 112, .54)"
+  },
+  "companionWeights": {
+    "companion-crimslime-big-crimslime": 55,
+    "companion-crimera-big-crimera": 100,
+    "companion-herpling": 55,
+    "companion-face-monster": 55,
+    "companion-blood-crawler": 55,
+    "companion-blood-crawler-on-wall": 55,
+    "companion-blood-feeder": 55,
+    "companion-blood-jelly": 55,
+    "companion-brain-of-cthulhu": 25,
+    "companion-creeper": 55
+  },
+  "musicPool": [
+    "crimson"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-crimson-1",
+    "bg-variant-crimson-2",
+    "bg-variant-crimson-3",
+    "bg-variant-crimson-4",
+    "bg-variant-crimson-5"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-crimson"
+  ]
+}

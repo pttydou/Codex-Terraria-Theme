@@ -1,0 +1,892 @@
+{
+  "schemaVersion": 1,
+  "downloadedAt": "2026-07-25T11:43:34.501Z",
+  "sourcePage": "https://terraria.wiki.gg/wiki/Biome_backgrounds",
+  "behavior": "Each environment lazily materializes one selected background from its pool.",
+  "families": [
+    {
+      "id": "forest",
+      "themes": [
+        "forest-day",
+        "forest-night",
+        "blood-moon",
+        "solar-eclipse",
+        "goblin-invasion",
+        "graveyard",
+        "pumpkin-moon"
+      ],
+      "files": [
+        {
+          "title": "Forest background 1.png",
+          "url": "https://terraria.wiki.gg/images/Forest_background_1.png?e2477a",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 88640,
+          "sha256": "40c249e70702d4c6b1a8e3bfe5135e6ee13ee5b3538b0abea1a5dab32cd0198d",
+          "size": 44641
+        },
+        {
+          "title": "Forest background 6.png",
+          "url": "https://terraria.wiki.gg/images/Forest_background_6.png?1dfab6",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 75089,
+          "sha256": "1430e95200358090a37d067727b0144c1354063deb6368842141b0d9e0c57fc1",
+          "size": 40111
+        },
+        {
+          "title": "Forest background 9.png",
+          "url": "https://terraria.wiki.gg/images/Forest_background_9.png?e8e52d",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 71482,
+          "sha256": "efb5f2f915d5e66239dc2f8ea6cc3f077aff2560ee1a0b27fa82715757997ada",
+          "size": 36401
+        },
+        {
+          "title": "Forest background 14.gif",
+          "url": "https://terraria.wiki.gg/images/Forest_background_14.gif?7a501e",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 41179,
+          "sha256": "53b60821dec00659ccc7154f8d65c9dff7780b0897564ffac72aa55e76adb324",
+          "size": 41179
+        },
+        {
+          "title": "Forest background 18.png",
+          "url": "https://terraria.wiki.gg/images/Forest_background_18.png?c24523",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 103620,
+          "sha256": "2eff0b17a273a3b83efe49a4b01d39fd0781c3ccefa04ece85a499e1998fdca7",
+          "size": 52288
+        }
+      ]
+    },
+    {
+      "id": "snow",
+      "themes": [
+        "tundra",
+        "tundra-night",
+        "frost-moon"
+      ],
+      "files": [
+        {
+          "title": "Snow biome background 1.png",
+          "url": "https://terraria.wiki.gg/images/Snow_biome_background_1.png?6396a5",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 155649,
+          "sha256": "8afa1a41e086cbbb7e64bf661a27eaf1ed6c30656f9de930ec17a8fae4fa0c92",
+          "size": 61844
+        },
+        {
+          "title": "Snow biome background 5.png",
+          "url": "https://terraria.wiki.gg/images/Snow_biome_background_5.png?944240",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 146181,
+          "sha256": "5bb4bde50b226a4c1639391680a783bc2aff4a302d9d5e8c9f21493dfcdb5644",
+          "size": 59959
+        },
+        {
+          "title": "Snow biome background 11.png",
+          "url": "https://terraria.wiki.gg/images/Snow_biome_background_11.png?a5ad6f",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 141746,
+          "sha256": "69d1189906c0699f3039799bb5a7ddddbe9ba060f6ac4b410d45a89455bd4392",
+          "size": 83140
+        },
+        {
+          "title": "Snow biome background 13.png",
+          "url": "https://terraria.wiki.gg/images/Snow_biome_background_13.png?801cfb",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 96867,
+          "sha256": "c4358a679944a324459262974355b1cc8fb93c6c32d4c7fc748d124a8c22f0de",
+          "size": 47402
+        },
+        {
+          "title": "Snow biome background 14.png",
+          "url": "https://terraria.wiki.gg/images/Snow_biome_background_14.png?e2dd21",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 109510,
+          "sha256": "8b3aa9e8a066d8195f077aca39e758f907dd5404f942dce2595906ae0eade963",
+          "size": 48632
+        }
+      ]
+    },
+    {
+      "id": "jungle",
+      "themes": [
+        "jungle",
+        "jungle-night"
+      ],
+      "files": [
+        {
+          "title": "Jungle background 1.png",
+          "url": "https://terraria.wiki.gg/images/Jungle_background_1.png?6f2e04",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 47983,
+          "sha256": "31aa925cfc2ae7e7028e16f86c8246f4c4468863a75fdc4b2c12cae27814fdda",
+          "size": 25985
+        },
+        {
+          "title": "Jungle background 3.png",
+          "url": "https://terraria.wiki.gg/images/Jungle_background_3.png?223441",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 47892,
+          "sha256": "5eee625dd49862c8e3ba4e9e887bfd221abb77ef746656653f4dd29a7e1139d2",
+          "size": 23201
+        },
+        {
+          "title": "Jungle background 5.png",
+          "url": "https://terraria.wiki.gg/images/Jungle_background_5.png?a2415a",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 196322,
+          "sha256": "845e49a67b7d0eb032c099ce0eefcf5bf3a67d43033b114b6edcd1e7ef566782",
+          "size": 116911
+        },
+        {
+          "title": "Jungle background 6.gif",
+          "url": "https://terraria.wiki.gg/images/Jungle_background_6.gif?9bf848",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 44529,
+          "sha256": "19657cc3f2175dc1ca13dc3b45fecd1f8c842df7b6dc4f6cd486f5ed6e08525e",
+          "size": 44529
+        },
+        {
+          "title": "Jungle background 7.gif",
+          "url": "https://terraria.wiki.gg/images/Jungle_background_7.gif?6a7c8e",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 107530,
+          "sha256": "3c4d913b609a47246a8be8ea577be34492582757b740fb05f26f8c5421269295",
+          "size": 107530
+        }
+      ]
+    },
+    {
+      "id": "desert",
+      "themes": [
+        "desert"
+      ],
+      "files": [
+        {
+          "title": "Desert background 1.png",
+          "url": "https://terraria.wiki.gg/images/Desert_background_1.png?736007",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 20155,
+          "sha256": "5c7a95f6fb88745b92ecfd6e93c9f71cd840ad0e35bc118aef596133528dfe2b",
+          "size": 10727
+        },
+        {
+          "title": "Desert background 2.png",
+          "url": "https://terraria.wiki.gg/images/Desert_background_2.png?18fbbb",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 26396,
+          "sha256": "44e47cf6e9c33c42a0abf63937591526ef4874ffa310171185adfb3204ec37fc",
+          "size": 19988
+        },
+        {
+          "title": "Desert background 4.png",
+          "url": "https://terraria.wiki.gg/images/Desert_background_4.png?602a0f",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 36186,
+          "sha256": "aaf465e83bb731a2527fe07e4c6e971548d8107a9b4da48f1450048dec1ed87a",
+          "size": 16952
+        },
+        {
+          "title": "Desert background 6.gif",
+          "url": "https://terraria.wiki.gg/images/Desert_background_6.gif?5dce6d",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 32753,
+          "sha256": "051b5eb3a3b25fde636a9558cc2f33c8a619ece77065a82233e77b78c9aa8080",
+          "size": 32753
+        },
+        {
+          "title": "Desert background 7.png",
+          "url": "https://terraria.wiki.gg/images/Desert_background_7.png?d570d2",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 38995,
+          "sha256": "dbfd81145a9fedef503ce32b0c35c2dad724a9a2768b1697ba44ca8203c45436",
+          "size": 17318
+        }
+      ]
+    },
+    {
+      "id": "corruption",
+      "themes": [
+        "corruption"
+      ],
+      "files": [
+        {
+          "title": "Corruption background 1.png",
+          "url": "https://terraria.wiki.gg/images/Corruption_background_1.png?b352e6",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 83561,
+          "sha256": "02b475df94626686327ddd9846e154986d45230961acf27c1bf1ac7994454127",
+          "size": 40567
+        },
+        {
+          "title": "Corruption background 3.png",
+          "url": "https://terraria.wiki.gg/images/Corruption_background_3.png?a5cb95",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 72189,
+          "sha256": "9e9fb6297c61529d3bc4222e3e406075b2d8a5dbfa4f74531c4da110ee8b28df",
+          "size": 36527
+        },
+        {
+          "title": "Corruption background 4.png",
+          "url": "https://terraria.wiki.gg/images/Corruption_background_4.png?80af26",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 63230,
+          "sha256": "6ea0472164dd71b0ccb637dac50f8635faefa54a0dca9ff9fb55de90841f1dd6",
+          "size": 34189
+        },
+        {
+          "title": "Corruption background 5.png",
+          "url": "https://terraria.wiki.gg/images/Corruption_background_5.png?cb1b70",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 52719,
+          "sha256": "afbf96992274d5de3ccf20f90cbcda8ff071d8691568bd991930446632a8fbfd",
+          "size": 27004
+        },
+        {
+          "title": "Corruption background 6.png",
+          "url": "https://terraria.wiki.gg/images/Corruption_background_6.png?7264ff",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 94959,
+          "sha256": "c1563d3f0b90143d2f654aae5001e0af4d588cf8b0fa590bdce37839499ae532",
+          "size": 43649
+        }
+      ]
+    },
+    {
+      "id": "crimson",
+      "themes": [
+        "crimson"
+      ],
+      "files": [
+        {
+          "title": "Crimson background 1.png",
+          "url": "https://terraria.wiki.gg/images/Crimson_background_1.png?a2cb0b",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 89953,
+          "sha256": "f5e41717a2fee3efbc925c5c18ca5d9fc78e5334fb836d04a1075e8eacbeb5e1",
+          "size": 45829
+        },
+        {
+          "title": "Crimson background 2.png",
+          "url": "https://terraria.wiki.gg/images/Crimson_background_2.png?7e5969",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 91325,
+          "sha256": "8ac0d4145486bb66a1e6d11009a9fc2ccd8237953ab817fb5f274c522d31a611",
+          "size": 46899
+        },
+        {
+          "title": "Crimson background 4.png",
+          "url": "https://terraria.wiki.gg/images/Crimson_background_4.png?7a8421",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 40261,
+          "sha256": "e12bc1fda3eac5e71daeb6a2eba1912a813c426df812b3a6edb89ebb21113ebf",
+          "size": 18224
+        },
+        {
+          "title": "Crimson background 6.png",
+          "url": "https://terraria.wiki.gg/images/Crimson_background_6.png?1b3b83",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 47831,
+          "sha256": "9e56d67c2279abbfd647f9384c009ab88696991d960b98b27957d29fef298853",
+          "size": 22956
+        },
+        {
+          "title": "Crimson background 7.gif",
+          "url": "https://terraria.wiki.gg/images/Crimson_background_7.gif?8dae9e",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 84585,
+          "sha256": "31857e48cd2bb41cdce38c255f618f7e57f68a9b739ac5ed9c2d0ee648275693",
+          "size": 84585
+        }
+      ]
+    },
+    {
+      "id": "hallow",
+      "themes": [
+        "hallow",
+        "hallow-night"
+      ],
+      "files": [
+        {
+          "title": "Hallow background 1.png",
+          "url": "https://terraria.wiki.gg/images/Hallow_background_1.png?654448",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 78575,
+          "sha256": "5643987d909950d83091eee3fc6c0747df355b13e340d51e268cc7c2d49f7dc6",
+          "size": 78575
+        },
+        {
+          "title": "Hallow background 2.png",
+          "url": "https://terraria.wiki.gg/images/Hallow_background_2.png?5e2b61",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 111770,
+          "sha256": "f3bc026b5100096e32417d5587283a93df748d17456f442ebae66cd06a1e4d26",
+          "size": 111770
+        },
+        {
+          "title": "Hallow background 4.png",
+          "url": "https://terraria.wiki.gg/images/Hallow_background_4.png?47225b",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 116957,
+          "sha256": "48ac89214d03390c2e16a3e3ab84140b97286f36ee432702fa6e6b2c676d9e5d",
+          "size": 116957
+        },
+        {
+          "title": "Hallow background 5.png",
+          "url": "https://terraria.wiki.gg/images/Hallow_background_5.png?ce4a35",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 133885,
+          "sha256": "0310d1d290959b964742d66cfd59ac291c1bc3c12ca2ae97bfc0fc332453766b",
+          "size": 133885
+        },
+        {
+          "title": "Hallow background 6.gif",
+          "url": "https://terraria.wiki.gg/images/Hallow_background_6.gif?dda5e2",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 114176,
+          "sha256": "4c557b337826502e5516f42f2d38879e30cb5fc25014bdfc1287fdc9511badb1",
+          "size": 114176
+        }
+      ]
+    },
+    {
+      "id": "ocean",
+      "themes": [
+        "ocean",
+        "pirate-invasion"
+      ],
+      "files": [
+        {
+          "title": "Ocean background 1.png",
+          "url": "https://terraria.wiki.gg/images/Ocean_background_1.png?70da35",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 9132,
+          "sha256": "9ba4831a479412cdaf25eed5c095ac4423dc9dca2490f27094a083abcb208719",
+          "size": 9132
+        },
+        {
+          "title": "Ocean background 3.png",
+          "url": "https://terraria.wiki.gg/images/Ocean_background_3.png?eaa5ea",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 8075,
+          "sha256": "d1f72f5cc5bff28638c4f1984d7b95144d6606dd7bdcef64fa34de9514dc49de",
+          "size": 8075
+        },
+        {
+          "title": "Ocean background 6.png",
+          "url": "https://terraria.wiki.gg/images/Ocean_background_6.png?db81d2",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 33946,
+          "sha256": "fb4e569631a36158cd115c15aa9037fca38ab770d54a6a2dfd2b6f78a60c5428",
+          "size": 33946
+        },
+        {
+          "title": "Ocean background 7.png",
+          "url": "https://terraria.wiki.gg/images/Ocean_background_7.png?8246da",
+          "width": 1024,
+          "height": 720,
+          "wikiSize": 34292,
+          "sha256": "a0558c1a14a3ff3ad8f1c01236dab3e20313fe479bc07b6c46d3cc6dba9df2eb",
+          "size": 34292
+        },
+        {
+          "title": "Ocean background 8.png",
+          "url": "https://terraria.wiki.gg/images/Ocean_background_8.png?6a876d",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 44619,
+          "sha256": "97900ab202a93eeb13454c8d55d8b95e3a82ca16c4e13c1a21bca7f082d86760",
+          "size": 44619
+        }
+      ]
+    },
+    {
+      "id": "mushroom",
+      "themes": [
+        "glowing-mushroom"
+      ],
+      "files": [
+        {
+          "title": "Glowing Mushroom background 1.png",
+          "url": "https://terraria.wiki.gg/images/Glowing_Mushroom_background_1.png?ae8b89",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 59623,
+          "sha256": "ea38bff47d0d98b877c97c76d04f55fbe799d6d79a043f1729f9f217f1f9d27d",
+          "size": 59623
+        },
+        {
+          "title": "Glowing Mushroom background 2.png",
+          "url": "https://terraria.wiki.gg/images/Glowing_Mushroom_background_2.png?4a4518",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 113088,
+          "sha256": "142d6a9fcd71503d325766c964f10dceee307da1114bef299f7b0838bac28705",
+          "size": 113088
+        },
+        {
+          "title": "Glowing Mushroom background 3.gif",
+          "url": "https://terraria.wiki.gg/images/Glowing_Mushroom_background_3.gif?6e6a3b",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 22290,
+          "sha256": "37a9054a197a320d53c64fbe67e94b6dc5b68f2918fd2a41a70384687028ff1a",
+          "size": 22290
+        },
+        {
+          "title": "Glowing Mushroom background 4.png",
+          "url": "https://terraria.wiki.gg/images/Glowing_Mushroom_background_4.png?e316cb",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 56028,
+          "sha256": "296dadce9eceab257c690d54851adbb68bfa6f7c712ab1c8ac0a904504a0b7d6",
+          "size": 56028
+        },
+        {
+          "title": "Glowing Mushroom background 5.png",
+          "url": "https://terraria.wiki.gg/images/Glowing_Mushroom_background_5.png?40bef1",
+          "width": 1024,
+          "height": 838,
+          "wikiSize": 149984,
+          "sha256": "3c7d92d27bd0b96988c43a85392fb3c423fb39ada3d3a8a8b87cce039f59a089",
+          "size": 149984
+        }
+      ]
+    },
+    {
+      "id": "underground",
+      "themes": [
+        "underground"
+      ],
+      "files": [
+        {
+          "title": "Underground background 1.png",
+          "url": "https://terraria.wiki.gg/images/Underground_background_1.png?85b0e3",
+          "width": 128,
+          "height": 96,
+          "wikiSize": 2050,
+          "sha256": "b4e688db035be1f5026fe813022317bb439431724c2f49c5ebf5b36ade6ba947",
+          "size": 702
+        },
+        {
+          "title": "Underground background 3.png",
+          "url": "https://terraria.wiki.gg/images/Underground_background_3.png?f33b21",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 3616,
+          "sha256": "8db50853923176bd06c5dd227fd7df3dbd7116db1bc0b652ca3304fec6186168",
+          "size": 815
+        },
+        {
+          "title": "Underground background 6.png",
+          "url": "https://terraria.wiki.gg/images/Underground_background_6.png?b3c9b3",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 3622,
+          "sha256": "78150382c717bc5fa0963bb93cfbafd7440987476c8204cbd471639bf57be43b",
+          "size": 841
+        },
+        {
+          "title": "Underground background 8.png",
+          "url": "https://terraria.wiki.gg/images/Underground_background_8.png?5db4cb",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4162,
+          "sha256": "2e12c1e61d86cfa7b09f7a36a810b54a2c53b06432ca422224bb79cb9a73945b",
+          "size": 1180
+        },
+        {
+          "title": "Underground background 9.png",
+          "url": "https://terraria.wiki.gg/images/Underground_background_9.png?49fb30",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4218,
+          "sha256": "85590b147a307ae3aa0cd3e5dfb9e862accb54889ad1a953ca4f07f0651cd526",
+          "size": 1281
+        }
+      ]
+    },
+    {
+      "id": "cavern",
+      "themes": [
+        "cavern"
+      ],
+      "files": [
+        {
+          "title": "Cavern background 1.png",
+          "url": "https://terraria.wiki.gg/images/Cavern_background_1.png?949048",
+          "width": 128,
+          "height": 96,
+          "wikiSize": 2440,
+          "sha256": "1952d1a9fe0ed75fda29ce064e17279502c555688ad3caf9d80ec10db7ccc050",
+          "size": 815
+        },
+        {
+          "title": "Cavern background 3.png",
+          "url": "https://terraria.wiki.gg/images/Cavern_background_3.png?7f8474",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 3732,
+          "sha256": "91bfd99bf39b5cf1078860135b0de4f20ee8cd920bc78aab0c840794901f71ef",
+          "size": 839
+        },
+        {
+          "title": "Cavern background 6.png",
+          "url": "https://terraria.wiki.gg/images/Cavern_background_6.png?3837b7",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 3615,
+          "sha256": "d99568df6c2e1f60e41975e3ca4b98333679972c7c2bee54744a585e5096c5db",
+          "size": 847
+        },
+        {
+          "title": "Cavern background 8.png",
+          "url": "https://terraria.wiki.gg/images/Cavern_background_8.png?d62063",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4053,
+          "sha256": "1c8e76f70a8ed2ac23155a382956685cc0ed32fcf084cc67f5a7366c34f3cbf3",
+          "size": 1101
+        },
+        {
+          "title": "Cavern background 9.png",
+          "url": "https://terraria.wiki.gg/images/Cavern_background_9.png?d76d0d",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 3930,
+          "sha256": "277f41d278be35379319ef632b57de911e5509eff88b45f1715fb784131b4cbd",
+          "size": 1066
+        }
+      ]
+    },
+    {
+      "id": "underworld",
+      "themes": [
+        "underworld"
+      ],
+      "files": [
+        {
+          "title": "Underworld background 1.gif",
+          "url": "https://terraria.wiki.gg/images/Underworld_background_1.gif?7690a5",
+          "width": 1024,
+          "height": 858,
+          "wikiSize": 48643,
+          "sha256": "ce9c6da32cc82bdfa3c73deb446c9f4f26dd083d06864b83ec1e3cfd4f6da229",
+          "size": 48643
+        },
+        {
+          "title": "Underworld background 2.gif",
+          "url": "https://terraria.wiki.gg/images/Underworld_background_2.gif?f51084",
+          "width": 1024,
+          "height": 858,
+          "wikiSize": 80883,
+          "sha256": "fbcea6334e901f7bae2586b6a897b26c8e2732126f91a8f13dafb52c9c61395a",
+          "size": 80883
+        },
+        {
+          "title": "Underworld background 3.gif",
+          "url": "https://terraria.wiki.gg/images/Underworld_background_3.gif?3a4d87",
+          "width": 1024,
+          "height": 858,
+          "wikiSize": 105713,
+          "sha256": "620ac6fd908cb1a3fcde25e32e49fb9c13430052d15d3a84ed60d4c331a8cbe9",
+          "size": 105713
+        }
+      ]
+    },
+    {
+      "id": "ice",
+      "themes": [
+        "ice-biome"
+      ],
+      "files": [
+        {
+          "title": "Ice biome background 1.png",
+          "url": "https://terraria.wiki.gg/images/Ice_biome_background_1.png?759ad8",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4193,
+          "sha256": "7b8cf5846f6691f06beb45b424fd87d92f41e940be517b31d49575eec6b4a5c1",
+          "size": 1053
+        },
+        {
+          "title": "Ice biome background 2.png",
+          "url": "https://terraria.wiki.gg/images/Ice_biome_background_2.png?1b4834",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 3706,
+          "sha256": "6c439f5d58230b97715abb679367158df1c77482cf448ce3b343e0b0049ff425",
+          "size": 969
+        },
+        {
+          "title": "Ice biome background 3.png",
+          "url": "https://terraria.wiki.gg/images/Ice_biome_background_3.png?5bad55",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4153,
+          "sha256": "e465e6d2f6c810f181025a6b93f0499472658d848338b810f4f238992ee84d49",
+          "size": 1148
+        },
+        {
+          "title": "Ice biome background 5.png",
+          "url": "https://terraria.wiki.gg/images/Ice_biome_background_5.png?1752cd",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 3713,
+          "sha256": "fc9afbc5cdb520a28561db232c09e09e8fcd0fd33e09f35e4e739cc44aec7167",
+          "size": 924
+        },
+        {
+          "title": "Ice biome background 6.png",
+          "url": "https://terraria.wiki.gg/images/Ice_biome_background_6.png?144bfc",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4653,
+          "sha256": "6c6ee7bc2fba55792f6a57b2ca1a31c5731c1b48dfdad8db5cbf67249839834e",
+          "size": 1306
+        }
+      ]
+    },
+    {
+      "id": "underground-jungle",
+      "themes": [
+        "underground-jungle"
+      ],
+      "files": [
+        {
+          "title": "Underground jungle background 1.png",
+          "url": "https://terraria.wiki.gg/images/Underground_jungle_background_1.png?3e94bf",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4338,
+          "sha256": "1e75c80c59e87f0d76ae3dc915e9a9f33b0cac5d454f31f3135148d5715b96bc",
+          "size": 1193
+        },
+        {
+          "title": "Underground jungle background 2.png",
+          "url": "https://terraria.wiki.gg/images/Underground_jungle_background_2.png?e6d8a1",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4124,
+          "sha256": "1df57d7c4251b09ccfdaee520720bb5fc1676b639a4c6945a0c4bb61f9070c51",
+          "size": 1282
+        },
+        {
+          "title": "Cavern jungle background 1.png",
+          "url": "https://terraria.wiki.gg/images/Cavern_jungle_background_1.png?fa28e4",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4469,
+          "sha256": "9974451b7234aac5d5a7f19dfd1c02529588e0134790a1498ae915a468a50fef",
+          "size": 1485
+        },
+        {
+          "title": "Cavern jungle background 2.png",
+          "url": "https://terraria.wiki.gg/images/Cavern_jungle_background_2.png?353ec5",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4232,
+          "sha256": "02e18345d8bbe67392c84c3d8e1c0377acb8db6acef5e498f4366314d5d39379",
+          "size": 1227
+        }
+      ]
+    },
+    {
+      "id": "underground-corruption",
+      "themes": [
+        "underground-corruption"
+      ],
+      "files": [
+        {
+          "title": "Underground corruption background 1.png",
+          "url": "https://terraria.wiki.gg/images/Underground_corruption_background_1.png?4686ac",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4333,
+          "sha256": "c04d15a75cfe54b0b54b261dde9ee43d73789c3141e29f12914fc0e2d5bd4146",
+          "size": 1317
+        },
+        {
+          "title": "Underground corruption background 2.png",
+          "url": "https://terraria.wiki.gg/images/Underground_corruption_background_2.png?882c14",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4482,
+          "sha256": "3f6923ee75a442bd1a03d99da34146e52078b19bb3e73b0a9062a20537861267",
+          "size": 1303
+        },
+        {
+          "title": "Underground corruption background 3.png",
+          "url": "https://terraria.wiki.gg/images/Underground_corruption_background_3.png?27967f",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4972,
+          "sha256": "eafe67f3eabcdb73d140ba26f504fe43d171133222d356b612330e1b5d5bb555",
+          "size": 1248
+        },
+        {
+          "title": "Underground corruption background 4.png",
+          "url": "https://terraria.wiki.gg/images/Underground_corruption_background_4.png?7f8b77",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4774,
+          "sha256": "57162639fc0d8b0834a81b0bc7a21e827901458bfa7bcb359d8ec23a82de4b90",
+          "size": 1303
+        }
+      ]
+    },
+    {
+      "id": "underground-crimson",
+      "themes": [
+        "underground-crimson"
+      ],
+      "files": [
+        {
+          "title": "Underground crimson background 1.png",
+          "url": "https://terraria.wiki.gg/images/Underground_crimson_background_1.png?6e722f",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4623,
+          "sha256": "593e5695dbaa5ef6f3ef843bc8dcb9d777bc90202635bb639d0d2be6d07c5846",
+          "size": 1447
+        },
+        {
+          "title": "Underground crimson background 2.png",
+          "url": "https://terraria.wiki.gg/images/Underground_crimson_background_2.png?8432af",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4297,
+          "sha256": "b32ed1d101f80ce243c4475af832064e12b76cdeae04f5d4972d4c3ee7856d9c",
+          "size": 1389
+        },
+        {
+          "title": "Underground crimson background 3.png",
+          "url": "https://terraria.wiki.gg/images/Underground_crimson_background_3.png?ebe898",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4618,
+          "sha256": "75f06bfb54bb82c16c0db991c4128b7a22afbf17ffc03e97c1591d25591cd207",
+          "size": 1399
+        },
+        {
+          "title": "Underground crimson background 4.png",
+          "url": "https://terraria.wiki.gg/images/Underground_crimson_background_4.png?fd4784",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4550,
+          "sha256": "9dc48316a2f7a2e72f2492945ce2cff4f9c7f2c9cd0b900d91285f4adac784fd",
+          "size": 1428
+        },
+        {
+          "title": "Underground crimson background 5.png",
+          "url": "https://terraria.wiki.gg/images/Underground_crimson_background_5.png?8239aa",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4011,
+          "sha256": "083a7f360caf463d035c875ed4ea461a2ca67320e89dc14fbc6a36caffdb40ce",
+          "size": 1241
+        }
+      ]
+    },
+    {
+      "id": "underground-hallow",
+      "themes": [
+        "underground-hallow"
+      ],
+      "files": [
+        {
+          "title": "Underground hallow background 1.png",
+          "url": "https://terraria.wiki.gg/images/Underground_hallow_background_1.png?ca2d64",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4355,
+          "sha256": "31d5f4d5c5e6d302e1ce407121cc93758311e86a9ac4de6a16a42e32ef766899",
+          "size": 1829
+        },
+        {
+          "title": "Underground hallow background 2.png",
+          "url": "https://terraria.wiki.gg/images/Underground_hallow_background_2.png?81ea30",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 5011,
+          "sha256": "d30bf2a7f8651d5fbc63be642f77e9c58afdc951c622478890e801a796f11127",
+          "size": 1315
+        },
+        {
+          "title": "Underground hallow background 3.png",
+          "url": "https://terraria.wiki.gg/images/Underground_hallow_background_3.png?7ee44c",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4501,
+          "sha256": "3281acbd7cb4c12df1dd3b7fed8226ef99df93d4daee86566412fd35ad1a85a4",
+          "size": 1485
+        }
+      ]
+    },
+    {
+      "id": "underground-mushroom",
+      "themes": [
+        "underground-glowing-mushroom"
+      ],
+      "files": [
+        {
+          "title": "Underground glowing mushroom background 1.png",
+          "url": "https://terraria.wiki.gg/images/Underground_glowing_mushroom_background_1.png?9e5b09",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4094,
+          "sha256": "627f78822c8f9624db50ca4b3b30d8128c49af1d4533078117113141d6d96a92",
+          "size": 1419
+        },
+        {
+          "title": "Underground glowing mushroom background 2.png",
+          "url": "https://terraria.wiki.gg/images/Underground_glowing_mushroom_background_2.png?2946cf",
+          "width": 160,
+          "height": 96,
+          "wikiSize": 4170,
+          "sha256": "2ec42f5d20249430907585df69b2e7b49e866ce19beefa1924f19d0fd052d3a8",
+          "size": 1422
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-lunar-vortex",
+  "name": "Terraria · 星旋柱",
+  "stylePreset": "terraria",
+  "variant": "lunar-vortex",
+  "brandSubtitle": "THE VORTEX PILLAR",
+  "tagline": "星旋能量撕开深空。",
+  "projectPrefix": "选择星旋域 · ",
+  "projectLabel": "选择星旋域",
+  "statusText": "月亮事件·星旋",
+  "quote": "THE VORTEX OPENS",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "none",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "accent-1": "accent-1.png",
+    "accent-2": "accent-2.png",
+    "accent-3": "accent-3.png",
+    "companion-vortex-pillar": "companion-vortex-pillar.png",
+    "companion-storm-diver": "companion-storm-diver.apng",
+    "companion-alien-queen": "companion-alien-queen.apng",
+    "companion-alien-hornet": "companion-alien-hornet.apng",
+    "companion-alien-larva": "companion-alien-larva.apng",
+    "companion-vortexian": "companion-vortexian.apng"
+  },
+  "companionPool": [
+    "companion-vortex-pillar",
+    "companion-storm-diver",
+    "companion-alien-queen",
+    "companion-alien-hornet",
+    "companion-alien-larva",
+    "companion-vortexian"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#061f25",
+    "panel": "#0e4c53",
+    "panelAlt": "#16727a",
+    "accent": "#49e3d2",
+    "accentAlt": "#38a9e7",
+    "secondary": "#9cf8ee",
+    "highlight": "#1c8790",
+    "text": "#eafffb",
+    "muted": "#b8deda",
+    "line": "rgba(73, 227, 210, .58)"
+  },
+  "companionWeights": {
+    "companion-vortex-pillar": 10,
+    "companion-storm-diver": 55,
+    "companion-alien-queen": 55,
+    "companion-alien-hornet": 55,
+    "companion-alien-larva": 55,
+    "companion-vortexian": 55
+  },
+  "musicPool": [
+    "the-towers"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-towers"
+  ]
+}

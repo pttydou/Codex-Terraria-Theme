@@ -1,0 +1,33 @@
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+*.tmp
+*.bak
+release/
+dist/
+build/
+coverage/
+node_modules/
+
+# User data and optional music
+bundled-music/
+bundled-music.json
+music/
+*.mp3
+*.m4a
+*.wav
+*.ogg
+*.flac
+
+# Downloaded/bundled runtimes and compiled binaries
+windows/TRSkin/core/runtime/win-x64/node.exe
+windows/TRSkin/core/runtime/win-arm64/node.exe
+macos/control-app/bin/
+
+# Runtime state
+theme-backup.json
+music.json
+random-pool.json
+*.pid

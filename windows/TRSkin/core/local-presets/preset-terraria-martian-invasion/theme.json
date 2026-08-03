@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-martian-invasion",
+  "name": "Terraria · 火星人入侵",
+  "stylePreset": "terraria",
+  "variant": "martian-invasion",
+  "brandSubtitle": "MARTIAN MADNESS",
+  "tagline": "探测器已经逃脱，外星舰队接管天空。",
+  "projectPrefix": "选择登陆区 · ",
+  "projectLabel": "选择登陆区",
+  "statusText": "火星暴乱",
+  "quote": "MARTIANS ARE INVADING",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "none",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "torch": "torch.png",
+    "accent-1": "event-symbol.apng",
+    "accent-2": "event-item.png",
+    "accent-3": "martian-saucer.apng",
+    "companion-brain-scrambler": "companion-brain-scrambler.apng",
+    "companion-ray-gunner": "companion-ray-gunner.apng",
+    "companion-martian-officer": "companion-martian-officer.apng",
+    "companion-gray-grunt": "companion-gray-grunt.apng",
+    "companion-martian-engineer": "companion-martian-engineer.apng",
+    "companion-martian-drone": "companion-martian-drone.apng",
+    "companion-gigazapper": "companion-gigazapper.apng",
+    "companion-scutlix": "companion-scutlix.apng",
+    "companion-martian-saucer": "companion-martian-saucer.apng",
+    "companion-martian-saucer-martian-sauc": "companion-martian-saucer-martian-sauc.apng",
+    "companion-martian-walker": "companion-martian-walker.apng",
+    "companion-scutlix-gunner": "companion-scutlix-gunner.png"
+  },
+  "companionPool": [
+    "companion-brain-scrambler",
+    "companion-ray-gunner",
+    "companion-martian-officer",
+    "companion-gray-grunt",
+    "companion-martian-engineer",
+    "companion-martian-drone",
+    "companion-gigazapper",
+    "companion-scutlix",
+    "companion-martian-saucer",
+    "companion-martian-saucer-martian-sauc",
+    "companion-martian-walker",
+    "companion-scutlix-gunner"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#080b20",
+    "panel": "#171d45",
+    "panelAlt": "#242e61",
+    "accent": "#6dff91",
+    "accentAlt": "#79eaff",
+    "secondary": "#c18cff",
+    "highlight": "#6e3f9b",
+    "text": "#ecfff1",
+    "muted": "#b7c9d4",
+    "line": "rgba(109, 255, 145, .52)"
+  },
+  "companionWeights": {
+    "companion-brain-scrambler": 55,
+    "companion-ray-gunner": 55,
+    "companion-martian-officer": 55,
+    "companion-gray-grunt": 55,
+    "companion-martian-engineer": 55,
+    "companion-martian-drone": 55,
+    "companion-gigazapper": 55,
+    "companion-scutlix": 55,
+    "companion-martian-saucer": 10,
+    "companion-martian-saucer-martian-sauc": 10,
+    "companion-martian-walker": 25,
+    "companion-scutlix-gunner": 55
+  },
+  "musicPool": [
+    "martian-madness"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-invasion"
+  ]
+}

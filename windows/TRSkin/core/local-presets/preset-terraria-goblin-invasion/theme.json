@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-terraria-goblin-invasion",
+  "name": "Terraria · 哥布林入侵",
+  "stylePreset": "terraria",
+  "variant": "goblin-invasion",
+  "brandSubtitle": "GOBLIN ARMY",
+  "tagline": "完整哥布林军团正在向世界中心推进。",
+  "projectPrefix": "选择防线 · ",
+  "projectLabel": "选择防线",
+  "statusText": "哥布林入侵",
+  "quote": "A GOBLIN ARMY APPROACHES",
+  "image": "background.png",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.5,
+    "focusY": 0.5,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "assets": {
+    "logo": "terraria-logo.png",
+    "health": "player-heart.png",
+    "mana": "mana.png",
+    "explore": "card-explore.png",
+    "build": "card-build.png",
+    "review": "card-review.png",
+    "fix": "card-fix.png",
+    "torch": "torch.png",
+    "accent-1": "event-symbol.png",
+    "accent-2": "event-item.png",
+    "accent-3": "goblin-warlock.apng",
+    "companion-goblin-peon": "companion-goblin-peon.apng",
+    "companion-goblin-thief": "companion-goblin-thief.apng",
+    "companion-goblin-warrior": "companion-goblin-warrior.apng",
+    "companion-goblin-archer": "companion-goblin-archer.apng",
+    "companion-goblin-sorcerer": "companion-goblin-sorcerer.png",
+    "companion-goblin-warlock": "companion-goblin-warlock.apng",
+    "companion-shadowflame-apparition": "companion-shadowflame-apparition.apng",
+    "bg-primary": "background.png",
+    "bg-variant-forest-1": "bg-variant-forest-1.png",
+    "bg-variant-forest-2": "bg-variant-forest-2.png",
+    "bg-variant-forest-3": "bg-variant-forest-3.png",
+    "bg-variant-forest-4": "bg-variant-forest-4.apng",
+    "bg-variant-forest-5": "bg-variant-forest-5.png"
+  },
+  "companionPool": [
+    "companion-goblin-peon",
+    "companion-goblin-thief",
+    "companion-goblin-warrior",
+    "companion-goblin-archer",
+    "companion-goblin-sorcerer",
+    "companion-goblin-warlock",
+    "companion-shadowflame-apparition"
+  ],
+  "cardIconPool": [
+    "explore",
+    "build",
+    "review",
+    "fix"
+  ],
+  "colors": {
+    "background": "#11120c",
+    "panel": "#29331c",
+    "panelAlt": "#404b26",
+    "accent": "#a7d85a",
+    "accentAlt": "#d0b050",
+    "secondary": "#b88cff",
+    "highlight": "#5b387d",
+    "text": "#f6f4dc",
+    "muted": "#c9c7a7",
+    "line": "rgba(167, 216, 90, .52)"
+  },
+  "companionWeights": {
+    "companion-goblin-peon": 100,
+    "companion-goblin-thief": 100,
+    "companion-goblin-warrior": 55,
+    "companion-goblin-archer": 100,
+    "companion-goblin-sorcerer": 55,
+    "companion-goblin-warlock": 10,
+    "companion-shadowflame-apparition": 55
+  },
+  "musicPool": [
+    "goblin-army"
+  ],
+  "backgroundPool": [
+    "bg-primary",
+    "bg-variant-forest-1",
+    "bg-variant-forest-2",
+    "bg-variant-forest-3",
+    "bg-variant-forest-4",
+    "bg-variant-forest-5"
+  ],
+  "otherworldMusicPool": [
+    "otherworld-invasion"
+  ]
+}
