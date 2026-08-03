@@ -12,7 +12,10 @@ import {
 const scriptPath = fileURLToPath(import.meta.url);
 const here = path.dirname(scriptPath);
 const root = path.resolve(here, "..");
-const SKIN_VERSION = "2.6.0.19";
+const SKIN_VERSION = (await fs.readFile(path.join(root, "VERSION"), "utf8")).trim();
+if (!/^\d+\.\d+\.\d+(?:\.\d+)?$/.test(SKIN_VERSION)) {
+  throw new Error("TR Skin VERSION is invalid");
+}
 const DEFAULT_THEME_ROOT = path.join(root, "local-presets", "preset-terraria-random");
 const MAX_ART_BYTES = 16 * 1024 * 1024;
 const STRONG_THEME_AUDIT_MS = 30000;

@@ -6,6 +6,8 @@
 *.css text eol=lf
 *.ps1 text eol=crlf
 *.cmd text eol=crlf
+*.yml text eol=lf
+*.yaml text eol=lf
 *.png binary
 *.apng binary
 *.jpg binary

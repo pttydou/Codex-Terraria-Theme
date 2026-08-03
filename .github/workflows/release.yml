@@ -1,0 +1,213 @@
+name: Build and publish release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Validate tag and source versions
+        run: node release/validate-release.mjs --tag "$GITHUB_REF_NAME"
+        shell: bash
+      - name: Run source tests
+        run: bash macos/tests/run-tests.sh
+        shell: bash
+      - name: Validate PowerShell syntax
+        shell: pwsh
+        run: |
+          $errors = @()
+          Get-ChildItem windows,release -Recurse -File -Filter *.ps1 | ForEach-Object {
+            $tokens = $null
+            $parseErrors = $null
+            [void][System.Management.Automation.Language.Parser]::ParseFile(
+              $_.FullName, [ref]$tokens, [ref]$parseErrors
+            )
+            $errors += $parseErrors
+          }
+          if ($errors.Count -gt 0) { $errors | Format-List; throw 'PowerShell syntax validation failed.' }
+      - name: Compile native macOS control panel
+        if: runner.os == 'macOS'
+        run: macos/scripts/build-theme-console-binary-macos.sh "$RUNNER_TEMP/CodexThemeConsole"
+
+  prepare:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.version.outputs.value }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - id: version
+        name: Validate version and tag
+        shell: bash
+        run: |
+          version="$(tr -d '[:space:]' < windows/TRSkin/core/VERSION)"
+          node release/validate-release.mjs --tag "$GITHUB_REF_NAME"
+          printf 'value=%s\n' "$version" >> "$GITHUB_OUTPUT"
+      - name: Create or reuse draft Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if state="$(gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft 2>/dev/null)"; then
+            [[ "$state" == "true" ]] || { echo 'Refusing to overwrite a published Release.' >&2; exit 1; }
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              --repo "$GITHUB_REPOSITORY" \
+              --verify-tag \
+              --draft \
+              --title "TRSkin ${{ steps.version.outputs.value }}" \
+              --notes "Build in progress from commit $GITHUB_SHA."
+          fi
+      - name: Download, verify, and stage pinned Music Pack
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          tag="$(node -p "require('./release/release-config.json').music.sourceTag")"
+          asset="$(node -p "require('./release/release-config.json').music.assetName")"
+          expected="$(node -p "require('./release/release-config.json').music.sha256")"
+          gh release download "$tag" --repo "$GITHUB_REPOSITORY" --pattern "$asset" --dir music
+          printf '%s  %s\n' "$expected" "music/$asset" | sha256sum -c -
+          gh release upload "$GITHUB_REF_NAME" "music/$asset" \
+            --repo "$GITHUB_REPOSITORY" --clobber
+
+  windows:
+    needs: prepare
+    runs-on: windows-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Download and verify pinned Music Pack
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          $config = Get-Content release/release-config.json -Raw | ConvertFrom-Json
+          gh release download $config.music.sourceTag --repo $env:GITHUB_REPOSITORY `
+            --pattern $config.music.assetName --dir music
+          if ($LASTEXITCODE -ne 0) { throw 'Could not download the pinned Music Pack.' }
+          $actual = (Get-FileHash -Algorithm SHA256 "music/$($config.music.assetName)").Hash.ToLowerInvariant()
+          if ($actual -cne $config.music.sha256) { throw 'Music Pack SHA-256 mismatch.' }
+      - name: Build Windows packages
+        shell: pwsh
+        run: |
+          $parameters = @{
+            Version = '${{ needs.prepare.outputs.version }}'
+            OutputDirectory = 'dist'
+            SourceCommit = '${{ github.sha }}'
+            MusicPack = 'music/TRSkin-Music-Pack.zip'
+          }
+          ./release/build-windows.ps1 @parameters
+      - name: Attest Windows packages
+        uses: actions/attest@508db95dd578ae2727ebd6217d5ba78e4fbda05d # v4
+        with:
+          subject-path: dist/*.zip
+      - name: Upload Windows packages to draft Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          gh release upload $env:GITHUB_REF_NAME dist/*.zip `
+            --repo $env:GITHUB_REPOSITORY --clobber
+          if ($LASTEXITCODE -ne 0) { throw 'Could not upload Windows packages.' }
+
+  macos:
+    needs: prepare
+    runs-on: macos-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Download and verify pinned Music Pack
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          tag="$(node -p "require('./release/release-config.json').music.sourceTag")"
+          asset="$(node -p "require('./release/release-config.json').music.assetName")"
+          expected="$(node -p "require('./release/release-config.json').music.sha256")"
+          gh release download "$tag" --repo "$GITHUB_REPOSITORY" --pattern "$asset" --dir music
+          printf '%s  %s\n' "$expected" "music/$asset" | shasum -a 256 -c -
+      - name: Build macOS packages
+        run: |
+          bash release/build-macos.sh \
+            '${{ needs.prepare.outputs.version }}' \
+            dist \
+            '${{ github.sha }}' \
+            music/TRSkin-Music-Pack.zip
+      - name: Attest macOS packages
+        uses: actions/attest@508db95dd578ae2727ebd6217d5ba78e4fbda05d # v4
+        with:
+          subject-path: dist/*.zip
+      - name: Upload macOS packages to draft Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" dist/*.zip --repo "$GITHUB_REPOSITORY" --clobber
+
+  publish:
+    needs: [prepare, windows, macos]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Read draft Release asset digests
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api "repos/$GITHUB_REPOSITORY/releases/tags/$GITHUB_REF_NAME" > release.json
+      - name: Generate update manifest and checksums
+        run: |
+          node release/generate-release-metadata.mjs \
+            release.json dist '${{ needs.prepare.outputs.version }}' \
+            "$GITHUB_REF_NAME" '${{ github.sha }}'
+      - name: Attest manifest and checksums
+        uses: actions/attest@508db95dd578ae2727ebd6217d5ba78e4fbda05d # v4
+        with:
+          subject-path: |
+            dist/SHA256SUMS.txt
+            dist/update-manifest.json
+      - name: Upload metadata and publish Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release upload "$GITHUB_REF_NAME" \
+            dist/SHA256SUMS.txt dist/update-manifest.json \
+            --repo "$GITHUB_REPOSITORY" --clobber
+          gh release edit "$GITHUB_REF_NAME" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "TRSkin ${{ needs.prepare.outputs.version }}" \
+            --notes-file dist/RELEASE-NOTES.md \
+            --draft=false

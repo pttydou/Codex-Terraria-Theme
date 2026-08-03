@@ -30,7 +30,13 @@ START_ERROR_LOG="$STATE_ROOT/start-error.log"
 CODEX_APP_JOB_LABEL="com.openai.codex-dream-skin-studio.app"
 INJECTOR_JOB_LABEL="com.openai.codex-dream-skin-studio.injector"
 EXPECTED_CODEX_TEAM_ID="${CODEX_EXPECTED_TEAM_ID:-2DC432GLL2}"
-SKIN_VERSION="2.6.0.12"
+SKIN_VERSION="$(/usr/bin/tr -d '[:space:]' < "$PROJECT_ROOT/VERSION")"
+case "$SKIN_VERSION" in
+  ''|*[!0-9.]*|.*|*..*|*.)
+    /usr/bin/printf 'Codex Dream Skin Studio: the package VERSION is invalid.\n' >&2
+    exit 1
+    ;;
+esac
 
 fail() {
   local message="$*"

@@ -5,7 +5,7 @@ Thumbs.db
 *.log
 *.tmp
 *.bak
-release/
+release-output*/
 dist/
 build/
 coverage/

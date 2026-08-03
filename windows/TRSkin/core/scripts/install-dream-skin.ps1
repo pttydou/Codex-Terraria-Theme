@@ -70,10 +70,10 @@ try {
     $entry.TargetPath = $powershell
     $entry.Arguments = (
       "-NoProfile -STA -ExecutionPolicy Bypass " +
-      "-File `"$($engine.ControlPanel)`"$portArgument"
+      "-File `"$($engine.OneClick)`"$portArgument"
     )
     $entry.WorkingDirectory = $engine.Root
-    $entry.Description = 'Open the visible Codex Terraria Skin control panel'
+    $entry.Description = 'Check for updates and open the Codex Terraria Skin control panel'
     $entry.IconLocation = "$(Join-Path $engine.Root 'assets\trskin.ico'),0"
     $entry.WindowStyle = 1
     $entry.Save()

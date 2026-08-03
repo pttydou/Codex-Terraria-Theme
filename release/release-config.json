@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "repository": "pttydou/TRSkin",
+  "music": {
+    "version": "1",
+    "sourceTag": "v2.6.0.17",
+    "assetName": "TRSkin-Music-Pack.zip",
+    "sha256": "aac2fc04bb68da095c2307c3230dede49789a1923d4bd46f7d188039468c9e20"
+  }
+}

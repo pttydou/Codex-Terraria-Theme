@@ -8,6 +8,7 @@ $ErrorActionPreference = 'Stop'
 $PortExplicit = $PSBoundParameters.ContainsKey('Port')
 $SourceRoot = Split-Path -Parent $PSScriptRoot
 . (Join-Path $PSScriptRoot 'common-windows.ps1')
+. (Join-Path $PSScriptRoot 'update-windows.ps1')
 
 function Read-DreamSkinVersion {
   param([Parameter(Mandatory = $true)][string]$Path)
@@ -49,6 +50,7 @@ try {
     $installed.Restore,
     $installed.Tray,
     $installed.ControlPanel
+    $installed.Updater
   )
   $installedComplete = $true
   foreach ($required in $installedFiles) {
@@ -73,6 +75,28 @@ try {
   }
 
   $performedInstall = $false
+  if ($sourceIsInstalled -and $installedComplete -and $null -ne $installedVersion) {
+    $availableUpdate = Get-DreamSkinAvailableUpdate -InstalledVersion $installedVersion -StateRoot $StateRoot
+    if ($null -ne $availableUpdate) {
+      $targetVersion = "$($availableUpdate.release.version)"
+      $confirmed = Confirm-DreamSkinRestart -Message (
+        "TR Skin $targetVersion is available. The update only replaces program files; " +
+        'music, themes, and settings will be preserved. Download and install it now?'
+      )
+      if ($confirmed) {
+        $registeredInstalls = @(Get-DreamSkinRegisteredCodexInstalls)
+        foreach ($codex in $registeredInstalls) {
+          if ((Get-DreamSkinCodexProcesses -Codex $codex).Count -gt 0) {
+            Stop-DreamSkinCodex -Codex $codex -AllowForce
+          }
+        }
+        Install-DreamSkinAvailableUpdate -Manifest $availableUpdate -StateRoot $StateRoot
+        $installed = Get-DreamSkinRuntimeEnginePaths -StateRoot $StateRoot
+        $installedVersion = Read-DreamSkinVersion -Path $installed.Version
+        $performedInstall = $true
+      }
+    }
+  }
   if ($needsInstall) {
     $registeredInstalls = @(Get-DreamSkinRegisteredCodexInstalls)
     if ($registeredInstalls.Count -eq 0) {

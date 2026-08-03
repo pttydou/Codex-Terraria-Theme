@@ -6,19 +6,19 @@ TRSkin 是一个非官方的 Codex Desktop Terraria 主题切换器，提供 Win
 
 ## 下载
 
-普通用户请直接使用 [TRSkin 2.6.0 Release](https://github.com/pttydou/TRSkin/releases/tag/v2.6.0.17)：
+普通用户请直接打开 [最新 Release](https://github.com/pttydou/TRSkin/releases/latest)，按用途选择：
 
-- Windows：完整包
-- macOS：完整包
-- 已有程序、只需补音乐：Music Pack
+- 首次安装：`TRSkin-Windows-<版本>.zip` 或 `TRSkin-macOS-<版本>.zip` 完整包；
+- 已安装用户：程序自动提示下载对应平台的 `Update` 包；
+- 只需补充音乐：`TRSkin-Music-Pack.zip`。
 
-Release 包是开箱即用的发行版本；本仓库主分支用于源码阅读、修改和协作。
+从 `v2.7.0` 开始，Release 由 GitHub Actions 从版本标签对应的源码自动测试和构建。Windows/macOS 完整包与 Update 包均带源码 commit 信息，并发布 SHA-256 与 GitHub 构建证明；独立 Music Pack 作为固定哈希的外部内容输入管理。详细说明见[发布溯源与验证](docs/RELEASE-PROVENANCE.md)。
 
 ## 安装与使用
 
 ### Windows
 
-1. 从 Release 下载 `TRSkin-Windows-2.6.0.17.zip`。
+1. 从 Release 下载最新的 `TRSkin-Windows-<版本>.zip`。
 2. 完整解压 ZIP，不要直接在压缩包预览窗口中运行。
 3. 打开解压后的 `TRSkin` 文件夹。
 4. 双击 `START-TRSKIN.cmd`。
@@ -28,7 +28,7 @@ Release 包是开箱即用的发行版本；本仓库主分支用于源码阅读
 
 ### macOS
 
-1. 从 Release 下载 `TRSkin-macOS-2.6.0.12.zip`。
+1. 从 Release 下载最新的 `TRSkin-macOS-<版本>.zip`。
 2. 完整解压后双击 `START-CODEX-TERRARIA.app`。
 3. 首次如被 macOS 阻止，请右键应用并选择 **打开**。
 4. 安装完成后，通过主题控制台选择环境、随机模式和音乐设置。
@@ -43,6 +43,22 @@ Release 包是开箱即用的发行版本；本仓库主分支用于源码阅读
 - macOS：放到 `.codex-dream-skin-studio/` 下，与 `scripts/` 同级。
 
 首次播放音乐时，需要在 Codex 主题界面中点击一次音乐按钮。音乐功能默认不会自动播放。
+
+## 更新机制
+
+从 `2.7.0` 开始，Windows 桌面入口和 macOS 控制台每 24 小时最多检查一次最新版本。发现更新时会先询问用户，再执行以下流程：
+
+1. 只下载当前平台的 `Update` 包，不下载完整包或 Music Pack；
+2. 校验下载大小、SHA-256、版本号、源码 commit 和包内构建身份；
+3. 将新引擎暂存并替换旧引擎，失败时恢复旧引擎；
+4. 成功后删除旧引擎备份、下载 ZIP 和临时目录。
+
+音乐、主题和设置存放在引擎以外的持久目录中：
+
+- Windows：`%LOCALAPPDATA%\CodexDreamSkin`；
+- macOS：`~/Library/Application Support/CodexDreamSkinStudio`。
+
+因此普通代码更新不会重复下载或删除音乐。只有 Music Pack 版本发生变化时，用户才需要单独更新音乐。设置环境变量 `TRSKIN_DISABLE_UPDATE_CHECK=1` 可以关闭联网检查。
 
 ## 仓库结构
 
@@ -67,7 +83,7 @@ cd TRSkin
 
 ### Windows
 
-Windows 的发布包内置 x64/arm64 Node.js 运行时，源码仓库不追踪这些大型二进制文件。若要从源码运行完整安装流程，请先从对应 Windows Release 包复制：
+Windows 的发布包内置 x64/arm64 Node.js 运行时，源码仓库不追踪这些大型二进制文件。CI 会按照 [`NODE-RUNTIME.json`](windows/TRSkin/core/legal/NODE-RUNTIME.json) 中固定的官方地址和 SHA-256 下载 Node。若要直接从源码运行安装流程，可运行公开打包脚本，或者从对应 Release 包复制：
 
 ```text
 TRSkin/core/runtime/win-x64/node.exe
@@ -81,6 +97,8 @@ windows/TRSkin/core/runtime/
 ```
 
 然后运行 `windows/TRSkin/START-TRSKIN.cmd`。普通用户无需执行这一步，直接下载 Release 即可。
+
+公开构建命令和 CI 流程见[发布溯源文档](docs/RELEASE-PROVENANCE.md)与 [release workflow](.github/workflows/release.yml)。
 
 ### macOS
 
