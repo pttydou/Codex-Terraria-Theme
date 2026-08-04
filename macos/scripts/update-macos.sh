@@ -3,8 +3,8 @@
 set -euo pipefail
 . "$(cd "$(dirname "$0")" && pwd -P)/common-macos.sh"
 
-UPDATE_REPOSITORY="pttydou/TRSkin"
-UPDATE_MANIFEST_URL="https://github.com/pttydou/TRSkin/releases/latest/download/update-manifest.json"
+UPDATE_REPOSITORY="pttydou/Codex-Terraria-Theme"
+UPDATE_MANIFEST_URL="https://github.com/pttydou/Codex-Terraria-Theme/releases/latest/download/update-manifest.json"
 UPDATE_CACHE_PATH="$STATE_ROOT/update-check.json"
 UPDATE_CACHE_SECONDS=86400
 

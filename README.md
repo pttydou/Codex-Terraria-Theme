@@ -1,12 +1,48 @@
-# TRSkin
+# TRSkin — Codex Terraria Theme / Skin Switcher
 
-TRSkin 是一个非官方的 Codex Desktop Terraria 主题切换器，提供 Windows 与 macOS 支持、44 套环境/事件主题，以及全环境随机模式。
+把 OpenAI Codex Desktop 变成一个会随 Terraria 世界变化的工作空间。
+
+TRSkin 是一个面向 Windows 与 macOS 的非官方 Codex Desktop Terraria 主题切换器：提供 **44 套环境与事件主题**、全环境随机、环境音乐、自动更新，以及 **524 个右侧伙伴候选**。伙伴池中包含 **449 个动态伙伴**和 **99 个动物或其他小动物候选**；同一时间只显示 1 个，约每 12 秒轮换且不会连续重复。
+
+[![Latest Release](https://img.shields.io/github/v/release/pttydou/Codex-Terraria-Theme?display_name=tag&sort=semver)](https://github.com/pttydou/Codex-Terraria-Theme/releases/latest)
+[![Release](https://img.shields.io/github/actions/workflow/status/pttydou/Codex-Terraria-Theme/release.yml?label=release)](https://github.com/pttydou/Codex-Terraria-Theme/actions/workflows/release.yml)
+[![License](https://img.shields.io/github/license/pttydou/Codex-Terraria-Theme)](LICENSE)
+
+## 效果预览
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/trskin-office-workflow.png" alt="TRSkin 办公工作流主题"></td>
+    <td width="50%"><img src="docs/images/trskin-underground-theme.png" alt="TRSkin 地下洞穴主题"></td>
+  </tr>
+  <tr>
+    <td align="center">办公工作流主题</td>
+    <td align="center">地下洞穴主题</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/images/trskin-task-theme.png" alt="TRSkin 任务对话主题与右侧伙伴"></td>
+    <td width="50%"><img src="docs/images/trskin-codex-workspace.png" alt="TRSkin Codex 工作区主题"></td>
+  </tr>
+  <tr>
+    <td align="center">任务对话与右侧伙伴</td>
+    <td align="center">Codex 工作区实际效果</td>
+  </tr>
+</table>
+
+## 功能亮点
+
+- **44 套环境与事件主题**：森林、洞穴、地狱、神圣、腐化、猩红、地牢、入侵事件等。
+- **524 个右侧伙伴候选**：按环境、地层、昼夜和事件匹配，支持稀有度权重与动态轮换。
+- **全环境随机**：背景、配色、火把、伙伴、建议卡和音乐随环境成组切换。
+- **环境音乐**：音乐包独立保存，普通程序更新不会重复下载或删除音乐。
+- **安全更新**：只下载当前平台的小型 Update 包，验证 SHA-256 和源码提交，失败时自动回滚。
+- **随时恢复**：可以从控制台恢复 Codex 官方外观，不删除已保存的主题、音乐和设置。
 
 > 本项目与 OpenAI、Re-Logic 或 Terraria Wiki 无隶属、赞助或官方认可关系。
 
 ## 下载
 
-普通用户请直接打开 [最新 Release](https://github.com/pttydou/TRSkin/releases/latest)，按用途选择：
+普通用户请直接打开 [最新 Release](https://github.com/pttydou/Codex-Terraria-Theme/releases/latest)，按用途选择：
 
 - 首次安装：`TRSkin-Windows-<版本>.zip` 或 `TRSkin-macOS-<版本>.zip` 完整包；
 - 已安装用户：程序自动提示下载对应平台的 `Update` 包；
@@ -77,8 +113,8 @@ TRSkin/
 ## 从源码开始
 
 ```bash
-git clone https://github.com/pttydou/TRSkin.git
-cd TRSkin
+git clone https://github.com/pttydou/Codex-Terraria-Theme.git
+cd Codex-Terraria-Theme
 ```
 
 ### Windows
@@ -115,6 +151,13 @@ cd macos
 ## 参与修改
 
 欢迎 Fork 仓库、创建功能分支并提交 Pull Request。提交前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，不要提交音乐、用户图片、账号数据、日志或构建后的二进制文件。
+
+## Bug 反馈与交流
+
+- QQ 反馈群：**1095325114**
+- 也可以通过 [GitHub Issues](https://github.com/pttydou/Codex-Terraria-Theme/issues) 报告可复现的问题。
+
+反馈 Bug 时建议附上操作系统、TRSkin 版本、Codex Desktop 版本、问题发生步骤和不含隐私信息的截图；请勿公开账号、Token、聊天内容或私人项目资料。
 
 ## 许可证与素材
 
