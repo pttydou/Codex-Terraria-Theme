@@ -12,12 +12,12 @@ TRSkin 是一个面向 Windows 与 macOS 的非官方 Codex Desktop Terraria 主
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/images/trskin-office-workflow.png" alt="TRSkin 办公工作流主题"></td>
-    <td width="50%"><img src="docs/images/trskin-underground-theme.png" alt="TRSkin 地下洞穴主题"></td>
+    <td width="50%"><img src="docs/images/trskin-office-workflow.png" alt="TRSkin 地表森林白天主题"></td>
+    <td width="50%"><img src="docs/images/trskin-underground-theme.png" alt="TRSkin 洞穴主题"></td>
   </tr>
   <tr>
-    <td align="center">办公工作流主题</td>
-    <td align="center">地下洞穴主题</td>
+    <td align="center">地表森林白天主题</td>
+    <td align="center">洞穴主题</td>
   </tr>
   <tr>
     <td width="50%"><img src="docs/images/trskin-task-theme.png" alt="TRSkin 任务对话主题与右侧伙伴"></td>
