@@ -1,7 +1,7 @@
 Set-StrictMode -Version Latest
 
-$script:DreamSkinUpdateRepository = 'pttydou/TRSkin'
-$script:DreamSkinUpdateManifestUrl = 'https://github.com/pttydou/TRSkin/releases/latest/download/update-manifest.json'
+$script:DreamSkinUpdateRepository = 'pttydou/Codex-Terraria-Theme'
+$script:DreamSkinUpdateManifestUrl = 'https://github.com/pttydou/Codex-Terraria-Theme/releases/latest/download/update-manifest.json'
 
 function Test-DreamSkinUpdateManifest {
   param([Parameter(Mandatory = $true)]$Manifest)

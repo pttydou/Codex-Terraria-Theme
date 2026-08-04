@@ -10,4 +10,4 @@ TRSkin for Windows
 音乐、主题和设置保存在 %LOCALAPPDATA%\CodexDreamSkin，不会随引擎更新而删除。
 
 源码、校验值和构建说明：
-https://github.com/pttydou/TRSkin
+https://github.com/pttydou/Codex-Terraria-Theme

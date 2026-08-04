@@ -8,6 +8,21 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const macosRoot = path.resolve(here, "..");
 const template = await fs.readFile(path.join(macosRoot, "assets", "renderer-inject.js"), "utf8");
 const css = await fs.readFile(path.join(macosRoot, "assets", "dream-skin.css"), "utf8");
+const windowsChromeConfig = await fs.readFile(
+  path.resolve(macosRoot, "../windows/TRSkin/core/scripts/config-utf8.ps1"),
+  "utf8",
+);
+
+assert.match(
+  windowsChromeConfig,
+  /appearanceLightChromeTheme[^\r\n]*ink = "#F8FAFC"/,
+  "Windows native caption glyphs must use a light ink color above the dark Terraria title bar.",
+);
+assert.doesNotMatch(
+  windowsChromeConfig,
+  /appearanceLightChromeTheme[^\r\n]*ink = "#4A235F"/,
+  "Windows native caption glyphs must not reuse the old low-contrast purple ink.",
+);
 
 assert.doesNotMatch(
   css,

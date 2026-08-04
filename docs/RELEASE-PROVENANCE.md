@@ -46,7 +46,7 @@ Get-FileHash -Algorithm SHA256 .\TRSkin-Windows-<版本>.zip
 验证 ZIP 是否确实由本仓库的 GitHub Actions 工作流产生：
 
 ```bash
-gh attestation verify TRSkin-Windows-<版本>.zip -R pttydou/TRSkin
+gh attestation verify TRSkin-Windows-<版本>.zip -R pttydou/Codex-Terraria-Theme
 ```
 
 GitHub 的构建证明会关联仓库、工作流、commit、触发事件与产物哈希。它证明产物来源和完整性，但不等同于代码本身没有安全问题。
