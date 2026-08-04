@@ -107,7 +107,11 @@ try {
         if ($PortExplicit) { throw "Port $Port is already occupied by an unverified listener. Choose another port." }
         $Port = Select-DreamSkinPort -PreferredPort $Port
       }
-      $arguments = @('--remote-debugging-address=127.0.0.1', "--remote-debugging-port=$Port")
+      $arguments = @(
+        '--force-dark-mode',
+        '--remote-debugging-address=127.0.0.1',
+        "--remote-debugging-port=$Port"
+      )
       if ($ProfilePath) {
         New-Item -ItemType Directory -Force -Path $ProfilePath | Out-Null
         $arguments += "--user-data-dir=$ProfilePath"
