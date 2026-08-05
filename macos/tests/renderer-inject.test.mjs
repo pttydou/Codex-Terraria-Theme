@@ -588,6 +588,11 @@ assert.match(
 );
 assert.match(
   css,
+  /svg\[aria-roledescription\][\s\S]{0,120}g\.node g\.label :is\(text, tspan\)[\s\S]{0,120}color:\s*#172033 !important;[\s\S]{0,80}fill:\s*#172033 !important;[\s\S]{0,80}text-shadow:\s*none !important;/,
+  "Native SVG text/tspan diagram labels must override both inherited color and SVG fill.",
+);
+assert.match(
+  css,
   /\[data-dream-torch\][\s\S]{0,100}#codex-dream-skin-chrome::after/,
   "The lower-left torch decoration must only exist when an environment declares one.",
 );

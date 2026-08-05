@@ -1572,9 +1572,8 @@ html.codex-dream-skin[data-dream-style="terraria"]
   text-shadow: 1px 2px 0 rgb(3 9 18 / .74);
 }
 
-/* Mermaid renders labels inside SVG foreignObject nodes.  Those labels must
-   keep the diagram's light-card contrast instead of inheriting the skin's
-   cream prose color and dark text shadow from the surrounding Markdown. */
+/* Mermaid may render labels either in foreignObject HTML or native SVG
+   text/tspan nodes. Both forms must keep contrast on light diagram nodes. */
 html.codex-dream-skin[data-dream-style="terraria"]
   main.trskin-main-surface:not(.dream-skin-home-shell)
   svg[aria-roledescription]
@@ -1584,6 +1583,15 @@ html.codex-dream-skin[data-dream-style="terraria"]
   svg[aria-roledescription]
   :is(.nodeLabel, .edgeLabel) :where(p, span, strong, em) {
   color: #172033 !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  svg[aria-roledescription]
+  g.node g.label :is(text, tspan) {
+  color: #172033 !important;
+  fill: #172033 !important;
   text-shadow: none !important;
 }
 
