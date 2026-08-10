@@ -232,7 +232,7 @@ export const CODEX_PROBE_EXPRESSION = `(() => {
         'aside.app-shell-left-panel, aside, nav[aria-label], [data-testid*="sidebar"]'
       )),
       composer: Boolean(document.querySelector(
-        '.composer-surface-chrome, textarea, [contenteditable="true"]'
+        '.dream-skin-composer-surface, [data-composer-surface-variant], [data-composer-utility-bar-variant], .composer-surface-chrome, textarea, [contenteditable="true"]'
       )),
       main: Boolean(document.querySelector('main, [role="main"]')),
     };
@@ -1032,7 +1032,20 @@ async function verifySession(session) {
     }
     const projectButton = box(home?.querySelector('.group\\\\/project-selector > button'));
     const shell = box(document.querySelector('main.trskin-main-surface'));
-    const composer = box(document.querySelector('.composer-surface-chrome'));
+    const nativeComposer = document.querySelector(
+      '[data-composer-surface-variant], [data-composer-utility-bar-variant]'
+    );
+    const editor = document.querySelector('textarea, [contenteditable="true"]');
+    const composerNode = document.querySelector('.dream-skin-composer-surface') ??
+      nativeComposer?.querySelector(':scope > [data-composer-layout]') ?? nativeComposer ??
+      document.querySelector('.composer-surface-chrome') ??
+      editor?.closest('[data-composer-layout], form') ?? editor;
+    const composer = box(composerNode);
+    const composerMarkers = [...document.querySelectorAll('.dream-skin-composer-surface')];
+    const visibleComposerMarkers = composerMarkers.filter((candidate) => box(candidate)?.visible);
+    const composerStyle = getComputedStyle(composerNode || document.body);
+    const homeUtilityNode = document.querySelector('.dream-skin-home-utility');
+    const homeUtilityStyle = getComputedStyle(homeUtilityNode || document.body);
     const sidebar = box(document.querySelector('aside.app-shell-left-panel'));
     const chrome = document.getElementById('codex-dream-skin-chrome');
     const result = {
@@ -1049,6 +1062,14 @@ async function verifySession(session) {
       projectButton,
       shell,
       composer,
+      composerOwned: Boolean(composerNode?.classList.contains('dream-skin-composer-surface')),
+      composerMarkerCount: composerMarkers.length,
+      visibleComposerMarkerCount: visibleComposerMarkers.length,
+      composerOutlineStyle: composerStyle.outlineStyle,
+      homeUtility: box(homeUtilityNode),
+      homeUtilityOwned: Boolean(homeUtilityNode?.classList.contains('dream-skin-home-utility')),
+      homeUtilityBackground: homeUtilityStyle.backgroundImage || homeUtilityStyle.backgroundColor,
+      homeUtilityColor: homeUtilityStyle.color,
       sidebar,
       viewport: { width: innerWidth, height: innerHeight },
       documentOverflow: {
@@ -1058,7 +1079,10 @@ async function verifySession(session) {
     };
     const basePass = result.installed && result.version === ${JSON.stringify(SKIN_VERSION)} &&
       result.stylePresent && result.chromePresent && result.chromePointerEvents === 'none' &&
-      Boolean(result.shell?.visible) && Boolean(result.sidebar?.visible) && !result.documentOverflow.x;
+      Boolean(result.shell?.visible) && Boolean(result.sidebar?.visible) && !result.documentOverflow.x &&
+      (!result.composer?.visible || (result.composerOwned &&
+        result.visibleComposerMarkerCount === 1 && result.composerOutlineStyle === 'none')) &&
+      (!result.homeUtility?.visible || result.homeUtilityOwned);
     // Project selector markup varies across Codex builds — soft requirement.
     const cardsPass = !suggestions || (
       cardBoxes.length >= 2 && cardBoxes.length <= 4 &&
@@ -1248,7 +1272,7 @@ export function earlyPayloadFor(payload, revision) {
         'aside.app-shell-left-panel, aside, nav[aria-label], [data-testid*="sidebar"]'
       );
       const composer = document.querySelector(
-        '.composer-surface-chrome, textarea, [contenteditable="true"]'
+        '.dream-skin-composer-surface, [data-composer-surface-variant], [data-composer-utility-bar-variant], .composer-surface-chrome, textarea, [contenteditable="true"]'
       );
       if (!shell || (!sidebar && !composer)) return false;
       stop();

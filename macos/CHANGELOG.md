@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.7.2 — stable Composer ownership
+
+- Codex 26.730 的 Composer 不再依赖 `.composer-surface-chrome`；通过稳定的
+  `data-composer-surface-variant`、`data-composer-utility-bar-variant` 和直接子级
+  `data-composer-layout` 发现并标记当前可见输入面板。
+- 首页“项目 / 本地 / 分支”环境栏通过
+  `data-composer-home-utility-bar-position` 获得 `.dream-skin-home-utility` 标记，
+  不再保留 Electron light shell 的白色横带。
+- Composer 视觉样式只依赖 `.dream-skin-composer-surface`，并强制清除原生
+  `canvastext` outline；普通 Markdown、标题栏、侧边栏和其他输入控件不受影响。
+- 路由切换、热注入和恢复会清理失效标记；探针、早期注入、live verify 与 Windows
+  实现同步，并保留旧 Codex 类名作为兼容发现路径。
+
 ## 2.6.0.12 — background music continuity
 
 - 环境音乐默认在 Codex 失去焦点、被其他窗口遮住或进入后台时继续播放；只有

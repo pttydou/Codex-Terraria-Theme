@@ -6,12 +6,88 @@ import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const macosRoot = path.resolve(here, "..");
+const windowsRoot = path.resolve(macosRoot, "../windows/TRSkin/core");
 const template = await fs.readFile(path.join(macosRoot, "assets", "renderer-inject.js"), "utf8");
 const css = await fs.readFile(path.join(macosRoot, "assets", "dream-skin.css"), "utf8");
+const macosInjector = await fs.readFile(path.join(macosRoot, "scripts", "injector.mjs"), "utf8");
+const windowsTemplate = await fs.readFile(
+  path.join(windowsRoot, "assets", "renderer-inject.js"),
+  "utf8",
+);
+const windowsCss = await fs.readFile(path.join(windowsRoot, "assets", "dream-skin.css"), "utf8");
+const windowsInjector = await fs.readFile(path.join(windowsRoot, "scripts", "injector.mjs"), "utf8");
+const windowsThemePayload = await fs.readFile(
+  path.join(windowsRoot, "scripts", "theme-payload.mjs"),
+  "utf8",
+);
 const windowsChromeConfig = await fs.readFile(
   path.resolve(macosRoot, "../windows/TRSkin/core/scripts/config-utf8.ps1"),
   "utf8",
 );
+
+for (const { label, renderer, stylesheet, injectors } of [
+  { label: "macOS", renderer: template, stylesheet: css, injectors: [macosInjector] },
+  {
+    label: "Windows",
+    renderer: windowsTemplate,
+    stylesheet: windowsCss,
+    injectors: [windowsInjector, windowsThemePayload],
+  },
+]) {
+  assert.equal(
+    renderer.includes('"[data-composer-surface-variant]"')
+      && renderer.includes('"[data-composer-utility-bar-variant]"'),
+    true,
+    `${label} must discover current Composer roots through stable data attributes.`,
+  );
+  assert.match(
+    renderer,
+    /directComposerLayout[\s\S]{0,500}:scope > \[data-composer-layout\][\s\S]{0,2500}elementIsVisible\(surface\)[\s\S]{0,200}active = surface/,
+    `${label} must descend to the visible direct data-composer-layout surface.`,
+  );
+  assert.match(
+    renderer,
+    /querySelectorAll\?\.\(`\.\$\{COMPOSER_SURFACE_CLASS\}`\)[\s\S]{0,220}candidate !== active[\s\S]{0,120}classList\?\.remove[\s\S]{0,180}active\?\.classList\?\.add/,
+    `${label} must remove stale Composer markers before marking the active surface.`,
+  );
+  assert.match(
+    renderer,
+    /data-composer-home-utility-bar-position[\s\S]{0,180}_homeUtilityBar_[\s\S]{0,500}dream-skin-home-utility/,
+    `${label} must prefer the stable home utility attribute while retaining the legacy fallback.`,
+  );
+  assert.equal(
+    renderer.includes(".composer-surface-chrome"),
+    true,
+    `${label} must retain the legacy Composer discovery path.`,
+  );
+  assert.match(
+    renderer,
+    /cleanup[\s\S]{0,2600}COMPOSER_SURFACE_CLASS[\s\S]{0,160}classList\.remove\(COMPOSER_SURFACE_CLASS\)/,
+    `${label} cleanup must remove renderer-owned Composer markers.`,
+  );
+  assert.match(
+    stylesheet,
+    /\.dream-skin-composer-surface\s*\{[\s\S]{0,120}outline:\s*none !important;/,
+    `${label} must suppress the native canvastext Composer outline.`,
+  );
+  assert.doesNotMatch(
+    stylesheet,
+    /\.composer-surface-chrome/,
+    `${label} visual CSS must depend only on the renderer-owned Composer marker.`,
+  );
+  for (const injector of injectors) {
+    assert.equal(
+      injector.includes(".dream-skin-composer-surface")
+        && injector.includes("[data-composer-surface-variant]")
+        && injector.includes("[data-composer-utility-bar-variant]")
+        && injector.includes(".composer-surface-chrome")
+        && injector.includes("composerOutlineStyle")
+        && injector.includes("visibleComposerMarkerCount"),
+      true,
+      `${label} probe, early injection, and live verify must recognize stable and legacy Composer paths.`,
+    );
+  }
+}
 
 assert.match(
   windowsChromeConfig,
@@ -174,7 +250,7 @@ assert.match(
 );
 assert.match(
   css,
-  /data-dream-art-wide="true"\]\s+\.composer-surface-chrome\s*\{[\s\S]{0,500}backdrop-filter:\s*none !important;/,
+  /data-dream-art-wide="true"\]\s+\.dream-skin-composer-surface\s*\{[\s\S]{0,500}backdrop-filter:\s*none !important;/,
   "Wide artwork should use one uniform composer surface without a split blur layer.",
 );
 assert.match(
@@ -184,32 +260,32 @@ assert.match(
 );
 assert.match(
   css,
-  /data-dream-shell="light"\]\[data-dream-art-wide="true"\][\s\S]{0,100}\.composer-surface-chrome\s*\{[\s\S]{0,400}backdrop-filter:\s*blur\(8px\) saturate\(102%\) !important;/,
+  /data-dream-shell="light"\]\[data-dream-art-wide="true"\][\s\S]{0,100}\.dream-skin-composer-surface\s*\{[\s\S]{0,400}backdrop-filter:\s*blur\(8px\) saturate\(102%\) !important;/,
   "The translucent light composer should softly separate text from detailed artwork.",
 );
 assert.match(
   template,
-  /\[class\*="_homeUtilityBar_"\][\s\S]{0,500}dream-skin-home-utility/,
-  "The renderer should give the current native home utility bar a stable theme class.",
+  /\[data-composer-home-utility-bar-position\][\s\S]{0,120}\[class\*="_homeUtilityBar_"\][\s\S]{0,500}dream-skin-home-utility/,
+  "The renderer should mark the stable native home utility bar with a theme-owned class.",
 );
 assert.match(
   css,
-  /\.dream-skin-home:has\(\.dream-skin-home-utility\)[\s\S]{0,120}\.composer-surface-chrome\s*\{[\s\S]{0,180}border-radius:\s*0 0 22px 22px !important;/,
+  /\.dream-skin-home:has\(\.dream-skin-home-utility\)[\s\S]{0,120}\.dream-skin-composer-surface\s*\{[\s\S]{0,180}border-radius:\s*0 0 22px 22px !important;/,
   "The home utility bar and composer should render as one continuous control.",
 );
 assert.match(
   css,
-  /\.composer-surface-chrome button:not\(\[class~="bg-token-foreground"\]\)[\s\S]{0,100}color:\s*var\(--ds-muted\) !important;/,
+  /\.dream-skin-composer-surface button:not\(\[class~="bg-token-foreground"\]\)[\s\S]{0,100}color:\s*var\(--ds-muted\) !important;/,
   "Composer controls must remain readable when Codex native tokens lag behind a forced dark appearance.",
 );
 assert.match(
   css,
-  /\.composer-surface-chrome button:not\(\[class~="bg-token-foreground"\]\) \*\s*\{[\s\S]{0,80}color:\s*currentColor !important;/,
+  /\.dream-skin-composer-surface button:not\(\[class~="bg-token-foreground"\]\) \*\s*\{[\s\S]{0,80}color:\s*currentColor !important;/,
   "Nested labels inside composer controls must inherit the corrected theme color.",
 );
 assert.match(
   css,
-  /\.composer-surface-chrome p\.placeholder::after\s*\{[\s\S]{0,120}color:\s*rgb\(var\(--ds-muted-rgb\) \/ \.82\) !important;[\s\S]{0,80}opacity:\s*1 !important;/,
+  /\.dream-skin-composer-surface p\.placeholder::after\s*\{[\s\S]{0,120}color:\s*rgb\(var\(--ds-muted-rgb\) \/ \.82\) !important;[\s\S]{0,80}opacity:\s*1 !important;/,
   "Composer placeholder text must not inherit a stale native color with double opacity.",
 );
 assert.match(
@@ -442,17 +518,17 @@ assert.match(
 );
 assert.match(
   css,
-  /data-dream-style="terraria"\]\[data-dream-variant\][\s\S]{0,80}main\.trskin-main-surface \.composer-surface-chrome\s*\{[\s\S]{0,220}inset 0 0 0 1px[\s\S]{0,140}0 0 0 2px rgb\(var\(--ds-accent-rgb\) \/ \.48\) !important;/,
+  /data-dream-style="terraria"\]\[data-dream-variant\][\s\S]{0,80}main\.trskin-main-surface \.dream-skin-composer-surface\s*\{[\s\S]{0,220}inset 0 0 0 1px[\s\S]{0,140}0 0 0 2px rgb\(var\(--ds-accent-rgb\) \/ \.48\) !important;/,
   "The Terraria composer should use a sharp accent frame without a dark offset shell or blur.",
 );
 assert.doesNotMatch(
   css,
-  /main\.trskin-main-surface \.composer-surface-chrome\s*\{[\s\S]{0,260}var\(--biome-glow\)/,
+  /main\.trskin-main-surface \.dream-skin-composer-surface\s*\{[\s\S]{0,260}var\(--biome-glow\)/,
   "The Terraria composer frame should not blur over dark biome artwork.",
 );
 assert.match(
   css,
-  /\.thread-scroll-container \.sticky:has\(\.composer-surface-chrome\)\s*\{[\s\S]{0,260}background:\s*transparent !important;[\s\S]{0,180}box-shadow:\s*none !important;[\s\S]{0,100}padding-bottom:\s*0 !important;/,
+  /\.thread-scroll-container \.sticky:has\(\.dream-skin-composer-surface\)\s*\{[\s\S]{0,260}background:\s*transparent !important;[\s\S]{0,180}box-shadow:\s*none !important;[\s\S]{0,100}padding-bottom:\s*0 !important;/,
   "The task composer dock should not expose a dark 16px strip below the input.",
 );
 assert.match(
@@ -467,12 +543,12 @@ assert.match(
 );
 assert.match(
   css,
-  /> \.relative\.z-10:has\(\.composer-surface-chrome\)[\s\S]{0,120}\.pointer-events-none\.absolute\.bg-gradient-to-t\s*\{[\s\S]{0,120}display:\s*none !important;[\s\S]{0,180}background-image:\s*none !important;/,
+  /> \.relative\.z-10:has\(\.dream-skin-composer-surface\)[\s\S]{0,120}\.pointer-events-none\.absolute\.bg-gradient-to-t\s*\{[\s\S]{0,120}display:\s*none !important;[\s\S]{0,180}background-image:\s*none !important;/,
   "A nested progress or tool-status rail must not restore the full-width dark footer gradient.",
 );
 assert.match(
   css,
-  /> \.relative\.z-10:has\(\.composer-surface-chrome\)\s*\{[\s\S]{0,260}background:\s*transparent !important;[\s\S]{0,260}width:\s*min\(100%, var\(--dream-skin-composer-safe-width, 100%\)\) !important;[\s\S]{0,180}max-width:\s*none !important;[\s\S]{0,160}margin-inline:\s*0 !important;[\s\S]{0,160}padding-inline:\s*0 !important;/,
+  /> \.relative\.z-10:has\(\.dream-skin-composer-surface\)\s*\{[\s\S]{0,260}background:\s*transparent !important;[\s\S]{0,260}width:\s*min\(100%, var\(--dream-skin-composer-safe-width, 100%\)\) !important;[\s\S]{0,180}max-width:\s*none !important;[\s\S]{0,160}margin-inline:\s*0 !important;[\s\S]{0,160}padding-inline:\s*0 !important;/,
   "The task composer rail should not expose dark centered gutters around the input.",
 );
 assert.match(
@@ -717,6 +793,8 @@ function createFixture(theme, {
   composerRail = null,
   audioPlay = null,
   nativeHeader = false,
+  composerScenario = null,
+  homeUtility = false,
 } = {}) {
   let fixtureShell = nativeShell;
   const nodes = new Map();
@@ -809,6 +887,59 @@ function createFixture(theme, {
       };
     },
   };
+  const composerRect = {
+    x: 360, y: 680, left: 360, top: 680,
+    right: 1160, bottom: 760, width: 800, height: 80,
+  };
+  const composerLayout = composerScenario?.startsWith("stable-") ? {
+    classList: createClassList(),
+    children: [],
+    matches(selector) { return selector === "[data-composer-layout]"; },
+    closest(selector) { return selector === "main" ? shellMain : null; },
+    getBoundingClientRect() { return composerRect; },
+  } : null;
+  const composerWrapper = composerLayout ? {
+    classList: createClassList(),
+    children: [composerLayout],
+    matches(selector) {
+      return composerScenario === "stable-surface"
+        ? selector === "[data-composer-surface-variant]"
+        : selector === "[data-composer-utility-bar-variant]";
+    },
+    querySelector(selector) {
+      return selector === ":scope > [data-composer-layout]" ? composerLayout : null;
+    },
+    closest(selector) { return selector === "main" ? shellMain : null; },
+    getBoundingClientRect() { return composerRect; },
+  } : null;
+  const legacyComposer = composerScenario === "legacy" ? {
+    classList: createClassList(["composer-surface-chrome"]),
+    children: [],
+    matches(selector) { return selector === ".composer-surface-chrome"; },
+    closest(selector) { return selector === "main" ? shellMain : null; },
+    getBoundingClientRect() { return composerRect; },
+  } : null;
+  const staleComposer = composerScenario ? {
+    classList: createClassList(["dream-skin-composer-surface"]),
+    children: [],
+    getBoundingClientRect() { return composerRect; },
+  } : null;
+  const homeUtilityBar = homeUtility ? {
+    classList: createClassList(),
+    getBoundingClientRect() { return { ...composerRect, y: 640, top: 640, bottom: 680, height: 40 }; },
+  } : null;
+  const homeRoute = homeUtility ? {
+    classList: createClassList(),
+    children: [],
+    querySelector() { return null; },
+    querySelectorAll(selector) {
+      return selector.includes("data-composer-home-utility-bar-position")
+        ? [homeUtilityBar] : [];
+    },
+  } : null;
+  const homeIndicator = homeRoute ? {
+    closest(selector) { return selector === '[role="main"]' ? homeRoute : null; },
+  } : null;
   const threadSpacer = conversation ? {
     className: "shrink-0",
     classList: createClassList(["shrink-0"]),
@@ -832,12 +963,22 @@ function createFixture(theme, {
     firstElementChild: threadMessages,
     querySelector() { return null; },
   } : null;
+  const threadComposerSurface = conversation ? {
+    classList: createClassList(["composer-surface-chrome"]),
+    children: [],
+    matches(selector) { return selector === ".composer-surface-chrome"; },
+    closest(selector) { return selector === "main" ? shellMain : null; },
+    getBoundingClientRect() {
+      return { x: 360, y: 680, left: 360, top: 680, right: 1160, bottom: 760, width: 800, height: 80 };
+    },
+  } : null;
   const threadComposer = conversation ? {
     className: "sticky bottom-0",
     classList: createClassList(["sticky", "bottom-0"]),
     querySelector(selector) {
-      return selector === ".composer-surface-chrome" ? {} : null;
+      return selector === ".composer-surface-chrome" ? threadComposerSurface : null;
     },
+    contains(candidate) { return candidate === threadComposerSurface; },
   } : null;
   const threadContent = conversation ? {
     children: [threadMessageRail, threadComposer],
@@ -942,17 +1083,54 @@ function createFixture(theme, {
     createElement,
     getElementById(id) { return nodes.get(id) ?? null; },
     querySelector(selector) {
+      if (selector === '[data-testid="home-icon"]') return homeIndicator;
+      if (selector === "[data-composer-surface-variant]") {
+        return composerScenario === "stable-surface" ? composerWrapper : null;
+      }
+      if (selector === "[data-composer-utility-bar-variant]") {
+        return composerScenario === "stable-utility" ? composerWrapper : null;
+      }
+      if (selector === ".composer-surface-chrome") return legacyComposer;
+      if (selector === 'textarea, [contenteditable="true"]') return null;
       if (selector === "main.trskin-main-surface" || selector === "main") return shellMain;
       if (selector === "main.trskin-main-surface > header.trskin-app-header") {
         return activeNativeHeader?.header || null;
       }
       if (selector === ".thread-scroll-container") return threadScroller;
-      if (selector.includes(".thread-scroll-container .sticky:has(.composer-surface-chrome)")) {
+      if (selector.includes(".thread-scroll-container .sticky:has(.dream-skin-composer-surface)")) {
         return composerDock;
       }
       return null;
     },
-    querySelectorAll() { return []; },
+    querySelectorAll(selector) {
+      if (selector === "[data-composer-surface-variant]") {
+        return composerScenario === "stable-surface" ? [composerWrapper] : [];
+      }
+      if (selector === "[data-composer-utility-bar-variant]") {
+        return composerScenario === "stable-utility" ? [composerWrapper] : [];
+      }
+      if (selector === '[role="main"]') return homeRoute ? [homeRoute] : [];
+      if (selector === '[role="main"].dream-skin-home') {
+        return homeRoute?.classList.contains("dream-skin-home") ? [homeRoute] : [];
+      }
+      if (selector === ".dream-skin-home-utility") {
+        return homeUtilityBar?.classList.contains("dream-skin-home-utility")
+          ? [homeUtilityBar] : [];
+      }
+      if (selector === ".composer-surface-chrome" && threadComposerSurface) {
+        return [threadComposerSurface];
+      }
+      if (selector === ".composer-surface-chrome" && legacyComposer) return [legacyComposer];
+      if (selector === ".dream-skin-composer-surface" &&
+        threadComposerSurface?.classList.contains("dream-skin-composer-surface")) {
+        return [threadComposerSurface];
+      }
+      if (selector === ".dream-skin-composer-surface") {
+        return [composerLayout, legacyComposer, staleComposer]
+          .filter((candidate) => candidate?.classList.contains("dream-skin-composer-surface"));
+      }
+      return [];
+    },
   };
   const colorMediaQuery = {
     get matches() { return fixtureShell === "dark"; },
@@ -1088,6 +1266,11 @@ function createFixture(theme, {
     shellMain,
     shellBox,
     composerDock,
+    composerLayout,
+    composerWrapper,
+    legacyComposer,
+    staleComposer,
+    homeUtilityBar,
     composerRailBox,
     threadListeners,
     threadMessages,
@@ -1155,6 +1338,53 @@ assert.equal(defaultMetrics.layoutReads, 1, "Subtree mutations must not force sh
 assert.equal(defaultMetrics.mutationBatchesIgnored, 50);
 assert.equal(defaults.resizeObservers.length, 1);
 assert.ok(defaults.resizeObservers[0].target);
+
+for (const composerScenario of ["stable-surface", "stable-utility"]) {
+  const stableComposer = createFixture({
+    id: `composer-${composerScenario}`,
+    appearance: "auto",
+    art: { safeArea: "auto", taskMode: "auto" },
+  }, { composerScenario, homeUtility: true });
+  vm.runInNewContext(stableComposer.payload, stableComposer.context);
+  assert.equal(
+    stableComposer.composerLayout.classList.contains("dream-skin-composer-surface"),
+    true,
+    `${composerScenario} must mark its visible direct data-composer-layout child.`,
+  );
+  assert.equal(
+    stableComposer.staleComposer.classList.contains("dream-skin-composer-surface"),
+    false,
+    `${composerScenario} must remove a stale Composer marker.`,
+  );
+  assert.equal(
+    stableComposer.homeUtilityBar.classList.contains("dream-skin-home-utility"),
+    true,
+    "The stable home utility bar must receive the renderer-owned theme marker.",
+  );
+  stableComposer.window.__CODEX_DREAM_SKIN_STATE__.cleanup();
+  assert.equal(
+    stableComposer.composerLayout.classList.contains("dream-skin-composer-surface"),
+    false,
+    "Cleanup must remove the active Composer marker.",
+  );
+  assert.equal(
+    stableComposer.homeUtilityBar.classList.contains("dream-skin-home-utility"),
+    false,
+    "Cleanup must remove the home utility marker.",
+  );
+}
+
+const legacyComposerFixture = createFixture({
+  id: "composer-legacy-fallback",
+  appearance: "auto",
+  art: { safeArea: "auto", taskMode: "auto" },
+}, { composerScenario: "legacy" });
+vm.runInNewContext(legacyComposerFixture.payload, legacyComposerFixture.context);
+assert.equal(
+  legacyComposerFixture.legacyComposer.classList.contains("dream-skin-composer-surface"),
+  true,
+  "The legacy native Composer class must remain a compatible discovery path.",
+);
 
 const nativeHudFixture = createFixture({
   id: "native-header-hud",
