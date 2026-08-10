@@ -26,6 +26,10 @@ jobs:
       - name: Run source tests
         run: bash macos/tests/run-tests.sh
         shell: bash
+      - name: Run Windows-native source tests
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./windows/tests/run-tests.ps1
       - name: Validate PowerShell syntax
         shell: pwsh
         run: |

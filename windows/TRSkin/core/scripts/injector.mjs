@@ -396,7 +396,7 @@ export const CODEX_PROBE_EXPRESSION = `(() => {
         'aside.app-shell-left-panel, aside, nav[aria-label], [data-testid*="sidebar"]'
       )),
       composer: Boolean(document.querySelector(
-        '.composer-surface-chrome, textarea, [contenteditable="true"]'
+        '.dream-skin-composer-surface, [data-composer-surface-variant], [data-composer-utility-bar-variant], .composer-surface-chrome, textarea, [contenteditable="true"]'
       )),
       main: Boolean(document.querySelector('main, [role="main"]')),
     };
@@ -515,7 +515,7 @@ export function earlyPayloadFor(payload, revision) {
         'aside.app-shell-left-panel, aside, nav[aria-label], [data-testid*="sidebar"]'
       );
       const composer = document.querySelector(
-        '.composer-surface-chrome, textarea, [contenteditable="true"]'
+        '.dream-skin-composer-surface, [data-composer-surface-variant], [data-composer-utility-bar-variant], .composer-surface-chrome, textarea, [contenteditable="true"]'
       );
       if (!shell || (!sidebar && !composer)) return false;
       stop();
@@ -608,6 +608,20 @@ async function verifySession(session) {
     if (!hero?.visible) {
       hero = box(home?.querySelector('[data-feature="game-source"]'));
     }
+    const nativeComposer = document.querySelector(
+      '[data-composer-surface-variant], [data-composer-utility-bar-variant]'
+    );
+    const editor = document.querySelector('textarea, [contenteditable="true"]');
+    const composerNode = document.querySelector('.dream-skin-composer-surface') ??
+      nativeComposer?.querySelector(':scope > [data-composer-layout]') ?? nativeComposer ??
+      document.querySelector('.composer-surface-chrome') ??
+      editor?.closest('[data-composer-layout], form') ?? editor;
+    const composer = box(composerNode);
+    const composerMarkers = [...document.querySelectorAll('.dream-skin-composer-surface')];
+    const visibleComposerMarkers = composerMarkers.filter((candidate) => box(candidate)?.visible);
+    const composerStyle = getComputedStyle(composerNode || document.body);
+    const homeUtilityNode = document.querySelector('.dream-skin-home-utility');
+    const homeUtilityStyle = getComputedStyle(homeUtilityNode || document.body);
     const result = {
       installed: document.documentElement.classList.contains('codex-dream-skin'),
       version: window.__CODEX_DREAM_SKIN_STATE__?.version ?? null,
@@ -619,9 +633,15 @@ async function verifySession(session) {
       suggestionsPresent: Boolean(suggestions),
       hero,
       cards,
-      composer: box(document.querySelector('.composer-surface-chrome') ??
-        document.querySelector('textarea, [contenteditable="true"]')?.closest('form') ??
-        document.querySelector('textarea, [contenteditable="true"]')),
+      composer,
+      composerOwned: Boolean(composerNode?.classList.contains('dream-skin-composer-surface')),
+      composerMarkerCount: composerMarkers.length,
+      visibleComposerMarkerCount: visibleComposerMarkers.length,
+      composerOutlineStyle: composerStyle.outlineStyle,
+      homeUtility: box(homeUtilityNode),
+      homeUtilityOwned: Boolean(homeUtilityNode?.classList.contains('dream-skin-home-utility')),
+      homeUtilityBackground: homeUtilityStyle.backgroundImage || homeUtilityStyle.backgroundColor,
+      homeUtilityColor: homeUtilityStyle.color,
       sidebar: box(document.querySelector(
         'aside.app-shell-left-panel, aside, nav[aria-label], [data-testid*="sidebar"]'
       )),
@@ -634,6 +654,9 @@ async function verifySession(session) {
     result.pass = result.installed && result.version === result.expectedVersion &&
       result.stylePresent && result.chromePresent &&
       result.chromePointerEvents === 'none' && Boolean(result.composer) && Boolean(result.sidebar) &&
+      result.composerOwned && result.visibleComposerMarkerCount === 1 &&
+      result.composerOutlineStyle === 'none' &&
+      (!result.homeUtility?.visible || result.homeUtilityOwned) &&
       (!result.homePresent || (Boolean(result.hero?.visible) &&
         (!result.suggestionsPresent || (
           result.cards.length >= 2 && result.cards.length <= 4 &&

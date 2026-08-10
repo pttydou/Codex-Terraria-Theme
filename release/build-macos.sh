@@ -35,7 +35,7 @@ stage_package() {
     '双击 START-CODEX-TERRARIA.app 安装或打开控制台。' \
     '程序更新不会删除 ~/Library/Application Support/CodexDreamSkinStudio 中的音乐、主题和设置。' \
     > "$package_root/README.txt"
-  /usr/bin/printf '{\n  "schemaVersion": 1,\n  "repository": "pttydou/TRSkin",\n  "releaseVersion": "%s",\n  "sourceCommit": "%s",\n  "builder": "GitHub Actions"\n}\n' \
+  /usr/bin/printf '{\n  "schemaVersion": 1,\n  "repository": "pttydou/Codex-Terraria-Theme",\n  "releaseVersion": "%s",\n  "sourceCommit": "%s",\n  "builder": "GitHub Actions"\n}\n' \
     "$VERSION" "$SOURCE_COMMIT" > "$engine/BUILD-INFO.json"
 }
 

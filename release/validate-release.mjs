@@ -29,7 +29,7 @@ if (windowsVersion !== macosVersion || windowsVersion !== macosPackage.version) 
     `Release versions must match (Windows=${windowsVersion}, macOS=${macosVersion}, package.json=${macosPackage.version})`,
   );
 }
-if (config.schemaVersion !== 1 || config.repository !== "pttydou/TRSkin") {
+if (config.schemaVersion !== 1 || config.repository !== "pttydou/Codex-Terraria-Theme") {
   throw new Error("release-config.json has an unsupported identity");
 }
 if (!/^[a-f0-9]{64}$/.test(config.music.sha256)) {

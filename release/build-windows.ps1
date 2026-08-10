@@ -39,7 +39,7 @@ try {
 
   $BuildInfo = [ordered]@{
     schemaVersion = 1
-    repository = 'pttydou/TRSkin'
+    repository = 'pttydou/Codex-Terraria-Theme'
     releaseVersion = $Version
     sourceCommit = $SourceCommit
     builder = 'GitHub Actions'

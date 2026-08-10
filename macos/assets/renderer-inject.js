@@ -18,6 +18,12 @@
   const CARD_ICON_STYLE = "--dream-card-icon";
   const COMPOSER_SAFE_WIDTH_STYLE = "--dream-skin-composer-safe-width";
   const COMPOSER_SHIFT_STYLE = "--dream-skin-composer-shift-x";
+  const COMPOSER_SURFACE_CLASS = "dream-skin-composer-surface";
+  const COMPOSER_STABLE_SELECTORS = [
+    "[data-composer-surface-variant]",
+    "[data-composer-utility-bar-variant]",
+  ];
+  const COMPOSER_EDITOR_SELECTOR = 'textarea, [contenteditable="true"]';
   const IDLE_THREAD_MESSAGES_CLASS = "dream-skin-idle-thread-messages";
   const IDLE_THREAD_SPACER_CLASS = "dream-skin-idle-thread-spacer";
   const HOME_LAYOUT_CLASSES = [
@@ -37,10 +43,70 @@
     "data-dream-environment-mode",
     "data-dream-background-mode", "data-dream-music-state",
   ];
+  const elementIsVisible = (candidate) => {
+    if (!candidate) return false;
+    const box = candidate.getBoundingClientRect?.();
+    if (box) {
+      if (box.width <= 0 || box.height <= 0) return false;
+      if (typeof innerWidth === "number" && typeof innerHeight === "number" &&
+        (box.right <= 0 || box.bottom <= 0 || box.left >= innerWidth || box.top >= innerHeight)) {
+        return false;
+      }
+    }
+    try {
+      const style = getComputedStyle(candidate);
+      if (style.display === "none" || style.visibility === "hidden") return false;
+    } catch {}
+    return true;
+  };
+  const directComposerLayout = (candidate) => {
+    if (!candidate) return null;
+    if (candidate.matches?.("[data-composer-layout]")) return candidate;
+    return [...(candidate.children || [])].find((child) =>
+      child.matches?.("[data-composer-layout]")) ||
+      candidate.querySelector?.(":scope > [data-composer-layout]") || null;
+  };
+  const findComposerSurface = ({ mark = false } = {}) => {
+    const candidates = [];
+    const addCandidate = (candidate) => {
+      if (candidate && !candidates.includes(candidate)) candidates.push(candidate);
+    };
+    for (const selector of COMPOSER_STABLE_SELECTORS) {
+      for (const candidate of document.querySelectorAll?.(selector) || []) addCandidate(candidate);
+    }
+    for (const candidate of document.querySelectorAll?.(".composer-surface-chrome") || []) {
+      addCandidate(candidate);
+    }
+    const editor = document.querySelector?.(COMPOSER_EDITOR_SELECTOR) || null;
+    addCandidate(editor?.closest?.(
+      '[data-composer-layout], [data-composer-surface-variant], '
+      + '[data-composer-utility-bar-variant], .composer-surface-chrome, form',
+    ) || editor?.parentElement || editor);
+    if (editor) {
+      candidates.sort((left, right) =>
+        Number(right === editor || right.contains?.(editor)) -
+        Number(left === editor || left.contains?.(editor)));
+    }
+
+    let active = null;
+    for (const candidate of candidates) {
+      const layout = directComposerLayout(candidate);
+      const surface = layout || candidate;
+      if (elementIsVisible(surface)) {
+        active = surface;
+        break;
+      }
+    }
+    if (mark) {
+      for (const candidate of document.querySelectorAll?.(`.${COMPOSER_SURFACE_CLASS}`) || []) {
+        if (candidate !== active) candidate.classList?.remove?.(COMPOSER_SURFACE_CLASS);
+      }
+      active?.classList?.add?.(COMPOSER_SURFACE_CLASS);
+    }
+    return active;
+  };
   const findCodexMainSurface = ({ mark = false } = {}) => {
-    const composer = document.querySelector(
-      '.composer-surface-chrome, textarea, [contenteditable="true"]',
-    );
+    const composer = findComposerSurface();
     const composerMain = composer?.closest?.("main") || null;
     const legacyHeader = document.querySelector("header.app-header-tint");
     const nativeHeader = legacyHeader ||
@@ -1545,8 +1611,9 @@
   const syncConversationIdleLayout = (scroller) => {
     const contentRoot = scroller?.firstElementChild || null;
     const contentChildren = [...(contentRoot?.children || [])];
-    const composer = contentChildren.find((candidate) =>
-      candidate.querySelector?.(".composer-surface-chrome")) || null;
+    const activeComposer = findComposerSurface();
+    const composer = activeComposer ? contentChildren.find((candidate) =>
+      candidate === activeComposer || candidate.contains?.(activeComposer)) || null : null;
     const composerIndex = contentChildren.indexOf(composer);
     const messageRail = composerIndex > 0 ? contentChildren[composerIndex - 1] : null;
     const messageStack = messageRail?.firstElementChild || null;
@@ -1670,8 +1737,8 @@
 
   const syncComposerGeometry = (shellMain, { settle = false } = {}) => {
     const dock = document.querySelector(
-      ".thread-scroll-container .sticky:has(.composer-surface-chrome) "
-      + "> .relative.z-10:has(.composer-surface-chrome)",
+      `.thread-scroll-container .sticky:has(.${COMPOSER_SURFACE_CLASS}) `
+      + `> .relative.z-10:has(.${COMPOSER_SURFACE_CLASS})`,
     );
     if (observedComposerDock && observedComposerDock !== dock) {
       observedComposerDock.style?.removeProperty(COMPOSER_SAFE_WIDTH_STYLE);
@@ -1721,6 +1788,7 @@
     const root = document.documentElement;
     if (!root) return;
     shell ||= root.getAttribute(SHELL_ATTR) || resolvedShell();
+    findComposerSurface({ mark: true });
     const shellMain = findCodexMainSurface({ mark: true });
     const homeIndicator = document.querySelector('[data-testid="home-icon"]');
     const home = homeIndicator?.closest('[role="main"]') ||
@@ -1780,7 +1848,9 @@
     }
     applyFixedCardIcons();
     const homeUtilityBars = new Set(home
-      ? home.querySelectorAll('[class*="_homeUtilityBar_"]')
+      ? [...home.querySelectorAll(
+        '[data-composer-home-utility-bar-position], [class*="_homeUtilityBar_"]',
+      )].filter(elementIsVisible)
       : []);
     for (const candidate of document.querySelectorAll(".dream-skin-home-utility")) {
       if (!homeUtilityBars.has(candidate)) candidate.classList.remove("dream-skin-home-utility");
@@ -1987,6 +2057,8 @@
         node.removeAttribute?.(APP_HEADER_ATTR);
       });
     document.querySelectorAll(".dream-skin-home-utility").forEach((node) => node.classList.remove("dream-skin-home-utility"));
+    document.querySelectorAll(`.${COMPOSER_SURFACE_CLASS}`).forEach((node) =>
+      node.classList.remove(COMPOSER_SURFACE_CLASS));
     for (const className of HOME_LAYOUT_CLASSES) {
       document.querySelectorAll(`.${className}`).forEach((node) => node.classList.remove(className));
     }
@@ -2074,10 +2146,21 @@
     '[role="main"]',
     '[data-testid="home-icon"]',
     ".group\\/home-suggestions",
+    '[data-composer-home-utility-bar-position]',
+    '[data-composer-surface-variant]',
+    '[data-composer-utility-bar-variant]',
+    '[data-composer-layout]',
     '[class*="_homeUtilityBar_"]',
+    `.${COMPOSER_SURFACE_CLASS}`,
     ".composer-surface-chrome",
     "header.app-header-tint",
   ].join(",");
+  const ROUTE_MUTATION_ATTRIBUTES = new Set([
+    "data-composer-home-utility-bar-position",
+    "data-composer-surface-variant",
+    "data-composer-utility-bar-variant",
+    "data-composer-layout",
+  ]);
   const nodeTouchesRouteSurface = (node) => {
     if (!node) return false;
     if (node === document.documentElement || node === document.body) return true;
@@ -2090,6 +2173,9 @@
     }
   };
   const mutationNeedsRouteSync = (mutations) => mutations.some((mutation) => {
+    if (mutation.type === "attributes") {
+      return ROUTE_MUTATION_ATTRIBUTES.has(mutation.attributeName);
+    }
     if (mutation.type !== "childList") return false;
     if (nodeTouchesRouteSurface(mutation.target)) return true;
     return [...(mutation.addedNodes || []), ...(mutation.removedNodes || [])]
@@ -2255,6 +2341,8 @@
   observer.observe(document.documentElement, {
     childList: true,
     subtree: true,
+    attributes: true,
+    attributeFilter: [...ROUTE_MUTATION_ATTRIBUTES],
   });
   rootObserver.observe(document.documentElement, {
     attributes: true,

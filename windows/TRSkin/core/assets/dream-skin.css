@@ -347,7 +347,7 @@ html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-
 }
 
 html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(main.trskin-main-surface:not(.dream-skin-home-shell))
-  .composer-surface-chrome {
+  .dream-skin-composer-surface {
   background: var(--ds-immersive-composer-solid) !important;
   border: 0 !important;
   box-shadow:
@@ -736,8 +736,9 @@ html.codex-dream-skin:is([data-dream-art-safe="center"], [data-dream-art-safe-ar
 .dream-skin-home .dream-skin-home-suggestions button > span:first-child { justify-content: center !important; }
 .dream-skin-home .dream-skin-home-suggestions button > span:last-child { align-items: center !important; text-align: center !important; }
 
-html.codex-dream-skin .composer-surface-chrome {
+html.codex-dream-skin .dream-skin-composer-surface {
   overflow: visible !important;
+  outline: none !important;
   border: 1px solid rgb(var(--ds-muted-rgb) / .18) !important;
   border-radius: 22px !important;
   background: rgb(var(--ds-panel-rgb) / .94) !important;
@@ -745,7 +746,7 @@ html.codex-dream-skin .composer-surface-chrome {
   backdrop-filter: blur(16px) saturate(108%) !important;
 }
 
-html.codex-dream-skin .composer-surface-chrome::before { content: none !important; }
+html.codex-dream-skin .dream-skin-composer-surface::before { content: none !important; }
 
 /* A wide image can carry the home screen too. The native hero remains live,
    but the artwork is painted once on the window instead of repeated in a card. */
@@ -827,7 +828,7 @@ html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface.dream
   backdrop-filter: blur(8px) saturate(104%) !important;
 }
 
-html.codex-dream-skin[data-dream-art-wide="true"] .composer-surface-chrome {
+html.codex-dream-skin[data-dream-art-wide="true"] .dream-skin-composer-surface {
   background: var(--ds-immersive-composer-solid) !important;
   border: 0 !important;
   box-shadow:
@@ -838,7 +839,7 @@ html.codex-dream-skin[data-dream-art-wide="true"] .composer-surface-chrome {
 }
 
 html.codex-dream-skin[data-dream-shell="light"][data-dream-art-wide="true"]
-  .composer-surface-chrome {
+  .dream-skin-composer-surface {
   box-shadow:
     0 10px 28px rgb(var(--ds-bg-rgb) / .14),
     inset 0 0 0 1px var(--ds-immersive-line),
@@ -847,7 +848,7 @@ html.codex-dream-skin[data-dream-shell="light"][data-dream-art-wide="true"]
 }
 
 html.codex-dream-skin[data-dream-shell="light"]
-  .composer-surface-chrome p.placeholder::after {
+  .dream-skin-composer-surface p.placeholder::after {
   color: rgb(var(--ds-muted-rgb) / .78) !important;
   opacity: 1 !important;
 }
@@ -870,7 +871,7 @@ html.codex-dream-skin .dream-skin-home-utility {
 }
 
 html.codex-dream-skin .dream-skin-home:has(.dream-skin-home-utility)
-  .composer-surface-chrome {
+  .dream-skin-composer-surface {
   border: 0 !important;
   border-radius: 0 0 22px 22px !important;
   box-shadow:
@@ -890,7 +891,7 @@ html.codex-dream-skin[data-dream-art-wide="true"] .dream-skin-home-utility {
 }
 
 html.codex-dream-skin[data-dream-art-wide="true"]
-  .dream-skin-home:has(.dream-skin-home-utility) .composer-surface-chrome {
+  .dream-skin-home:has(.dream-skin-home-utility) .dream-skin-composer-surface {
   box-shadow:
     0 10px 30px rgb(var(--ds-bg-rgb) / .20),
     inset 1px 0 var(--ds-immersive-line),
@@ -908,27 +909,27 @@ html.codex-dream-skin[data-dream-shell="light"][data-dream-art-wide="true"]
 }
 
 html.codex-dream-skin .dream-skin-home-utility button,
-html.codex-dream-skin .composer-surface-chrome button:not([class~="bg-token-foreground"]) {
+html.codex-dream-skin .dream-skin-composer-surface button:not([class~="bg-token-foreground"]) {
   color: var(--ds-muted) !important;
 }
 
 html.codex-dream-skin .dream-skin-home-utility button svg,
-html.codex-dream-skin .composer-surface-chrome button svg {
+html.codex-dream-skin .dream-skin-composer-surface button svg {
   color: currentColor !important;
 }
 
 html.codex-dream-skin .dream-skin-home-utility button *,
-html.codex-dream-skin .composer-surface-chrome button:not([class~="bg-token-foreground"]) * {
+html.codex-dream-skin .dream-skin-composer-surface button:not([class~="bg-token-foreground"]) * {
   color: currentColor !important;
 }
 
 html.codex-dream-skin .dream-skin-home-utility button:hover,
-html.codex-dream-skin .composer-surface-chrome button:not([class~="bg-token-foreground"]):hover {
+html.codex-dream-skin .dream-skin-composer-surface button:not([class~="bg-token-foreground"]):hover {
   color: var(--ds-text) !important;
   background: rgb(var(--ds-accent-rgb) / .10) !important;
 }
 
-html.codex-dream-skin .composer-surface-chrome p.placeholder::after {
+html.codex-dream-skin .dream-skin-composer-surface p.placeholder::after {
   color: rgb(var(--ds-muted-rgb) / .82) !important;
   opacity: 1 !important;
 }
@@ -1351,7 +1352,7 @@ html.codex-dream-skin[data-dream-style="terraria"]
 }
 
 html.codex-dream-skin[data-dream-style="terraria"] .dream-skin-home-utility,
-html.codex-dream-skin[data-dream-style="terraria"] .composer-surface-chrome {
+html.codex-dream-skin[data-dream-style="terraria"] .dream-skin-composer-surface {
   border: 3px solid rgb(255 255 255 / .25) !important;
   border-radius: 5px !important;
   background: linear-gradient(180deg,
@@ -1362,13 +1363,13 @@ html.codex-dream-skin[data-dream-style="terraria"] .composer-surface-chrome {
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"]
-  :is(.dream-skin-home-utility, .composer-surface-chrome) {
+  :is(.dream-skin-home-utility, .dream-skin-composer-surface) {
   border-color: rgb(185 239 112 / .54) !important;
   background: linear-gradient(180deg, rgb(27 94 111 / .99), rgb(15 67 68 / .99)) !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
-  :is(.dream-skin-home-utility, .composer-surface-chrome) {
+  :is(.dream-skin-home-utility, .dream-skin-composer-surface) {
   border-color: rgb(255 189 85 / .54) !important;
   background: linear-gradient(180deg, rgb(62 38 74 / .99), rgb(34 21 45 / .99)) !important;
   box-shadow:
@@ -1383,12 +1384,12 @@ html.codex-dream-skin[data-dream-style="terraria"]
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]
-  .dream-skin-home:has(.dream-skin-home-utility) .composer-surface-chrome {
+  .dream-skin-home:has(.dream-skin-home-utility) .dream-skin-composer-surface {
   border-top: 0 !important;
   border-radius: 0 0 5px 5px !important;
 }
 
-html.codex-dream-skin[data-dream-style="terraria"] .composer-surface-chrome button {
+html.codex-dream-skin[data-dream-style="terraria"] .dream-skin-composer-surface button {
   border-radius: 3px !important;
 }
 
@@ -1572,9 +1573,8 @@ html.codex-dream-skin[data-dream-style="terraria"]
   text-shadow: 1px 2px 0 rgb(3 9 18 / .74);
 }
 
-/* Mermaid renders labels inside SVG foreignObject nodes.  Those labels must
-   keep the diagram's light-card contrast instead of inheriting the skin's
-   cream prose color and dark text shadow from the surrounding Markdown. */
+/* Mermaid may render labels either in foreignObject HTML or native SVG
+   text/tspan nodes. Both forms must keep contrast on light diagram nodes. */
 html.codex-dream-skin[data-dream-style="terraria"]
   main.trskin-main-surface:not(.dream-skin-home-shell)
   svg[aria-roledescription]
@@ -1584,6 +1584,15 @@ html.codex-dream-skin[data-dream-style="terraria"]
   svg[aria-roledescription]
   :is(.nodeLabel, .edgeLabel) :where(p, span, strong, em) {
   color: #172033 !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  svg[aria-roledescription]
+  g.node g.label :is(text, tspan) {
+  color: #172033 !important;
+  fill: #172033 !important;
   text-shadow: none !important;
 }
 
@@ -2193,7 +2202,7 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
   [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
   [data-dream-variant="marble-cave"]
 ) :is(.dream-skin-home .dream-skin-home-suggestions button,
-     .dream-skin-home-utility, .composer-surface-chrome) {
+     .dream-skin-home-utility, .dream-skin-composer-surface) {
   border-color: rgb(var(--ds-accent-rgb) / .56) !important;
   background: var(--biome-card) !important;
   box-shadow: var(--terraria-frame), 0 0 22px var(--biome-glow) !important;
@@ -2204,7 +2213,7 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
    environment artwork became visible behind the native input. A blurred
    glow has the same effect over darker biomes, so the final frame is sharp. */
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
-  main.trskin-main-surface .composer-surface-chrome {
+  main.trskin-main-surface .dream-skin-composer-surface {
   box-shadow:
     inset 0 0 0 1px rgb(255 255 255 / .18),
     0 0 0 2px rgb(var(--ds-accent-rgb) / .48) !important;
@@ -2218,7 +2227,7 @@ html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
    tool status expands the footer, that fade becomes a large dark rectangle;
    Terraria already supplies its own task scrim, so keep the native fade clear. */
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
-  .thread-scroll-container .sticky:has(.composer-surface-chrome) {
+  .thread-scroll-container .sticky:has(.dream-skin-composer-surface) {
   background: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
@@ -2246,7 +2255,7 @@ html.codex-dream-skin[data-dream-style="terraria"]
    entire layer is more durable than matching its generated Tailwind gradient
    child: Codex can insert another wrapper when progress/tool rows expand. */
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
-  .thread-scroll-container .sticky:has(.composer-surface-chrome)
+  .thread-scroll-container .sticky:has(.dream-skin-composer-surface)
   > .pointer-events-none.absolute {
   display: none !important;
   background: none !important;
@@ -2256,8 +2265,8 @@ html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
    the footer rail instead of keeping it as a direct sticky child. Keep the
    actual status pill, but remove its full-width dark gradient backdrop. */
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
-  .thread-scroll-container .sticky:has(.composer-surface-chrome)
-  > .relative.z-10:has(.composer-surface-chrome)
+  .thread-scroll-container .sticky:has(.dream-skin-composer-surface)
+  > .relative.z-10:has(.dream-skin-composer-surface)
   .pointer-events-none.absolute.bg-gradient-to-t {
   display: none !important;
   background: none !important;
@@ -2266,15 +2275,15 @@ html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
-  .thread-scroll-container .sticky:has(.composer-surface-chrome)
+  .thread-scroll-container .sticky:has(.dream-skin-composer-surface)
   > .pointer-events-none.absolute
   > .bg-gradient-to-t {
   background: none !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
-  .thread-scroll-container .sticky:has(.composer-surface-chrome)
-  > .relative.z-10:has(.composer-surface-chrome) {
+  .thread-scroll-container .sticky:has(.dream-skin-composer-surface)
+  > .relative.z-10:has(.dream-skin-composer-surface) {
   background: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
@@ -2332,7 +2341,7 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
   [data-dream-variant="underground-crimson"],
   [data-dream-variant="underground-glowing-mushroom"]
 ) :is(.dream-skin-home .dream-skin-home-suggestions button,
-     .dream-skin-home-utility, .composer-surface-chrome) {
+     .dream-skin-home-utility, .dream-skin-composer-surface) {
   border-color: rgb(var(--ds-accent-rgb) / .56) !important;
   background: var(--biome-card) !important;
   box-shadow: var(--terraria-frame), 0 0 22px var(--biome-glow) !important;

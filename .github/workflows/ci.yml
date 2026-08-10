@@ -25,6 +25,10 @@ jobs:
       - name: Run cross-platform source tests
         shell: bash
         run: bash macos/tests/run-tests.sh
+      - name: Run Windows-native source tests
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./windows/tests/run-tests.ps1
       - name: Validate shell syntax
         if: runner.os != 'Windows'
         shell: bash
