@@ -8,6 +8,20 @@ TRSkin 是一个面向 Windows 与 macOS 的非官方 Codex Desktop Terraria 主
 [![Release](https://img.shields.io/github/actions/workflow/status/pttydou/Codex-Terraria-Theme/release.yml?label=release)](https://github.com/pttydou/Codex-Terraria-Theme/actions/workflows/release.yml)
 [![License](https://img.shields.io/github/license/pttydou/Codex-Terraria-Theme)](LICENSE)
 
+## 视频演示
+
+<p align="center">
+  <a href="https://github.com/pttydou/Codex-Terraria-Theme/releases/download/v2.7.2/TRSkin-showcase-44-themes-with-BGM.mp4">
+    <img src="https://github.com/pttydou/Codex-Terraria-Theme/releases/download/v2.7.2/preview-44-themes.jpg" alt="TRSkin 44 套 Terraria 环境与事件主题视频演示" width="100%">
+  </a>
+</p>
+
+<p align="center">
+  <strong><a href="https://github.com/pttydou/Codex-Terraria-Theme/releases/download/v2.7.2/TRSkin-showcase-44-themes-with-BGM.mp4">▶ 点击观看 44 套环境与事件主题完整演示（约 68 秒，含 BGM）</a></strong>
+</p>
+
+视频展示自动切换的主题背景、界面配色与右侧伙伴。实际安装、主题切换和恢复方法请继续查看下方说明。
+
 ## 效果预览
 
 <table>
