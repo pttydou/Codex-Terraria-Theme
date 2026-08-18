@@ -6,6 +6,8 @@
   the macOS settings-card contrast repair.
 - Retain the Windows Composer theming, outline removal, and environment-music
   continuity fixes verified against the managed local runtime.
+- Define the missing forest-day and cavern Composer card variables and retain a
+  themed fallback, preventing transparent inputs from exposing Codex native dark gray.
 
 ## 2.7.2 — stable Composer ownership
 

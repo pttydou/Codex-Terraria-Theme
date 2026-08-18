@@ -70,6 +70,21 @@ for (const { label, renderer, stylesheet, injectors } of [
     /\.dream-skin-composer-surface\s*\{[\s\S]{0,120}outline:\s*none !important;/,
     `${label} must suppress the native canvastext Composer outline.`,
   );
+  assert.match(
+    stylesheet,
+    /data-dream-variant="forest-day"\][\s\S]{0,180}--biome-card:\s*linear-gradient\([\s\S]{0,180}--biome-glow:/,
+    `${label} forest-day Composer must define the biome variables used by the final card rule.`,
+  );
+  assert.match(
+    stylesheet,
+    /data-dream-variant="cavern"\][\s\S]{0,180}--biome-card:\s*linear-gradient\([\s\S]{0,180}--biome-glow:/,
+    `${label} cavern Composer must define the biome variables used by the final card rule.`,
+  );
+  assert.doesNotMatch(
+    stylesheet,
+    /background:\s*var\(--biome-card\)\s*!important;/,
+    `${label} biome card backgrounds must retain a safe fallback when a future variant omits variables.`,
+  );
   assert.doesNotMatch(
     stylesheet,
     /\.composer-surface-chrome/,
