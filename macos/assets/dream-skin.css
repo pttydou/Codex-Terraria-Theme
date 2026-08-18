@@ -2811,6 +2811,57 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
   }
 }
 
+/* Codex settings keep native opaque light cards even while the surrounding
+   Terraria route uses a dark wallpaper. Renderer-owned markers constrain the
+   light semantic palette to verified settings surfaces only, so task text,
+   navigation and other dark regions retain their normal Terraria colors. */
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface {
+  --color-text-foreground: #18212b !important;
+  --color-text-foreground-secondary: #4b5966 !important;
+  --color-text-foreground-tertiary: #66727d !important;
+  --color-token-foreground: #18212b !important;
+  --color-token-description-foreground: #4b5966 !important;
+  --color-token-disabled-foreground: #66727d !important;
+  --color-token-input-foreground: #18212b !important;
+  --color-token-input-placeholder-foreground: #66727d !important;
+  --color-token-icon-foreground: #4b5966 !important;
+  --color-token-link: #0867b8 !important;
+  color: #18212b !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface
+  :is(h1, h2, h3, h4, h5, h6, label, legend, button, select, option, input, textarea,
+    [class*="text-token-foreground"], [class*="text-token-text-primary"],
+    [class*="text-token-input-foreground"]) {
+  color: #18212b !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface
+  :is(p, small, [class*="text-token-text-secondary"],
+    [class*="text-token-description-foreground"]) {
+  color: #4b5966 !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface :is(a, [role="link"], [class*="text-token-link"]) {
+  color: #0867b8 !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface
+  :is([disabled], [aria-disabled="true"], [class*="text-token-disabled"],
+    [class*="text-token-text-tertiary"], [class*="text-token-input-placeholder"]) {
+  color: #66727d !important;
+  text-shadow: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html.codex-dream-skin *,
   html.codex-dream-skin *::before,

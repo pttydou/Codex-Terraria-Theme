@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — settings light-card contrast
+
+- 新版 Codex 设置页通过稳定的 `data-settings-panel-slug` 属性识别，不依赖中文文案、
+  CSS Module 哈希类或脆弱的 DOM 顺序。
+- 只给经计算样式确认的不透明浅色大卡片添加
+  `.trskin-settings-light-surface` 自有标记，并在标记范围内恢复深色标题、说明、链接与
+  禁用文字；设置页外围、左侧导航和普通对话仍保持 Terraria 浅色文字。
+- 路由切换、热注入与恢复会自动更新或清理设置页标记。
+
 ## 2.7.2 — stable Composer ownership
 
 - Codex 26.730 的 Composer 不再依赖 `.composer-surface-chrome`；通过稳定的
