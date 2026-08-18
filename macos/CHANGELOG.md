@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — settings light-card contrast
+## 2.7.3 — settings light-card contrast
 
 - 新版 Codex 设置页通过稳定的 `data-settings-panel-slug` 属性识别，不依赖中文文案、
   CSS Module 哈希类或脆弱的 DOM 顺序。

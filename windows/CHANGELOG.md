@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.7.3 — synchronized maintenance release
+
+- Keep Windows and macOS update manifests on the same release version while shipping
+  the macOS settings-card contrast repair.
+- Retain the Windows Composer theming, outline removal, and environment-music
+  continuity fixes verified against the managed local runtime.
+
 ## 2.7.2 — stable Composer ownership
 
 - Discover current Codex Composer surfaces through stable `data-composer-*` attributes
