@@ -186,6 +186,7 @@ try {
   $randomConfig = Invoke-DreamSkinRandomPoolHelper -Command 'show' -StateRoot $StateRoot
   $musicConfig = Invoke-DreamSkinMusicHelper -Command 'show' -StateRoot $StateRoot
   $savedThemes = @(Get-DreamSkinSavedThemes -StateRoot $StateRoot -SkipImageMetadata)
+  $fixedThemes = @($savedThemes | Where-Object { "$($_.Id)" -cne 'preset-terraria-random' })
   $activeTheme = $null
   try { $activeTheme = Read-DreamSkinTheme -ThemeDirectory $paths.Active -SkipImageMetadata } catch {}
   Write-TRSkinPanelTrace -Message "configuration-loaded catalog-count=$($catalog.Count)"
@@ -224,23 +225,27 @@ try {
     -bor [System.Windows.Forms.AnchorStyles]::Right
   Write-TRSkinPanelTrace -Message 'tabs-created'
 
-  $environmentPage = [System.Windows.Forms.TabPage]::new('环境与背景')
-  $environmentPage.AutoScroll = $true
-  $environmentPage.BackColor = [System.Drawing.Color]::FromArgb(27, 58, 70)
-  $environmentPage.ForeColor = $form.ForeColor
+  $quickPage = [System.Windows.Forms.TabPage]::new('快速设置')
+  $quickPage.AutoScroll = $true
+  $quickPage.BackColor = [System.Drawing.Color]::FromArgb(27, 58, 70)
+  $quickPage.ForeColor = $form.ForeColor
   Write-TRSkinPanelTrace -Message 'environment-shell-created'
 
-  $themeLabel = New-TRSkinLabel -Text '固定环境' -Left 20 -Top 22 -Width 120
+  $quickIntro = New-TRSkinLabel `
+    -Text '常用操作只保留两项：选择一个环境，或开启全部环境随机。' `
+    -Left 20 -Top 24 -Width 690 -Height 32
+  $quickIntro.Font = [System.Drawing.Font]::new('Segoe UI Semibold', 11)
+  $themeLabel = New-TRSkinLabel -Text '切换环境' -Left 20 -Top 82 -Width 120
   $themeCombo = [System.Windows.Forms.ComboBox]::new()
   $themeCombo.DropDownStyle = [System.Windows.Forms.ComboBoxStyle]::DropDownList
-  $themeCombo.SetBounds(145, 18, 560, 30)
-  foreach ($theme in $savedThemes) {
+  $themeCombo.SetBounds(145, 78, 560, 30)
+  foreach ($theme in $fixedThemes) {
     [void]$themeCombo.Items.Add("$($theme.Name)")
   }
   Write-TRSkinPanelTrace -Message 'theme-combo-bound'
   if ($activeTheme -and $activeTheme.Theme.id) {
-    for ($index = 0; $index -lt $savedThemes.Count; $index += 1) {
-      if ("$($savedThemes[$index].Id)" -eq "$($activeTheme.Theme.id)") {
+    for ($index = 0; $index -lt $fixedThemes.Count; $index += 1) {
+      if ("$($fixedThemes[$index].Id)" -eq "$($activeTheme.Theme.id)") {
         $themeCombo.SelectedIndex = $index
         break
       }
@@ -256,7 +261,15 @@ try {
   $randomToggle.Checked = [bool](
     $activeTheme -and "$($activeTheme.Theme.id)" -eq 'preset-terraria-random'
   )
-  $randomToggle.SetBounds(145, 58, 260, 28)
+  $randomToggle.SetBounds(145, 126, 300, 28)
+  $randomHint = New-TRSkinLabel `
+    -Text '开启后会忽略上面的固定环境；轮换间隔和环境范围可在“高级设置”调整。' `
+    -Left 145 -Top 158 -Width 560 -Height 48
+  $randomHint.ForeColor = [System.Drawing.Color]::FromArgb(184, 201, 181)
+  $themeCombo.Enabled = -not $randomToggle.Checked
+  $randomToggle.add_CheckedChanged({
+    $themeCombo.Enabled = -not $randomToggle.Checked
+  })
   Write-TRSkinPanelTrace -Message 'random-toggle-created'
 
   $intervalLabel = New-TRSkinLabel -Text '环境切换间隔' -Left 20 -Top 98 -Width 120
@@ -317,11 +330,24 @@ try {
     [void]$environmentList.Items.Add($item)
   }
   Write-TRSkinPanelTrace -Message "environment-list-created item-count=$($environmentList.Items.Count)"
-  $environmentPage.Controls.AddRange(@(
-    $themeLabel, $themeCombo, $randomToggle, $intervalLabel, $interval, $intervalUnit,
+  $quickPage.Controls.AddRange(@(
+    $quickIntro, $themeLabel, $themeCombo, $randomToggle, $randomHint
+  ))
+  $rotationPage = [System.Windows.Forms.TabPage]::new('随机轮换')
+  $rotationPage.AutoScroll = $true
+  $rotationPage.BackColor = [System.Drawing.Color]::FromArgb(27, 58, 70)
+  $rotationPage.ForeColor = $form.ForeColor
+  $rotationPage.Controls.AddRange(@(
+    $intervalLabel, $interval, $intervalUnit,
     $backgroundLabel, $backgroundMode, $backgroundInterval, $backgroundUnit,
     $poolLabel, $selectAll, $selectNone, $nextEnvironment, $environmentList
   ))
+  $advancedPage = [System.Windows.Forms.TabPage]::new('高级设置')
+  $advancedPage.BackColor = [System.Drawing.Color]::FromArgb(27, 58, 70)
+  $advancedPage.ForeColor = $form.ForeColor
+  $advancedTabs = [System.Windows.Forms.TabControl]::new()
+  $advancedTabs.Dock = [System.Windows.Forms.DockStyle]::Fill
+  $advancedPage.Controls.Add($advancedTabs)
   Write-TRSkinPanelTrace -Message 'environment-page-created'
 
   $musicPage = [System.Windows.Forms.TabPage]::new('环境音乐')
@@ -422,23 +448,29 @@ try {
   ))
   Write-TRSkinPanelTrace -Message 'music-page-created'
 
-  [void]$tabs.TabPages.Add($environmentPage)
-  [void]$tabs.TabPages.Add($musicPage)
+  $maintenancePage = [System.Windows.Forms.TabPage]::new('维护')
+  $maintenancePage.BackColor = [System.Drawing.Color]::FromArgb(27, 58, 70)
+  $maintenancePage.ForeColor = $form.ForeColor
+  [void]$advancedTabs.TabPages.Add($rotationPage)
+  [void]$advancedTabs.TabPages.Add($musicPage)
+  [void]$advancedTabs.TabPages.Add($maintenancePage)
+  [void]$tabs.TabPages.Add($quickPage)
+  [void]$tabs.TabPages.Add($advancedPage)
 
   $save = [System.Windows.Forms.Button]::new()
-  $save.Text = '保存设置'
+  $save.Text = '保存并切换'
   $save.SetBounds(20, 576, 130, 42)
   $save.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom `
     -bor [System.Windows.Forms.AnchorStyles]::Left
   $apply = [System.Windows.Forms.Button]::new()
   $apply.Text = '应用 / 重新应用'
-  $apply.SetBounds(160, 576, 170, 42)
-  $apply.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom `
+  $apply.SetBounds(28, 78, 190, 42)
+  $apply.Anchor = [System.Windows.Forms.AnchorStyles]::Top `
     -bor [System.Windows.Forms.AnchorStyles]::Left
   $restore = [System.Windows.Forms.Button]::new()
   $restore.Text = '恢复官方外观'
-  $restore.SetBounds(340, 576, 150, 42)
-  $restore.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom `
+  $restore.SetBounds(28, 142, 190, 42)
+  $restore.Anchor = [System.Windows.Forms.AnchorStyles]::Top `
     -bor [System.Windows.Forms.AnchorStyles]::Left
   $close = [System.Windows.Forms.Button]::new()
   $close.Text = '关闭'
@@ -446,7 +478,12 @@ try {
   $close.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom `
     -bor [System.Windows.Forms.AnchorStyles]::Right
 
-  $form.Controls.AddRange(@($title, $status, $tabs, $save, $apply, $restore, $close))
+  $maintenanceIntro = New-TRSkinLabel `
+    -Text '只有皮肤未生效或需要退出 TR Skin 时，才需要使用这里。' `
+    -Left 28 -Top 24 -Width 650 -Height 32
+  $maintenanceIntro.Font = [System.Drawing.Font]::new('Segoe UI Semibold', 11)
+  $maintenancePage.Controls.AddRange(@($maintenanceIntro, $apply, $restore))
+  $form.Controls.AddRange(@($title, $status, $tabs, $save, $close))
   $form.AcceptButton = $save
   $form.CancelButton = $close
   $form.KeyPreview = $true
@@ -511,9 +548,9 @@ try {
 
       $selectedTheme = if (
         $themeCombo.SelectedIndex -ge 0 -and
-        $themeCombo.SelectedIndex -lt $savedThemes.Count
+        $themeCombo.SelectedIndex -lt $fixedThemes.Count
       ) {
-        $savedThemes[$themeCombo.SelectedIndex]
+        $fixedThemes[$themeCombo.SelectedIndex]
       } else {
         $null
       }

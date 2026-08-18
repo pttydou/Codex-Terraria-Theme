@@ -72,6 +72,11 @@ for (const { label, renderer, stylesheet, injectors } of [
   );
   assert.match(
     stylesheet,
+    /\.dream-skin-composer-surface\s+:is\([\s\S]{0,240}\[data-composer-surface-variant\][\s\S]{0,160}\[data-rich-text-layout\][\s\S]{0,120}\)\s*\{[\s\S]{0,120}background:\s*transparent !important;[\s\S]{0,100}background-image:\s*none !important;[\s\S]{0,100}box-shadow:\s*none !important;[\s\S]{0,100}outline:\s*none !important;/,
+    `${label} must clear nested native Composer shells so they cannot cover the themed surface.`,
+  );
+  assert.match(
+    stylesheet,
     /data-dream-variant="forest-day"\][\s\S]{0,180}--biome-card:\s*linear-gradient\([\s\S]{0,180}--biome-glow:/,
     `${label} forest-day Composer must define the biome variables used by the final card rule.`,
   );
