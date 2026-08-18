@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — settings light-card contrast
+## 2.7.3 — settings light-card contrast
 
 - 新版 Codex 设置页通过稳定的 `data-settings-panel-slug` 属性识别，不依赖中文文案、
   CSS Module 哈希类或脆弱的 DOM 顺序。
@@ -8,6 +8,8 @@
   `.trskin-settings-light-surface` 自有标记，并在标记范围内恢复深色标题、说明、链接与
   禁用文字；设置页外围、左侧导航和普通对话仍保持 Terraria 浅色文字。
 - 路由切换、热注入与恢复会自动更新或清理设置页标记。
+- 森林白天与洞穴输入框补齐环境卡片变量，通用规则同时保留主题色回退，避免变量缺失时
+  输入框透明并露出 Codex 原生深灰底。
 
 ## 2.7.2 — stable Composer ownership
 

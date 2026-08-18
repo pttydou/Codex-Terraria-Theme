@@ -1364,12 +1364,16 @@ html.codex-dream-skin[data-dream-style="terraria"] .dream-skin-composer-surface 
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"]
   :is(.dream-skin-home-utility, .dream-skin-composer-surface) {
+  --biome-card: linear-gradient(180deg, rgb(27 94 111 / .99), rgb(15 67 68 / .99));
+  --biome-glow: rgb(185 239 112 / .22);
   border-color: rgb(185 239 112 / .54) !important;
   background: linear-gradient(180deg, rgb(27 94 111 / .99), rgb(15 67 68 / .99)) !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
   :is(.dream-skin-home-utility, .dream-skin-composer-surface) {
+  --biome-card: linear-gradient(180deg, rgb(62 38 74 / .99), rgb(34 21 45 / .99));
+  --biome-glow: rgb(255 160 64 / .20);
   border-color: rgb(255 189 85 / .54) !important;
   background: linear-gradient(180deg, rgb(62 38 74 / .99), rgb(34 21 45 / .99)) !important;
   box-shadow:
@@ -2204,8 +2208,10 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
 ) :is(.dream-skin-home .dream-skin-home-suggestions button,
      .dream-skin-home-utility, .dream-skin-composer-surface) {
   border-color: rgb(var(--ds-accent-rgb) / .56) !important;
-  background: var(--biome-card) !important;
-  box-shadow: var(--terraria-frame), 0 0 22px var(--biome-glow) !important;
+  background: var(--biome-card,
+    linear-gradient(180deg, rgb(var(--ds-panel-2-rgb) / .99), rgb(var(--ds-panel-rgb) / .99))) !important;
+  box-shadow: var(--terraria-frame),
+    0 0 22px var(--biome-glow, rgb(var(--ds-accent-rgb) / .20)) !important;
 }
 
 /* Keep the composer crisp without the thick dark Terraria card frame. The
@@ -2343,8 +2349,10 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
 ) :is(.dream-skin-home .dream-skin-home-suggestions button,
      .dream-skin-home-utility, .dream-skin-composer-surface) {
   border-color: rgb(var(--ds-accent-rgb) / .56) !important;
-  background: var(--biome-card) !important;
-  box-shadow: var(--terraria-frame), 0 0 22px var(--biome-glow) !important;
+  background: var(--biome-card,
+    linear-gradient(180deg, rgb(var(--ds-panel-2-rgb) / .99), rgb(var(--ds-panel-rgb) / .99))) !important;
+  box-shadow: var(--terraria-frame),
+    0 0 22px var(--biome-glow, rgb(var(--ds-accent-rgb) / .20)) !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]:is(

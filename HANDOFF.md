@@ -2,7 +2,7 @@
 
 ## Current release line
 
-- Planned version: `2.7.2`
+- Planned version: `2.7.3`
 - Supported desktop platforms: Windows and macOS
 - Linux does not currently have an installation package.
 
