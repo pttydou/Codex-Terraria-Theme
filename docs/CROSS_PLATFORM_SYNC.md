@@ -28,6 +28,16 @@ Windows also embeds equivalent probe and live-verification logic in
    `.dream-skin-composer-surface` is the single themed background owner.
 8. Route changes, hot re-injection, and restore must remove stale markers.
 
+## Music hot-replacement contract
+
+1. Capture the previous controller's playback intent before hot-replacement cleanup.
+2. If music was active or waiting to advance, attach the new environment pool and resume
+   without requiring another button click.
+3. If the user explicitly paused music, preserve that pause across the replacement.
+4. Official restore and disable paths must still stop audio, unload the source, and revoke
+   its Blob URL.
+5. Keep the Windows and macOS renderer implementations identical for this behavior.
+
 ## Required checks
 
 ```bash

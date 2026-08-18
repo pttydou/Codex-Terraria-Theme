@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.7.6 — manual environment music continuity
+
+- Preserve the user's active music intent when a fixed-environment selection hot-replaces
+  the renderer, so the newly selected environment starts its music without another click.
+- Keep an explicit user pause across the same replacement and retain normal stop behavior
+  when TRSkin is restored or disabled.
+- Mirror the renderer contract on Windows and macOS and add a two-way hot-swap regression.
+
 ## 2.7.5 — focused Windows quick settings
 
 - Keep only the fixed-environment selector on the Windows quick page.
