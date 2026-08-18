@@ -42,7 +42,7 @@ for (const { label, renderer, stylesheet, injectors } of [
   );
   assert.match(
     renderer,
-    /directComposerLayout[\s\S]{0,500}:scope > \[data-composer-layout\][\s\S]{0,2500}elementIsVisible\(surface\)[\s\S]{0,200}active = surface/,
+    /directComposerLayout[\s\S]{0,500}:scope > \[data-composer-layout\][\s\S]{0,7000}elementIsVisible\(surface\)[\s\S]{0,200}active = surface/,
     `${label} must descend to the visible direct data-composer-layout surface.`,
   );
   assert.match(
@@ -88,6 +88,44 @@ for (const { label, renderer, stylesheet, injectors } of [
     );
   }
 }
+
+assert.equal(
+  template.includes('const SETTINGS_ACTIVE_CLASS = "trskin-settings-active"')
+    && template.includes('const SETTINGS_LIGHT_SURFACE_CLASS = "trskin-settings-light-surface"')
+    && template.includes('const SETTINGS_PANEL_SELECTOR = "[data-settings-panel-slug]"'),
+  true,
+  "macOS settings discovery must use stable attributes and renderer-owned markers.",
+);
+assert.match(
+  template,
+  /syncSettingsContrastMarkers\(root\)[\s\S]{0,120}findComposerSurface\(\{ mark: true \}\)/,
+  "Settings contrast markers must refresh at the start of every route pass.",
+);
+assert.match(
+  template,
+  /width < 140[\s\S]{0,100}height < 36[\s\S]{0,120}width \* box\.height < 4500[\s\S]{0,300}alpha >= 0\.82[\s\S]{0,80}luminance >= 0\.82/,
+  "Settings surfaces must satisfy stable size, opacity and luminance thresholds.",
+);
+assert.match(
+  template,
+  /ROUTE_MUTATION_SELECTOR[\s\S]{0,500}SETTINGS_PANEL_SELECTOR[\s\S]{0,500}data-settings-panel-slug/,
+  "Settings route mutations must schedule marker refreshes.",
+);
+assert.doesNotMatch(
+  template,
+  /搜索设置|默认权限|自动审核|完整访问权限/,
+  "Settings discovery must not depend on localized visible copy.",
+);
+assert.match(
+  css,
+  /trskin-settings-active[\s\S]{0,160}trskin-settings-light-surface[\s\S]{0,800}--color-token-foreground:\s*#18212b !important;[\s\S]{0,500}--color-token-description-foreground:\s*#4b5966 !important;[\s\S]{0,500}--color-token-link:\s*#0867b8 !important;/,
+  "Verified light settings cards must receive the dedicated dark semantic palette.",
+);
+assert.match(
+  css,
+  /trskin-settings-light-surface[\s\S]{0,1800}:is\(a, \[role="link"\],[\s\S]{0,180}color:\s*#0867b8 !important;/,
+  "Settings links must remain distinguishable on native white cards.",
+);
 
 assert.match(
   windowsChromeConfig,
@@ -795,6 +833,7 @@ function createFixture(theme, {
   nativeHeader = false,
   composerScenario = null,
   homeUtility = false,
+  settings = null,
 } = {}) {
   let fixtureShell = nativeShell;
   const nodes = new Map();
@@ -832,6 +871,8 @@ function createFixture(theme, {
     setAttribute(name, value) { bodyAttributes.set(name, String(value)); },
   };
   let activeNativeHeader = null;
+  let settingsPanel = null;
+  let settingsSurfaces = [];
   const createNativeHeader = () => {
     const createRail = (className = "") => ({
       className,
@@ -879,6 +920,9 @@ function createFixture(theme, {
         ? activeNativeHeader?.header || null
         : null;
     },
+    querySelectorAll(selector) {
+      return selector === "div, section, article, form, fieldset" ? settingsSurfaces : [];
+    },
     getBoundingClientRect() {
       return {
         ...shellBox,
@@ -887,6 +931,31 @@ function createFixture(theme, {
       };
     },
   };
+  if (settings) {
+    settingsPanel = {
+      classList: createClassList(),
+      closest(selector) {
+        return selector === '[role="main"], main' ? shellMain : null;
+      },
+      getBoundingClientRect() {
+        return settings.active === false
+          ? { left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0 }
+          : { left: 340, top: 90, right: 520, bottom: 140, width: 180, height: 50 };
+      },
+    };
+    settingsSurfaces = (settings.surfaces || []).map((surface) => {
+      const width = surface.width ?? 520;
+      const height = surface.height ?? 160;
+      return {
+        _backgroundColor: surface.backgroundColor,
+        classList: createClassList(surface.marked ? ["trskin-settings-light-surface"] : []),
+        matches(selector) { return selector === "div, section, article, form, fieldset"; },
+        getBoundingClientRect() {
+          return { left: 360, top: 180, right: 360 + width, bottom: 180 + height, width, height };
+        },
+      };
+    });
+  }
   const composerRect = {
     x: 360, y: 680, left: 360, top: 680,
     right: 1160, bottom: 760, width: 800, height: 80,
@@ -1103,6 +1172,13 @@ function createFixture(theme, {
       return null;
     },
     querySelectorAll(selector) {
+      if (selector === "[data-settings-panel-slug]") {
+        return settings && settings.active !== false ? [settingsPanel] : [];
+      }
+      if (selector === ".trskin-settings-light-surface") {
+        return settingsSurfaces.filter((candidate) =>
+          candidate.classList.contains("trskin-settings-light-surface"));
+      }
       if (selector === "[data-composer-surface-variant]") {
         return composerScenario === "stable-surface" ? [composerWrapper] : [];
       }
@@ -1214,7 +1290,10 @@ function createFixture(theme, {
         ? (attributes.get("data-dream-shell") || "dark") : fixtureShell;
       return {
         colorScheme: skinShell,
-        backgroundColor: fixtureShell === "dark" ? "rgb(24, 24, 27)" : "rgb(250, 250, 250)",
+        backgroundColor: node?._backgroundColor ||
+          (fixtureShell === "dark" ? "rgb(24, 24, 27)" : "rgb(250, 250, 250)"),
+        display: "block",
+        visibility: "visible",
         flexDirection: node === threadScroller
           ? (conversation?.flexDirection || "column-reverse") : "row",
       };
@@ -1271,6 +1350,8 @@ function createFixture(theme, {
     legacyComposer,
     staleComposer,
     homeUtilityBar,
+    settingsPanel,
+    settingsSurfaces,
     composerRailBox,
     threadListeners,
     threadMessages,
@@ -1290,6 +1371,9 @@ function createFixture(theme, {
     },
     setConversationStreaming(value) {
       if (conversation) conversation.streaming = Boolean(value);
+    },
+    setSettingsActive(value) {
+      if (settings) settings.active = Boolean(value);
     },
   };
 }
@@ -1384,6 +1468,52 @@ assert.equal(
   legacyComposerFixture.legacyComposer.classList.contains("dream-skin-composer-surface"),
   true,
   "The legacy native Composer class must remain a compatible discovery path.",
+);
+
+const settingsFixture = createFixture({
+  id: "macos-settings-light-surface",
+  appearance: "dark",
+  stylePreset: "terraria",
+}, {
+  settings: {
+    active: true,
+    surfaces: [
+      { backgroundColor: "rgb(255, 255, 255)" },
+      { backgroundColor: "rgba(255, 255, 255, 0.6)" },
+      { backgroundColor: "rgb(32, 38, 44)" },
+      { backgroundColor: "rgb(255, 255, 255)", width: 100, height: 30, marked: true },
+    ],
+  },
+});
+vm.runInNewContext(settingsFixture.payload, settingsFixture.context);
+assert.equal(
+  settingsFixture.root.classList.contains("trskin-settings-active"),
+  true,
+  "A visible stable settings slug must activate the settings contrast scope.",
+);
+assert.equal(
+  settingsFixture.settingsSurfaces[0].classList.contains("trskin-settings-light-surface"),
+  true,
+  "A large opaque white settings card must receive the light-surface marker.",
+);
+for (const surface of settingsFixture.settingsSurfaces.slice(1)) {
+  assert.equal(
+    surface.classList.contains("trskin-settings-light-surface"),
+    false,
+    "Transparent, dark or undersized settings surfaces must not retain the contrast marker.",
+  );
+}
+settingsFixture.setSettingsActive(false);
+settingsFixture.window.__CODEX_DREAM_SKIN_STATE__.ensure({ route: true });
+assert.equal(
+  settingsFixture.root.classList.contains("trskin-settings-active"),
+  false,
+  "Leaving settings must clear the root contrast scope.",
+);
+assert.equal(
+  settingsFixture.settingsSurfaces[0].classList.contains("trskin-settings-light-surface"),
+  false,
+  "Leaving settings must clear previously marked light cards.",
 );
 
 const nativeHudFixture = createFixture({

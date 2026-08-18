@@ -24,6 +24,10 @@
     "[data-composer-utility-bar-variant]",
   ];
   const COMPOSER_EDITOR_SELECTOR = 'textarea, [contenteditable="true"]';
+  const SETTINGS_ACTIVE_CLASS = "trskin-settings-active";
+  const SETTINGS_LIGHT_SURFACE_CLASS = "trskin-settings-light-surface";
+  const SETTINGS_PANEL_SELECTOR = "[data-settings-panel-slug]";
+  const SETTINGS_SURFACE_SELECTOR = "div, section, article, form, fieldset";
   const IDLE_THREAD_MESSAGES_CLASS = "dream-skin-idle-thread-messages";
   const IDLE_THREAD_SPACER_CLASS = "dream-skin-idle-thread-spacer";
   const HOME_LAYOUT_CLASSES = [
@@ -65,6 +69,57 @@
     return [...(candidate.children || [])].find((child) =>
       child.matches?.("[data-composer-layout]")) ||
       candidate.querySelector?.(":scope > [data-composer-layout]") || null;
+  };
+  const computedSurfaceColor = (candidate) => {
+    try {
+      const value = String(getComputedStyle(candidate).backgroundColor || "");
+      if (!value || value === "transparent") return null;
+      const channels = value.match(/[\d.]+/g)?.map(Number) || [];
+      if (channels.length < 3 || channels.some((channel) => !Number.isFinite(channel))) return null;
+      const [red, green, blue] = channels;
+      const alpha = channels.length >= 4 ? channels[3] : 1;
+      const linear = (channel) => {
+        const normalized = Math.max(0, Math.min(255, channel)) / 255;
+        return normalized <= 0.03928
+          ? normalized / 12.92
+          : ((normalized + 0.055) / 1.055) ** 2.4;
+      };
+      return {
+        alpha,
+        luminance: 0.2126 * linear(red) + 0.7152 * linear(green) + 0.0722 * linear(blue),
+      };
+    } catch {
+      return null;
+    }
+  };
+  const isSettingsLightSurface = (candidate) => {
+    if (!candidate?.matches?.(SETTINGS_SURFACE_SELECTOR) || !elementIsVisible(candidate)) return false;
+    const box = candidate.getBoundingClientRect?.();
+    if (!box || box.width < 140 || box.height < 36 || box.width * box.height < 4500) return false;
+    const color = computedSurfaceColor(candidate);
+    return Boolean(color && color.alpha >= 0.82 && color.luminance >= 0.82);
+  };
+  const syncSettingsContrastMarkers = (root = document.documentElement) => {
+    const panels = [...(document.querySelectorAll?.(SETTINGS_PANEL_SELECTOR) || [])]
+      .filter(elementIsVisible);
+    const active = panels.length > 0;
+    root?.classList?.toggle?.(SETTINGS_ACTIVE_CLASS, active);
+    const lightSurfaces = new Set();
+    if (active) {
+      const settingsMain = panels.find((panel) =>
+        panel.closest?.('[role="main"], main'))?.closest?.('[role="main"], main') ||
+        findCodexMainSurface();
+      const scope = settingsMain || document.body || document;
+      const candidates = [scope, ...(scope.querySelectorAll?.(SETTINGS_SURFACE_SELECTOR) || [])];
+      for (const candidate of candidates) {
+        if (isSettingsLightSurface(candidate)) lightSurfaces.add(candidate);
+      }
+    }
+    for (const candidate of document.querySelectorAll?.(`.${SETTINGS_LIGHT_SURFACE_CLASS}`) || []) {
+      if (!lightSurfaces.has(candidate)) candidate.classList?.remove?.(SETTINGS_LIGHT_SURFACE_CLASS);
+    }
+    for (const candidate of lightSurfaces) candidate.classList?.add?.(SETTINGS_LIGHT_SURFACE_CLASS);
+    return lightSurfaces;
   };
   const findComposerSurface = ({ mark = false } = {}) => {
     const candidates = [];
@@ -1788,6 +1843,7 @@
     const root = document.documentElement;
     if (!root) return;
     shell ||= root.getAttribute(SHELL_ATTR) || resolvedShell();
+    syncSettingsContrastMarkers(root);
     findComposerSurface({ mark: true });
     const shellMain = findCodexMainSurface({ mark: true });
     const homeIndicator = document.querySelector('[data-testid="home-icon"]');
@@ -2033,6 +2089,7 @@
     if (state?.installToken !== installToken) return false;
     window[DISABLED_KEY] = true;
     document.documentElement?.classList.remove("codex-dream-skin");
+    document.documentElement?.classList.remove(SETTINGS_ACTIVE_CLASS);
     document.documentElement?.removeAttribute(SHELL_ATTR);
     document.documentElement?.removeAttribute(PLATFORM_ATTR);
     for (const name of ART_ATTRS) document.documentElement?.removeAttribute(name);
@@ -2059,6 +2116,8 @@
     document.querySelectorAll(".dream-skin-home-utility").forEach((node) => node.classList.remove("dream-skin-home-utility"));
     document.querySelectorAll(`.${COMPOSER_SURFACE_CLASS}`).forEach((node) =>
       node.classList.remove(COMPOSER_SURFACE_CLASS));
+    document.querySelectorAll(`.${SETTINGS_LIGHT_SURFACE_CLASS}`).forEach((node) =>
+      node.classList.remove(SETTINGS_LIGHT_SURFACE_CLASS));
     for (const className of HOME_LAYOUT_CLASSES) {
       document.querySelectorAll(`.${className}`).forEach((node) => node.classList.remove(className));
     }
@@ -2150,6 +2209,7 @@
     '[data-composer-surface-variant]',
     '[data-composer-utility-bar-variant]',
     '[data-composer-layout]',
+    SETTINGS_PANEL_SELECTOR,
     '[class*="_homeUtilityBar_"]',
     `.${COMPOSER_SURFACE_CLASS}`,
     ".composer-surface-chrome",
@@ -2160,6 +2220,7 @@
     "data-composer-surface-variant",
     "data-composer-utility-bar-variant",
     "data-composer-layout",
+    "data-settings-panel-slug",
   ]);
   const nodeTouchesRouteSurface = (node) => {
     if (!node) return false;
@@ -2192,7 +2253,7 @@
   const nativeAppearanceSnapshot = () => {
     const nativeClass = (node) => String(node?.className || "")
       .split(/\s+/)
-      .filter((name) => name && name !== "codex-dream-skin")
+      .filter((name) => name && name !== "codex-dream-skin" && name !== SETTINGS_ACTIVE_CLASS)
       .sort()
       .join(" ");
     const attributes = (node) => ["data-theme", "data-appearance", "data-color-mode"]
