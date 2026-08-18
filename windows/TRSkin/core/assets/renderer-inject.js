@@ -390,6 +390,14 @@
 
   const previous = window[STATE_KEY];
   const previousScrollPinned = previous?.conversationScrollState?.pinned;
+  const previousMusicWantsPlayback = previous?.music?.wantsPlayback === true || Boolean(
+    previous?.music?.userUnlocked === true
+      && previous?.music?.pausedByUser === false
+      && (
+        previous?.music?.audio?.paused === false
+        || previous?.music?.pausedForHidden === true
+      ),
+  );
   const artUrl = (() => {
     const comma = artDataUrl.indexOf(",");
     const mime = /^data:([^;,]+)/.exec(artDataUrl)?.[1] || "image/png";
@@ -1059,8 +1067,12 @@
     let currentPoolVariant = activeTheme.variant || THEME.variant || "default";
     let pendingEnvironment = null;
     let fileMap = new Map();
-    let userUnlocked = false;
-    let pausedByUser = true;
+    // A fixed-environment switch hot-replaces the renderer in the same Codex
+    // document. Preserve the user's play/pause intent across that replacement:
+    // actively playing music continues with the new environment, while an
+    // explicit pause stays paused.
+    let userUnlocked = previousMusicWantsPlayback;
+    let pausedByUser = !previousMusicWantsPlayback;
     let pausedForHidden = false;
     let lastMusicEvent = "initialized";
     let resumeAfterHiddenAdvance = false;
@@ -1387,6 +1399,10 @@
       get userUnlocked() { return userUnlocked; },
       get pausedByUser() { return pausedByUser; },
       get pausedForHidden() { return pausedForHidden; },
+      get wantsPlayback() {
+        return userUnlocked && !pausedByUser
+          && (Boolean(nextTrackTimer) || pausedForHidden || audio?.paused === false);
+      },
       get lastMusicEvent() { return lastMusicEvent; },
       pauseWhenHidden: musicPauseWhenHidden,
       soundtrackMode: musicSoundtrackMode,

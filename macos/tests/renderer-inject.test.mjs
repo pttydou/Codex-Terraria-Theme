@@ -790,6 +790,11 @@ assert.match(
   /previous\?\.cardIconTimer[\s\S]{0,80}clearInterval\(previous\.cardIconTimer\)/,
   "Hot upgrades must clear the legacy card-icon shuffle timer.",
 );
+assert.match(
+  template,
+  /previousMusicWantsPlayback[\s\S]{0,500}previous\?\.music\?\.audio\?\.paused === false/,
+  "Hot environment replacement must capture active music before cleaning up the old controller.",
+);
 assert.equal(
   template.includes('const HUD_ID = "codex-dream-skin-hud"')
     && template.includes(".filter((candidate) => candidate.id !== HUD_ID)"),
@@ -2262,6 +2267,87 @@ assert.equal(rapidMusicState.currentTrack.displayName, "Forest");
 assert.equal(rapidMusicState.audio.paused, false);
 assert.equal(musicPlayAttempts, 3);
 rapidEnvironmentFixture.window.__CODEX_DREAM_SKIN_STATE__.cleanup();
+
+const hotSwapMusicFixture = createFixture({
+  id: "hot-swap-music-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+  variant: "forest-day",
+  musicPool: ["overworld-day"],
+  music: {
+    enabled: true,
+    volume: 0.35,
+    playbackMode: "sequential",
+    environmentChangeMode: "immediate",
+    tracks: [
+      { slotId: "overworld-day", fileName: "forest.wav", displayName: "Forest" },
+      { slotId: "underground", fileName: "cavern.wav", displayName: "Cavern" },
+    ],
+  },
+});
+const hotSwapTracks = [{ name: "forest.wav" }, { name: "cavern.wav" }];
+vm.runInNewContext(hotSwapMusicFixture.payload, hotSwapMusicFixture.context);
+let hotSwapInput = hotSwapMusicFixture.nodes.get("codex-dream-skin-music-files");
+hotSwapInput.files = hotSwapTracks;
+hotSwapMusicFixture.window.__CODEX_DREAM_SKIN_ATTACH_MUSIC__();
+hotSwapMusicFixture.nodes.get("codex-dream-skin-music-toggle").dispatch("click");
+await new Promise((resolve) => setImmediate(resolve));
+assert.equal(hotSwapMusicFixture.window.__CODEX_DREAM_SKIN_STATE__.music.audio.paused, false);
+
+const cavernHotSwapTheme = {
+  id: "hot-swap-music-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+  variant: "cavern",
+  musicPool: ["underground"],
+  music: {
+    enabled: true,
+    volume: 0.35,
+    playbackMode: "sequential",
+    environmentChangeMode: "immediate",
+    tracks: [
+      { slotId: "overworld-day", fileName: "forest.wav", displayName: "Forest" },
+      { slotId: "underground", fileName: "cavern.wav", displayName: "Cavern" },
+    ],
+  },
+};
+vm.runInNewContext(
+  hotSwapMusicFixture.payloadFor(cavernHotSwapTheme),
+  hotSwapMusicFixture.context,
+);
+hotSwapInput = hotSwapMusicFixture.nodes.get("codex-dream-skin-music-files");
+hotSwapInput.files = hotSwapTracks;
+assert.equal(
+  hotSwapMusicFixture.window.__CODEX_DREAM_SKIN_ATTACH_MUSIC__(),
+  1,
+  "The replacement environment must attach its one-track music pool.",
+);
+await new Promise((resolve) => setImmediate(resolve));
+let hotSwapMusicState = hotSwapMusicFixture.window.__CODEX_DREAM_SKIN_STATE__.music;
+assert.equal(hotSwapMusicState.currentTrack.displayName, "Cavern");
+assert.equal(hotSwapMusicState.audio.paused, false);
+assert.equal(
+  hotSwapMusicFixture.nodes.get("codex-dream-skin-music-toggle").dataset.state,
+  "playing",
+  "A manually selected environment must inherit active playback without another click.",
+);
+
+hotSwapMusicFixture.nodes.get("codex-dream-skin-music-toggle").dispatch("click");
+assert.equal(hotSwapMusicState.pausedByUser, true);
+vm.runInNewContext(hotSwapMusicFixture.payload, hotSwapMusicFixture.context);
+hotSwapInput = hotSwapMusicFixture.nodes.get("codex-dream-skin-music-files");
+hotSwapInput.files = hotSwapTracks;
+hotSwapMusicFixture.window.__CODEX_DREAM_SKIN_ATTACH_MUSIC__();
+await new Promise((resolve) => setImmediate(resolve));
+hotSwapMusicState = hotSwapMusicFixture.window.__CODEX_DREAM_SKIN_STATE__.music;
+assert.equal(hotSwapMusicState.audio, null);
+assert.equal(hotSwapMusicState.pausedByUser, true);
+assert.equal(
+  hotSwapMusicFixture.nodes.get("codex-dream-skin-music-toggle").dataset.state,
+  "ready",
+  "A manually paused player must remain paused after a fixed-environment switch.",
+);
+hotSwapMusicFixture.window.__CODEX_DREAM_SKIN_STATE__.cleanup();
 
 const tunedMusicFixture = createFixture({
   id: "tuned-music-contract",

@@ -2,7 +2,7 @@
 
 ## Current release line
 
-- Planned version: `2.7.5`
+- Planned version: `2.7.6`
 - Supported desktop platforms: Windows and macOS
 - Linux does not currently have an installation package.
 
@@ -28,6 +28,11 @@ only fixed-environment selection. The all-environment random switch, rotation po
 timers, music, and restore controls belong under Advanced Settings. Saving and applying
 are one primary action; do not split them or move advanced controls back to the first-run
 surface without a new usability review.
+
+Fixed-environment selection hot-replaces the renderer inside the same Codex document.
+The renderer must capture the old music controller's playback intent before cleanup:
+active or queued playback resumes with the selected environment, while an explicit user
+pause remains paused. Official restore still stops playback and removes the controller.
 
 ## Verification status
 
