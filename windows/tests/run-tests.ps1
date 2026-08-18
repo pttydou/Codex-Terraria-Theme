@@ -27,6 +27,10 @@ try {
     'advanced music page' = 'advancedTabs\.TabPages\.Add\(\$musicPage\)'
     'advanced maintenance page' = 'advancedTabs\.TabPages\.Add\(\$maintenancePage\)'
     'random preset excluded from fixed selector' = 'fixedThemes[\s\S]{0,160}preset-terraria-random'
+    'quick page contains only environment controls' = '\$quickPage\.Controls\.AddRange\(@\(\s*\$quickIntro,\s*\$themeLabel,\s*\$themeCombo\s*\)\)'
+    'random toggle belongs to advanced rotation' = '\$rotationPage\.Controls\.AddRange\(@\(\s*\$randomToggle,\s*\$randomHint'
+    'fixed selection turns random mode off' = '\$themeCombo\.add_DropDown\([\s\S]{0,160}\$randomToggle\.Checked\s*=\s*\$false'
+    'save action also applies the runtime' = '\$save\.add_Click\([\s\S]{0,7000}Start-TRSkinPowerShell\s+-Script\s+\$startScript'
   }
   foreach ($expectation in $controlPanelExpectations.GetEnumerator()) {
     if ($controlPanelSource -notmatch $expectation.Value) {
@@ -35,6 +39,9 @@ try {
   }
   if ($controlPanelSource -match '\$tabs\.TabPages\.Add\(\$(?:environmentPage|musicPage)\)') {
     throw 'Detailed environment or music pages must not remain top-level tabs.'
+  }
+  if ($controlPanelSource -match '\$apply\s*=\s*\[System\.Windows\.Forms\.Button\]::new') {
+    throw 'Save and apply must remain one primary action, not separate buttons.'
   }
 
   $parseErrors = @()

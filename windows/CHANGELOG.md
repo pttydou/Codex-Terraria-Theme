@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.7.5 — focused Windows quick settings
+
+- Keep only the fixed-environment selector on the Windows quick page.
+- Move the all-environment random switch alongside interval, background, pool, and
+  next-environment controls under Advanced Settings.
+- Replace separate save and re-apply controls with one `保存并应用` action; choosing a
+  fixed environment automatically exits all-environment random mode.
+
 ## 2.7.4 — nested home Composer surface
 
 - Keep the renderer-owned Composer frame as the single Terraria background owner.

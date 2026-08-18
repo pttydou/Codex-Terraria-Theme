@@ -2,7 +2,7 @@
 
 ## Current release line
 
-- Planned version: `2.7.4`
+- Planned version: `2.7.5`
 - Supported desktop platforms: Windows and macOS
 - Linux does not currently have an installation package.
 
@@ -24,9 +24,10 @@ the outer `.dream-skin-composer-surface` remains the sole themed background owne
 the native dark inset, shadow, and outline must not cover it.
 
 The Windows control panel follows a progressive-disclosure layout. Its quick page owns
-only fixed-environment selection and the all-environment random switch. Rotation pool,
-timers, music, re-apply, and restore controls belong under Advanced Settings; do not
-move them back to the first-run surface without a new usability review.
+only fixed-environment selection. The all-environment random switch, rotation pool,
+timers, music, and restore controls belong under Advanced Settings. Saving and applying
+are one primary action; do not split them or move advanced controls back to the first-run
+surface without a new usability review.
 
 ## Verification status
 

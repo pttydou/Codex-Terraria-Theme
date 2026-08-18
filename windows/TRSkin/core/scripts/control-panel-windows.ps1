@@ -232,7 +232,7 @@ try {
   Write-TRSkinPanelTrace -Message 'environment-shell-created'
 
   $quickIntro = New-TRSkinLabel `
-    -Text '常用操作只保留两项：选择一个环境，或开启全部环境随机。' `
+    -Text '选择想要使用的 Terraria 环境，然后点击“保存并应用”。' `
     -Left 20 -Top 24 -Width 690 -Height 32
   $quickIntro.Font = [System.Drawing.Font]::new('Segoe UI Semibold', 11)
   $themeLabel = New-TRSkinLabel -Text '切换环境' -Left 20 -Top 82 -Width 120
@@ -261,14 +261,20 @@ try {
   $randomToggle.Checked = [bool](
     $activeTheme -and "$($activeTheme.Theme.id)" -eq 'preset-terraria-random'
   )
-  $randomToggle.SetBounds(145, 126, 300, 28)
+  $randomToggle.SetBounds(20, 20, 300, 28)
   $randomHint = New-TRSkinLabel `
-    -Text '开启后会忽略上面的固定环境；轮换间隔和环境范围可在“高级设置”调整。' `
-    -Left 145 -Top 158 -Width 560 -Height 48
+    -Text '开启后保存将使用全部环境随机；在首页选择固定环境会自动关闭此开关。' `
+    -Left 20 -Top 52 -Width 665 -Height 36
   $randomHint.ForeColor = [System.Drawing.Color]::FromArgb(184, 201, 181)
-  $themeCombo.Enabled = -not $randomToggle.Checked
-  $randomToggle.add_CheckedChanged({
-    $themeCombo.Enabled = -not $randomToggle.Checked
+  $themeCombo.add_SelectedIndexChanged({
+    if ($randomToggle.Checked) {
+      $randomToggle.Checked = $false
+    }
+  })
+  $themeCombo.add_DropDown({
+    if ($randomToggle.Checked) {
+      $randomToggle.Checked = $false
+    }
   })
   Write-TRSkinPanelTrace -Message 'random-toggle-created'
 
@@ -331,14 +337,14 @@ try {
   }
   Write-TRSkinPanelTrace -Message "environment-list-created item-count=$($environmentList.Items.Count)"
   $quickPage.Controls.AddRange(@(
-    $quickIntro, $themeLabel, $themeCombo, $randomToggle, $randomHint
+    $quickIntro, $themeLabel, $themeCombo
   ))
   $rotationPage = [System.Windows.Forms.TabPage]::new('随机轮换')
   $rotationPage.AutoScroll = $true
   $rotationPage.BackColor = [System.Drawing.Color]::FromArgb(27, 58, 70)
   $rotationPage.ForeColor = $form.ForeColor
   $rotationPage.Controls.AddRange(@(
-    $intervalLabel, $interval, $intervalUnit,
+    $randomToggle, $randomHint, $intervalLabel, $interval, $intervalUnit,
     $backgroundLabel, $backgroundMode, $backgroundInterval, $backgroundUnit,
     $poolLabel, $selectAll, $selectNone, $nextEnvironment, $environmentList
   ))
@@ -458,18 +464,13 @@ try {
   [void]$tabs.TabPages.Add($advancedPage)
 
   $save = [System.Windows.Forms.Button]::new()
-  $save.Text = '保存并切换'
-  $save.SetBounds(20, 576, 130, 42)
+  $save.Text = '保存并应用'
+  $save.SetBounds(20, 576, 160, 42)
   $save.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom `
-    -bor [System.Windows.Forms.AnchorStyles]::Left
-  $apply = [System.Windows.Forms.Button]::new()
-  $apply.Text = '应用 / 重新应用'
-  $apply.SetBounds(28, 78, 190, 42)
-  $apply.Anchor = [System.Windows.Forms.AnchorStyles]::Top `
     -bor [System.Windows.Forms.AnchorStyles]::Left
   $restore = [System.Windows.Forms.Button]::new()
   $restore.Text = '恢复官方外观'
-  $restore.SetBounds(28, 142, 190, 42)
+  $restore.SetBounds(28, 78, 190, 42)
   $restore.Anchor = [System.Windows.Forms.AnchorStyles]::Top `
     -bor [System.Windows.Forms.AnchorStyles]::Left
   $close = [System.Windows.Forms.Button]::new()
@@ -479,10 +480,10 @@ try {
     -bor [System.Windows.Forms.AnchorStyles]::Right
 
   $maintenanceIntro = New-TRSkinLabel `
-    -Text '只有皮肤未生效或需要退出 TR Skin 时，才需要使用这里。' `
+    -Text '需要退出 TR Skin 并恢复 Codex 官方外观时，才使用这里。' `
     -Left 28 -Top 24 -Width 650 -Height 32
   $maintenanceIntro.Font = [System.Drawing.Font]::new('Segoe UI Semibold', 11)
-  $maintenancePage.Controls.AddRange(@($maintenanceIntro, $apply, $restore))
+  $maintenancePage.Controls.AddRange(@($maintenanceIntro, $restore))
   $form.Controls.AddRange(@($title, $status, $tabs, $save, $close))
   $form.AcceptButton = $save
   $form.CancelButton = $close
@@ -494,7 +495,7 @@ try {
       $eventArgs.SuppressKeyPress = $true
       $eventArgs.Handled = $true
     } elseif ($eventArgs.KeyCode -eq [System.Windows.Forms.Keys]::F5) {
-      $apply.PerformClick()
+      $save.PerformClick()
       $eventArgs.SuppressKeyPress = $true
       $eventArgs.Handled = $true
     }
@@ -637,27 +638,11 @@ try {
           -Arguments $musicArguments -StateRoot $StateRoot
       }
       Set-DreamSkinPaused -Paused $false -StateRoot $StateRoot | Out-Null
-      $status.Text = "已保存：$loadedName"
-      $message = '环境、轮换、背景和音乐设置已经保存，并会在下次打开时继续使用。'
       if ($runtimeWarning) {
-        $message += "`r`n`r`n当前 Codex 未能热更新，请点击应用 / 重新应用：$runtimeWarning"
+        Write-TRSkinPanelTrace -Message "runtime-random-config-warning message=$runtimeWarning"
       }
-      [void][System.Windows.Forms.MessageBox]::Show(
-        $message,
-        'TR Skin',
-        [System.Windows.Forms.MessageBoxButtons]::OK,
-        [System.Windows.Forms.MessageBoxIcon]::Information
-      )
-    } catch {
-      Show-TRSkinPanelError -Message $_.Exception.Message
-    }
-  })
-
-  $apply.add_Click({
-    try {
-      Set-DreamSkinPaused -Paused $false -StateRoot $StateRoot | Out-Null
       Start-TRSkinPowerShell -Script $startScript -Arguments @('-Port', "$Port", '-PromptRestart')
-      $status.Text = '正在应用 TR Skin…'
+      $status.Text = "已保存，正在应用：$loadedName"
     } catch {
       Show-TRSkinPanelError -Message $_.Exception.Message
     }
