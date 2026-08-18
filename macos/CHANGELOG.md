@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.7.4 — 首页输入框内层深色底修复
+
+- 由皮肤自有 `.dream-skin-composer-surface` 外层统一绘制 Terraria 输入框背景。
+- 清除其内部稳定 Composer 布局与富文本节点的原生背景、阴影和 outline，避免新版
+  Codex 首页在主题边框内继续显示深灰/黑色内衬。
+- Windows 与 macOS 使用同一套稳定属性规则，不依赖自动生成的 CSS Module 类名。
+- 同步发行的 Windows 控制器将首页精简为固定环境与全环境随机两项，其余轮换、音乐和
+  维护功能统一收入高级设置；macOS 控制器交互本次不变。
+
 ## 2.7.3 — settings light-card contrast
 
 - 新版 Codex 设置页通过稳定的 `data-settings-panel-slug` 属性识别，不依赖中文文案、

@@ -2,7 +2,7 @@
 
 ## Current release line
 
-- Planned version: `2.7.3`
+- Planned version: `2.7.4`
 - Supported desktop platforms: Windows and macOS
 - Linux does not currently have an installation package.
 
@@ -17,6 +17,16 @@ home utility CSS Module class. TRSkin now discovers Composer surfaces through st
 The legacy `.composer-surface-chrome` path remains in renderer and injector discovery
 for older Codex builds. Visual CSS no longer depends on it. Re-injection and cleanup
 remove stale renderer-owned markers.
+
+Current Codex builds may add nested native Composer layout/rich-text surfaces inside
+the owned outer node. Those stable-attribute descendants are intentionally transparent:
+the outer `.dream-skin-composer-surface` remains the sole themed background owner and
+the native dark inset, shadow, and outline must not cover it.
+
+The Windows control panel follows a progressive-disclosure layout. Its quick page owns
+only fixed-environment selection and the all-environment random switch. Rotation pool,
+timers, music, re-apply, and restore controls belong under Advanced Settings; do not
+move them back to the first-run surface without a new usability review.
 
 ## Verification status
 

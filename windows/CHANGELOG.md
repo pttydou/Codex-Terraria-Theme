@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.7.4 — nested home Composer surface
+
+- Keep the renderer-owned Composer frame as the single Terraria background owner.
+- Clear native background, shadow, and outline from nested stable Composer layout and
+  rich-text surfaces, preventing the current Codex home input from showing a dark inset.
+- Apply the same stable-attribute rule to Windows and macOS without relying on generated
+  CSS Module class names.
+- Reduce the Windows control panel to two top-level choices: fixed environment and
+  all-environment random. Move rotation details, music, re-apply, and restore into
+  clearly grouped advanced pages.
+
 ## 2.7.3 — synchronized maintenance release
 
 - Keep Windows and macOS update manifests on the same release version while shipping

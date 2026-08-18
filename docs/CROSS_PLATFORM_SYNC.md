@@ -24,7 +24,9 @@ Windows also embeds equivalent probe and live-verification logic in
 5. Keep `.composer-surface-chrome` and the old home utility CSS Module substring only as
    compatibility discovery fallbacks.
 6. Visual CSS must use renderer-owned classes and must clear the native Composer outline.
-7. Route changes, hot re-injection, and restore must remove stale markers.
+7. Nested stable Composer surface/layout and rich-text nodes must remain transparent;
+   `.dream-skin-composer-surface` is the single themed background owner.
+8. Route changes, hot re-injection, and restore must remove stale markers.
 
 ## Required checks
 

@@ -746,6 +746,23 @@ html.codex-dream-skin .dream-skin-composer-surface {
   backdrop-filter: blur(16px) saturate(108%) !important;
 }
 
+/* Newer Codex home composers can wrap the editor in an additional native
+   surface/layout shell. The renderer-owned outer marker paints the Terraria
+   card, so these stable inner shells must stay transparent; otherwise their
+   default dark fill appears as a thick black inset inside the themed frame. */
+html.codex-dream-skin .dream-skin-composer-surface
+  :is(
+    [data-composer-surface-variant],
+    [data-composer-utility-bar-variant],
+    [data-composer-layout],
+    [data-rich-text-layout]
+  ) {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
 html.codex-dream-skin .dream-skin-composer-surface::before { content: none !important; }
 
 /* A wide image can carry the home screen too. The native hero remains live,
