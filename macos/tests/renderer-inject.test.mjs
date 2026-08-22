@@ -97,6 +97,16 @@ for (const { label, renderer, stylesheet, injectors } of [
   );
   assert.match(
     renderer,
+    /const dockBox = dock[\s\S]{0,400}const railBox = rail[\s\S]{0,1200}blockerBox\.bottom <= widthBox\.top[\s\S]{0,1800}composerGeometryAttempts = 16/,
+    `${label} must cap and repeatedly settle Composer against complementary sidebars.`,
+  );
+  assert.match(
+    renderer,
+    /mutationTouchesComposerBoundary[\s\S]{0,2600}layout: mutationTouchesComposerBoundary\(mutations\)/,
+    `${label} must request layout settling when complementary sidebars mutate.`,
+  );
+  assert.match(
+    renderer,
     /cleanup[\s\S]{0,4200}LIGHT_SURFACE_INSET_CLASS[\s\S]{0,160}HOME_EMPTY_SLOT_CLASS[\s\S]{0,220}COMPOSER_DECORATION_CLASS/,
     `${label} cleanup must remove all new renderer-owned layout and contrast markers.`,
   );
@@ -701,7 +711,7 @@ assert.match(
 );
 assert.match(
   template,
-  /mutationNeedsRouteSync[\s\S]{0,700}mutationBatchesIgnored[\s\S]{0,180}scheduleEnsure\(\{ route: true \}\)/,
+  /mutationNeedsRouteSync[\s\S]{0,2600}mutationBatchesIgnored[\s\S]{0,180}scheduleEnsure\(\{ route: true, layout: mutationTouchesComposerBoundary\(mutations\) \}\)/,
   "Streaming-only DOM mutations should be filtered before route synchronization.",
 );
 assert.match(
@@ -874,6 +884,7 @@ function createFixture(theme, {
   visibilityState = "visible",
   conversation = null,
   composerRail = null,
+  rightSidebar = null,
   audioPlay = null,
   nativeHeader = false,
   composerScenario = null,
@@ -983,6 +994,17 @@ function createFixture(theme, {
       };
     },
   };
+  const rightSidebarElement = rightSidebar ? {
+    classList: createClassList(),
+    contains() { return false; },
+    getBoundingClientRect() {
+      const width = rightSidebar.width ?? 250;
+      const left = rightSidebar.left ?? shellBox.left + shellBox.width - width;
+      const top = rightSidebar.top ?? shellBox.top;
+      const height = rightSidebar.height ?? shellBox.height;
+      return { left, top, right: left + width, bottom: top + height, width, height };
+    },
+  } : null;
   if (settings) {
     settingsPanel = {
       classList: createClassList(),
@@ -1191,6 +1213,13 @@ function createFixture(theme, {
   const composerDock = composerRail ? {
     style: createStyleDeclaration(),
     parentElement: composerRailElement,
+    getBoundingClientRect() {
+      const left = composerRail.railLeft ?? composerRailBox.left;
+      const top = composerRail.railTop ?? composerRailBox.top;
+      const width = composerRail.railWidth ?? composerRailBox.width;
+      const height = composerRail.railHeight ?? composerRailBox.height;
+      return { left, top, right: left + width, bottom: top + height, width, height };
+    },
   } : null;
 
   const createElement = (tagName) => {
@@ -1278,6 +1307,9 @@ function createFixture(theme, {
       return null;
     },
     querySelectorAll(selector) {
+      if (selector === 'aside, [role="complementary"]') {
+        return rightSidebarElement ? [rightSidebarElement] : [];
+      }
       if (selector === "[data-settings-panel-slug]") {
         return settings && settings.active !== false ? [settingsPanel] : [];
       }
@@ -1471,6 +1503,7 @@ function createFixture(theme, {
     settingsSurfaces,
     homeSlotElements,
     reviewRowElements,
+    rightSidebarElement,
     composerRailBox,
     threadListeners,
     threadMessages,
@@ -1840,6 +1873,78 @@ assert.equal(
   narrowNativeComposer.composerDock.style.values.get("--dream-skin-composer-shift-x"),
   "-355px",
   "The expanded Composer must center inside the main safe bounds without leaving a right gutter.",
+);
+const sidebarBoundComposer = createFixture({
+  id: "sidebar-bound-composer-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+  variant: "dungeon",
+}, {
+  conversation: {
+    scrollTop: 0,
+    scrollHeight: 900,
+    clientHeight: 900,
+    flexDirection: "column-reverse",
+  },
+  composerRail: {
+    left: 650,
+    top: 680,
+    width: 520,
+    height: 120,
+  },
+  rightSidebar: {
+    left: 1030,
+    top: 36,
+    width: 250,
+    height: 764,
+  },
+});
+vm.runInNewContext(sidebarBoundComposer.payload, sidebarBoundComposer.context);
+assert.equal(
+  sidebarBoundComposer.composerDock.style.values.get("--dream-skin-composer-safe-width"),
+  "720px",
+  "A full-height right sidebar must cap Composer at its 15px safe boundary.",
+);
+assert.equal(
+  sidebarBoundComposer.composerDock.style.values.get("--dream-skin-composer-shift-x"),
+  "-355px",
+);
+const topOverlayComposer = createFixture({
+  id: "top-overlay-composer-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+  variant: "dungeon",
+}, {
+  conversation: {
+    scrollTop: 0,
+    scrollHeight: 900,
+    clientHeight: 900,
+    flexDirection: "column-reverse",
+  },
+  composerRail: {
+    left: 650,
+    top: 680,
+    width: 520,
+    height: 120,
+    railLeft: 720,
+  },
+  rightSidebar: {
+    left: 1030,
+    top: 36,
+    width: 250,
+    height: 300,
+  },
+});
+vm.runInNewContext(topOverlayComposer.payload, topOverlayComposer.context);
+assert.equal(
+  topOverlayComposer.composerDock.style.values.get("--dream-skin-composer-safe-width"),
+  "970px",
+  "A top-only complementary overlay must not leave an unnecessary bottom-right gutter.",
+);
+assert.equal(
+  topOverlayComposer.composerDock.style.values.get("--dream-skin-composer-shift-x"),
+  "-425px",
+  "Composer translation must use the rail origin even when a floating summary moves it away from the dock origin.",
 );
 const narrowWindowComposer = createFixture({
   id: "narrow-window-composer-contract",

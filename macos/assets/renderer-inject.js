@@ -26,6 +26,7 @@
     "[data-composer-surface-variant]",
     "[data-composer-utility-bar-variant]",
   ];
+  const COMPOSER_BLOCKER_SELECTOR = 'aside, [role="complementary"]';
   const COMPOSER_EDITOR_SELECTOR = 'textarea, [contenteditable="true"]';
   const SETTINGS_ACTIVE_CLASS = "trskin-settings-active";
   const SETTINGS_LIGHT_SURFACE_CLASS = "trskin-settings-light-surface";
@@ -2012,13 +2013,32 @@
     rail.style?.removeProperty(COMPOSER_SAFE_WIDTH_STYLE);
     rail.style?.removeProperty(COMPOSER_SHIFT_STYLE);
     const shellBox = shellMain.getBoundingClientRect();
-    const railBox = dock?.getBoundingClientRect?.() || rail.getBoundingClientRect?.();
-    if (!railBox) return;
+    const dockBox = dock?.getBoundingClientRect?.() || null;
+    const railBox = rail.getBoundingClientRect?.() || dockBox;
+    const widthBox = dockBox || railBox;
+    if (!railBox || !widthBox) return;
     metrics.composerGeometryReads += 1;
     const safeLeft = shellBox.left + 15;
-    const safeRight = shellBox.right - 15;
+    let safeRight = shellBox.right - 15;
+    for (const candidate of document.querySelectorAll?.(COMPOSER_BLOCKER_SELECTOR) || []) {
+      if (candidate === rail || candidate === dock || candidate.contains?.(rail)
+        || rail.contains?.(candidate) || dock?.contains?.(candidate)) continue;
+      let blockerBox = null;
+      let style = null;
+      try {
+        blockerBox = candidate.getBoundingClientRect();
+        style = getComputedStyle(candidate);
+      } catch {}
+      if (!blockerBox || blockerBox.width < 160 || blockerBox.height < 80
+        || blockerBox.left <= safeLeft || blockerBox.left < shellBox.left + shellBox.width * 0.5
+        || blockerBox.right < shellBox.right - 2
+        || blockerBox.bottom <= widthBox.top || blockerBox.top >= widthBox.bottom
+        || style?.display === "none" || style?.visibility === "hidden" || style?.opacity === "0") continue;
+      safeRight = Math.min(safeRight, blockerBox.left - 15);
+    }
+    safeRight = Math.max(safeLeft, safeRight);
     const availableWidth = Math.max(0, safeRight - safeLeft);
-    const nativeDockWidth = Math.max(0, railBox.width);
+    const nativeDockWidth = Math.max(0, widthBox.width);
     const readableCap = Math.max(nativeDockWidth, shellBox.height * 1.5);
     const composerWidth = Math.min(availableWidth, readableCap);
     const composerLeft = safeLeft + (availableWidth - composerWidth) / 2;
@@ -2026,7 +2046,7 @@
     setStyleProperty(rail, COMPOSER_SAFE_WIDTH_STYLE, `${Math.round(composerWidth * 100) / 100}px`);
     setStyleProperty(rail, COMPOSER_SHIFT_STYLE, `${Math.round(shift * 100) / 100}px`);
     if (settle) {
-      composerGeometryAttempts = 4;
+      composerGeometryAttempts = 16;
       if (!composerGeometryTimer) {
         const settleGeometry = () => {
           composerGeometryTimer = null;
@@ -2471,13 +2491,42 @@
     return [...(mutation.addedNodes || []), ...(mutation.removedNodes || [])]
       .some(nodeTouchesRouteSurface);
   });
+  const mutationTouchesComposerBoundary = (mutations) => mutations.some((mutation) => {
+    const candidates = mutation.type === "childList"
+      ? [mutation.target, ...(mutation.addedNodes || []), ...(mutation.removedNodes || [])]
+      : [mutation.target];
+    return candidates.some((node) => {
+      if (node?.nodeType !== 1) return false;
+      try {
+        if (node.matches?.(COMPOSER_BLOCKER_SELECTOR)
+          || node.closest?.(COMPOSER_BLOCKER_SELECTOR)
+          || node.querySelector?.(COMPOSER_BLOCKER_SELECTOR)) return true;
+        const shellMain = document.querySelector?.(`main.${MAIN_SURFACE_CLASS}`)
+          || findCodexMainSurface();
+        const shellBox = shellMain?.getBoundingClientRect?.();
+        if (!shellBox) return false;
+        const positioned = [node, ...(node.querySelectorAll?.("*") || [])].slice(0, 48);
+        return positioned.some((candidate) => {
+          const box = candidate.getBoundingClientRect?.();
+          let style = null;
+          try { style = getComputedStyle(candidate); } catch {}
+          return Boolean(box && ["absolute", "fixed", "sticky"].includes(style?.position)
+            && box.width >= 160 && box.height >= 80
+            && box.left >= shellBox.left + shellBox.width * 0.5
+            && box.right >= shellBox.right - 2);
+        });
+      } catch {
+        return false;
+      }
+    });
+  });
   const observer = new MutationObserver((mutations) => {
     metrics.mutationBatches += 1;
     if (!mutationNeedsRouteSync(mutations)) {
       metrics.mutationBatchesIgnored += 1;
       return;
     }
-    scheduleEnsure({ route: true });
+    scheduleEnsure({ route: true, layout: mutationTouchesComposerBoundary(mutations) });
   });
   const nativeAppearanceSnapshot = () => {
     const nativeClass = (node) => String(node?.className || "")

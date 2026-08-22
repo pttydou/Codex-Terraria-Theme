@@ -38,7 +38,10 @@ An unreleased cross-platform layout compatibility change is present after `v2.7.
 the renderer collapses only verified empty home slots before the stable game-source
 content, themes repeated computed-light change-review rows through an owned inset
 marker, and expands/centers Composer from main-surface safe bounds instead of retaining
-the native narrow rail. macOS and Windows source tests cover these contracts. Windows
+the native narrow rail. Full-height complementary sidebars cap that safe area, while
+top-only overlays do not create a bottom-right gutter. Dock width and rail translation
+origin are measured separately so pinned-summary transitions cannot create overflow.
+macOS and Windows source tests cover these contracts. Windows
 native source tests pass; macOS real-app visual verification still requires a Mac.
 
 ## Verification status
