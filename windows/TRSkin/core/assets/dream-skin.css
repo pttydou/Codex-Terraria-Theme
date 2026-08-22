@@ -2309,6 +2309,15 @@ html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
   transform: translateX(var(--dream-skin-composer-shift-x, 0px)) !important;
 }
 
+/* Codex centers the sticky dock inside a message-width host that clips
+   horizontal overflow. The measured rail may legitimately extend beyond that
+   host toward the viewport edge, so unclip only the renderer-verified Composer
+   ancestor; the outer thread scroller remains the final viewport boundary. */
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
+  .dream-skin-composer-overflow-host {
+  overflow-x: visible !important;
+}
+
 /* Change-review currently paints adjacent file rows as separate light
    controls. Only renderer-verified repeated rows receive this inset marker;
    header, Composer, Home, Settings, Markdown/Diff, media and forms are

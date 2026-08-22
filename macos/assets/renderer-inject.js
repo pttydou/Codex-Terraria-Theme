@@ -22,6 +22,7 @@
   const COMPOSER_DOCK_CLASS = "dream-skin-composer-dock";
   const COMPOSER_RAIL_CLASS = "dream-skin-composer-rail";
   const COMPOSER_DECORATION_CLASS = "dream-skin-composer-decoration";
+  const COMPOSER_OVERFLOW_HOST_CLASS = "dream-skin-composer-overflow-host";
   const COMPOSER_STABLE_SELECTORS = [
     "[data-composer-surface-variant]",
     "[data-composer-utility-bar-variant]",
@@ -1951,6 +1952,33 @@
     }
   };
 
+  const composerBandIsBlocked = (candidate, blockerBox, bandBox) => {
+    if (typeof document.elementsFromPoint !== "function") return true;
+    const viewportWidth = typeof innerWidth === "number" ? innerWidth : blockerBox.right;
+    const viewportHeight = typeof innerHeight === "number" ? innerHeight : bandBox.bottom;
+    const y = Math.max(0, Math.min(viewportHeight - 1, (bandBox.top + bandBox.bottom) / 2));
+    const left = Math.max(0, blockerBox.left + 6);
+    const right = Math.min(viewportWidth - 1, blockerBox.right - 6);
+    const points = [left, left + (right - left) / 2, right]
+      .filter((value, index, values) => Number.isFinite(value)
+        && value >= 0 && value < viewportWidth
+        && values.findIndex((entry) => Math.abs(entry - value) < 1) === index);
+    return points.some((x) => document.elementsFromPoint(x, y).some((hit) => {
+      if (hit !== candidate && !candidate.contains?.(hit)) return false;
+      let style = null;
+      try { style = getComputedStyle(hit); } catch {}
+      if (!style || style.display === "none" || style.visibility === "hidden"
+        || style.pointerEvents === "none" || style.opacity === "0") return false;
+      const paint = parseComputedColor(style.backgroundColor);
+      if (paint?.alpha >= 0.12 || (style.backgroundImage && style.backgroundImage !== "none")) {
+        return true;
+      }
+      return hit !== candidate && hit.matches?.(
+        'button, input, textarea, select, a[href], [role="button"], [role="listitem"], [role="row"]',
+      );
+    }));
+  };
+
   const syncComposerGeometry = (shellMain, { settle = false } = {}) => {
     const legacyRail = document.querySelector(
       `.thread-scroll-container .sticky:has(.${COMPOSER_SURFACE_CLASS}) `
@@ -1988,6 +2016,18 @@
     }
     rail?.classList?.add?.(COMPOSER_RAIL_CLASS);
     dock?.classList?.add?.(COMPOSER_DOCK_CLASS);
+    const overflowHosts = new Set();
+    for (let candidate = dock?.parentElement; candidate && candidate !== shellMain;
+      candidate = candidate.parentElement) {
+      if (candidate.matches?.(".thread-scroll-container")) break;
+      let style = null;
+      try { style = getComputedStyle(candidate); } catch {}
+      if (["hidden", "clip"].includes(style?.overflowX)) overflowHosts.add(candidate);
+    }
+    for (const candidate of document.querySelectorAll?.(`.${COMPOSER_OVERFLOW_HOST_CLASS}`) || []) {
+      if (!overflowHosts.has(candidate)) candidate.classList?.remove?.(COMPOSER_OVERFLOW_HOST_CLASS);
+    }
+    for (const candidate of overflowHosts) candidate.classList?.add?.(COMPOSER_OVERFLOW_HOST_CLASS);
     const decorations = new Set();
     for (const candidate of [...(dock?.children || []), ...(rail?.querySelectorAll?.("*") || [])]) {
       if (candidate === rail || candidate === composer || candidate.contains?.(composer)
@@ -2033,7 +2073,8 @@
         || blockerBox.left <= safeLeft || blockerBox.left < shellBox.left + shellBox.width * 0.5
         || blockerBox.right < shellBox.right - 2
         || blockerBox.bottom <= widthBox.top || blockerBox.top >= widthBox.bottom
-        || style?.display === "none" || style?.visibility === "hidden" || style?.opacity === "0") continue;
+        || style?.display === "none" || style?.visibility === "hidden" || style?.opacity === "0"
+        || !composerBandIsBlocked(candidate, blockerBox, widthBox)) continue;
       safeRight = Math.min(safeRight, blockerBox.left - 15);
     }
     safeRight = Math.max(safeLeft, safeRight);
@@ -2046,7 +2087,7 @@
     setStyleProperty(rail, COMPOSER_SAFE_WIDTH_STYLE, `${Math.round(composerWidth * 100) / 100}px`);
     setStyleProperty(rail, COMPOSER_SHIFT_STYLE, `${Math.round(shift * 100) / 100}px`);
     if (settle) {
-      composerGeometryAttempts = 16;
+      composerGeometryAttempts = 48;
       if (!composerGeometryTimer) {
         const settleGeometry = () => {
           composerGeometryTimer = null;
@@ -2356,6 +2397,7 @@
       COMPOSER_DOCK_CLASS,
       COMPOSER_RAIL_CLASS,
       COMPOSER_DECORATION_CLASS,
+      COMPOSER_OVERFLOW_HOST_CLASS,
     ]) {
       document.querySelectorAll(`.${className}`).forEach((node) => node.classList.remove(className));
     }

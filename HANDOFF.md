@@ -38,11 +38,16 @@ An unreleased cross-platform layout compatibility change is present after `v2.7.
 the renderer collapses only verified empty home slots before the stable game-source
 content, themes repeated computed-light change-review rows through an owned inset
 marker, and expands/centers Composer from main-surface safe bounds instead of retaining
-the native narrow rail. Full-height complementary sidebars cap that safe area, while
-top-only overlays do not create a bottom-right gutter. Dock width and rail translation
-origin are measured separately so pinned-summary transitions cannot create overflow.
+the native narrow rail. A complementary sidebar caps that safe area only when painted or
+interactive content occupies the Composer band; transparent full-height pinned-summary
+shells and top-only overlays do not create a bottom-right gutter. Dock width and rail
+translation origin are measured separately, geometry settling spans the full summary
+transition, and a renderer-owned overflow-host marker prevents Codex's narrower message
+column from clipping the visibly expanded input.
 macOS and Windows source tests cover these contracts. Windows
-native source tests pass; macOS real-app visual verification still requires a Mac.
+native source tests pass. Windows managed-runtime verification confirms the pinned output
+summary and painted Composer remain 15px from the main-surface right edge; macOS real-app
+visual verification still requires a Mac.
 
 ## Verification status
 
