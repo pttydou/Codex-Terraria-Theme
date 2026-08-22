@@ -2,6 +2,9 @@
 
 ## Unreleased — Codex layout compatibility
 
+- 新增不依赖 Codex 版本号的前端能力契约：小范围 DOM 调整只要仍可通过语义或编辑器
+  回退接管，就标记为 `adaptive` 并继续运行；只有主内容区或可见 Composer 的关键能力
+  丢失才标记为 `incompatible` 并要求适配，live verify 会直接输出该结论。
 - 首页从稳定的 `data-feature="game-source"` 定位真实内容，只折叠它之前经内容守卫确认
   为空的兼容槽；异步出现文字、控件或媒体后立即撤销隐藏。
 - change-review 只对同一局部祖先内成组、横向对齐且计算 paint 为浅色的全宽行添加
