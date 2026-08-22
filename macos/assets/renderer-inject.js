@@ -26,6 +26,9 @@
   const FRONTEND_CONTRACT_SCHEMA = 1;
   const FRONTEND_COMPATIBILITY_ATTR = "data-dream-frontend-compatibility";
   const FRONTEND_CONTRACT_ATTR = "data-dream-frontend-contract";
+  const FRONTEND_SAFE_MODE_ATTR = "data-dream-frontend-safe-mode";
+  const FRONTEND_SAFE_MODE_STORAGE_KEY = "__TRSKIN_FRONTEND_SAFE_MODE_V1__";
+  const FRONTEND_FAILURE_CONFIRM_MS = 1200;
   const COMPOSER_STABLE_SELECTORS = [
     "[data-composer-surface-variant]",
     "[data-composer-utility-bar-variant]",
@@ -449,7 +452,7 @@
     };
   };
   const syncFrontendContract = (root, context) => {
-    const contract = evaluateFrontendContract(context);
+    const contract = applyFrontendContract(evaluateFrontendContract(context));
     setAttribute(root, FRONTEND_COMPATIBILITY_ATTR, contract.status);
     setAttribute(root, FRONTEND_CONTRACT_ATTR, String(contract.schema));
     const state = window[STATE_KEY];
@@ -458,6 +461,25 @@
   };
   const VERSION = __DREAM_SKIN_VERSION_JSON__;
   const STYLE_REVISION = __DREAM_SKIN_STYLE_REVISION_JSON__;
+  const readStoredFrontendSafeMode = () => {
+    try {
+      const value = window.localStorage?.getItem?.(FRONTEND_SAFE_MODE_STORAGE_KEY);
+      if (!value) return null;
+      const record = JSON.parse(value);
+      return record?.schema === 1 && record?.active === true ? record : null;
+    } catch {
+      return null;
+    }
+  };
+  const writeStoredFrontendSafeMode = (record) => {
+    try {
+      window.localStorage?.setItem?.(FRONTEND_SAFE_MODE_STORAGE_KEY, JSON.stringify(record));
+    } catch {}
+  };
+  const clearStoredFrontendSafeMode = () => {
+    try { window.localStorage?.removeItem?.(FRONTEND_SAFE_MODE_STORAGE_KEY); } catch {}
+  };
+  const storedFrontendSafeMode = readStoredFrontendSafeMode();
   const THEME = themeConfig && typeof themeConfig === "object" ? themeConfig : {};
   const dreamPlatform = (() => {
     if (typeof navigator === "undefined") return "other";
@@ -668,6 +690,18 @@
   window[DISABLED_KEY] = false;
 
   const previous = window[STATE_KEY];
+  const frontendSafety = {
+    active: Boolean(storedFrontendSafeMode || previous?.frontendSafety?.active),
+    restored: Boolean(storedFrontendSafeMode),
+    activatedAt: storedFrontendSafeMode?.activatedAt
+      || previous?.frontendSafety?.activatedAt || null,
+    reason: storedFrontendSafeMode?.reason || previous?.frontendSafety?.reason || null,
+    failureFingerprint: storedFrontendSafeMode?.fingerprint
+      || previous?.frontendSafety?.failureFingerprint || null,
+    pendingFingerprint: null,
+    confirmationReady: false,
+    confirmationTimer: null,
+  };
   const previousScrollPinned = previous?.conversationScrollState?.pinned;
   const previousMusicWantsPlayback = previous?.music?.wantsPlayback === true || Boolean(
     previous?.music?.userUnlocked === true
@@ -703,6 +737,9 @@
   }
   if (previous?.composerGeometryTimer) clearTimeout(previous.composerGeometryTimer);
   if (previous?.analysisTimer) clearTimeout(previous.analysisTimer);
+  if (previous?.frontendSafety?.confirmationTimer) {
+    clearTimeout(previous.frontendSafety.confirmationTimer);
+  }
   if (previous?.resizeHandler) window.removeEventListener("resize", previous.resizeHandler);
   if (previous?.mediaHandler && previous?.mediaQuery) {
     try { previous.mediaQuery.removeEventListener("change", previous.mediaHandler); } catch {}
@@ -757,6 +794,109 @@
       node.textContent = value;
       metrics.textWrites += 1;
     }
+  };
+
+  const frontendSafetySnapshot = () => ({
+    mode: frontendSafety.active ? "safe" : frontendSafety.pendingFingerprint
+      ? "confirming" : "normal",
+    active: frontendSafety.active,
+    restored: frontendSafety.restored,
+    reason: frontendSafety.reason,
+    activatedAt: frontendSafety.activatedAt,
+    failureFingerprint: frontendSafety.failureFingerprint,
+    confirmationMs: FRONTEND_FAILURE_CONFIRM_MS,
+  });
+
+  const syncFrontendVisualState = () => {
+    const active = frontendSafety.active;
+    const root = document.documentElement;
+    const style = document.getElementById(STYLE_ID);
+    if (style) style.disabled = active;
+    for (const id of [CHROME_ID, HUD_ID]) {
+      const node = document.getElementById(id);
+      if (!node) continue;
+      node.hidden = active;
+      if (active) node.style?.setProperty?.("display", "none", "important");
+      else node.style?.removeProperty?.("display");
+    }
+    if (active) setAttribute(root, FRONTEND_SAFE_MODE_ATTR, "true");
+    else root?.removeAttribute?.(FRONTEND_SAFE_MODE_ATTR);
+  };
+
+  const clearFrontendConfirmation = () => {
+    if (frontendSafety.confirmationTimer) clearTimeout(frontendSafety.confirmationTimer);
+    frontendSafety.confirmationTimer = null;
+    frontendSafety.confirmationReady = false;
+    frontendSafety.pendingFingerprint = null;
+  };
+
+  const setFrontendSafeMode = (active, contract = null) => {
+    if (active) {
+      frontendSafety.active = true;
+      frontendSafety.restored = false;
+      frontendSafety.activatedAt ||= new Date().toISOString();
+      frontendSafety.reason = contract?.criticalMissing?.join(",") || "frontend-contract";
+      frontendSafety.failureFingerprint = contract?.fingerprint || null;
+      writeStoredFrontendSafeMode({
+        schema: 1,
+        active: true,
+        adapterRevision: STYLE_REVISION,
+        activatedAt: frontendSafety.activatedAt,
+        reason: frontendSafety.reason,
+        fingerprint: frontendSafety.failureFingerprint,
+      });
+    } else {
+      frontendSafety.active = false;
+      frontendSafety.restored = false;
+      frontendSafety.activatedAt = null;
+      frontendSafety.reason = null;
+      frontendSafety.failureFingerprint = null;
+      clearStoredFrontendSafeMode();
+    }
+    syncFrontendVisualState();
+    window[STATE_KEY]?.syncRuntimeTimers?.();
+  };
+
+  const confirmingFrontendContract = (contract) => ({
+    ...contract,
+    observedStatus: contract.status,
+    status: "adaptive",
+    updateRequired: false,
+    action: "confirming-frontend-contract",
+    safety: frontendSafetySnapshot(),
+  });
+
+  const applyFrontendContract = (contract) => {
+    if (contract.status !== "incompatible") {
+      clearFrontendConfirmation();
+      if (frontendSafety.active) setFrontendSafeMode(false);
+      else syncFrontendVisualState();
+      return { ...contract, safety: frontendSafetySnapshot() };
+    }
+
+    if (frontendSafety.active) {
+      clearFrontendConfirmation();
+      syncFrontendVisualState();
+      return { ...contract, safety: frontendSafetySnapshot() };
+    }
+
+    if (frontendSafety.pendingFingerprint !== contract.fingerprint) {
+      clearFrontendConfirmation();
+      frontendSafety.pendingFingerprint = contract.fingerprint;
+      frontendSafety.confirmationTimer = setTimeout(() => {
+        const state = window[STATE_KEY];
+        if (state?.installToken !== installToken) return;
+        frontendSafety.confirmationTimer = null;
+        frontendSafety.confirmationReady = true;
+        state.ensure({ root: false, route: true, layout: false });
+      }, FRONTEND_FAILURE_CONFIRM_MS);
+      return confirmingFrontendContract(contract);
+    }
+
+    if (!frontendSafety.confirmationReady) return confirmingFrontendContract(contract);
+    clearFrontendConfirmation();
+    setFrontendSafeMode(true, contract);
+    return { ...contract, safety: frontendSafetySnapshot() };
   };
 
   const desiredAssetKeys = () => {
@@ -1855,6 +1995,7 @@
     }
     style.dataset.dreamSkinVersion = VERSION;
     style.dataset.dreamSkinStyleRevision = STYLE_REVISION;
+    style.disabled = frontendSafety.active;
     return style;
   };
 
@@ -2264,9 +2405,12 @@
     }
     for (const candidate of homeUtilityBars) candidate.classList.add("dream-skin-home-utility");
 
-    syncFrontendContract(root, { main: shellMain, composer: activeComposer, home });
+    const frontendContract = syncFrontendContract(
+      root,
+      { main: shellMain, composer: activeComposer, home },
+    );
 
-    if (!shellMain || !document.body) return;
+    if (frontendContract.safety?.active || !shellMain || !document.body) return;
     shellMain.classList.toggle("dream-skin-home-shell", Boolean(home));
     syncLightSurfaceMarkers(shellMain);
     const nativeHeader = shellMain.querySelector?.(`:scope > header.${APP_HEADER_CLASS}`) ||
@@ -2448,6 +2592,7 @@
     document.documentElement?.removeAttribute(PLATFORM_ATTR);
     document.documentElement?.removeAttribute(FRONTEND_COMPATIBILITY_ATTR);
     document.documentElement?.removeAttribute(FRONTEND_CONTRACT_ATTR);
+    document.documentElement?.removeAttribute(FRONTEND_SAFE_MODE_ATTR);
     for (const name of ART_ATTRS) document.documentElement?.removeAttribute(name);
     document.documentElement?.style.removeProperty("--dream-skin-art");
     for (const name of THEME_VARIABLES) document.documentElement?.style.removeProperty(name);
@@ -2521,6 +2666,9 @@
       cancelAnimationFrame(state.scheduler.frame);
     }
     if (state?.composerGeometryTimer) clearTimeout(state.composerGeometryTimer);
+    if (state?.frontendSafety?.confirmationTimer) {
+      clearTimeout(state.frontendSafety.confirmationTimer);
+    }
     if (analysisTimer) clearTimeout(analysisTimer);
     if (state?.resizeHandler) window.removeEventListener("resize", state.resizeHandler);
     if (state?.mediaHandler && state?.mediaQuery) {
@@ -2702,6 +2850,12 @@
       return false;
     }
     if (!state.timer) state.timer = setInterval(() => ensure(), 10000);
+    if (state.frontendSafety?.active) {
+      stopTimer(state, "companionTimer");
+      stopTimer(state, "environmentTimer");
+      stopTimer(state, "backgroundTimer");
+      return true;
+    }
     if (motionMediaQuery?.matches) {
       stopTimer(state, "companionTimer");
       stopTimer(state, "environmentTimer");
@@ -2761,7 +2915,13 @@
     syncConversationScrollState,
     syncComposerGeometry,
     evaluateFrontendContract,
+    applyFrontendContract,
     frontendContract: null,
+    frontendSafety,
+    retryFrontendCompatibility: () => {
+      ensure({ root: false, route: true, layout: false });
+      return window[STATE_KEY]?.frontendContract ?? null;
+    },
     artUrl,
     installToken,
     analysis: artAnalysis,

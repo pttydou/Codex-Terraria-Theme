@@ -47,6 +47,24 @@ Windows also embeds equivalent probe and live-verification logic in
 7. Windows and macOS verification output must include `frontendCompatibility`; CI tests
    both normal compatibility and fallback behavior without supplying any Codex version.
 
+## Frontend safety circuit breaker
+
+1. A single incompatible scan is treated as a route-transition candidate. The renderer
+   publishes `confirming-frontend-contract` and waits 1200ms before rescanning, so a
+   temporary Codex DOM replacement cannot flash the whole theme on and off.
+2. If the same hard capability loss survives confirmation, the renderer enters safe mode:
+   it disables the TRSkin stylesheet, hides renderer-owned chrome/HUD, and leaves the
+   official Codex interface operable.
+3. Safe mode is stored in local renderer storage and restored before the next full style
+   pass. Reloading Codex therefore cannot create an injection/failure loop.
+4. The low-frequency compatibility scan remains active in safe mode. A compatible or
+   adaptive result—such as after installing a new frontend adapter—automatically clears
+   the circuit breaker, re-enables the stylesheet, and removes the stored failure record.
+5. Optional capability loss continues to degrade locally through the existing adaptive
+   contract; it must not trigger the global circuit breaker.
+6. Live verification passes only in safety mode `normal` with an enabled stylesheet.
+   `confirming` and `safe` are diagnostic states, not successful installations.
+
 ## Layout compatibility contract
 
 1. Locate real home content from `[data-feature="game-source"]`; only direct siblings
