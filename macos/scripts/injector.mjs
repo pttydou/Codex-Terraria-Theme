@@ -1049,11 +1049,13 @@ async function verifySession(session) {
     const sidebar = box(document.querySelector('aside.app-shell-left-panel'));
     const chrome = document.getElementById('codex-dream-skin-chrome');
     const frontendCompatibility = window.__CODEX_DREAM_SKIN_STATE__?.frontendContract ?? null;
+    const skinStyle = document.getElementById('codex-dream-skin-style');
     const result = {
       installed: document.documentElement.classList.contains('codex-dream-skin'),
       version: window.__CODEX_DREAM_SKIN_STATE__?.version ?? null,
       frontendCompatibility,
-      stylePresent: Boolean(document.getElementById('codex-dream-skin-style')),
+      stylePresent: Boolean(skinStyle),
+      styleEnabled: Boolean(skinStyle) && !skinStyle.disabled,
       chromePresent: Boolean(chrome),
       chromePointerEvents: getComputedStyle(chrome || document.body).pointerEvents,
       homeRoute: Boolean(homeRoute),
@@ -1081,7 +1083,8 @@ async function verifySession(session) {
     };
     const basePass = result.installed && result.version === ${JSON.stringify(SKIN_VERSION)} &&
       Boolean(result.frontendCompatibility) && !result.frontendCompatibility.updateRequired &&
-      result.stylePresent && result.chromePresent && result.chromePointerEvents === 'none' &&
+      result.frontendCompatibility.safety?.mode === 'normal' &&
+      result.stylePresent && result.styleEnabled && result.chromePresent && result.chromePointerEvents === 'none' &&
       Boolean(result.shell?.visible) && Boolean(result.sidebar?.visible) && !result.documentOverflow.x &&
       (!result.composer?.visible || (result.composerOwned &&
         result.visibleComposerMarkerCount === 1 && result.composerOutlineStyle === 'none')) &&

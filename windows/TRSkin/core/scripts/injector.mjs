@@ -623,12 +623,14 @@ async function verifySession(session) {
     const homeUtilityNode = document.querySelector('.dream-skin-home-utility');
     const homeUtilityStyle = getComputedStyle(homeUtilityNode || document.body);
     const frontendCompatibility = window.__CODEX_DREAM_SKIN_STATE__?.frontendContract ?? null;
+    const skinStyle = document.getElementById('codex-dream-skin-style');
     const result = {
       installed: document.documentElement.classList.contains('codex-dream-skin'),
       version: window.__CODEX_DREAM_SKIN_STATE__?.version ?? null,
       expectedVersion: ${JSON.stringify(SKIN_VERSION)},
       frontendCompatibility,
-      stylePresent: Boolean(document.getElementById('codex-dream-skin-style')),
+      stylePresent: Boolean(skinStyle),
+      styleEnabled: Boolean(skinStyle) && !skinStyle.disabled,
       chromePresent: Boolean(document.getElementById('codex-dream-skin-chrome')),
       chromePointerEvents: getComputedStyle(document.getElementById('codex-dream-skin-chrome') || document.body).pointerEvents,
       homePresent: Boolean(home),
@@ -655,7 +657,8 @@ async function verifySession(session) {
     };
     result.pass = result.installed && result.version === result.expectedVersion &&
       Boolean(result.frontendCompatibility) && !result.frontendCompatibility.updateRequired &&
-      result.stylePresent && result.chromePresent &&
+      result.frontendCompatibility.safety?.mode === 'normal' &&
+      result.stylePresent && result.styleEnabled && result.chromePresent &&
       result.chromePointerEvents === 'none' && Boolean(result.composer) && Boolean(result.sidebar) &&
       result.composerOwned && result.visibleComposerMarkerCount === 1 &&
       result.composerOutlineStyle === 'none' &&

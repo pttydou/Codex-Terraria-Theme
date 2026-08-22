@@ -115,6 +115,15 @@ for (const { label, renderer, stylesheet, injectors } of [
     /policy:\s*"capabilities-not-codex-version"[\s\S]{0,500}updateRequired:\s*status === "incompatible"/,
     `${label} must decide frontend maintenance from capabilities instead of Codex versions.`,
   );
+  assert.equal(
+    renderer.includes('const FRONTEND_FAILURE_CONFIRM_MS = 1200')
+      && renderer.includes('const FRONTEND_SAFE_MODE_STORAGE_KEY = "__TRSKIN_FRONTEND_SAFE_MODE_V1__"')
+      && renderer.includes('style.disabled = frontendSafety.active')
+      && renderer.includes('action: "confirming-frontend-contract"')
+      && renderer.includes('retryFrontendCompatibility'),
+    true,
+    `${label} must confirm persistent breakage, enter a durable safe mode, and support recovery.`,
+  );
   assert.match(
     renderer,
     /cleanup[\s\S]{0,4200}LIGHT_SURFACE_INSET_CLASS[\s\S]{0,160}HOME_EMPTY_SLOT_CLASS[\s\S]{0,220}COMPOSER_DECORATION_CLASS/,
@@ -154,7 +163,9 @@ for (const { label, renderer, stylesheet, injectors } of [
         && injector.includes("composerOutlineStyle")
         && injector.includes("visibleComposerMarkerCount")
         && injector.includes("frontendCompatibility")
-        && injector.includes("!result.frontendCompatibility.updateRequired"),
+        && injector.includes("!result.frontendCompatibility.updateRequired")
+        && injector.includes("result.frontendCompatibility.safety?.mode === 'normal'")
+        && injector.includes("result.styleEnabled"),
       true,
       `${label} probe, early injection, and live verify must recognize stable and legacy Composer paths.`,
     );
@@ -914,8 +925,10 @@ function createFixture(theme, {
   homeSlots = null,
   reviewRows = null,
   settings = null,
+  frontendStorage = null,
 } = {}) {
   let fixtureShell = nativeShell;
+  let mainAvailable = true;
   const nodes = new Map();
   const attributes = new Map();
   const bodyAttributes = new Map();
@@ -925,6 +938,7 @@ function createFixture(theme, {
   const intervals = new Map();
   const documentListeners = new Map();
   const threadListeners = new Map();
+  const storageValues = frontendStorage || new Map();
   let nextTimer = 1;
   let nextInterval = 0;
   let nextBlob = 1;
@@ -1345,7 +1359,9 @@ function createFixture(theme, {
       }
       if (selector === ".composer-surface-chrome") return legacyComposer;
       if (selector === 'textarea, [contenteditable="true"]') return null;
-      if (selector === "main.trskin-main-surface" || selector === "main") return shellMain;
+      if (selector === "main.trskin-main-surface" || selector === "main") {
+        return mainAvailable ? shellMain : null;
+      }
       if (selector === "main.trskin-main-surface > header.trskin-app-header") {
         return activeNativeHeader?.header || null;
       }
@@ -1444,6 +1460,11 @@ function createFixture(theme, {
   const window = {
     addEventListener() {},
     removeEventListener() {},
+    localStorage: {
+      getItem(name) { return storageValues.get(name) ?? null; },
+      setItem(name, value) { storageValues.set(name, String(value)); },
+      removeItem(name) { storageValues.delete(name); },
+    },
     matchMedia(query) {
       return query.includes("reduced-motion") ? motionMediaQuery : colorMediaQuery;
     },
@@ -1574,6 +1595,7 @@ function createFixture(theme, {
       return activeNativeHeader;
     },
     setNativeShell(value) { fixtureShell = value; },
+    setMainAvailable(value) { mainAvailable = Boolean(value); },
     setVisibility(value) {
       document.visibilityState = value;
       documentListeners.get("visibilitychange")?.();
@@ -1619,6 +1641,57 @@ const brokenContract = defaults.window.__CODEX_DREAM_SKIN_STATE__.evaluateFronte
 assert.equal(brokenContract.status, "incompatible");
 assert.equal(brokenContract.updateRequired, true);
 assert.deepEqual([...brokenContract.criticalMissing], ["main-surface"]);
+
+const safetyStorage = new Map();
+const safetyFixture = createFixture({
+  id: "frontend-safety-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+}, { frontendStorage: safetyStorage });
+vm.runInNewContext(safetyFixture.payload, safetyFixture.context);
+let safetyState = safetyFixture.window.__CODEX_DREAM_SKIN_STATE__;
+const safetyStyle = safetyFixture.nodes.get("codex-dream-skin-style");
+const safetyChrome = safetyFixture.nodes.get("codex-dream-skin-chrome");
+safetyFixture.setMainAvailable(false);
+safetyState.ensure({ root: false, route: true, layout: false });
+assert.equal(safetyState.frontendContract.status, "adaptive");
+assert.equal(safetyState.frontendContract.observedStatus, "incompatible");
+assert.equal(safetyState.frontendContract.action, "confirming-frontend-contract");
+assert.equal(safetyState.frontendContract.safety.mode, "confirming");
+assert.equal(safetyStyle.disabled, false, "A transient route replacement must not blank the skin.");
+assert.equal(safetyStorage.size, 0, "Transient incompatibility must not be persisted.");
+safetyState.ensure({ root: false, route: true, layout: false });
+assert.equal(safetyStyle.disabled, false, "Repeated scans inside the grace window must not flicker.");
+safetyFixture.flushTimers(1200);
+safetyState = safetyFixture.window.__CODEX_DREAM_SKIN_STATE__;
+assert.equal(safetyState.frontendContract.status, "incompatible");
+assert.equal(safetyState.frontendContract.updateRequired, true);
+assert.equal(safetyState.frontendContract.safety.mode, "safe");
+assert.equal(safetyState.frontendSafety.active, true);
+assert.equal(safetyStyle.disabled, true, "Confirmed incompatibility must disable all skin CSS.");
+assert.equal(safetyChrome.hidden, true, "Confirmed incompatibility must hide custom chrome.");
+assert.equal(safetyFixture.attributes.get("data-dream-frontend-safe-mode"), "true");
+assert.ok(safetyStorage.has("__TRSKIN_FRONTEND_SAFE_MODE_V1__"));
+
+vm.runInNewContext(safetyFixture.payload, safetyFixture.context);
+safetyState = safetyFixture.window.__CODEX_DREAM_SKIN_STATE__;
+assert.equal(safetyState.frontendSafety.active, true);
+assert.equal(safetyState.frontendSafety.restored, true);
+assert.equal(safetyStyle.disabled, true, "Safe mode must survive renderer reinjection.");
+safetyFixture.setMainAvailable(true);
+const recoveredContract = safetyState.retryFrontendCompatibility();
+assert.equal(recoveredContract.status, "compatible");
+assert.equal(recoveredContract.safety.mode, "normal");
+assert.equal(safetyStyle.disabled, false, "A compatible adapter must restore the skin automatically.");
+assert.notEqual(
+  safetyFixture.nodes.get("codex-dream-skin-chrome").hidden,
+  true,
+  "Recovered custom chrome must be visible again.",
+);
+assert.equal(safetyFixture.attributes.has("data-dream-frontend-safe-mode"), false);
+assert.equal(safetyStorage.size, 0, "Recovery must clear the persisted circuit breaker.");
+assert.equal(safetyState.cleanup(), true);
+
 assert.equal(defaultMetrics.rootPasses, 1);
 assert.equal(defaultMetrics.routePasses, 1);
 assert.equal(defaultMetrics.layoutReads, 1);
