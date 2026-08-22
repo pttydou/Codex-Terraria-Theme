@@ -1,5 +1,6 @@
 $script:DreamSkinUtf8NoBom = [System.Text.UTF8Encoding]::new($false, $true)
 $script:DreamSkinLegacyAppearanceTheme = 'appearanceTheme = "light"'
+$script:DreamSkinManagedAppearanceTheme = 'appearanceTheme = "dark"'
 $script:DreamSkinManagedLightCodeTheme = 'appearanceLightCodeThemeId = "codex"'
 $script:DreamSkinManagedLightChromeTheme = 'appearanceLightChromeTheme = { accent = "#B65CFF", contrast = 64, fonts = { code = "Cascadia Code", ui = "Microsoft YaHei UI" }, ink = "#F8FAFC", opaqueWindows = true, semanticColors = { diffAdded = "#BCE8CF", diffRemoved = "#F7B8CE", skill = "#C47BFF" }, surface = "#FFF4FA" }'
 
@@ -368,22 +369,24 @@ function Read-DreamSkinAppearanceMarker {
     throw "TR Skin appearance marker is unreadable; config was preserved: $markerPath"
   }
   if ($null -eq $marker -or $marker -is [string] -or $marker -is [array] -or
-    [int]$marker.schemaVersion -ne 1 -or $marker.appearanceThemeManaged -isnot [bool] -or
-    [bool]$marker.appearanceThemeManaged) {
+    [int]$marker.schemaVersion -ne 1 -or $marker.appearanceThemeManaged -isnot [bool]) {
     throw "TR Skin appearance marker is invalid; config was preserved: $markerPath"
   }
   return $marker
 }
 
 function Write-DreamSkinAppearanceMarker {
-  param([Parameter(Mandatory = $true)][string]$BackupPath)
+  param(
+    [Parameter(Mandatory = $true)][string]$BackupPath,
+    [bool]$AppearanceThemeManaged = $false
+  )
   $markerPath = Get-DreamSkinAppearanceMarkerPath -BackupPath $BackupPath
   if (Get-Command Assert-DreamSkinNoReparseComponents -ErrorAction SilentlyContinue) {
     Assert-DreamSkinNoReparseComponents -Path $markerPath
   }
   $marker = [ordered]@{
     schemaVersion = 1
-    appearanceThemeManaged = $false
+    appearanceThemeManaged = $AppearanceThemeManaged
   } | ConvertTo-Json
   Write-DreamSkinUtf8FileAtomically -Path $markerPath -Content ($marker + "`r`n")
 }
@@ -436,6 +439,7 @@ function Install-DreamSkinBaseTheme {
       $body = Set-DreamSkinSectionSetting -Body $body -Key 'appearanceTheme' -Line $savedAppearance -NewLine $newLine
     }
     $settings = [ordered]@{
+      appearanceTheme = $script:DreamSkinManagedAppearanceTheme
       appearanceLightCodeThemeId = $script:DreamSkinManagedLightCodeTheme
       appearanceLightChromeTheme = $script:DreamSkinManagedLightChromeTheme
     }
@@ -449,7 +453,7 @@ function Install-DreamSkinBaseTheme {
     $content = $content.Substring(0, $desktop.BodyStart) + $body +
       $content.Substring($desktop.BodyStart + $desktop.BodyLength)
     Write-DreamSkinUtf8FileAtomically -Path $ConfigPath -Content $content -ExpectedBytes $originalBytes
-    Write-DreamSkinAppearanceMarker -BackupPath $BackupPath
+    Write-DreamSkinAppearanceMarker -BackupPath $BackupPath -AppearanceThemeManaged $true
     $writeCompleted = $true
   } catch {
     if ($backupCreated -and -not $writeCompleted) {
@@ -493,7 +497,10 @@ function Restore-DreamSkinBaseTheme {
   $restoreLegacyAppearance = $null -eq $appearanceMarker -and
     (Test-DreamSkinLegacyManagedLightTrio -Content $currentContent)
   $restoreKeys = @('appearanceLightCodeThemeId', 'appearanceLightChromeTheme')
-  if ($restoreLegacyAppearance) { $restoreKeys = @('appearanceTheme') + $restoreKeys }
+  if ($restoreLegacyAppearance -or ($null -ne $appearanceMarker -and
+      [bool]$appearanceMarker.appearanceThemeManaged)) {
+    $restoreKeys = @('appearanceTheme') + $restoreKeys
+  }
   $hasNestedLightChromeTheme = Test-DreamSkinDesktopNestedTable `
     -Content $currentContent -Key 'appearanceLightChromeTheme'
   foreach ($key in $restoreKeys) {

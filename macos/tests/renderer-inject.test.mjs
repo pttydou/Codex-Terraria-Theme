@@ -24,6 +24,10 @@ const windowsChromeConfig = await fs.readFile(
   path.resolve(macosRoot, "../windows/TRSkin/core/scripts/config-utf8.ps1"),
   "utf8",
 );
+const windowsStartScript = await fs.readFile(
+  path.resolve(macosRoot, "../windows/TRSkin/core/scripts/start-dream-skin.ps1"),
+  "utf8",
+);
 
 for (const { label, renderer, stylesheet, injectors } of [
   { label: "macOS", renderer: template, stylesheet: css, injectors: [macosInjector] },
@@ -196,6 +200,26 @@ assert.doesNotMatch(
   windowsChromeConfig,
   /appearanceLightChromeTheme[^\r\n]*ink = "#4A235F"/,
   "Windows native caption glyphs must not reuse the old low-contrast purple ink.",
+);
+assert.match(
+  windowsChromeConfig,
+  /DreamSkinManagedAppearanceTheme = 'appearanceTheme = "dark"'/,
+  "Windows installs must request Chromium's dark native frame so caption buttons stay visible.",
+);
+assert.match(
+  windowsChromeConfig,
+  /Write-DreamSkinAppearanceMarker -BackupPath \$BackupPath -AppearanceThemeManaged \$true/,
+  "Windows installs must record that the user's original appearance mode needs restoring.",
+);
+assert.match(
+  windowsChromeConfig,
+  /restoreLegacyAppearance -or \(\$null -ne \$appearanceMarker[\s\S]{0,160}appearanceThemeManaged/,
+  "Restoring the official appearance must restore the user's pre-install appearance mode.",
+);
+assert.match(
+  windowsStartScript,
+  /\$arguments = @\([\s\S]{0,120}'--force-dark-mode'[\s\S]{0,160}'--remote-debugging-address=127\.0\.0\.1'/,
+  "Windows must launch Chromium in native dark mode so caption controls use light glyphs.",
 );
 
 assert.doesNotMatch(
