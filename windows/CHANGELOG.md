@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — Codex layout compatibility
+
+- Locate real home content from stable `data-feature="game-source"` semantics and collapse
+  only guarded empty slots before it; asynchronously populated banners become visible again.
+- Mark only repeated, aligned, computed-light full-width change-review rows with
+  `.trskin-light-surface-inset`, while excluding Header, Composer, Markdown/Diff, media,
+  Settings, and form controls.
+- Expand and center Composer from main-surface safe bounds instead of retaining a narrow
+  native rail, and remove only verified empty pointer-inert footer decorations.
+- Share the renderer/CSS behavior with macOS and cover home slots, CSS Color 4 paints,
+  review rows, Composer width, and cleanup in the cross-platform regression suite.
+
 ## 2.7.6 — manual environment music continuity
 
 - Preserve the user's active music intent when a fixed-environment selection hot-replaces

@@ -534,6 +534,18 @@ html.codex-dream-skin .dream-skin-home {
   padding-top: 15px !important;
 }
 
+/* Codex may prepend optional compatibility/banner slots before the real home
+   content. The renderer hides only slots that are still semantically empty
+   and removes this marker as soon as asynchronous content appears. */
+.dream-skin-home > .dream-skin-home-empty-slot {
+  display: none !important;
+  min-height: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
 .dream-skin-home .dream-skin-home-hero-rail {
   flex: 0 0 440px !important;
   min-height: 440px !important;
@@ -2250,7 +2262,7 @@ html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
    tool status expands the footer, that fade becomes a large dark rectangle;
    Terraria already supplies its own task scrim, so keep the native fade clear. */
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
-  .thread-scroll-container .sticky:has(.dream-skin-composer-surface) {
+  .dream-skin-composer-dock {
   background: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
@@ -2278,19 +2290,7 @@ html.codex-dream-skin[data-dream-style="terraria"]
    entire layer is more durable than matching its generated Tailwind gradient
    child: Codex can insert another wrapper when progress/tool rows expand. */
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
-  .thread-scroll-container .sticky:has(.dream-skin-composer-surface)
-  > .pointer-events-none.absolute {
-  display: none !important;
-  background: none !important;
-}
-
-/* Newer Codex builds nest the progress/tool-status fade several levels inside
-   the footer rail instead of keeping it as a direct sticky child. Keep the
-   actual status pill, but remove its full-width dark gradient backdrop. */
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
-  .thread-scroll-container .sticky:has(.dream-skin-composer-surface)
-  > .relative.z-10:has(.dream-skin-composer-surface)
-  .pointer-events-none.absolute.bg-gradient-to-t {
+  .dream-skin-composer-decoration {
   display: none !important;
   background: none !important;
   background-image: none !important;
@@ -2298,23 +2298,49 @@ html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
-  .thread-scroll-container .sticky:has(.dream-skin-composer-surface)
-  > .pointer-events-none.absolute
-  > .bg-gradient-to-t {
-  background: none !important;
-}
-
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
-  .thread-scroll-container .sticky:has(.dream-skin-composer-surface)
-  > .relative.z-10:has(.dream-skin-composer-surface) {
+  .dream-skin-composer-rail {
   background: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
-  width: min(100%, var(--dream-skin-composer-safe-width, 100%)) !important;
+  width: var(--dream-skin-composer-safe-width, 100%) !important;
   max-width: none !important;
   margin-inline: 0 !important;
   padding-inline: 0 !important;
   transform: translateX(var(--dream-skin-composer-shift-x, 0px)) !important;
+}
+
+/* Change-review currently paints adjacent file rows as separate light
+   controls. Only renderer-verified repeated rows receive this inset marker;
+   header, Composer, Home, Settings, Markdown/Diff, media and forms are
+   excluded before CSS ownership begins. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  .trskin-light-surface-inset {
+  color: var(--terraria-reading-text) !important;
+  background: rgb(var(--ds-panel-rgb) / .96) !important;
+  background-image: none !important;
+  border-color: rgb(var(--ds-accent-rgb) / .44) !important;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .08) !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  .trskin-light-surface-inset::before,
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  .trskin-light-surface-inset::after {
+  background: none !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  .trskin-light-surface-inset :is(span, p, strong, small, svg) {
+  color: inherit !important;
+  fill: currentColor;
+  text-shadow: none !important;
 }
 
 /* Spawn-specific variants added in 2.1 keep the same native controls but use
@@ -2834,6 +2860,57 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
   .dream-skin-home [data-feature="game-source"]::after {
     margin-top: 7px;
   }
+}
+
+/* Codex settings keep native opaque light cards even while the surrounding
+   Terraria route uses a dark wallpaper. Renderer-owned markers constrain the
+   light semantic palette to verified settings surfaces only, so task text,
+   navigation and other dark regions retain their normal Terraria colors. */
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface {
+  --color-text-foreground: #18212b !important;
+  --color-text-foreground-secondary: #4b5966 !important;
+  --color-text-foreground-tertiary: #66727d !important;
+  --color-token-foreground: #18212b !important;
+  --color-token-description-foreground: #4b5966 !important;
+  --color-token-disabled-foreground: #66727d !important;
+  --color-token-input-foreground: #18212b !important;
+  --color-token-input-placeholder-foreground: #66727d !important;
+  --color-token-icon-foreground: #4b5966 !important;
+  --color-token-link: #0867b8 !important;
+  color: #18212b !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface
+  :is(h1, h2, h3, h4, h5, h6, label, legend, button, select, option, input, textarea,
+    [class*="text-token-foreground"], [class*="text-token-text-primary"],
+    [class*="text-token-input-foreground"]) {
+  color: #18212b !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface
+  :is(p, small, [class*="text-token-text-secondary"],
+    [class*="text-token-description-foreground"]) {
+  color: #4b5966 !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface :is(a, [role="link"], [class*="text-token-link"]) {
+  color: #0867b8 !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface
+  :is([disabled], [aria-disabled="true"], [class*="text-token-disabled"],
+    [class*="text-token-text-tertiary"], [class*="text-token-input-placeholder"]) {
+  color: #66727d !important;
+  text-shadow: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

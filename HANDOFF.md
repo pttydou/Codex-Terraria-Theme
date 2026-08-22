@@ -34,6 +34,13 @@ The renderer must capture the old music controller's playback intent before clea
 active or queued playback resumes with the selected environment, while an explicit user
 pause remains paused. Official restore still stops playback and removes the controller.
 
+An unreleased cross-platform layout compatibility change is present after `v2.7.6`:
+the renderer collapses only verified empty home slots before the stable game-source
+content, themes repeated computed-light change-review rows through an owned inset
+marker, and expands/centers Composer from main-surface safe bounds instead of retaining
+the native narrow rail. macOS and Windows source tests cover these contracts. Windows
+native source tests pass; macOS real-app visual verification still requires a Mac.
+
 ## Verification status
 
 - macOS source suite: required before merge.

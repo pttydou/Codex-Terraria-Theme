@@ -42,7 +42,7 @@ for (const { label, renderer, stylesheet, injectors } of [
   );
   assert.match(
     renderer,
-    /directComposerLayout[\s\S]{0,500}:scope > \[data-composer-layout\][\s\S]{0,7000}elementIsVisible\(surface\)[\s\S]{0,200}active = surface/,
+    /directComposerLayout[\s\S]{0,500}:scope > \[data-composer-layout\][\s\S]{0,20000}elementIsVisible\(surface\)[\s\S]{0,200}active = surface/,
     `${label} must descend to the visible direct data-composer-layout surface.`,
   );
   assert.match(
@@ -74,6 +74,31 @@ for (const { label, renderer, stylesheet, injectors } of [
     stylesheet,
     /\.dream-skin-composer-surface\s+:is\([\s\S]{0,240}\[data-composer-surface-variant\][\s\S]{0,160}\[data-rich-text-layout\][\s\S]{0,120}\)\s*\{[\s\S]{0,120}background:\s*transparent !important;[\s\S]{0,100}background-image:\s*none !important;[\s\S]{0,100}box-shadow:\s*none !important;[\s\S]{0,100}outline:\s*none !important;/,
     `${label} must clear nested native Composer shells so they cannot cover the themed surface.`,
+  );
+  assert.equal(
+    renderer.includes('const HOME_EMPTY_SLOT_CLASS = "dream-skin-home-empty-slot"')
+      && renderer.includes("syncHomeEmptySlots(home, homeContent)")
+      && stylesheet.includes(".dream-skin-home > .dream-skin-home-empty-slot"),
+    true,
+    `${label} must hide only renderer-verified empty slots before real home content.`,
+  );
+  assert.equal(
+    renderer.includes('const LIGHT_SURFACE_INSET_CLASS = "trskin-light-surface-inset"')
+      && renderer.includes("alignedRepeatedLightRows")
+      && renderer.includes("computedPaintIsLight")
+      && stylesheet.includes(".trskin-light-surface-inset"),
+    true,
+    `${label} must theme verified repeated light change-review rows through an owned marker.`,
+  );
+  assert.match(
+    renderer,
+    /availableWidth[\s\S]{0,240}readableCap = Math\.max\(nativeDockWidth, shellBox\.height \* 1\.5\)[\s\S]{0,180}composerLeft = safeLeft \+ \(availableWidth - composerWidth\) \/ 2/,
+    `${label} must expand and center Composer from main-surface bounds instead of retaining a narrow native rail.`,
+  );
+  assert.match(
+    renderer,
+    /cleanup[\s\S]{0,4200}LIGHT_SURFACE_INSET_CLASS[\s\S]{0,160}HOME_EMPTY_SLOT_CLASS[\s\S]{0,220}COMPOSER_DECORATION_CLASS/,
+    `${label} cleanup must remove all new renderer-owned layout and contrast markers.`,
   );
   assert.match(
     stylesheet,
@@ -586,27 +611,22 @@ assert.doesNotMatch(
 );
 assert.match(
   css,
-  /\.thread-scroll-container \.sticky:has\(\.dream-skin-composer-surface\)\s*\{[\s\S]{0,260}background:\s*transparent !important;[\s\S]{0,180}box-shadow:\s*none !important;[\s\S]{0,100}padding-bottom:\s*0 !important;/,
+  /\.dream-skin-composer-dock\s*\{[\s\S]{0,120}background:\s*transparent !important;[\s\S]{0,180}box-shadow:\s*none !important;[\s\S]{0,100}padding-bottom:\s*0 !important;/,
   "The task composer dock should not expose a dark 16px strip below the input.",
 );
 assert.match(
   css,
-  /> \.pointer-events-none\.absolute\s*\{[\s\S]{0,100}display:\s*none !important;[\s\S]{0,100}background:\s*none !important;/,
+  /\.dream-skin-composer-decoration\s*\{[\s\S]{0,100}display:\s*none !important;[\s\S]{0,100}background:\s*none !important;[\s\S]{0,100}background-image:\s*none !important;[\s\S]{0,100}box-shadow:\s*none !important;/,
   "The native decoration-only footer fade should be hidden even when Codex nests its gradient differently.",
 );
-assert.match(
+assert.doesNotMatch(
   css,
-  /> \.pointer-events-none\.absolute[\s\S]{0,80}> \.bg-gradient-to-t\s*\{[\s\S]{0,80}background:\s*none !important;/,
-  "The expanded task footer should not add a dark native fade behind progress rows.",
+  /\.sticky:has\(\.dream-skin-composer-surface\)|\.relative\.z-10:has\(\.dream-skin-composer-surface\)|\.pointer-events-none\.absolute/,
+  "Composer dock, rail, and decoration CSS must consume only renderer-owned markers.",
 );
 assert.match(
   css,
-  /> \.relative\.z-10:has\(\.dream-skin-composer-surface\)[\s\S]{0,120}\.pointer-events-none\.absolute\.bg-gradient-to-t\s*\{[\s\S]{0,120}display:\s*none !important;[\s\S]{0,180}background-image:\s*none !important;/,
-  "A nested progress or tool-status rail must not restore the full-width dark footer gradient.",
-);
-assert.match(
-  css,
-  /> \.relative\.z-10:has\(\.dream-skin-composer-surface\)\s*\{[\s\S]{0,260}background:\s*transparent !important;[\s\S]{0,260}width:\s*min\(100%, var\(--dream-skin-composer-safe-width, 100%\)\) !important;[\s\S]{0,180}max-width:\s*none !important;[\s\S]{0,160}margin-inline:\s*0 !important;[\s\S]{0,160}padding-inline:\s*0 !important;/,
+  /\.dream-skin-composer-rail\s*\{[\s\S]{0,160}background:\s*transparent !important;[\s\S]{0,260}width:\s*var\(--dream-skin-composer-safe-width, 100%\) !important;[\s\S]{0,180}max-width:\s*none !important;[\s\S]{0,160}margin-inline:\s*0 !important;[\s\S]{0,160}padding-inline:\s*0 !important;/,
   "The task composer rail should not expose dark centered gutters around the input.",
 );
 assert.match(
@@ -858,6 +878,8 @@ function createFixture(theme, {
   nativeHeader = false,
   composerScenario = null,
   homeUtility = false,
+  homeSlots = null,
+  reviewRows = null,
   settings = null,
 } = {}) {
   let fixtureShell = nativeShell;
@@ -898,6 +920,8 @@ function createFixture(theme, {
   let activeNativeHeader = null;
   let settingsPanel = null;
   let settingsSurfaces = [];
+  let homeSlotElements = [];
+  let reviewRowElements = [];
   const createNativeHeader = () => {
     const createRail = (className = "") => ({
       className,
@@ -946,6 +970,9 @@ function createFixture(theme, {
         : null;
     },
     querySelectorAll(selector) {
+      if (selector === 'button, [role="button"], [role="row"], [role="listitem"], li, tr') {
+        return reviewRowElements;
+      }
       return selector === "div, section, article, form, fieldset" ? settingsSurfaces : [];
     },
     getBoundingClientRect() {
@@ -1022,10 +1049,43 @@ function createFixture(theme, {
     classList: createClassList(),
     getBoundingClientRect() { return { ...composerRect, y: 640, top: 640, bottom: 680, height: 40 }; },
   } : null;
-  const homeRoute = homeUtility ? {
+  let homeSource = null;
+  let homeContent = null;
+  if (homeSlots) {
+    homeSlotElements = homeSlots.map((slot) => ({
+      classList: createClassList(),
+      textContent: slot.text || "",
+      children: [],
+      matches() { return false; },
+      closest(selector) {
+        return selector.includes("dream-skin-home-empty-slot")
+          && this.classList.contains("dream-skin-home-empty-slot") ? this : null;
+      },
+      contains() { return false; },
+      querySelector() { return null; },
+    }));
+    const homeHeroRail = { parentElement: null, classList: createClassList() };
+    const homeHero = {
+      parentElement: homeHeroRail,
+      classList: createClassList(),
+      querySelectorAll() { return []; },
+    };
+    const homeHeroInner = { parentElement: homeHero, classList: createClassList() };
+    const homeCopy = { parentElement: homeHeroInner, classList: createClassList() };
+    homeSource = { parentElement: homeCopy };
+    homeContent = {
+      classList: createClassList(),
+      contains(candidate) { return candidate === homeSource; },
+    };
+    homeHeroRail.parentElement = homeContent;
+    homeSlotElements.push(homeContent);
+  }
+  const homeRoute = homeUtility || homeSlots ? {
     classList: createClassList(),
-    children: [],
-    querySelector() { return null; },
+    children: homeSlotElements,
+    querySelector(selector) {
+      return selector === '[data-feature="game-source"]' ? homeSource : null;
+    },
     querySelectorAll(selector) {
       return selector.includes("data-composer-home-utility-bar-position")
         ? [homeUtilityBar] : [];
@@ -1034,6 +1094,27 @@ function createFixture(theme, {
   const homeIndicator = homeRoute ? {
     closest(selector) { return selector === '[role="main"]' ? homeRoute : null; },
   } : null;
+  if (reviewRows) {
+    const reviewParent = {};
+    reviewRowElements = reviewRows.map((row, index) => {
+      const left = row.left ?? 360;
+      const top = row.top ?? 180 + index * 56;
+      const width = row.width ?? 720;
+      const height = row.height ?? 52;
+      return {
+        _backgroundColor: row.backgroundColor ?? "color(srgb 0.98 0.98 0.98)",
+        classList: createClassList(row.marked ? ["trskin-light-surface-inset"] : []),
+        parentElement: reviewParent,
+        textContent: row.text || "file",
+        closest() { return null; },
+        contains() { return false; },
+        querySelector() { return null; },
+        getBoundingClientRect() {
+          return { left, top, right: left + width, bottom: top + height, width, height };
+        },
+      };
+    });
+  }
   const threadSpacer = conversation ? {
     className: "shrink-0",
     classList: createClassList(["shrink-0"]),
@@ -1204,6 +1285,14 @@ function createFixture(theme, {
         return settingsSurfaces.filter((candidate) =>
           candidate.classList.contains("trskin-settings-light-surface"));
       }
+      if (selector === ".dream-skin-home-empty-slot") {
+        return homeSlotElements.filter((candidate) =>
+          candidate.classList?.contains("dream-skin-home-empty-slot"));
+      }
+      if (selector === ".trskin-light-surface-inset") {
+        return reviewRowElements.filter((candidate) =>
+          candidate.classList.contains("trskin-light-surface-inset"));
+      }
       if (selector === "[data-composer-surface-variant]") {
         return composerScenario === "stable-surface" ? [composerWrapper] : [];
       }
@@ -1317,8 +1406,11 @@ function createFixture(theme, {
         colorScheme: skinShell,
         backgroundColor: node?._backgroundColor ||
           (fixtureShell === "dark" ? "rgb(24, 24, 27)" : "rgb(250, 250, 250)"),
+        backgroundImage: node?._backgroundImage || "none",
         display: "block",
         visibility: "visible",
+        position: node?._position || "static",
+        pointerEvents: node?._pointerEvents || "auto",
         flexDirection: node === threadScroller
           ? (conversation?.flexDirection || "column-reverse") : "row",
       };
@@ -1377,6 +1469,8 @@ function createFixture(theme, {
     homeUtilityBar,
     settingsPanel,
     settingsSurfaces,
+    homeSlotElements,
+    reviewRowElements,
     composerRailBox,
     threadListeners,
     threadMessages,
@@ -1493,6 +1587,75 @@ assert.equal(
   legacyComposerFixture.legacyComposer.classList.contains("dream-skin-composer-surface"),
   true,
   "The legacy native Composer class must remain a compatible discovery path.",
+);
+
+const homeSlotFixture = createFixture({
+  id: "home-empty-slot-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+}, {
+  homeSlots: [{}, { text: "Update available" }],
+});
+vm.runInNewContext(homeSlotFixture.payload, homeSlotFixture.context);
+assert.equal(
+  homeSlotFixture.homeSlotElements[0].classList.contains("dream-skin-home-empty-slot"),
+  true,
+  "An empty compatibility slot before the real home content must be collapsed.",
+);
+assert.equal(
+  homeSlotFixture.homeSlotElements[1].classList.contains("dream-skin-home-empty-slot"),
+  false,
+  "A home banner with real content must remain visible.",
+);
+homeSlotFixture.homeSlotElements[0].textContent = "Async notice";
+homeSlotFixture.observers[0].callback([{
+  type: "characterData",
+  target: { parentElement: homeSlotFixture.homeSlotElements[0] },
+}]);
+homeSlotFixture.flushTimers(64);
+assert.equal(
+  homeSlotFixture.homeSlotElements[0].classList.contains("dream-skin-home-empty-slot"),
+  false,
+  "An asynchronously populated home slot must lose the empty marker.",
+);
+
+const reviewRowsFixture = createFixture({
+  id: "change-review-light-rows-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+}, {
+  reviewRows: [
+    {},
+    { backgroundColor: "oklab(0.96 0 0)" },
+    { backgroundColor: "rgb(24, 24, 27)" },
+    { width: 96 },
+  ],
+});
+vm.runInNewContext(reviewRowsFixture.payload, reviewRowsFixture.context);
+assert.equal(
+  reviewRowsFixture.reviewRowElements[0].classList.contains("trskin-light-surface-inset"),
+  true,
+  "Aligned repeated light review rows must receive the owned contrast marker.",
+);
+assert.equal(
+  reviewRowsFixture.reviewRowElements[1].classList.contains("trskin-light-surface-inset"),
+  true,
+);
+assert.equal(
+  reviewRowsFixture.reviewRowElements[2].classList.contains("trskin-light-surface-inset"),
+  false,
+  "A native dark row must not be repainted by the light-surface scanner.",
+);
+assert.equal(
+  reviewRowsFixture.reviewRowElements[3].classList.contains("trskin-light-surface-inset"),
+  false,
+  "A small action button must not be mistaken for a full-width review row.",
+);
+reviewRowsFixture.window.__CODEX_DREAM_SKIN_STATE__.cleanup();
+assert.equal(
+  reviewRowsFixture.reviewRowElements[0].classList.contains("trskin-light-surface-inset"),
+  false,
+  "Cleanup must remove light-surface ownership markers.",
 );
 
 const settingsFixture = createFixture({
@@ -1647,6 +1810,66 @@ assert.equal(
   responsiveTask.composerDock.style.values.get("--dream-skin-composer-shift-x"),
   "95px",
   "A mid-width composer that would enter the sidebar must shift into the main-surface safe area.",
+);
+const narrowNativeComposer = createFixture({
+  id: "narrow-native-composer-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+  variant: "dungeon",
+}, {
+  conversation: {
+    scrollTop: 0,
+    scrollHeight: 900,
+    clientHeight: 900,
+    flexDirection: "column-reverse",
+  },
+  composerRail: {
+    left: 650,
+    top: 680,
+    width: 520,
+    height: 120,
+  },
+});
+vm.runInNewContext(narrowNativeComposer.payload, narrowNativeComposer.context);
+assert.equal(
+  narrowNativeComposer.composerDock.style.values.get("--dream-skin-composer-safe-width"),
+  "970px",
+  "A narrow native Composer rail must expand to the readable main-surface width.",
+);
+assert.equal(
+  narrowNativeComposer.composerDock.style.values.get("--dream-skin-composer-shift-x"),
+  "-355px",
+  "The expanded Composer must center inside the main safe bounds without leaving a right gutter.",
+);
+const narrowWindowComposer = createFixture({
+  id: "narrow-window-composer-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+  variant: "dungeon",
+}, {
+  conversation: {
+    scrollTop: 0,
+    scrollHeight: 700,
+    clientHeight: 700,
+    flexDirection: "column-reverse",
+  },
+  composerRail: {
+    left: 280,
+    top: 580,
+    width: 520,
+    height: 120,
+  },
+});
+narrowWindowComposer.shellBox.width = 300;
+vm.runInNewContext(narrowWindowComposer.payload, narrowWindowComposer.context);
+assert.equal(
+  narrowWindowComposer.composerDock.style.values.get("--dream-skin-composer-safe-width"),
+  "270px",
+  "A narrow window must cap Composer at the actual safe width instead of forcing overflow.",
+);
+assert.equal(
+  narrowWindowComposer.composerDock.style.values.get("--dream-skin-composer-shift-x"),
+  "15px",
 );
 responsiveTask.flushTimers(32);
 responsiveTask.threadListeners.get("wheel")();
