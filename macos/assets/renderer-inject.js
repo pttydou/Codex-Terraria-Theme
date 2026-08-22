@@ -23,6 +23,9 @@
   const COMPOSER_RAIL_CLASS = "dream-skin-composer-rail";
   const COMPOSER_DECORATION_CLASS = "dream-skin-composer-decoration";
   const COMPOSER_OVERFLOW_HOST_CLASS = "dream-skin-composer-overflow-host";
+  const FRONTEND_CONTRACT_SCHEMA = 1;
+  const FRONTEND_COMPATIBILITY_ATTR = "data-dream-frontend-compatibility";
+  const FRONTEND_CONTRACT_ATTR = "data-dream-frontend-contract";
   const COMPOSER_STABLE_SELECTORS = [
     "[data-composer-surface-variant]",
     "[data-composer-utility-bar-variant]",
@@ -377,6 +380,81 @@
       selectedHeader?.setAttribute?.(APP_HEADER_ATTR, "true");
     }
     return selected;
+  };
+  const evaluateFrontendContract = ({ main = null, composer = null, home = null } = {}) => {
+    const stableComposer = COMPOSER_STABLE_SELECTORS
+      .flatMap((selector) => [...(document.querySelectorAll?.(selector) || [])])
+      .find(elementIsVisible) || null;
+    const legacyComposer = [...(document.querySelectorAll?.(".composer-surface-chrome") || [])]
+      .find(elementIsVisible) || null;
+    const editor = document.querySelector?.(COMPOSER_EDITOR_SELECTOR) || null;
+    const navigation = document.querySelector?.(
+      'aside.app-shell-left-panel, aside, nav[aria-label], [data-testid*="sidebar"]',
+    ) || null;
+    const header = main?.querySelector?.(`:scope > header.${APP_HEADER_CLASS}`)
+      || main?.querySelector?.(":scope > header") || null;
+    const settings = document.documentElement?.classList?.contains?.(SETTINGS_ACTIVE_CLASS) || false;
+    const editorVisible = elementIsVisible(editor);
+    let composerDiscovery = "absent";
+    if (composer) {
+      if (stableComposer && (composer === stableComposer || stableComposer.contains?.(composer)
+        || composer.contains?.(stableComposer))) composerDiscovery = "stable";
+      else if (legacyComposer && (composer === legacyComposer || legacyComposer.contains?.(composer)
+        || composer.contains?.(legacyComposer))) composerDiscovery = "legacy-fallback";
+      else if (editor && (composer === editor || composer.contains?.(editor)
+        || editor.contains?.(composer))) composerDiscovery = "editor-fallback";
+      else composerDiscovery = "semantic-fallback";
+    }
+    const criticalMissing = [];
+    if (!document.body) criticalMissing.push("document-body");
+    if (!main) criticalMissing.push("main-surface");
+    if (editorVisible && !composer) criticalMissing.push("visible-composer");
+    const fallbacks = [];
+    if (composerDiscovery.endsWith("-fallback")) fallbacks.push(composerDiscovery);
+    if (!navigation) fallbacks.push("navigation-optional");
+    if (!header) fallbacks.push("header-optional");
+    const status = criticalMissing.length
+      ? "incompatible"
+      : fallbacks.some((entry) => !entry.endsWith("-optional")) ? "adaptive" : "compatible";
+    return {
+      schema: FRONTEND_CONTRACT_SCHEMA,
+      policy: "capabilities-not-codex-version",
+      status,
+      updateRequired: status === "incompatible",
+      action: status === "incompatible" ? "frontend-adapter-update"
+        : status === "adaptive" ? "monitor" : "none",
+      composerDiscovery,
+      capabilities: {
+        documentBody: Boolean(document.body),
+        mainSurface: Boolean(main),
+        navigation: Boolean(navigation),
+        header: Boolean(header),
+        home: Boolean(home),
+        settings,
+        composer: Boolean(composer),
+        stableComposer: Boolean(stableComposer),
+        editor: editorVisible,
+      },
+      criticalMissing,
+      fallbacks,
+      fingerprint: [
+        `contract-${FRONTEND_CONTRACT_SCHEMA}`,
+        `main:${main ? "yes" : "no"}`,
+        `composer:${composerDiscovery}`,
+        `navigation:${navigation ? "yes" : "no"}`,
+        `header:${header ? "yes" : "no"}`,
+        `home:${home ? "yes" : "no"}`,
+        `settings:${settings ? "yes" : "no"}`,
+      ].join(";"),
+    };
+  };
+  const syncFrontendContract = (root, context) => {
+    const contract = evaluateFrontendContract(context);
+    setAttribute(root, FRONTEND_COMPATIBILITY_ATTR, contract.status);
+    setAttribute(root, FRONTEND_CONTRACT_ATTR, String(contract.schema));
+    const state = window[STATE_KEY];
+    if (state?.installToken === installToken) state.frontendContract = contract;
+    return contract;
   };
   const VERSION = __DREAM_SKIN_VERSION_JSON__;
   const STYLE_REVISION = __DREAM_SKIN_STYLE_REVISION_JSON__;
@@ -2116,7 +2194,7 @@
     if (!root) return;
     shell ||= root.getAttribute(SHELL_ATTR) || resolvedShell();
     syncSettingsContrastMarkers(root);
-    findComposerSurface({ mark: true });
+    const activeComposer = findComposerSurface({ mark: true });
     const shellMain = findCodexMainSurface({ mark: true });
     const homeIndicator = document.querySelector('[data-testid="home-icon"]');
     const home = homeIndicator?.closest('[role="main"]') ||
@@ -2185,6 +2263,8 @@
       if (!homeUtilityBars.has(candidate)) candidate.classList.remove("dream-skin-home-utility");
     }
     for (const candidate of homeUtilityBars) candidate.classList.add("dream-skin-home-utility");
+
+    syncFrontendContract(root, { main: shellMain, composer: activeComposer, home });
 
     if (!shellMain || !document.body) return;
     shellMain.classList.toggle("dream-skin-home-shell", Boolean(home));
@@ -2366,6 +2446,8 @@
     document.documentElement?.classList.remove(SETTINGS_ACTIVE_CLASS);
     document.documentElement?.removeAttribute(SHELL_ATTR);
     document.documentElement?.removeAttribute(PLATFORM_ATTR);
+    document.documentElement?.removeAttribute(FRONTEND_COMPATIBILITY_ATTR);
+    document.documentElement?.removeAttribute(FRONTEND_CONTRACT_ATTR);
     for (const name of ART_ATTRS) document.documentElement?.removeAttribute(name);
     document.documentElement?.style.removeProperty("--dream-skin-art");
     for (const name of THEME_VARIABLES) document.documentElement?.style.removeProperty(name);
@@ -2678,6 +2760,8 @@
     conversationScrollState,
     syncConversationScrollState,
     syncComposerGeometry,
+    evaluateFrontendContract,
+    frontendContract: null,
     artUrl,
     installToken,
     analysis: artAnalysis,

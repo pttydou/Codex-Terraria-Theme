@@ -28,6 +28,25 @@ Windows also embeds equivalent probe and live-verification logic in
    `.dream-skin-composer-surface` is the single themed background owner.
 8. Route changes, hot re-injection, and restore must remove stale markers.
 
+## Frontend capability contract
+
+1. Compatibility decisions use renderer capabilities, never the Codex application
+   version. TRSkin's own updater continues to compare only signed TRSkin release versions.
+2. The renderer publishes schema `1` in `frontendContract` and mirrors its current status
+   to `data-dream-frontend-compatibility` on the document root.
+3. `compatible` means the semantic frontend contract is intact and no maintenance action
+   is required.
+4. `adaptive` means a stable anchor moved but a verified semantic fallback still owns the
+   feature. The skin keeps running; maintainers may monitor the fingerprint but must not
+   release only to chase a Codex version number.
+5. `incompatible` is reserved for hard capability loss: the main surface cannot be found,
+   the document body is unavailable, or a visible native editor cannot be safely owned.
+   Only this status sets `updateRequired` and requests a frontend-adapter update.
+6. Sidebar, header, project selector, suggestion cards, and route-specific Composer
+   absence are optional signals. Their absence alone cannot force a compatibility release.
+7. Windows and macOS verification output must include `frontendCompatibility`; CI tests
+   both normal compatibility and fallback behavior without supplying any Codex version.
+
 ## Layout compatibility contract
 
 1. Locate real home content from `[data-feature="game-source"]`; only direct siblings

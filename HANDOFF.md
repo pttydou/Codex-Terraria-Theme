@@ -23,6 +23,22 @@ the owned outer node. Those stable-attribute descendants are intentionally trans
 the outer `.dream-skin-composer-surface` remains the sole themed background owner and
 the native dark inset, shadow, and outline must not cover it.
 
+## Codex frontend update policy
+
+Do not map TRSkin releases to Codex version numbers. The runtime uses frontend capability
+contract schema `1` and reports `compatible`, `adaptive`, or `incompatible` through
+`window.__CODEX_DREAM_SKIN_STATE__.frontendContract` and the live verification output.
+
+- `compatible`: no frontend maintenance.
+- `adaptive`: a stable anchor changed, but a verified semantic/editor fallback still works;
+  keep the current TRSkin release and monitor only.
+- `incompatible`: a critical main-surface or visible-Composer capability is lost; only then
+  prepare a frontend-adapter repair.
+
+TRSkin's updater compares TRSkin release versions only. An official Codex update is not an
+update trigger by itself. Optional header/sidebar/home controls may disappear on individual
+routes without requiring a compatibility release.
+
 The Windows control panel follows a progressive-disclosure layout. Its quick page owns
 only fixed-environment selection. The all-environment random switch, rotation pool,
 timers, music, and restore controls belong under Advanced Settings. Saving and applying

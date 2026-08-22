@@ -1048,9 +1048,11 @@ async function verifySession(session) {
     const homeUtilityStyle = getComputedStyle(homeUtilityNode || document.body);
     const sidebar = box(document.querySelector('aside.app-shell-left-panel'));
     const chrome = document.getElementById('codex-dream-skin-chrome');
+    const frontendCompatibility = window.__CODEX_DREAM_SKIN_STATE__?.frontendContract ?? null;
     const result = {
       installed: document.documentElement.classList.contains('codex-dream-skin'),
       version: window.__CODEX_DREAM_SKIN_STATE__?.version ?? null,
+      frontendCompatibility,
       stylePresent: Boolean(document.getElementById('codex-dream-skin-style')),
       chromePresent: Boolean(chrome),
       chromePointerEvents: getComputedStyle(chrome || document.body).pointerEvents,
@@ -1078,6 +1080,7 @@ async function verifySession(session) {
       },
     };
     const basePass = result.installed && result.version === ${JSON.stringify(SKIN_VERSION)} &&
+      Boolean(result.frontendCompatibility) && !result.frontendCompatibility.updateRequired &&
       result.stylePresent && result.chromePresent && result.chromePointerEvents === 'none' &&
       Boolean(result.shell?.visible) && Boolean(result.sidebar?.visible) && !result.documentOverflow.x &&
       (!result.composer?.visible || (result.composerOwned &&
@@ -1095,6 +1098,7 @@ async function verifySession(session) {
     );
     result.pass = Boolean(basePass && homePass);
     result.softNotes = {
+      codexVersionIgnored: true,
       projectButtonOptional: !result.projectButton?.visible,
       composerOptionalOnNonTaskRoutes: !result.composer?.visible,
       suggestionCardsOptional: result.homeRoute && result.visibleCardCount === 0,

@@ -2,6 +2,10 @@
 
 ## Unreleased — Codex layout compatibility
 
+- Add a version-independent frontend capability contract. Minor Codex DOM changes that
+  still satisfy semantic/editor fallbacks report `adaptive` and keep running; only hard
+  main-surface or visible-Composer capability loss reports `incompatible` and requests an
+  adapter update. Live verification now exposes that decision directly.
 - Locate real home content from stable `data-feature="game-source"` semantics and collapse
   only guarded empty slots before it; asynchronously populated banners become visible again.
 - Mark only repeated, aligned, computed-light full-width change-review rows with

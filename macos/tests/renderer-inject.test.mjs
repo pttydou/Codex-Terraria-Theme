@@ -112,8 +112,18 @@ for (const { label, renderer, stylesheet, injectors } of [
   );
   assert.match(
     renderer,
+    /policy:\s*"capabilities-not-codex-version"[\s\S]{0,500}updateRequired:\s*status === "incompatible"/,
+    `${label} must decide frontend maintenance from capabilities instead of Codex versions.`,
+  );
+  assert.match(
+    renderer,
     /cleanup[\s\S]{0,4200}LIGHT_SURFACE_INSET_CLASS[\s\S]{0,160}HOME_EMPTY_SLOT_CLASS[\s\S]{0,220}COMPOSER_DECORATION_CLASS/,
     `${label} cleanup must remove all new renderer-owned layout and contrast markers.`,
+  );
+  assert.match(
+    renderer,
+    /cleanup[\s\S]{0,1000}removeAttribute\(FRONTEND_COMPATIBILITY_ATTR\)[\s\S]{0,160}removeAttribute\(FRONTEND_CONTRACT_ATTR\)/,
+    `${label} cleanup must revoke the published frontend capability contract.`,
   );
   assert.match(
     stylesheet,
@@ -142,7 +152,9 @@ for (const { label, renderer, stylesheet, injectors } of [
         && injector.includes("[data-composer-utility-bar-variant]")
         && injector.includes(".composer-surface-chrome")
         && injector.includes("composerOutlineStyle")
-        && injector.includes("visibleComposerMarkerCount"),
+        && injector.includes("visibleComposerMarkerCount")
+        && injector.includes("frontendCompatibility")
+        && injector.includes("!result.frontendCompatibility.updateRequired"),
       true,
       `${label} probe, early injection, and live verify must recognize stable and legacy Composer paths.`,
     );
@@ -1593,6 +1605,20 @@ assert.equal(defaults.attributes.get("data-dream-art-task-mode"), "ambient");
 assert.equal(defaults.attributes.get("data-dream-art-ready"), "false");
 assert.equal(defaults.rootStyle.values.get("--dream-art-position"), "50.00% 50.00%");
 const defaultMetrics = defaults.window.__CODEX_DREAM_SKIN_STATE__.metrics;
+const defaultContract = defaults.window.__CODEX_DREAM_SKIN_STATE__.frontendContract;
+assert.equal(defaultContract.policy, "capabilities-not-codex-version");
+assert.equal(defaultContract.status, "compatible");
+assert.equal(defaultContract.updateRequired, false);
+assert.equal(defaults.attributes.get("data-dream-frontend-compatibility"), "compatible");
+assert.equal(defaults.attributes.get("data-dream-frontend-contract"), "1");
+const brokenContract = defaults.window.__CODEX_DREAM_SKIN_STATE__.evaluateFrontendContract({
+  main: null,
+  composer: null,
+  home: null,
+});
+assert.equal(brokenContract.status, "incompatible");
+assert.equal(brokenContract.updateRequired, true);
+assert.deepEqual([...brokenContract.criticalMissing], ["main-surface"]);
 assert.equal(defaultMetrics.rootPasses, 1);
 assert.equal(defaultMetrics.routePasses, 1);
 assert.equal(defaultMetrics.layoutReads, 1);
@@ -1845,6 +1871,9 @@ const responsiveTask = createFixture({
 });
 vm.runInNewContext(responsiveTask.payload, responsiveTask.context);
 let responsiveState = responsiveTask.window.__CODEX_DREAM_SKIN_STATE__;
+assert.equal(responsiveState.frontendContract.status, "adaptive");
+assert.equal(responsiveState.frontendContract.composerDiscovery, "legacy-fallback");
+assert.equal(responsiveState.frontendContract.updateRequired, false);
 assert.equal(
   responsiveTask.threadScroller.scrollTop,
   -420,
