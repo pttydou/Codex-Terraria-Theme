@@ -12,7 +12,8 @@
   band; transparent pinned-summary shells no longer leave a bottom-right gutter. Measure
   dock width separately from the rail origin, settle through the full summary transition,
   and unclip the verified inner message-width host so the painted input reaches its 15px
-  safe edge. Remove only verified empty pointer-inert footer decorations.
+  safe edge without toggling that owned marker between geometry passes. Remove only
+  verified empty pointer-inert footer decorations.
 - Share the renderer/CSS behavior with macOS and cover home slots, CSS Color 4 paints,
   review rows, Composer width, and cleanup in the cross-platform regression suite.
 

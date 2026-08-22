@@ -10,7 +10,8 @@
   限制，超宽窗口居中；只有在 Composer 高度实际存在背景或交互内容的右侧栏才成为安全
   右边界，透明的全高置顶摘要外壳和顶部浮层不会误留右下空白；dock 宽度与 rail 平移
   起点分别测量，动态收敛覆盖完整摘要动画，并通过自有 overflow-host marker 解除内层
-  消息宽度容器对已扩展输入框的裁剪；空的 pointer-inert footer 装饰通过自有 marker 清理。
+  消息宽度容器对已扩展输入框的裁剪，后续几何轮次保持该 marker 而不来回闪烁；空的
+  pointer-inert footer 装饰通过自有 marker 清理。
 - renderer、CSS 与回归契约同步到 Windows；macOS 实机视觉仍需在 Mac 上验收。
 
 ## 2.7.6 — 手动切换环境时继承音乐状态
