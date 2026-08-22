@@ -28,6 +28,25 @@ Windows also embeds equivalent probe and live-verification logic in
    `.dream-skin-composer-surface` is the single themed background owner.
 8. Route changes, hot re-injection, and restore must remove stale markers.
 
+## Layout compatibility contract
+
+1. Locate real home content from `[data-feature="game-source"]`; only direct siblings
+   before that content that pass an empty-content guard may receive
+   `.dream-skin-home-empty-slot`.
+2. Text, controls, media, Composer nodes, URL-backed paint, and asynchronous content
+   make a home slot non-empty and must revoke the marker before the next paint.
+3. Repeated change-review rows may receive `.trskin-light-surface-inset` only when at
+   least two wide, shallow, horizontally aligned semantic controls share a compact
+   ancestor and their computed solid, gradient, or pseudo-element paint is light.
+4. Header, Composer, Home, Settings, Markdown/Diff, media, and form regions remain
+   excluded from the generic light-surface scan.
+5. Composer width comes from main-surface safe bounds. Its readable cap is the greater
+   of the native dock width and `mainHeight * 1.5`; available width remains the hard cap.
+6. Empty positioned pointer-inert footer decorations use renderer-owned markers; real
+   status/progress content remains visible.
+7. Route mutation, resize, hot replacement, pause, restore, and cleanup must revoke
+   stale markers and inline Composer geometry on both platforms.
+
 ## Music hot-replacement contract
 
 1. Capture the previous controller's playback intent before hot-replacement cleanup.

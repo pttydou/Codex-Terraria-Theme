@@ -19,6 +19,9 @@
   const COMPOSER_SAFE_WIDTH_STYLE = "--dream-skin-composer-safe-width";
   const COMPOSER_SHIFT_STYLE = "--dream-skin-composer-shift-x";
   const COMPOSER_SURFACE_CLASS = "dream-skin-composer-surface";
+  const COMPOSER_DOCK_CLASS = "dream-skin-composer-dock";
+  const COMPOSER_RAIL_CLASS = "dream-skin-composer-rail";
+  const COMPOSER_DECORATION_CLASS = "dream-skin-composer-decoration";
   const COMPOSER_STABLE_SELECTORS = [
     "[data-composer-surface-variant]",
     "[data-composer-utility-bar-variant]",
@@ -26,6 +29,10 @@
   const COMPOSER_EDITOR_SELECTOR = 'textarea, [contenteditable="true"]';
   const SETTINGS_ACTIVE_CLASS = "trskin-settings-active";
   const SETTINGS_LIGHT_SURFACE_CLASS = "trskin-settings-light-surface";
+  const LIGHT_SURFACE_INSET_CLASS = "trskin-light-surface-inset";
+  const HOME_EMPTY_SLOT_CLASS = "dream-skin-home-empty-slot";
+  const LIGHT_SURFACE_CANDIDATE_SELECTOR =
+    'button, [role="button"], [role="row"], [role="listitem"], li, tr';
   const SETTINGS_PANEL_SELECTOR = "[data-settings-panel-slug]";
   const SETTINGS_SURFACE_SELECTOR = "div, section, article, form, fieldset";
   const IDLE_THREAD_MESSAGES_CLASS = "dream-skin-idle-thread-messages";
@@ -70,27 +77,71 @@
       child.matches?.("[data-composer-layout]")) ||
       candidate.querySelector?.(":scope > [data-composer-layout]") || null;
   };
-  const computedSurfaceColor = (candidate) => {
+  const parseComputedColor = (value) => {
+    const source = String(value || "").trim().toLowerCase();
+    if (!source || source === "transparent") return null;
+    const perceptual = /^(oklab|oklch|lab|lch)\((.*)\)$/.exec(source);
+    if (perceptual) {
+      const lightnessToken = perceptual[2].match(/-?[\d.]+%?/)?.[0];
+      if (!lightnessToken) return null;
+      const numeric = Number.parseFloat(lightnessToken);
+      if (!Number.isFinite(numeric)) return null;
+      const lightness = lightnessToken.endsWith("%") ? numeric / 100 : numeric;
+      const alphaToken = perceptual[2].split("/")[1]?.match(/[\d.]+%?/)?.[0];
+      const alpha = alphaToken == null ? 1 : Math.max(0, Math.min(1,
+        alphaToken.endsWith("%") ? Number.parseFloat(alphaToken) / 100 : Number(alphaToken)));
+      return { alpha, luminance: Math.max(0, Math.min(1, lightness)) ** 2 };
+    }
+    const colorFunction = /^color\(\s*[a-z0-9-]+\s+(.+)\)$/.exec(source);
+    const functional = colorFunction || /^(rgba?)\((.*)\)$/.exec(source);
+    if (!functional) return null;
+    const contents = colorFunction ? colorFunction[1] : functional[2];
+    const numbers = contents.match(/-?[\d.]+%?/g) || [];
+    if (numbers.length < 3) return null;
+    const channel = (token) => {
+      const numeric = Number.parseFloat(token);
+      if (!Number.isFinite(numeric)) return NaN;
+      if (token.endsWith("%")) return numeric * 2.55;
+      return colorFunction ? numeric * 255 : numeric;
+    };
+    const alphaToken = numbers[3];
+    const alpha = alphaToken == null ? 1 : Math.max(0, Math.min(1,
+      alphaToken.endsWith("%") ? Number.parseFloat(alphaToken) / 100 : Number(alphaToken)));
+    const channels = numbers.slice(0, 3).map(channel);
+    if (channels.some((entry) => !Number.isFinite(entry))) return null;
+    const linear = (entry) => {
+      const normalized = Math.max(0, Math.min(255, entry)) / 255;
+      return normalized <= 0.03928
+        ? normalized / 12.92
+        : ((normalized + 0.055) / 1.055) ** 2.4;
+    };
+    return {
+      alpha,
+      luminance: 0.2126 * linear(channels[0])
+        + 0.7152 * linear(channels[1])
+        + 0.0722 * linear(channels[2]),
+    };
+  };
+  const computedSurfaceColor = (candidate, pseudo = null) => {
     try {
-      const value = String(getComputedStyle(candidate).backgroundColor || "");
-      if (!value || value === "transparent") return null;
-      const channels = value.match(/[\d.]+/g)?.map(Number) || [];
-      if (channels.length < 3 || channels.some((channel) => !Number.isFinite(channel))) return null;
-      const [red, green, blue] = channels;
-      const alpha = channels.length >= 4 ? channels[3] : 1;
-      const linear = (channel) => {
-        const normalized = Math.max(0, Math.min(255, channel)) / 255;
-        return normalized <= 0.03928
-          ? normalized / 12.92
-          : ((normalized + 0.055) / 1.055) ** 2.4;
-      };
-      return {
-        alpha,
-        luminance: 0.2126 * linear(red) + 0.7152 * linear(green) + 0.0722 * linear(blue),
-      };
+      return parseComputedColor(getComputedStyle(candidate, pseudo).backgroundColor);
     } catch {
       return null;
     }
+  };
+  const computedPaintIsLight = (candidate) => {
+    for (const pseudo of [null, "::before", "::after"]) {
+      let style = null;
+      try { style = getComputedStyle(candidate, pseudo); } catch {}
+      if (!style) continue;
+      const solid = parseComputedColor(style.backgroundColor);
+      if (solid && solid.alpha >= 0.72 && solid.luminance >= 0.72) return true;
+      const colors = String(style.backgroundImage || "")
+        .match(/(?:rgba?|color|oklab|oklch|lab|lch)\([^)]*\)/gi) || [];
+      const painted = colors.map(parseComputedColor).filter((color) => color && color.alpha >= 0.45);
+      if (painted.length && painted.every((color) => color.luminance >= 0.72)) return true;
+    }
+    return false;
   };
   const isSettingsLightSurface = (candidate) => {
     if (!candidate?.matches?.(SETTINGS_SURFACE_SELECTOR) || !elementIsVisible(candidate)) return false;
@@ -120,6 +171,99 @@
     }
     for (const candidate of lightSurfaces) candidate.classList?.add?.(SETTINGS_LIGHT_SURFACE_CLASS);
     return lightSurfaces;
+  };
+  const lightSurfaceIsProtected = (candidate) => Boolean(candidate?.closest?.([
+    "header", `.${COMPOSER_SURFACE_CLASS}`, `.${COMPOSER_DOCK_CLASS}`,
+    ".dream-skin-home", SETTINGS_PANEL_SELECTOR,
+    '[class*="_markdown"]', '[data-message-author-role]', "article",
+    "pre", "code", "svg", "img", "picture", "video", "canvas",
+    "form", "fieldset", "input", "textarea", "select",
+  ].join(",")));
+  const alignedRepeatedLightRows = (scope) => {
+    const candidates = [...(scope?.querySelectorAll?.(LIGHT_SURFACE_CANDIDATE_SELECTOR) || [])]
+      .filter((candidate) => {
+        if (!elementIsVisible(candidate) || lightSurfaceIsProtected(candidate)) return false;
+        const box = candidate.getBoundingClientRect?.();
+        if (!box || box.width < 260 || box.height < 28 || box.height > 112) return false;
+        return computedPaintIsLight(candidate);
+      });
+    const groups = new Map();
+    for (const candidate of candidates) {
+      let parent = candidate.parentElement;
+      for (let depth = 0; parent && parent !== scope && depth < 4;
+        depth += 1, parent = parent.parentElement) {
+        if (!groups.has(parent)) groups.set(parent, []);
+        groups.get(parent).push(candidate);
+      }
+    }
+    const marked = new Set();
+    for (const [group, rows] of groups) {
+      if (rows.length < 2) continue;
+      const uniqueRows = [...new Set(rows)];
+      if (uniqueRows.length < 2) continue;
+      const reference = uniqueRows[0].getBoundingClientRect();
+      const aligned = uniqueRows.filter((candidate) => {
+        const box = candidate.getBoundingClientRect();
+        return Math.abs(box.left - reference.left) <= 8
+          && Math.abs(box.width - reference.width) <= Math.max(24, reference.width * 0.12);
+      });
+      const alignedBoxes = aligned.map((candidate) => candidate.getBoundingClientRect());
+      const groupBox = group.getBoundingClientRect?.();
+      if (groupBox && alignedBoxes.length >= 2) {
+        const rowsTop = Math.min(...alignedBoxes.map((box) => box.top));
+        const rowsBottom = Math.max(...alignedBoxes.map((box) => box.bottom));
+        if (groupBox.width > reference.width + 160
+          || groupBox.height > Math.min(720, Math.max(240, rowsBottom - rowsTop + 160))) continue;
+      }
+      if (aligned.length >= 2) for (const candidate of aligned) marked.add(candidate);
+    }
+    return marked;
+  };
+  const syncLightSurfaceMarkers = (scope) => {
+    const previousMarkers = [...(document.querySelectorAll?.(`.${LIGHT_SURFACE_INSET_CLASS}`) || [])];
+    for (const candidate of previousMarkers) candidate.classList?.remove?.(LIGHT_SURFACE_INSET_CLASS);
+    if (!scope || scope.classList?.contains?.("dream-skin-home-shell")) return new Set();
+    const marked = alignedRepeatedLightRows(scope);
+    for (const candidate of marked) candidate.classList?.add?.(LIGHT_SURFACE_INSET_CLASS);
+    return marked;
+  };
+  const homeSlotHasContent = (candidate) => {
+    if (!candidate) return false;
+    if (String(candidate.textContent || "").trim()) return true;
+    if (candidate.matches?.([
+      "button", "a", "input", "textarea", "select", "img", "picture", "video", "audio",
+      "svg", "canvas", '[role="alert"]', '[role="status"]', '[role="dialog"]',
+      '[data-feature]', '[data-composer-layout]', '[data-composer-surface-variant]',
+      '[data-composer-utility-bar-variant]',
+    ].join(","))) return true;
+    if (candidate.querySelector?.([
+      "button", "a", "input", "textarea", "select", "img", "picture", "video", "audio",
+      "svg", "canvas", '[role="alert"]', '[role="status"]', '[role="dialog"]',
+      '[data-feature]', '[data-composer-layout]', '[data-composer-surface-variant]',
+      '[data-composer-utility-bar-variant]',
+    ].join(","))) return true;
+    const paintedNodes = [candidate, ...(candidate.querySelectorAll?.("*") || [])].slice(0, 64);
+    for (const node of paintedNodes) {
+      for (const pseudo of [null, "::before", "::after"]) {
+        try {
+          if (String(getComputedStyle(node, pseudo).backgroundImage || "").includes("url(")) return true;
+        } catch {}
+      }
+    }
+    return false;
+  };
+  const syncHomeEmptySlots = (home, homeContent) => {
+    for (const candidate of document.querySelectorAll?.(`.${HOME_EMPTY_SLOT_CLASS}`) || []) {
+      candidate.classList?.remove?.(HOME_EMPTY_SLOT_CLASS);
+    }
+    if (!home || !homeContent) return new Set();
+    const emptySlots = new Set();
+    for (const candidate of home.children || []) {
+      if (candidate === homeContent) break;
+      if (!homeSlotHasContent(candidate)) emptySlots.add(candidate);
+    }
+    for (const candidate of emptySlots) candidate.classList?.add?.(HOME_EMPTY_SLOT_CLASS);
+    return emptySlots;
   };
   const findComposerSurface = ({ mark = false } = {}) => {
     const candidates = [];
@@ -1807,30 +1951,80 @@
   };
 
   const syncComposerGeometry = (shellMain, { settle = false } = {}) => {
-    const dock = document.querySelector(
+    const legacyRail = document.querySelector(
       `.thread-scroll-container .sticky:has(.${COMPOSER_SURFACE_CLASS}) `
       + `> .relative.z-10:has(.${COMPOSER_SURFACE_CLASS})`,
     );
-    if (observedComposerDock && observedComposerDock !== dock) {
+    const composer = findComposerSurface();
+    const ancestors = [];
+    for (let candidate = composer?.parentElement; candidate && candidate !== shellMain;
+      candidate = candidate.parentElement) {
+      ancestors.push(candidate);
+      if (ancestors.length >= 12) break;
+    }
+    const semanticDockIndex = ancestors.findIndex((candidate) => {
+      let style = null;
+      try { style = getComputedStyle(candidate); } catch {}
+      return ["sticky", "fixed"].includes(style?.position)
+        && candidate.contains?.(composer);
+    });
+    const semanticDock = semanticDockIndex >= 0 ? ancestors[semanticDockIndex] : null;
+    const semanticRail = (semanticDockIndex >= 0
+      ? ancestors.slice(0, semanticDockIndex).reverse()
+      : ancestors.slice().reverse()).find((candidate) => {
+      let style = null;
+      try { style = getComputedStyle(candidate); } catch {}
+      return ["relative", "absolute"].includes(style?.position)
+        && candidate.contains?.(composer);
+    }) || null;
+    const rail = semanticRail || legacyRail;
+    const dock = semanticDock || rail?.parentElement || null;
+    for (const candidate of document.querySelectorAll?.(`.${COMPOSER_RAIL_CLASS}`) || []) {
+      if (candidate !== rail) candidate.classList?.remove?.(COMPOSER_RAIL_CLASS);
+    }
+    for (const candidate of document.querySelectorAll?.(`.${COMPOSER_DOCK_CLASS}`) || []) {
+      if (candidate !== dock) candidate.classList?.remove?.(COMPOSER_DOCK_CLASS);
+    }
+    rail?.classList?.add?.(COMPOSER_RAIL_CLASS);
+    dock?.classList?.add?.(COMPOSER_DOCK_CLASS);
+    const decorations = new Set();
+    for (const candidate of [...(dock?.children || []), ...(rail?.querySelectorAll?.("*") || [])]) {
+      if (candidate === rail || candidate === composer || candidate.contains?.(composer)
+        || String(candidate.textContent || "").trim()
+        || candidate.matches?.("[role], img, svg, video, canvas")
+        || candidate.querySelector?.("button, input, textarea, select, [role], img, svg, video, canvas")) continue;
+      let style = null;
+      try { style = getComputedStyle(candidate); } catch {}
+      if (["absolute", "fixed"].includes(style?.position) && style?.pointerEvents === "none") {
+        decorations.add(candidate);
+      }
+    }
+    for (const candidate of document.querySelectorAll?.(`.${COMPOSER_DECORATION_CLASS}`) || []) {
+      if (!decorations.has(candidate)) candidate.classList?.remove?.(COMPOSER_DECORATION_CLASS);
+    }
+    for (const candidate of decorations) candidate.classList?.add?.(COMPOSER_DECORATION_CLASS);
+    if (observedComposerDock && observedComposerDock !== rail) {
       observedComposerDock.style?.removeProperty(COMPOSER_SAFE_WIDTH_STYLE);
       observedComposerDock.style?.removeProperty(COMPOSER_SHIFT_STYLE);
     }
-    observedComposerDock = dock;
-    if (!dock || !shellMain || (activeTheme.stylePreset || THEME.stylePreset) !== "terraria") return;
-    const rail = dock.parentElement || dock;
+    observedComposerDock = rail;
+    if (!rail || !shellMain || (activeTheme.stylePreset || THEME.stylePreset) !== "terraria") return;
+    rail.style?.removeProperty(COMPOSER_SAFE_WIDTH_STYLE);
+    rail.style?.removeProperty(COMPOSER_SHIFT_STYLE);
     const shellBox = shellMain.getBoundingClientRect();
-    const railBox = rail.getBoundingClientRect();
+    const railBox = dock?.getBoundingClientRect?.() || rail.getBoundingClientRect?.();
+    if (!railBox) return;
     metrics.composerGeometryReads += 1;
     const safeLeft = shellBox.left + 15;
     const safeRight = shellBox.right - 15;
-    const safeWidth = Math.max(320, Math.min(railBox.width, safeRight - safeLeft));
-    const minimumShift = safeLeft - railBox.left;
-    const maximumShift = safeRight - railBox.left - safeWidth;
-    const shift = minimumShift <= maximumShift
-      ? Math.min(maximumShift, Math.max(minimumShift, 0))
-      : minimumShift;
-    setStyleProperty(dock, COMPOSER_SAFE_WIDTH_STYLE, `${Math.round(safeWidth * 100) / 100}px`);
-    setStyleProperty(dock, COMPOSER_SHIFT_STYLE, `${Math.round(shift * 100) / 100}px`);
+    const availableWidth = Math.max(0, safeRight - safeLeft);
+    const nativeDockWidth = Math.max(0, railBox.width);
+    const readableCap = Math.max(nativeDockWidth, shellBox.height * 1.5);
+    const composerWidth = Math.min(availableWidth, readableCap);
+    const composerLeft = safeLeft + (availableWidth - composerWidth) / 2;
+    const shift = composerLeft - railBox.left;
+    setStyleProperty(rail, COMPOSER_SAFE_WIDTH_STYLE, `${Math.round(composerWidth * 100) / 100}px`);
+    setStyleProperty(rail, COMPOSER_SHIFT_STYLE, `${Math.round(shift * 100) / 100}px`);
     if (settle) {
       composerGeometryAttempts = 4;
       if (!composerGeometryTimer) {
@@ -1878,6 +2072,7 @@
     const homeContent = home && homeSource
       ? [...home.children].find((candidate) => candidate.contains(homeSource)) || null
       : null;
+    syncHomeEmptySlots(home, homeContent);
     let nativeSuggestionGroup = home?.querySelector('.group\\/home-suggestions') || null;
     if (!nativeSuggestionGroup && homeHero) {
       for (const candidate of homeHero.querySelectorAll("div")) {
@@ -1930,6 +2125,8 @@
     for (const candidate of homeUtilityBars) candidate.classList.add("dream-skin-home-utility");
 
     if (!shellMain || !document.body) return;
+    shellMain.classList.toggle("dream-skin-home-shell", Boolean(home));
+    syncLightSurfaceMarkers(shellMain);
     const nativeHeader = shellMain.querySelector?.(`:scope > header.${APP_HEADER_CLASS}`) ||
       shellMain.querySelector?.(":scope > header");
     // The HUD is a real header flex item. Exclude it while rediscovering
@@ -1986,7 +2183,6 @@
       observedShellMain = shellMain;
       layout = true;
     }
-    shellMain.classList.toggle("dream-skin-home-shell", Boolean(home));
     let chrome = document.getElementById(CHROME_ID);
     let created = false;
     if (!chrome || chrome.parentElement !== document.body) {
@@ -2134,6 +2330,15 @@
       node.classList.remove(COMPOSER_SURFACE_CLASS));
     document.querySelectorAll(`.${SETTINGS_LIGHT_SURFACE_CLASS}`).forEach((node) =>
       node.classList.remove(SETTINGS_LIGHT_SURFACE_CLASS));
+    for (const className of [
+      LIGHT_SURFACE_INSET_CLASS,
+      HOME_EMPTY_SLOT_CLASS,
+      COMPOSER_DOCK_CLASS,
+      COMPOSER_RAIL_CLASS,
+      COMPOSER_DECORATION_CLASS,
+    ]) {
+      document.querySelectorAll(`.${className}`).forEach((node) => node.classList.remove(className));
+    }
     for (const className of HOME_LAYOUT_CLASSES) {
       document.querySelectorAll(`.${className}`).forEach((node) => node.classList.remove(className));
     }
@@ -2227,6 +2432,8 @@
     '[data-composer-layout]',
     SETTINGS_PANEL_SELECTOR,
     '[class*="_homeUtilityBar_"]',
+    `.${HOME_EMPTY_SLOT_CLASS}`,
+    `.${LIGHT_SURFACE_INSET_CLASS}`,
     `.${COMPOSER_SURFACE_CLASS}`,
     ".composer-surface-chrome",
     "header.app-header-tint",
@@ -2243,13 +2450,19 @@
     if (node === document.documentElement || node === document.body) return true;
     if (node.nodeType !== 1) return false;
     try {
-      return Boolean(node.matches?.(ROUTE_MUTATION_SELECTOR)
-        || node.querySelector?.(ROUTE_MUTATION_SELECTOR));
+      return Boolean(node.closest?.(`.${HOME_EMPTY_SLOT_CLASS}, .${LIGHT_SURFACE_INSET_CLASS}`)
+        || node.matches?.(ROUTE_MUTATION_SELECTOR)
+        || node.querySelector?.(ROUTE_MUTATION_SELECTOR)
+        || node.matches?.(LIGHT_SURFACE_CANDIDATE_SELECTOR)
+        || node.querySelector?.(LIGHT_SURFACE_CANDIDATE_SELECTOR));
     } catch {
       return false;
     }
   };
   const mutationNeedsRouteSync = (mutations) => mutations.some((mutation) => {
+    if (mutation.type === "characterData") {
+      return Boolean(mutation.target?.parentElement?.closest?.(`.${HOME_EMPTY_SLOT_CLASS}`));
+    }
     if (mutation.type === "attributes") {
       return ROUTE_MUTATION_ATTRIBUTES.has(mutation.attributeName);
     }
@@ -2417,6 +2630,7 @@
 
   observer.observe(document.documentElement, {
     childList: true,
+    characterData: true,
     subtree: true,
     attributes: true,
     attributeFilter: [...ROUTE_MUTATION_ATTRIBUTES],

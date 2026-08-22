@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Codex layout compatibility
+
+- 首页从稳定的 `data-feature="game-source"` 定位真实内容，只折叠它之前经内容守卫确认
+  为空的兼容槽；异步出现文字、控件或媒体后立即撤销隐藏。
+- change-review 只对同一局部祖先内成组、横向对齐且计算 paint 为浅色的全宽行添加
+  `.trskin-light-surface-inset`，保留 Header、Composer、Markdown/Diff、媒体与表单语义。
+- Composer 按主面安全边界、原生宽度和主面高度计算可读宽度，普通宽窗不再受窄 rail
+  限制，超宽窗口居中；空的 pointer-inert footer 装饰通过自有 marker 清理。
+- renderer、CSS 与回归契约同步到 Windows；macOS 实机视觉仍需在 Mac 上验收。
+
 ## 2.7.6 — 手动切换环境时继承音乐状态
 
 - 固定环境热切换会继承用户的播放意图：切换前正在播放，切换后自动播放新环境音乐，
