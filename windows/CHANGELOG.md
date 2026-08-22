@@ -8,7 +8,9 @@
   `.trskin-light-surface-inset`, while excluding Header, Composer, Markdown/Diff, media,
   Settings, and form controls.
 - Expand and center Composer from main-surface safe bounds instead of retaining a narrow
-  native rail, and remove only verified empty pointer-inert footer decorations.
+  native rail, cap it before a visible full-height complementary sidebar, and remove only
+  verified empty pointer-inert footer decorations. Measure dock width separately from the
+  rail translation origin so pinned summaries cannot create right-side overflow.
 - Share the renderer/CSS behavior with macOS and cover home slots, CSS Color 4 paints,
   review rows, Composer width, and cleanup in the cross-platform regression suite.
 
