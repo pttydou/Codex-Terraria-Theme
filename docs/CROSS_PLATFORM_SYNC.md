@@ -43,12 +43,18 @@ Windows also embeds equivalent probe and live-verification logic in
 5. Composer width comes from main-surface safe bounds. Its readable cap is the greater
    of the native dock width and `mainHeight * 1.5`; available width remains the hard cap.
    Dock geometry supplies width, while the actual rail origin supplies translation.
-6. A visible semantic complementary sidebar that intersects the Composer band caps the
-   safe right edge with a 15px gap; a top-only overlay must not reduce bottom width.
-   Right-aligned positioned overlay mutations trigger bounded geometry settling.
-7. Empty positioned pointer-inert footer decorations use renderer-owned markers; real
+6. A visible semantic complementary sidebar caps the safe right edge with a 15px gap
+   only when painted or interactive content actually occupies the Composer band. A
+   transparent full-height output-summary shell and a top-only overlay must not reduce
+   bottom width. Right-aligned overlay mutations trigger geometry settling across the
+   complete transition window.
+7. When the measured rail extends beyond Codex's centered message-width host, the
+   renderer marks only the inner clipping ancestor with
+   `.dream-skin-composer-overflow-host`; the outer thread scroller remains the viewport
+   clip boundary so the painted Composer can reach its measured 15px edge safely.
+8. Empty positioned pointer-inert footer decorations use renderer-owned markers; real
    status/progress content remains visible.
-8. Route mutation, resize, hot replacement, pause, restore, and cleanup must revoke
+9. Route mutation, resize, hot replacement, pause, restore, and cleanup must revoke
    stale markers and inline Composer geometry on both platforms.
 
 ## Music hot-replacement contract

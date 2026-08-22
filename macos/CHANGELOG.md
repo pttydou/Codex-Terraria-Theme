@@ -7,9 +7,10 @@
 - change-review 只对同一局部祖先内成组、横向对齐且计算 paint 为浅色的全宽行添加
   `.trskin-light-surface-inset`，保留 Header、Composer、Markdown/Diff、媒体与表单语义。
 - Composer 按主面安全边界、原生宽度和主面高度计算可读宽度，普通宽窗不再受窄 rail
-  限制，超宽窗口居中；展开的全高右侧栏会成为安全右边界，顶部浮层不会误留底部空白；
-  dock 宽度与 rail 平移起点分别测量，置顶摘要不会再造成右侧溢出；空的 pointer-inert
-  footer 装饰通过自有 marker 清理。
+  限制，超宽窗口居中；只有在 Composer 高度实际存在背景或交互内容的右侧栏才成为安全
+  右边界，透明的全高置顶摘要外壳和顶部浮层不会误留右下空白；dock 宽度与 rail 平移
+  起点分别测量，动态收敛覆盖完整摘要动画，并通过自有 overflow-host marker 解除内层
+  消息宽度容器对已扩展输入框的裁剪；空的 pointer-inert footer 装饰通过自有 marker 清理。
 - renderer、CSS 与回归契约同步到 Windows；macOS 实机视觉仍需在 Mac 上验收。
 
 ## 2.7.6 — 手动切换环境时继承音乐状态

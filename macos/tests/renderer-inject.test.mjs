@@ -97,7 +97,7 @@ for (const { label, renderer, stylesheet, injectors } of [
   );
   assert.match(
     renderer,
-    /const dockBox = dock[\s\S]{0,400}const railBox = rail[\s\S]{0,1200}blockerBox\.bottom <= widthBox\.top[\s\S]{0,1800}composerGeometryAttempts = 16/,
+    /composerBandIsBlocked[\s\S]{0,2400}document\.elementsFromPoint[\s\S]{0,6000}!composerBandIsBlocked\(candidate, blockerBox, widthBox\)[\s\S]{0,1800}composerGeometryAttempts = 48/,
     `${label} must cap and repeatedly settle Composer against complementary sidebars.`,
   );
   assert.match(
@@ -644,6 +644,11 @@ assert.match(
   /transform:\s*translateX\(var\(--dream-skin-composer-shift-x, 0px\)\) !important;/,
   "The expanded task composer should accept a measured horizontal correction at responsive widths.",
 );
+assert.match(
+  css,
+  /\.dream-skin-composer-overflow-host\s*\{[\s\S]{0,120}overflow-x:\s*visible !important;/,
+  "The shifted Composer must not be clipped by Codex's centered message-width host.",
+);
 assert.doesNotMatch(
   template,
   /dream-skin-particles[^\n]*<i>/,
@@ -995,8 +1000,11 @@ function createFixture(theme, {
     },
   };
   const rightSidebarElement = rightSidebar ? {
+    _backgroundColor: rightSidebar.backgroundColor ?? "rgb(24, 24, 27)",
+    _pointerEvents: rightSidebar.pointerEvents ?? "auto",
     classList: createClassList(),
     contains() { return false; },
+    matches() { return false; },
     getBoundingClientRect() {
       const width = rightSidebar.width ?? 250;
       const left = rightSidebar.left ?? shellBox.left + shellBox.width - width;
@@ -1202,6 +1210,7 @@ function createFixture(theme, {
   } : null;
   const composerRailBox = composerRail ? { ...composerRail } : null;
   const composerRailElement = composerRail ? {
+    parentElement: null,
     getBoundingClientRect() {
       return {
         ...composerRailBox,
@@ -1210,6 +1219,23 @@ function createFixture(theme, {
       };
     },
   } : null;
+  const composerOverflowHost = composerRail ? {
+    _overflowX: "clip",
+    classList: createClassList(),
+    parentElement: shellMain,
+    matches() { return false; },
+    getBoundingClientRect() {
+      return {
+        left: composerRailBox.left,
+        top: composerRailBox.top,
+        right: composerRailBox.left + composerRailBox.width,
+        bottom: (composerRailBox.top ?? 0) + (composerRailBox.height ?? 100),
+        width: composerRailBox.width,
+        height: composerRailBox.height ?? 100,
+      };
+    },
+  } : null;
+  if (composerRailElement) composerRailElement.parentElement = composerOverflowHost;
   const composerDock = composerRail ? {
     style: createStyleDeclaration(),
     parentElement: composerRailElement,
@@ -1280,6 +1306,12 @@ function createFixture(theme, {
     head: root,
     body,
     visibilityState,
+    elementsFromPoint(x, y) {
+      if (!rightSidebarElement) return [];
+      const box = rightSidebarElement.getBoundingClientRect();
+      return x >= box.left && x < box.right && y >= box.top && y < box.bottom
+        ? [rightSidebarElement] : [];
+    },
     addEventListener(name, handler) { documentListeners.set(name, handler); },
     removeEventListener(name, handler) {
       if (documentListeners.get(name) === handler) documentListeners.delete(name);
@@ -1350,6 +1382,10 @@ function createFixture(theme, {
       if (selector === ".dream-skin-composer-surface") {
         return [composerLayout, legacyComposer, staleComposer]
           .filter((candidate) => candidate?.classList.contains("dream-skin-composer-surface"));
+      }
+      if (selector === ".dream-skin-composer-overflow-host") {
+        return composerOverflowHost?.classList.contains("dream-skin-composer-overflow-host")
+          ? [composerOverflowHost] : [];
       }
       return [];
     },
@@ -1443,6 +1479,7 @@ function createFixture(theme, {
         visibility: "visible",
         position: node?._position || "static",
         pointerEvents: node?._pointerEvents || "auto",
+        overflowX: node?._overflowX || "visible",
         flexDirection: node === threadScroller
           ? (conversation?.flexDirection || "column-reverse") : "row",
       };
@@ -1494,6 +1531,7 @@ function createFixture(theme, {
     shellMain,
     shellBox,
     composerDock,
+    composerOverflowHost,
     composerLayout,
     composerWrapper,
     legacyComposer,
@@ -1844,6 +1882,11 @@ assert.equal(
   "95px",
   "A mid-width composer that would enter the sidebar must shift into the main-surface safe area.",
 );
+assert.equal(
+  responsiveTask.composerOverflowHost.classList.contains("dream-skin-composer-overflow-host"),
+  true,
+  "The renderer must mark a clipping ancestor so the shifted Composer remains fully painted.",
+);
 const narrowNativeComposer = createFixture({
   id: "narrow-native-composer-contract",
   appearance: "dark",
@@ -1907,6 +1950,42 @@ assert.equal(
 );
 assert.equal(
   sidebarBoundComposer.composerDock.style.values.get("--dream-skin-composer-shift-x"),
+  "-355px",
+);
+const transparentSidebarComposer = createFixture({
+  id: "transparent-sidebar-composer-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+  variant: "dungeon",
+}, {
+  conversation: {
+    scrollTop: 0,
+    scrollHeight: 900,
+    clientHeight: 900,
+    flexDirection: "column-reverse",
+  },
+  composerRail: {
+    left: 650,
+    top: 680,
+    width: 520,
+    height: 120,
+  },
+  rightSidebar: {
+    left: 1030,
+    top: 36,
+    width: 250,
+    height: 764,
+    backgroundColor: "rgba(0, 0, 0, 0)",
+  },
+});
+vm.runInNewContext(transparentSidebarComposer.payload, transparentSidebarComposer.context);
+assert.equal(
+  transparentSidebarComposer.composerDock.style.values.get("--dream-skin-composer-safe-width"),
+  "970px",
+  "A full-height but transparent output-summary layer must not leave a bottom-right gutter.",
+);
+assert.equal(
+  transparentSidebarComposer.composerDock.style.values.get("--dream-skin-composer-shift-x"),
   "-355px",
 );
 const topOverlayComposer = createFixture({
