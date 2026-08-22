@@ -2022,7 +2022,8 @@
       if (candidate.matches?.(".thread-scroll-container")) break;
       let style = null;
       try { style = getComputedStyle(candidate); } catch {}
-      if (["hidden", "clip"].includes(style?.overflowX)) overflowHosts.add(candidate);
+      if (candidate.classList?.contains?.(COMPOSER_OVERFLOW_HOST_CLASS)
+        || ["hidden", "clip"].includes(style?.overflowX)) overflowHosts.add(candidate);
     }
     for (const candidate of document.querySelectorAll?.(`.${COMPOSER_OVERFLOW_HOST_CLASS}`) || []) {
       if (!overflowHosts.has(candidate)) candidate.classList?.remove?.(COMPOSER_OVERFLOW_HOST_CLASS);

@@ -97,8 +97,13 @@ for (const { label, renderer, stylesheet, injectors } of [
   );
   assert.match(
     renderer,
-    /composerBandIsBlocked[\s\S]{0,2400}document\.elementsFromPoint[\s\S]{0,6000}!composerBandIsBlocked\(candidate, blockerBox, widthBox\)[\s\S]{0,1800}composerGeometryAttempts = 48/,
+    /composerBandIsBlocked[\s\S]{0,2400}document\.elementsFromPoint/,
     `${label} must cap and repeatedly settle Composer against complementary sidebars.`,
+  );
+  assert.match(
+    renderer,
+    /!composerBandIsBlocked\(candidate, blockerBox, widthBox\)[\s\S]{0,1800}composerGeometryAttempts = 48/,
+    `${label} must ignore transparent summary shells and settle the complete transition.`,
   );
   assert.match(
     renderer,
@@ -1479,7 +1484,9 @@ function createFixture(theme, {
         visibility: "visible",
         position: node?._position || "static",
         pointerEvents: node?._pointerEvents || "auto",
-        overflowX: node?._overflowX || "visible",
+        overflowX: node?._overflowX
+          && !node.classList?.contains?.("dream-skin-composer-overflow-host")
+          ? node._overflowX : "visible",
         flexDirection: node === threadScroller
           ? (conversation?.flexDirection || "column-reverse") : "row",
       };
@@ -1886,6 +1893,12 @@ assert.equal(
   responsiveTask.composerOverflowHost.classList.contains("dream-skin-composer-overflow-host"),
   true,
   "The renderer must mark a clipping ancestor so the shifted Composer remains fully painted.",
+);
+responsiveState.ensure({ route: true, layout: true });
+assert.equal(
+  responsiveTask.composerOverflowHost.classList.contains("dream-skin-composer-overflow-host"),
+  true,
+  "A second geometry pass must retain its owned overflow marker after CSS makes overflow visible.",
 );
 const narrowNativeComposer = createFixture({
   id: "narrow-native-composer-contract",
