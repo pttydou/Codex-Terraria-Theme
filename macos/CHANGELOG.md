@@ -1,10 +1,15 @@
 # Changelog
 
-## Unreleased — Codex layout compatibility
+## 2.7.7 — Codex 前端稳定性与安全回退
 
 - 新增不依赖 Codex 版本号的前端能力契约：小范围 DOM 调整只要仍可通过语义或编辑器
   回退接管，就标记为 `adaptive` 并继续运行；只有主内容区或可见 Composer 的关键能力
   丢失才标记为 `incompatible` 并要求适配，live verify 会直接输出该结论。
+- 新增持久化前端安全熔断：首次关键能力异常先等待 1200ms 复检，避免路由过渡导致
+  皮肤反复闪烁；异常持续存在时自动禁用 TRSkin 样式和自定义悬浮层，退回可操作的
+  官方 Codex 界面。安全状态跨重载保留，适配器恢复兼容后自动解除。
+- live verify 只有在安全状态为 `normal` 且样式实际启用时才通过，不会把确认期或安全
+  模式误报为安装成功；可选 Header、Sidebar 等能力缺失仍只做局部自适应。
 - 首页从稳定的 `data-feature="game-source"` 定位真实内容，只折叠它之前经内容守卫确认
   为空的兼容槽；异步出现文字、控件或媒体后立即撤销隐藏。
 - change-review 只对同一局部祖先内成组、横向对齐且计算 paint 为浅色的全宽行添加
@@ -15,7 +20,8 @@
   起点分别测量，动态收敛覆盖完整摘要动画，并通过自有 overflow-host marker 解除内层
   消息宽度容器对已扩展输入框的裁剪，后续几何轮次保持该 marker 而不来回闪烁；空的
   pointer-inert footer 装饰通过自有 marker 清理。
-- renderer、CSS 与回归契约同步到 Windows；macOS 实机视觉仍需在 Mac 上验收。
+- renderer、CSS、安全熔断与回归契约同步到 Windows；macOS 原生构建由 Release CI
+  重新编译并打包。
 
 ## 2.7.6 — 手动切换环境时继承音乐状态
 

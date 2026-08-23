@@ -1,11 +1,18 @@
 # Changelog
 
-## Unreleased — Codex layout compatibility
+## 2.7.7 — Codex frontend stability and safe fallback
 
 - Add a version-independent frontend capability contract. Minor Codex DOM changes that
   still satisfy semantic/editor fallbacks report `adaptive` and keep running; only hard
   main-surface or visible-Composer capability loss reports `incompatible` and requests an
   adapter update. Live verification now exposes that decision directly.
+- Add a persistent frontend circuit breaker. A first critical failure waits 1200ms for a
+  confirming scan so route transitions cannot flash the theme; a persistent failure
+  disables TRSkin CSS and custom chrome, leaving the official Codex interface operable.
+  Safe mode survives reloads and clears automatically after compatibility returns.
+- Require live verification to observe safety mode `normal` and an enabled stylesheet;
+  confirming and safe states cannot be reported as successful installs, while optional
+  capability loss continues to degrade locally.
 - Locate real home content from stable `data-feature="game-source"` semantics and collapse
   only guarded empty slots before it; asynchronously populated banners become visible again.
 - Mark only repeated, aligned, computed-light full-width change-review rows with

@@ -2,7 +2,7 @@
 
 ## Current release line
 
-- Planned version: `2.7.6`
+- Current release candidate: `2.7.7`
 - Supported desktop platforms: Windows and macOS
 - Linux does not currently have an installation package.
 
@@ -50,7 +50,7 @@ The renderer must capture the old music controller's playback intent before clea
 active or queued playback resumes with the selected environment, while an explicit user
 pause remains paused. Official restore still stops playback and removes the controller.
 
-An unreleased cross-platform layout compatibility change is present after `v2.7.6`:
+The `v2.7.7` cross-platform layout compatibility release:
 the renderer collapses only verified empty home slots before the stable game-source
 content, themes repeated computed-light change-review rows through an owned inset
 marker, and expands/centers Composer from main-surface safe bounds instead of retaining
@@ -60,6 +60,9 @@ shells and top-only overlays do not create a bottom-right gutter. Dock width and
 translation origin are measured separately, geometry settling spans the full summary
 transition, and a renderer-owned overflow-host marker prevents Codex's narrower message
 column from clipping the visibly expanded input.
+Persistent hard capability loss is confirmed after 1200ms before the renderer disables
+TRSkin CSS and custom chrome. This safe mode survives reloads, preserves the official
+Codex interface, and clears automatically when a compatible adapter is present again.
 macOS and Windows source tests cover these contracts. Windows
 native source tests pass. Windows managed-runtime verification confirms the pinned output
 summary and painted Composer remain 15px from the main-surface right edge; macOS real-app
