@@ -114,6 +114,24 @@ Windows also embeds equivalent probe and live-verification logic in
 7. Regression coverage must assert insertion, MutationObserver microtask, first RAF, stable
    route state, cleanup, and the identical Windows/macOS contract.
 
+## Native Home notice ownership
+
+1. Confirm the Home route from `[data-feature="game-source"]`; product copy, locale,
+   generated CSS Module names, child order, and fixed viewport coordinates are not
+   discovery contracts.
+2. A candidate notification must contain visible text and a real button, link, input,
+   alert, or status semantic; it must also be wide and shallow relative to the measured
+   Home surface and have computed light solid, gradient, or pseudo-element paint.
+3. Hero, suggestion, Home utility, Composer, game-source, and any ancestor containing
+   those core nodes remain native. Generic task ownership continues to exclude Home.
+4. One logical notification receives one `.trskin-home-banner-surface` outer owner.
+   Verified pseudo paint, controls, foreground, and repeated inset rows reuse the layered
+   ownership markers, while nested rows cannot draw a second frame or shadow.
+5. Relevant insertion batches claim Home ownership in the MutationObserver microtask;
+   the first animation frame and stable route scan must converge to the same result.
+6. Cleanup and route changes revoke every Home and nested marker. Windows and macOS keep
+   identical renderer/CSS behavior and share the same runtime regression fixture.
+
 ## Music hot-replacement contract
 
 1. Capture the previous controller's playback intent before hot-replacement cleanup.
