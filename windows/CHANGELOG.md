@@ -1,6 +1,12 @@
 # Changelog
 
-## Unreleased — Home notice ownership and Store-update recovery
+## 2.7.8 — async surface ownership and Store-update recovery
+
+- Give task surfaces, floating panels, pseudo paint, nested controls, foreground, and
+  change-review rows separate renderer-owned markers. Composite translucent paint against
+  its nearest opaque environment and remeasure only after revoking previous ownership.
+- Claim relevant asynchronous light surfaces in the MutationObserver microtask so the
+  first RAF and stable route scan cannot reintroduce a white flash.
 
 - Add a dedicated semantic adapter for native notices above Home content and promotion
   surfaces between Hero and Composer. Ownership requires visible text, real action/status
