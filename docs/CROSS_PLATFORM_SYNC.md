@@ -94,6 +94,26 @@ Windows also embeds equivalent probe and live-verification logic in
 9. Route mutation, resize, hot replacement, pause, restore, and cleanup must revoke
    stale markers and inline Composer geometry on both platforms.
 
+## Layered light-surface ownership
+
+1. A non-Home, non-Settings task route may remap only the small set of unstable native
+   surface tokens needed to prevent an unstyled first frame.
+2. Task containers, floating semantic panels, pseudo-element paint, controls, foreground,
+   and repeated inset rows have separate renderer-owned markers. CSS must not infer these
+   layers from generated Codex class names.
+3. Solid and gradient colors use apparent luminance after alpha composition against the
+   nearest opaque environment paint; raw white RGB with low alpha is not itself sufficient.
+4. Every scan removes prior ownership before reading computed styles, then applies the
+   complete marker set after measurement so themed output cannot become its own input.
+5. Markdown/Diff, message, Header, Composer, Home, Settings, code, media, and form regions
+   remain outside generic ownership. Controls and foreground are considered only inside an
+   already verified owned surface.
+6. A relevant MutationObserver delivery performs the bounded ownership pass immediately in
+   that microtask checkpoint. Route and layout work still coalesces into the next RAF with a
+   timeout fallback.
+7. Regression coverage must assert insertion, MutationObserver microtask, first RAF, stable
+   route state, cleanup, and the identical Windows/macOS contract.
+
 ## Music hot-replacement contract
 
 1. Capture the previous controller's playback intent before hot-replacement cleanup.
