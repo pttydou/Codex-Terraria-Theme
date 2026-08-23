@@ -2,7 +2,7 @@
 
 ## Current release line
 
-- Current release candidate: `2.7.7`
+- Current release candidate: `2.7.8`
 - Supported desktop platforms: Windows and macOS
 - Linux does not currently have an installation package.
 
@@ -70,8 +70,9 @@ column from clipping the visibly expanded input.
 Persistent hard capability loss is confirmed after 1200ms before the renderer disables
 TRSkin CSS and custom chrome. This safe mode survives reloads, preserves the official
 Codex interface, and clears automatically when a compatible adapter is present again.
-Post-2.7.7 development extends that adapter with layered light-surface ownership. A task
-route receives a small semantic-token guard, while computed task cards, floating panels,
+The `v2.7.8` surface-ownership release extends that adapter with layered light-surface
+ownership. A task route receives a small semantic-token guard, while computed task cards,
+floating panels,
 pseudo paint, nested controls, foreground, and repeated review rows are themed only after
 bounded renderer verification. Translucent paint is composited against its measured base,
 all ownership is revoked before remeasurement, and relevant MutationObserver batches claim
