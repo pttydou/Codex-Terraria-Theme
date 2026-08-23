@@ -63,6 +63,12 @@ column from clipping the visibly expanded input.
 Persistent hard capability loss is confirmed after 1200ms before the renderer disables
 TRSkin CSS and custom chrome. This safe mode survives reloads, preserves the official
 Codex interface, and clears automatically when a compatible adapter is present again.
+Post-2.7.7 development extends that adapter with layered light-surface ownership. A task
+route receives a small semantic-token guard, while computed task cards, floating panels,
+pseudo paint, nested controls, foreground, and repeated review rows are themed only after
+bounded renderer verification. Translucent paint is composited against its measured base,
+all ownership is revoked before remeasurement, and relevant MutationObserver batches claim
+new light paint in the same microtask checkpoint before the coalesced first animation frame.
 macOS and Windows source tests cover these contracts. Windows
 native source tests pass. Windows managed-runtime verification confirms the pinned output
 summary and painted Composer remain 15px from the main-surface right edge; macOS real-app

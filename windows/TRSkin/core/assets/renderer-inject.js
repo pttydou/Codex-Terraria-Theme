@@ -37,10 +37,32 @@
   const COMPOSER_EDITOR_SELECTOR = 'textarea, [contenteditable="true"]';
   const SETTINGS_ACTIVE_CLASS = "trskin-settings-active";
   const SETTINGS_LIGHT_SURFACE_CLASS = "trskin-settings-light-surface";
+  const TASK_ROUTE_CLASS = "trskin-task-route";
+  const TASK_LIGHT_SURFACE_CLASS = "trskin-task-light-surface";
+  const FLOATING_LIGHT_SURFACE_CLASS = "trskin-floating-light-surface";
+  const LIGHT_SURFACE_PSEUDO_CLASS = "trskin-light-surface-pseudo";
+  const LIGHT_SURFACE_CONTROL_CLASS = "trskin-light-surface-control";
+  const LIGHT_SURFACE_FOREGROUND_CLASS = "trskin-light-surface-foreground";
   const LIGHT_SURFACE_INSET_CLASS = "trskin-light-surface-inset";
   const HOME_EMPTY_SLOT_CLASS = "dream-skin-home-empty-slot";
   const LIGHT_SURFACE_CANDIDATE_SELECTOR =
     'button, [role="button"], [role="row"], [role="listitem"], li, tr';
+  const TASK_LIGHT_SURFACE_SELECTOR =
+    'section, article, [role="region"], [role="group"], [role="list"], [role="grid"], [role="tree"], [role="table"]';
+  const FLOATING_LIGHT_SURFACE_SELECTOR =
+    'dialog, [role="dialog"], [role="menu"], [role="listbox"], [role="tree"]';
+  const LIGHT_SURFACE_CONTROL_SELECTOR =
+    'button, [role="button"], [role="option"], [role="menuitem"], [role="tab"]';
+  const LIGHT_SURFACE_FOREGROUND_SELECTOR =
+    'span, p, strong, small, label, [role="heading"], svg';
+  const LIGHT_SURFACE_MARKER_CLASSES = [
+    TASK_LIGHT_SURFACE_CLASS,
+    FLOATING_LIGHT_SURFACE_CLASS,
+    LIGHT_SURFACE_PSEUDO_CLASS,
+    LIGHT_SURFACE_CONTROL_CLASS,
+    LIGHT_SURFACE_FOREGROUND_CLASS,
+    LIGHT_SURFACE_INSET_CLASS,
+  ];
   const SETTINGS_PANEL_SELECTOR = "[data-settings-panel-slug]";
   const SETTINGS_SURFACE_SELECTOR = "div, section, article, form, fieldset";
   const IDLE_THREAD_MESSAGES_CLASS = "dream-skin-idle-thread-messages";
@@ -137,20 +159,40 @@
       return null;
     }
   };
-  const computedPaintIsLight = (candidate) => {
+  const apparentLuminance = (color, baseLuminance) => color
+    ? color.luminance * color.alpha + baseLuminance * (1 - color.alpha)
+    : baseLuminance;
+  const surfaceBaseLuminance = (candidate) => {
+    let parent = candidate?.parentElement || null;
+    for (let depth = 0; parent && depth < 5; depth += 1, parent = parent.parentElement) {
+      const color = computedSurfaceColor(parent);
+      if (color && color.alpha >= 0.88) return color.luminance;
+    }
+    return document.documentElement?.getAttribute?.(SHELL_ATTR) === "light" ? 0.92 : 0.08;
+  };
+  const computedPaintAudit = (candidate, baseLuminance = surfaceBaseLuminance(candidate)) => {
+    let ownLight = false;
+    let pseudoLight = false;
     for (const pseudo of [null, "::before", "::after"]) {
       let style = null;
       try { style = getComputedStyle(candidate, pseudo); } catch {}
       if (!style) continue;
       const solid = parseComputedColor(style.backgroundColor);
-      if (solid && solid.alpha >= 0.72 && solid.luminance >= 0.72) return true;
+      const solidLight = Boolean(solid && solid.alpha >= 0.22
+        && apparentLuminance(solid, baseLuminance) >= 0.72);
       const colors = String(style.backgroundImage || "")
         .match(/(?:rgba?|color|oklab|oklch|lab|lch)\([^)]*\)/gi) || [];
-      const painted = colors.map(parseComputedColor).filter((color) => color && color.alpha >= 0.45);
-      if (painted.length && painted.every((color) => color.luminance >= 0.72)) return true;
+      const painted = colors.map(parseComputedColor).filter((color) => color && color.alpha >= 0.22);
+      const gradientLight = Boolean(painted.length && painted.every((color) =>
+        apparentLuminance(color, baseLuminance) >= 0.72));
+      if (solidLight || gradientLight) {
+        if (pseudo) pseudoLight = true;
+        else ownLight = true;
+      }
     }
-    return false;
+    return { light: ownLight || pseudoLight, ownLight, pseudoLight };
   };
+  const computedPaintIsLight = (candidate) => computedPaintAudit(candidate).light;
   const isSettingsLightSurface = (candidate) => {
     if (!candidate?.matches?.(SETTINGS_SURFACE_SELECTOR) || !elementIsVisible(candidate)) return false;
     const box = candidate.getBoundingClientRect?.();
@@ -183,7 +225,8 @@
   const lightSurfaceIsProtected = (candidate) => Boolean(candidate?.closest?.([
     "header", `.${COMPOSER_SURFACE_CLASS}`, `.${COMPOSER_DOCK_CLASS}`,
     ".dream-skin-home", SETTINGS_PANEL_SELECTOR,
-    '[class*="_markdown"]', '[data-message-author-role]', "article",
+    '[class*="_markdown"]', '[class*="_diff"]', '[class*="diff-"]',
+    '[data-message-author-role]', '[data-diff]', '[role="code"]',
     "pre", "code", "svg", "img", "picture", "video", "canvas",
     "form", "fieldset", "input", "textarea", "select",
   ].join(",")));
@@ -227,13 +270,80 @@
     }
     return marked;
   };
-  const syncLightSurfaceMarkers = (scope) => {
-    const previousMarkers = [...(document.querySelectorAll?.(`.${LIGHT_SURFACE_INSET_CLASS}`) || [])];
-    for (const candidate of previousMarkers) candidate.classList?.remove?.(LIGHT_SURFACE_INSET_CLASS);
-    if (!scope || scope.classList?.contains?.("dream-skin-home-shell")) return new Set();
-    const marked = alignedRepeatedLightRows(scope);
-    for (const candidate of marked) candidate.classList?.add?.(LIGHT_SURFACE_INSET_CLASS);
-    return marked;
+  const clearLightSurfaceMarkers = () => {
+    for (const className of LIGHT_SURFACE_MARKER_CLASSES) {
+      for (const candidate of document.querySelectorAll?.(`.${className}`) || []) {
+        candidate.classList?.remove?.(className);
+      }
+    }
+  };
+  const surfaceCandidateIsEligible = (candidate, { floating = false } = {}) => {
+    if (!elementIsVisible(candidate) || lightSurfaceIsProtected(candidate)) return false;
+    const box = candidate.getBoundingClientRect?.();
+    if (!box) return false;
+    if (floating) return box.width >= 120 && box.height >= 40 && box.width * box.height >= 4800;
+    return box.width >= 280 && box.height >= 64 && box.width * box.height >= 24000;
+  };
+  const syncLayeredSurfaceMarkers = (scope) => {
+    clearLightSurfaceMarkers();
+    const ownership = {
+      task: new Set(), floating: new Set(), inset: new Set(),
+      pseudo: new Set(), controls: new Set(), foreground: new Set(),
+    };
+    if (!scope || scope.classList?.contains?.("dream-skin-home-shell")
+      || document.documentElement?.classList?.contains?.(SETTINGS_ACTIVE_CLASS)) return ownership;
+
+    for (const candidate of [...(scope.querySelectorAll?.(TASK_LIGHT_SURFACE_SELECTOR) || [])]
+      .slice(0, 240)) {
+      if (!surfaceCandidateIsEligible(candidate)) continue;
+      const paint = computedPaintAudit(candidate);
+      if (!paint.light) continue;
+      ownership.task.add(candidate);
+      if (paint.pseudoLight) ownership.pseudo.add(candidate);
+    }
+    for (const candidate of [...(document.querySelectorAll?.(FLOATING_LIGHT_SURFACE_SELECTOR) || [])]
+      .slice(0, 80)) {
+      if (scope.contains?.(candidate) || !surfaceCandidateIsEligible(candidate, { floating: true })) {
+        continue;
+      }
+      const paint = computedPaintAudit(candidate);
+      if (!paint.light) continue;
+      ownership.floating.add(candidate);
+      if (paint.pseudoLight) ownership.pseudo.add(candidate);
+    }
+    ownership.inset = alignedRepeatedLightRows(scope);
+    for (const candidate of ownership.inset) {
+      if (computedPaintAudit(candidate).pseudoLight) ownership.pseudo.add(candidate);
+    }
+
+    const ownedSurfaces = [...ownership.task, ...ownership.floating, ...ownership.inset];
+    for (const surface of ownedSurfaces) {
+      for (const control of [...(surface.querySelectorAll?.(LIGHT_SURFACE_CONTROL_SELECTOR) || [])]
+        .slice(0, 80)) {
+        if (!elementIsVisible(control) || lightSurfaceIsProtected(control)) continue;
+        const box = control.getBoundingClientRect?.();
+        if (!box || box.height > 80 || box.width * box.height > 36000) continue;
+        if (computedPaintAudit(control, 0.12).light) ownership.controls.add(control);
+      }
+      for (const foreground of [...(surface.querySelectorAll?.(LIGHT_SURFACE_FOREGROUND_SELECTOR) || [])]
+        .slice(0, 160)) {
+        if (!elementIsVisible(foreground) || lightSurfaceIsProtected(foreground)) continue;
+        let color = null;
+        try { color = parseComputedColor(getComputedStyle(foreground).color); } catch {}
+        if (color && color.alpha >= 0.5 && color.luminance <= 0.45) {
+          ownership.foreground.add(foreground);
+        }
+      }
+    }
+    for (const candidate of ownership.task) candidate.classList?.add?.(TASK_LIGHT_SURFACE_CLASS);
+    for (const candidate of ownership.floating) candidate.classList?.add?.(FLOATING_LIGHT_SURFACE_CLASS);
+    for (const candidate of ownership.inset) candidate.classList?.add?.(LIGHT_SURFACE_INSET_CLASS);
+    for (const candidate of ownership.pseudo) candidate.classList?.add?.(LIGHT_SURFACE_PSEUDO_CLASS);
+    for (const candidate of ownership.controls) candidate.classList?.add?.(LIGHT_SURFACE_CONTROL_CLASS);
+    for (const candidate of ownership.foreground) {
+      candidate.classList?.add?.(LIGHT_SURFACE_FOREGROUND_CLASS);
+    }
+    return ownership;
   };
   const homeSlotHasContent = (candidate) => {
     if (!candidate) return false;
@@ -2412,7 +2522,9 @@
 
     if (frontendContract.safety?.active || !shellMain || !document.body) return;
     shellMain.classList.toggle("dream-skin-home-shell", Boolean(home));
-    syncLightSurfaceMarkers(shellMain);
+    shellMain.classList.toggle(TASK_ROUTE_CLASS, !home
+      && !root.classList?.contains?.(SETTINGS_ACTIVE_CLASS));
+    syncLayeredSurfaceMarkers(shellMain);
     const nativeHeader = shellMain.querySelector?.(`:scope > header.${APP_HEADER_CLASS}`) ||
       shellMain.querySelector?.(":scope > header");
     // The HUD is a real header flex item. Exclude it while rediscovering
@@ -2620,7 +2732,8 @@
     document.querySelectorAll(`.${SETTINGS_LIGHT_SURFACE_CLASS}`).forEach((node) =>
       node.classList.remove(SETTINGS_LIGHT_SURFACE_CLASS));
     for (const className of [
-      LIGHT_SURFACE_INSET_CLASS,
+      TASK_ROUTE_CLASS,
+      ...LIGHT_SURFACE_MARKER_CLASSES,
       HOME_EMPTY_SLOT_CLASS,
       COMPOSER_DOCK_CLASS,
       COMPOSER_RAIL_CLASS,
@@ -2752,6 +2865,17 @@
       return false;
     }
   };
+  const insertedNodeTouchesLightSurface = (node) => {
+    if (node?.nodeType !== 1) return false;
+    try {
+      return Boolean(node.matches?.(TASK_LIGHT_SURFACE_SELECTOR)
+        || node.querySelector?.(TASK_LIGHT_SURFACE_SELECTOR)
+        || node.matches?.(FLOATING_LIGHT_SURFACE_SELECTOR)
+        || node.querySelector?.(FLOATING_LIGHT_SURFACE_SELECTOR));
+    } catch {
+      return false;
+    }
+  };
   const mutationNeedsRouteSync = (mutations) => mutations.some((mutation) => {
     if (mutation.type === "characterData") {
       return Boolean(mutation.target?.parentElement?.closest?.(`.${HOME_EMPTY_SLOT_CLASS}`));
@@ -2762,7 +2886,7 @@
     if (mutation.type !== "childList") return false;
     if (nodeTouchesRouteSurface(mutation.target)) return true;
     return [...(mutation.addedNodes || []), ...(mutation.removedNodes || [])]
-      .some(nodeTouchesRouteSurface);
+      .some((node) => nodeTouchesRouteSurface(node) || insertedNodeTouchesLightSurface(node));
   });
   const mutationTouchesComposerBoundary = (mutations) => mutations.some((mutation) => {
     const candidates = mutation.type === "childList"
@@ -2793,12 +2917,30 @@
       }
     });
   });
+  const syncImmediateSurfaceOwnership = () => {
+    if (window[DISABLED_KEY] || window[STATE_KEY]?.frontendSafety?.active) return false;
+    const root = document.documentElement;
+    const shellMain = document.querySelector?.(`main.${MAIN_SURFACE_CLASS}`)
+      || findCodexMainSurface();
+    if (!root || !shellMain) return false;
+    syncSettingsContrastMarkers(root);
+    const taskRoute = !shellMain.classList?.contains?.("dream-skin-home-shell")
+      && !root.classList?.contains?.(SETTINGS_ACTIVE_CLASS);
+    shellMain.classList?.toggle?.(TASK_ROUTE_CLASS, taskRoute);
+    if (taskRoute) syncLayeredSurfaceMarkers(shellMain);
+    else clearLightSurfaceMarkers();
+    return taskRoute;
+  };
   const observer = new MutationObserver((mutations) => {
     metrics.mutationBatches += 1;
     if (!mutationNeedsRouteSync(mutations)) {
       metrics.mutationBatchesIgnored += 1;
       return;
     }
+    // MutationObserver callbacks run in the same microtask checkpoint as the
+    // insertion. Claim verified light paint now so it cannot flash before the
+    // coalesced route/layout pass on the next animation frame.
+    syncImmediateSurfaceOwnership();
     scheduleEnsure({ route: true, layout: mutationTouchesComposerBoundary(mutations) });
   });
   const nativeAppearanceSnapshot = () => {
@@ -2914,6 +3056,8 @@
     conversationScrollState,
     syncConversationScrollState,
     syncComposerGeometry,
+    syncLayeredSurfaceMarkers,
+    syncImmediateSurfaceOwnership,
     evaluateFrontendContract,
     applyFrontendContract,
     frontendContract: null,

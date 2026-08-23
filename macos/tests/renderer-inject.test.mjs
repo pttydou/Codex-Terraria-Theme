@@ -90,6 +90,20 @@ for (const { label, renderer, stylesheet, injectors } of [
     true,
     `${label} must theme verified repeated light change-review rows through an owned marker.`,
   );
+  assert.equal(
+    [
+      "trskin-task-light-surface",
+      "trskin-floating-light-surface",
+      "trskin-light-surface-pseudo",
+      "trskin-light-surface-control",
+      "trskin-light-surface-foreground",
+    ].every((className) => renderer.includes(className) && stylesheet.includes(className))
+      && renderer.includes("computedPaintAudit")
+      && renderer.includes("apparentLuminance")
+      && renderer.includes("syncImmediateSurfaceOwnership();"),
+    true,
+    `${label} must share layered, alpha-composited surface ownership before the first RAF.`,
+  );
   assert.match(
     renderer,
     /availableWidth[\s\S]{0,240}readableCap = Math\.max\(nativeDockWidth, shellBox\.height \* 1\.5\)[\s\S]{0,180}composerLeft = safeLeft \+ \(availableWidth - composerWidth\) \/ 2/,
@@ -126,7 +140,7 @@ for (const { label, renderer, stylesheet, injectors } of [
   );
   assert.match(
     renderer,
-    /cleanup[\s\S]{0,4200}LIGHT_SURFACE_INSET_CLASS[\s\S]{0,160}HOME_EMPTY_SLOT_CLASS[\s\S]{0,220}COMPOSER_DECORATION_CLASS/,
+    /cleanup[\s\S]{0,4200}LIGHT_SURFACE_MARKER_CLASSES[\s\S]{0,160}HOME_EMPTY_SLOT_CLASS[\s\S]{0,220}COMPOSER_DECORATION_CLASS/,
     `${label} cleanup must remove all new renderer-owned layout and contrast markers.`,
   );
   assert.match(
@@ -744,8 +758,8 @@ assert.match(
 );
 assert.match(
   template,
-  /mutationNeedsRouteSync[\s\S]{0,2600}mutationBatchesIgnored[\s\S]{0,180}scheduleEnsure\(\{ route: true, layout: mutationTouchesComposerBoundary\(mutations\) \}\)/,
-  "Streaming-only DOM mutations should be filtered before route synchronization.",
+  /const observer = new MutationObserver[\s\S]{0,300}mutationBatchesIgnored[\s\S]{0,260}syncImmediateSurfaceOwnership\(\);[\s\S]{0,180}scheduleEnsure\(\{ route: true, layout: mutationTouchesComposerBoundary\(mutations\) \}\)/,
+  "Streaming-only DOM mutations must be filtered, while relevant paint is claimed before route synchronization.",
 );
 assert.match(
   template,
@@ -924,6 +938,8 @@ function createFixture(theme, {
   homeUtility = false,
   homeSlots = null,
   reviewRows = null,
+  layeredSurfaces = null,
+  animationFrame = false,
   settings = null,
   frontendStorage = null,
 } = {}) {
@@ -935,11 +951,13 @@ function createFixture(theme, {
   const observers = [];
   const resizeObservers = [];
   const timers = new Map();
+  const animationFrames = new Map();
   const intervals = new Map();
   const documentListeners = new Map();
   const threadListeners = new Map();
   const storageValues = frontendStorage || new Map();
   let nextTimer = 1;
+  let nextAnimationFrame = 1;
   let nextInterval = 0;
   let nextBlob = 1;
   const rootStyle = createStyleDeclaration();
@@ -969,6 +987,8 @@ function createFixture(theme, {
   let settingsSurfaces = [];
   let homeSlotElements = [];
   let reviewRowElements = [];
+  let taskSurfaceElements = [];
+  let floatingSurfaceElements = [];
   const createNativeHeader = () => {
     const createRail = (className = "") => ({
       className,
@@ -1011,6 +1031,10 @@ function createFixture(theme, {
   const shellBox = { left: 280, top: 36, width: 1000, height: 764 };
   const shellMain = {
     classList: createClassList(),
+    contains(candidate) {
+      return taskSurfaceElements.some((surface) => surface === candidate
+        || surface._controls?.includes(candidate) || surface._foreground?.includes(candidate));
+    },
     querySelector(selector) {
       return selector === ":scope > header" || selector === ":scope > header.trskin-app-header"
         ? activeNativeHeader?.header || null
@@ -1019,6 +1043,9 @@ function createFixture(theme, {
     querySelectorAll(selector) {
       if (selector === 'button, [role="button"], [role="row"], [role="listitem"], li, tr') {
         return reviewRowElements;
+      }
+      if (selector === 'section, article, [role="region"], [role="group"], [role="list"], [role="grid"], [role="tree"], [role="table"]') {
+        return taskSurfaceElements;
       }
       return selector === "div, section, article, form, fieldset" ? settingsSurfaces : [];
     },
@@ -1175,6 +1202,66 @@ function createFixture(theme, {
         },
       };
     });
+  }
+  if (layeredSurfaces) {
+    const createLayerChild = (entry, type) => {
+      const width = entry.width ?? (type === "control" ? 120 : 160);
+      const height = entry.height ?? 36;
+      return {
+        _backgroundColor: entry.backgroundColor ?? "transparent",
+        _color: entry.color ?? "rgb(22, 28, 34)",
+        classList: createClassList(),
+        closest(selector) { return entry.protected && selector ? this : null; },
+        getBoundingClientRect() {
+          return { left: 390, top: 220, right: 390 + width, bottom: 220 + height, width, height };
+        },
+      };
+    };
+    const createLayerSurface = (entry, floating = false, index = 0) => {
+      const width = entry.width ?? 620;
+      const height = entry.height ?? 180;
+      const controls = (entry.controls || []).map((control) => createLayerChild(control, "control"));
+      const foreground = (entry.foreground || []).map((text) => createLayerChild(text, "foreground"));
+      const base = { _backgroundColor: entry.baseBackgroundColor ?? "rgb(20, 24, 30)" };
+      const surface = {
+        nodeType: 1,
+        _backgroundColor: entry.backgroundColor ?? "rgb(250, 250, 250)",
+        _backgroundImage: entry.backgroundImage ?? "none",
+        _pseudoBeforeBackgroundColor: entry.pseudoBeforeBackgroundColor ?? "transparent",
+        _pseudoBeforeBackgroundImage: entry.pseudoBeforeBackgroundImage ?? "none",
+        _pseudoAfterBackgroundColor: entry.pseudoAfterBackgroundColor ?? "transparent",
+        _pseudoAfterBackgroundImage: entry.pseudoAfterBackgroundImage ?? "none",
+        _controls: controls,
+        _foreground: foreground,
+        classList: createClassList(),
+        parentElement: floating ? body : base,
+        closest(selector) { return entry.protected && selector ? this : null; },
+        matches(selector) {
+          return selector === (floating
+            ? 'dialog, [role="dialog"], [role="menu"], [role="listbox"], [role="tree"]'
+            : 'section, article, [role="region"], [role="group"], [role="list"], [role="grid"], [role="tree"], [role="table"]');
+        },
+        contains(candidate) { return controls.includes(candidate) || foreground.includes(candidate); },
+        querySelectorAll(selector) {
+          if (selector === 'button, [role="button"], [role="option"], [role="menuitem"], [role="tab"]') {
+            return controls;
+          }
+          if (selector === 'span, p, strong, small, label, [role="heading"], svg') return foreground;
+          return [];
+        },
+        getBoundingClientRect() {
+          const left = floating ? 860 : 360;
+          const top = 180 + index * 200;
+          return { left, top, right: left + width, bottom: top + height, width, height };
+        },
+      };
+      for (const child of [...controls, ...foreground]) child.parentElement = surface;
+      return surface;
+    };
+    taskSurfaceElements = (layeredSurfaces.task || []).map((entry, index) =>
+      createLayerSurface(entry, false, index));
+    floatingSurfaceElements = (layeredSurfaces.floating || []).map((entry, index) =>
+      createLayerSurface(entry, true, index));
   }
   const threadSpacer = conversation ? {
     className: "shrink-0",
@@ -1390,6 +1477,17 @@ function createFixture(theme, {
         return reviewRowElements.filter((candidate) =>
           candidate.classList.contains("trskin-light-surface-inset"));
       }
+      if (selector === 'dialog, [role="dialog"], [role="menu"], [role="listbox"], [role="tree"]') {
+        return floatingSurfaceElements;
+      }
+      if (/^\.trskin-(?:task-light-surface|floating-light-surface|light-surface-pseudo|light-surface-control|light-surface-foreground|task-route)$/.test(selector)) {
+        const className = selector.slice(1);
+        return [shellMain, ...taskSurfaceElements, ...floatingSurfaceElements,
+          ...taskSurfaceElements.flatMap((surface) => [...surface._controls, ...surface._foreground]),
+          ...floatingSurfaceElements.flatMap((surface) => [...surface._controls, ...surface._foreground]),
+          ...reviewRowElements]
+          .filter((candidate) => candidate.classList?.contains(className));
+      }
       if (selector === "[data-composer-surface-variant]") {
         return composerScenario === "stable-surface" ? [composerWrapper] : [];
       }
@@ -1505,14 +1603,21 @@ function createFixture(theme, {
     Audio: FixtureAudio,
     Uint8Array,
     atob,
-    getComputedStyle(node) {
+    getComputedStyle(node, pseudo = null) {
       const skinShell = root.classList.contains("codex-dream-skin")
         ? (attributes.get("data-dream-shell") || "dark") : fixtureShell;
+      const pseudoPrefix = pseudo === "::before" ? "_pseudoBefore" :
+        pseudo === "::after" ? "_pseudoAfter" : "";
       return {
         colorScheme: skinShell,
-        backgroundColor: node?._backgroundColor ||
+        color: node?._color || "rgb(232, 236, 240)",
+        backgroundColor: (pseudoPrefix
+          ? node?.[`${pseudoPrefix}BackgroundColor`] ?? "transparent"
+          : node?._backgroundColor) ||
           (fixtureShell === "dark" ? "rgb(24, 24, 27)" : "rgb(250, 250, 250)"),
-        backgroundImage: node?._backgroundImage || "none",
+        backgroundImage: (pseudoPrefix
+          ? node?.[`${pseudoPrefix}BackgroundImage`] ?? "none"
+          : node?._backgroundImage) || "none",
         display: "block",
         visibility: "visible",
         position: node?._position || "static",
@@ -1536,8 +1641,15 @@ function createFixture(theme, {
       return id;
     },
     clearTimeout(id) { timers.delete(id); },
-    cancelAnimationFrame() {},
+    cancelAnimationFrame(id) { animationFrames.delete(id); },
   };
+  if (animationFrame) {
+    context.requestAnimationFrame = (callback) => {
+      const id = nextAnimationFrame++;
+      animationFrames.set(id, callback);
+      return id;
+    };
+  }
   const payloadFor = (nextTheme, cssText = ".fixture { background: var(--dream-asset-logo); }") => template
     .replace("__DREAM_SKIN_CSS_JSON__", JSON.stringify(cssText))
     .replace("__DREAM_SKIN_ART_JSON__", JSON.stringify("data:image/png;base64,AA=="))
@@ -1551,6 +1663,13 @@ function createFixture(theme, {
       timer.callback();
     }
   };
+  const flushAnimationFrames = () => {
+    const pending = [...animationFrames.entries()];
+    for (const [id, callback] of pending) {
+      animationFrames.delete(id);
+      callback(16);
+    }
+  };
 
   return {
     attributes,
@@ -1558,6 +1677,8 @@ function createFixture(theme, {
     body,
     bodyAttributes,
     context,
+    animationFrames,
+    flushAnimationFrames,
     flushTimers,
     intervals,
     nodes,
@@ -1581,6 +1702,8 @@ function createFixture(theme, {
     settingsSurfaces,
     homeSlotElements,
     reviewRowElements,
+    taskSurfaceElements,
+    floatingSurfaceElements,
     rightSidebarElement,
     composerRailBox,
     threadListeners,
@@ -1833,6 +1956,136 @@ assert.equal(
   reviewRowsFixture.reviewRowElements[0].classList.contains("trskin-light-surface-inset"),
   false,
   "Cleanup must remove light-surface ownership markers.",
+);
+
+const layeredSurfaceFixture = createFixture({
+  id: "layered-light-surface-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+}, {
+  layeredSurfaces: {
+    task: [
+      {
+        backgroundColor: "rgba(255, 255, 255, 0.84)",
+        controls: [{ backgroundColor: "rgb(250, 250, 250)" }],
+        foreground: [{ color: "rgb(24, 30, 36)" }],
+      },
+      { backgroundColor: "rgba(255, 255, 255, 0.55)" },
+      { backgroundColor: "transparent", pseudoBeforeBackgroundColor: "rgb(250, 250, 250)" },
+      { backgroundColor: "rgb(250, 250, 250)", protected: true },
+    ],
+    floating: [
+      { backgroundColor: "rgb(250, 250, 250)" },
+      { backgroundColor: "rgb(250, 250, 250)", protected: true },
+    ],
+  },
+});
+vm.runInNewContext(layeredSurfaceFixture.payload, layeredSurfaceFixture.context);
+assert.equal(
+  layeredSurfaceFixture.shellMain.classList.contains("trskin-task-route"),
+  true,
+  "Task routes must receive the early token guard.",
+);
+assert.equal(
+  layeredSurfaceFixture.taskSurfaceElements[0].classList.contains("trskin-task-light-surface"),
+  true,
+  "A verified async light task card must be owned.",
+);
+assert.equal(
+  layeredSurfaceFixture.taskSurfaceElements[1].classList.contains("trskin-task-light-surface"),
+  false,
+  "A translucent white layer over a dark base must use apparent luminance, not raw RGB.",
+);
+assert.equal(
+  layeredSurfaceFixture.taskSurfaceElements[2].classList.contains("trskin-light-surface-pseudo"),
+  true,
+  "A light pseudo-element paint must receive its dedicated reversible marker.",
+);
+assert.equal(
+  layeredSurfaceFixture.taskSurfaceElements[3].classList.contains("trskin-task-light-surface"),
+  false,
+  "Protected Markdown/Diff/form-like surfaces must remain native.",
+);
+assert.equal(
+  layeredSurfaceFixture.taskSurfaceElements[0]._controls[0].classList
+    .contains("trskin-light-surface-control"),
+  true,
+  "Controls may be repainted only after their parent surface is owned.",
+);
+assert.equal(
+  layeredSurfaceFixture.taskSurfaceElements[0]._foreground[0].classList
+    .contains("trskin-light-surface-foreground"),
+  true,
+  "Dark foreground may be corrected only inside an owned surface.",
+);
+assert.equal(
+  layeredSurfaceFixture.floatingSurfaceElements[0].classList
+    .contains("trskin-floating-light-surface"),
+  true,
+  "A verified floating light surface must be owned outside main.",
+);
+assert.equal(
+  layeredSurfaceFixture.floatingSurfaceElements[1].classList
+    .contains("trskin-floating-light-surface"),
+  false,
+);
+layeredSurfaceFixture.window.__CODEX_DREAM_SKIN_STATE__.cleanup();
+assert.equal(
+  layeredSurfaceFixture.taskSurfaceElements[0].classList.contains("trskin-task-light-surface"),
+  false,
+  "Cleanup must revoke layered ownership.",
+);
+
+const firstFrameFixture = createFixture({
+  id: "first-frame-light-surface-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+}, {
+  animationFrame: true,
+  layeredSurfaces: { task: [{ backgroundColor: "rgb(24, 24, 27)" }] },
+  reviewRows: [
+    { backgroundColor: "rgb(24, 24, 27)" },
+    { backgroundColor: "rgb(24, 24, 27)" },
+  ],
+});
+vm.runInNewContext(firstFrameFixture.payload, firstFrameFixture.context);
+const firstFrameRows = firstFrameFixture.reviewRowElements;
+const firstFrameTaskSurface = firstFrameFixture.taskSurfaceElements[0];
+assert.equal(
+  firstFrameRows[0].classList.contains("trskin-light-surface-inset"),
+  false,
+  "Insertion phase starts without a false-positive marker.",
+);
+for (const row of firstFrameRows) row._backgroundColor = "rgb(250, 250, 250)";
+firstFrameTaskSurface._backgroundColor = "rgb(250, 250, 250)";
+firstFrameFixture.observers[0].callback([{
+  type: "childList",
+  target: { nodeType: 1, matches: () => false, querySelector: () => null },
+  addedNodes: [...firstFrameRows, firstFrameTaskSurface],
+  removedNodes: [],
+}]);
+assert.equal(
+  firstFrameRows[0].classList.contains("trskin-light-surface-inset"),
+  true,
+  "MutationObserver microtask phase must own async light paint before RAF.",
+);
+assert.equal(
+  firstFrameTaskSurface.classList.contains("trskin-task-light-surface"),
+  true,
+  "A newly inserted semantic task surface must trigger immediate ownership.",
+);
+assert.equal(firstFrameFixture.animationFrames.size, 1);
+firstFrameFixture.flushAnimationFrames();
+assert.equal(
+  firstFrameRows[0].classList.contains("trskin-light-surface-inset"),
+  true,
+  "First RAF must preserve ownership without a flash.",
+);
+firstFrameFixture.window.__CODEX_DREAM_SKIN_STATE__.ensure({ root: false, route: true, layout: false });
+assert.equal(
+  firstFrameRows[0].classList.contains("trskin-light-surface-inset"),
+  true,
+  "Stable route state must converge to the same ownership result.",
 );
 
 const settingsFixture = createFixture({

@@ -2318,13 +2318,23 @@ html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
   overflow-x: visible !important;
 }
 
-/* Change-review currently paints adjacent file rows as separate light
-   controls. Only renderer-verified repeated rows receive this inset marker;
-   header, Composer, Home, Settings, Markdown/Diff, media and forms are
-   excluded before CSS ownership begins. */
+/* A task route gets a small token-level guard before async content settles.
+   Element paint is still owned only through the measured markers below. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface.trskin-task-route:not(.dream-skin-home-shell) {
+  --color-surface-elevated-secondary: rgb(var(--ds-panel-rgb) / .98) !important;
+  --color-surface-secondary: rgb(var(--ds-panel-rgb) / .96) !important;
+  --color-background-primary-soft: rgb(var(--ds-bg-rgb) / .92) !important;
+}
+
+/* Async task cards, floating panels and repeated review rows are measured
+   while their renderer-owned classes are removed. Markdown/Diff, Composer,
+   Home, Settings, media and forms never enter this ownership layer. */
 html.codex-dream-skin[data-dream-style="terraria"]
   main.trskin-main-surface:not(.dream-skin-home-shell)
-  .trskin-light-surface-inset {
+  :is(.trskin-task-light-surface, .trskin-light-surface-inset),
+html.codex-dream-skin[data-dream-style="terraria"]
+  .trskin-floating-light-surface {
   color: var(--terraria-reading-text) !important;
   background: rgb(var(--ds-panel-rgb) / .96) !important;
   background-image: none !important;
@@ -2335,10 +2345,14 @@ html.codex-dream-skin[data-dream-style="terraria"]
 
 html.codex-dream-skin[data-dream-style="terraria"]
   main.trskin-main-surface:not(.dream-skin-home-shell)
-  .trskin-light-surface-inset::before,
+  :is(.trskin-task-light-surface, .trskin-light-surface-inset).trskin-light-surface-pseudo::before,
 html.codex-dream-skin[data-dream-style="terraria"]
   main.trskin-main-surface:not(.dream-skin-home-shell)
-  .trskin-light-surface-inset::after {
+  :is(.trskin-task-light-surface, .trskin-light-surface-inset).trskin-light-surface-pseudo::after,
+html.codex-dream-skin[data-dream-style="terraria"]
+  .trskin-floating-light-surface.trskin-light-surface-pseudo::before,
+html.codex-dream-skin[data-dream-style="terraria"]
+  .trskin-floating-light-surface.trskin-light-surface-pseudo::after {
   background: none !important;
   background-image: none !important;
   box-shadow: none !important;
@@ -2346,9 +2360,24 @@ html.codex-dream-skin[data-dream-style="terraria"]
 
 html.codex-dream-skin[data-dream-style="terraria"]
   main.trskin-main-surface:not(.dream-skin-home-shell)
-  .trskin-light-surface-inset :is(span, p, strong, small, svg) {
-  color: inherit !important;
+  .trskin-light-surface-foreground,
+html.codex-dream-skin[data-dream-style="terraria"]
+  .trskin-floating-light-surface .trskin-light-surface-foreground {
+  color: var(--terraria-reading-text) !important;
   fill: currentColor;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main.trskin-main-surface:not(.dream-skin-home-shell)
+  .trskin-light-surface-control,
+html.codex-dream-skin[data-dream-style="terraria"]
+  .trskin-floating-light-surface .trskin-light-surface-control {
+  color: var(--terraria-reading-text) !important;
+  background: rgb(var(--ds-panel-2-rgb) / .98) !important;
+  background-image: none !important;
+  border-color: rgb(var(--ds-accent-rgb) / .5) !important;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .08) !important;
   text-shadow: none !important;
 }
 
