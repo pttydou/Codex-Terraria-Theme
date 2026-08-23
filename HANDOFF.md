@@ -50,6 +50,13 @@ The renderer must capture the old music controller's playback intent before clea
 active or queued playback resumes with the selected environment, while an explicit user
 pause remains paused. Official restore still stops playback and removes the controller.
 
+When a Store update replaces the running Codex package, the old verified browser identity
+is intentionally not reused. The Windows control panel detects that condition before
+changing settings, asks for restart consent in its own foreground window, and passes only
+that explicit consent to the hidden start process. It does not pin recovery to the stale
+port, and it reports success only after the background start/verify process exits with code
+zero; stderr is surfaced on failure instead of leaving a false “applying” status.
+
 The `v2.7.7` cross-platform layout compatibility release:
 the renderer collapses only verified empty home slots before the stable game-source
 content, themes repeated computed-light change-review rows through an owned inset

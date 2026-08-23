@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Store-update recovery
+
+- Detect a replaced Codex package or missing verified TR Skin session before saving from
+  the control panel, and request restart consent in the visible panel instead of a hidden
+  child process.
+- Let the start script move away from an unresponsive stale debug port after an update.
+- Keep Save/Restore disabled while their background operation is active. Report success
+  only after start and live verification exit successfully, and show redirected stderr on
+  failure.
+
 ## 2.7.7 — Codex frontend stability and safe fallback
 
 - Add a version-independent frontend capability contract. Minor Codex DOM changes that
