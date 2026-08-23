@@ -1,6 +1,16 @@
 # Changelog
 
-## Unreleased — Store-update recovery
+## Unreleased — Home notice ownership and Store-update recovery
+
+- Add a dedicated semantic adapter for native notices above Home content and promotion
+  surfaces between Hero and Composer. Ownership requires visible text, real action/status
+  semantics, relative wide-and-shallow geometry, and computed light paint; it never uses
+  product copy, locale, CSS Module hashes, child order, or fixed coordinates.
+- Keep Hero, suggestions, Home utility, Composer, game-source, and ancestors containing
+  those core nodes native. Give each logical notice one outer frame and reuse layered
+  pseudo/control/foreground markers without nested borders or shadows.
+- Claim asynchronous Home notices in the MutationObserver microtask and keep first-RAF,
+  stable-route, cleanup, Windows, and macOS behavior under one regression contract.
 
 - Detect a replaced Codex package or missing verified TR Skin session before saving from
   the control panel, and request restart consent in the visible panel instead of a hidden

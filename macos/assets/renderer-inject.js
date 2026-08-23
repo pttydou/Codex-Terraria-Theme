@@ -44,6 +44,7 @@
   const LIGHT_SURFACE_CONTROL_CLASS = "trskin-light-surface-control";
   const LIGHT_SURFACE_FOREGROUND_CLASS = "trskin-light-surface-foreground";
   const LIGHT_SURFACE_INSET_CLASS = "trskin-light-surface-inset";
+  const HOME_BANNER_SURFACE_CLASS = "trskin-home-banner-surface";
   const HOME_EMPTY_SLOT_CLASS = "dream-skin-home-empty-slot";
   const LIGHT_SURFACE_CANDIDATE_SELECTOR =
     'button, [role="button"], [role="row"], [role="listitem"], li, tr';
@@ -52,10 +53,25 @@
   const FLOATING_LIGHT_SURFACE_SELECTOR =
     'dialog, [role="dialog"], [role="menu"], [role="listbox"], [role="tree"]';
   const LIGHT_SURFACE_CONTROL_SELECTOR =
-    'button, [role="button"], [role="option"], [role="menuitem"], [role="tab"]';
+    'button, a, [role="button"], [role="link"], [role="option"], [role="menuitem"], [role="tab"]';
   const LIGHT_SURFACE_FOREGROUND_SELECTOR =
     'span, p, strong, small, label, [role="heading"], svg';
+  const HOME_BANNER_CANDIDATE_SELECTOR =
+    'div, section, article, [role="alert"], [role="status"], [role="region"], [role="group"]';
+  const HOME_BANNER_SEMANTIC_SELECTOR =
+    'button, a, input, [role="button"], [role="link"], [role="alert"], [role="status"]';
+  const HOME_BANNER_CORE_SELECTOR = [
+    '[data-feature="game-source"]',
+    ".dream-skin-home-hero", ".dream-skin-home-hero-rail",
+    ".dream-skin-home-suggestions", ".group\\/home-suggestions",
+    ".dream-skin-home-utility", '[data-composer-home-utility-bar-position]',
+    '[class*="_homeUtilityBar_"]', '[data-composer-surface-variant]',
+    '[data-composer-utility-bar-variant]', '[data-composer-layout]',
+    `.${COMPOSER_SURFACE_CLASS}`, `.${COMPOSER_DOCK_CLASS}`,
+    ".composer-surface-chrome", "textarea", '[contenteditable="true"]',
+  ].join(",");
   const LIGHT_SURFACE_MARKER_CLASSES = [
+    HOME_BANNER_SURFACE_CLASS,
     TASK_LIGHT_SURFACE_CLASS,
     FLOATING_LIGHT_SURFACE_CLASS,
     LIGHT_SURFACE_PSEUDO_CLASS,
@@ -222,18 +238,21 @@
     for (const candidate of lightSurfaces) candidate.classList?.add?.(SETTINGS_LIGHT_SURFACE_CLASS);
     return lightSurfaces;
   };
-  const lightSurfaceIsProtected = (candidate) => Boolean(candidate?.closest?.([
+  const lightSurfaceIsProtected = (candidate, { allowHome = false } = {}) => Boolean(
+    candidate?.closest?.([
     "header", `.${COMPOSER_SURFACE_CLASS}`, `.${COMPOSER_DOCK_CLASS}`,
-    ".dream-skin-home", SETTINGS_PANEL_SELECTOR,
+    ...(!allowHome ? [".dream-skin-home"] : []), SETTINGS_PANEL_SELECTOR,
     '[class*="_markdown"]', '[class*="_diff"]', '[class*="diff-"]',
     '[data-message-author-role]', '[data-diff]', '[role="code"]',
     "pre", "code", "svg", "img", "picture", "video", "canvas",
     "form", "fieldset", "input", "textarea", "select",
   ].join(",")));
-  const alignedRepeatedLightRows = (scope) => {
+  const alignedRepeatedLightRows = (scope, { allowHome = false } = {}) => {
     const candidates = [...(scope?.querySelectorAll?.(LIGHT_SURFACE_CANDIDATE_SELECTOR) || [])]
       .filter((candidate) => {
-        if (!elementIsVisible(candidate) || lightSurfaceIsProtected(candidate)) return false;
+        if (!elementIsVisible(candidate) || lightSurfaceIsProtected(candidate, { allowHome })) {
+          return false;
+        }
         const box = candidate.getBoundingClientRect?.();
         if (!box || box.width < 260 || box.height < 28 || box.height > 112) return false;
         return computedPaintIsLight(candidate);
@@ -284,12 +303,112 @@
     if (floating) return box.width >= 120 && box.height >= 40 && box.width * box.height >= 4800;
     return box.width >= 280 && box.height >= 64 && box.width * box.height >= 24000;
   };
+  const createLightSurfaceOwnership = () => ({
+    task: new Set(), floating: new Set(), homeBanner: new Set(), inset: new Set(),
+    pseudo: new Set(), controls: new Set(), foreground: new Set(),
+  });
+  const collectOwnedSurfaceDetails = (ownedSurfaces, ownership, { allowHome = false } = {}) => {
+    for (const surface of ownedSurfaces) {
+      for (const control of [...(surface.querySelectorAll?.(LIGHT_SURFACE_CONTROL_SELECTOR) || [])]
+        .slice(0, 80)) {
+        if (!elementIsVisible(control) || lightSurfaceIsProtected(control, { allowHome })) continue;
+        const box = control.getBoundingClientRect?.();
+        if (!box || box.height > 80 || box.width * box.height > 36000) continue;
+        if (computedPaintAudit(control, 0.12).light) ownership.controls.add(control);
+      }
+      for (const foreground of [...(surface.querySelectorAll?.(LIGHT_SURFACE_FOREGROUND_SELECTOR) || [])]
+        .slice(0, 160)) {
+        if (!elementIsVisible(foreground)
+          || lightSurfaceIsProtected(foreground, { allowHome })) continue;
+        let color = null;
+        try { color = parseComputedColor(getComputedStyle(foreground).color); } catch {}
+        if (color && color.alpha >= 0.5 && color.luminance <= 0.45) {
+          ownership.foreground.add(foreground);
+        }
+      }
+    }
+  };
+  const applyLightSurfaceOwnership = (ownership) => {
+    for (const candidate of ownership.task) candidate.classList?.add?.(TASK_LIGHT_SURFACE_CLASS);
+    for (const candidate of ownership.floating) candidate.classList?.add?.(FLOATING_LIGHT_SURFACE_CLASS);
+    for (const candidate of ownership.homeBanner) candidate.classList?.add?.(HOME_BANNER_SURFACE_CLASS);
+    for (const candidate of ownership.inset) candidate.classList?.add?.(LIGHT_SURFACE_INSET_CLASS);
+    for (const candidate of ownership.pseudo) candidate.classList?.add?.(LIGHT_SURFACE_PSEUDO_CLASS);
+    for (const candidate of ownership.controls) candidate.classList?.add?.(LIGHT_SURFACE_CONTROL_CLASS);
+    for (const candidate of ownership.foreground) {
+      candidate.classList?.add?.(LIGHT_SURFACE_FOREGROUND_CLASS);
+    }
+    return ownership;
+  };
+  const findHomeRoute = () => {
+    const indicator = document.querySelector?.('[data-testid="home-icon"]');
+    return indicator?.closest?.('[role="main"]') ||
+      [...(document.querySelectorAll?.('[role="main"]') || [])].find((candidate) =>
+        candidate.querySelector?.('[data-feature="game-source"]')) || null;
+  };
+  const homeBannerIsProtected = (candidate) => {
+    try {
+      return Boolean(candidate?.closest?.(HOME_BANNER_CORE_SELECTOR)
+        || candidate?.querySelector?.(HOME_BANNER_CORE_SELECTOR));
+    } catch {
+      return true;
+    }
+  };
+  const homeBannerIsEligible = (candidate, home) => {
+    if (!candidate || candidate === home || !elementIsVisible(candidate)
+      || lightSurfaceIsProtected(candidate, { allowHome: true })
+      || homeBannerIsProtected(candidate)) return false;
+    if (!String(candidate.textContent || "").trim()) return false;
+    if (!candidate.matches?.(HOME_BANNER_SEMANTIC_SELECTOR)
+      && !candidate.querySelector?.(HOME_BANNER_SEMANTIC_SELECTOR)) return false;
+    const box = candidate.getBoundingClientRect?.();
+    const homeBox = home?.getBoundingClientRect?.();
+    if (!box || !homeBox || homeBox.width <= 0 || homeBox.height <= 0) return false;
+    const minimumWidth = Math.max(260, Math.min(560, homeBox.width * 0.42));
+    const maximumHeight = Math.min(220, Math.max(96, homeBox.height * 0.3));
+    if (box.width < minimumWidth || box.width > homeBox.width + 12
+      || box.height < 36 || box.height > maximumHeight || box.width / box.height < 2) {
+      return false;
+    }
+    if (box.right < homeBox.left + minimumWidth || box.left > homeBox.right - minimumWidth) {
+      return false;
+    }
+    return computedPaintAudit(candidate).light;
+  };
+  const syncHomeBannerSurfaceMarkers = (home) => {
+    clearLightSurfaceMarkers();
+    const ownership = createLightSurfaceOwnership();
+    if (!home || !home.querySelector?.('[data-feature="game-source"]')
+      || document.documentElement?.classList?.contains?.(SETTINGS_ACTIVE_CLASS)) return ownership;
+    const candidates = [...(home.querySelectorAll?.(HOME_BANNER_CANDIDATE_SELECTOR) || [])]
+      .filter((candidate) => homeBannerIsEligible(candidate, home))
+      .sort((left, right) => {
+        const leftBox = left.getBoundingClientRect();
+        const rightBox = right.getBoundingClientRect();
+        return rightBox.width * rightBox.height - leftBox.width * leftBox.height;
+      })
+      .slice(0, 320);
+    for (const candidate of candidates) {
+      if ([...ownership.homeBanner].some((owner) =>
+        owner.contains?.(candidate) || candidate.contains?.(owner))) continue;
+      ownership.homeBanner.add(candidate);
+      const paint = computedPaintAudit(candidate);
+      if (paint.pseudoLight) ownership.pseudo.add(candidate);
+      for (const row of alignedRepeatedLightRows(candidate, { allowHome: true })) {
+        ownership.inset.add(row);
+        if (computedPaintAudit(row).pseudoLight) ownership.pseudo.add(row);
+      }
+    }
+    collectOwnedSurfaceDetails(
+      [...ownership.homeBanner, ...ownership.inset],
+      ownership,
+      { allowHome: true },
+    );
+    return applyLightSurfaceOwnership(ownership);
+  };
   const syncLayeredSurfaceMarkers = (scope) => {
     clearLightSurfaceMarkers();
-    const ownership = {
-      task: new Set(), floating: new Set(), inset: new Set(),
-      pseudo: new Set(), controls: new Set(), foreground: new Set(),
-    };
+    const ownership = createLightSurfaceOwnership();
     if (!scope || scope.classList?.contains?.("dream-skin-home-shell")
       || document.documentElement?.classList?.contains?.(SETTINGS_ACTIVE_CLASS)) return ownership;
 
@@ -316,34 +435,11 @@
       if (computedPaintAudit(candidate).pseudoLight) ownership.pseudo.add(candidate);
     }
 
-    const ownedSurfaces = [...ownership.task, ...ownership.floating, ...ownership.inset];
-    for (const surface of ownedSurfaces) {
-      for (const control of [...(surface.querySelectorAll?.(LIGHT_SURFACE_CONTROL_SELECTOR) || [])]
-        .slice(0, 80)) {
-        if (!elementIsVisible(control) || lightSurfaceIsProtected(control)) continue;
-        const box = control.getBoundingClientRect?.();
-        if (!box || box.height > 80 || box.width * box.height > 36000) continue;
-        if (computedPaintAudit(control, 0.12).light) ownership.controls.add(control);
-      }
-      for (const foreground of [...(surface.querySelectorAll?.(LIGHT_SURFACE_FOREGROUND_SELECTOR) || [])]
-        .slice(0, 160)) {
-        if (!elementIsVisible(foreground) || lightSurfaceIsProtected(foreground)) continue;
-        let color = null;
-        try { color = parseComputedColor(getComputedStyle(foreground).color); } catch {}
-        if (color && color.alpha >= 0.5 && color.luminance <= 0.45) {
-          ownership.foreground.add(foreground);
-        }
-      }
-    }
-    for (const candidate of ownership.task) candidate.classList?.add?.(TASK_LIGHT_SURFACE_CLASS);
-    for (const candidate of ownership.floating) candidate.classList?.add?.(FLOATING_LIGHT_SURFACE_CLASS);
-    for (const candidate of ownership.inset) candidate.classList?.add?.(LIGHT_SURFACE_INSET_CLASS);
-    for (const candidate of ownership.pseudo) candidate.classList?.add?.(LIGHT_SURFACE_PSEUDO_CLASS);
-    for (const candidate of ownership.controls) candidate.classList?.add?.(LIGHT_SURFACE_CONTROL_CLASS);
-    for (const candidate of ownership.foreground) {
-      candidate.classList?.add?.(LIGHT_SURFACE_FOREGROUND_CLASS);
-    }
-    return ownership;
+    collectOwnedSurfaceDetails(
+      [...ownership.task, ...ownership.floating, ...ownership.inset],
+      ownership,
+    );
+    return applyLightSurfaceOwnership(ownership);
   };
   const homeSlotHasContent = (candidate) => {
     if (!candidate) return false;
@@ -2447,10 +2543,7 @@
     syncSettingsContrastMarkers(root);
     const activeComposer = findComposerSurface({ mark: true });
     const shellMain = findCodexMainSurface({ mark: true });
-    const homeIndicator = document.querySelector('[data-testid="home-icon"]');
-    const home = homeIndicator?.closest('[role="main"]') ||
-      [...document.querySelectorAll('[role="main"]')].find((candidate) =>
-        candidate.querySelector('[data-feature="game-source"]')) || null;
+    const home = findHomeRoute();
     for (const candidate of document.querySelectorAll('[role="main"].dream-skin-home')) {
       if (candidate !== home) candidate.classList.remove("dream-skin-home");
     }
@@ -2524,7 +2617,8 @@
     shellMain.classList.toggle("dream-skin-home-shell", Boolean(home));
     shellMain.classList.toggle(TASK_ROUTE_CLASS, !home
       && !root.classList?.contains?.(SETTINGS_ACTIVE_CLASS));
-    syncLayeredSurfaceMarkers(shellMain);
+    if (home) syncHomeBannerSurfaceMarkers(home);
+    else syncLayeredSurfaceMarkers(shellMain);
     const nativeHeader = shellMain.querySelector?.(`:scope > header.${APP_HEADER_CLASS}`) ||
       shellMain.querySelector?.(":scope > header");
     // The HUD is a real header flex item. Exclude it while rediscovering
@@ -2871,7 +2965,9 @@
       return Boolean(node.matches?.(TASK_LIGHT_SURFACE_SELECTOR)
         || node.querySelector?.(TASK_LIGHT_SURFACE_SELECTOR)
         || node.matches?.(FLOATING_LIGHT_SURFACE_SELECTOR)
-        || node.querySelector?.(FLOATING_LIGHT_SURFACE_SELECTOR));
+        || node.querySelector?.(FLOATING_LIGHT_SURFACE_SELECTOR)
+        || node.matches?.(HOME_BANNER_SEMANTIC_SELECTOR)
+        || node.querySelector?.(HOME_BANNER_SEMANTIC_SELECTOR));
     } catch {
       return false;
     }
@@ -2924,12 +3020,14 @@
       || findCodexMainSurface();
     if (!root || !shellMain) return false;
     syncSettingsContrastMarkers(root);
-    const taskRoute = !shellMain.classList?.contains?.("dream-skin-home-shell")
-      && !root.classList?.contains?.(SETTINGS_ACTIVE_CLASS);
+    const home = findHomeRoute();
+    shellMain.classList?.toggle?.("dream-skin-home-shell", Boolean(home));
+    const taskRoute = !home && !root.classList?.contains?.(SETTINGS_ACTIVE_CLASS);
     shellMain.classList?.toggle?.(TASK_ROUTE_CLASS, taskRoute);
     if (taskRoute) syncLayeredSurfaceMarkers(shellMain);
+    else if (home) syncHomeBannerSurfaceMarkers(home);
     else clearLightSurfaceMarkers();
-    return taskRoute;
+    return taskRoute || Boolean(home);
   };
   const observer = new MutationObserver((mutations) => {
     metrics.mutationBatches += 1;
@@ -3057,6 +3155,7 @@
     syncConversationScrollState,
     syncComposerGeometry,
     syncLayeredSurfaceMarkers,
+    syncHomeBannerSurfaceMarkers,
     syncImmediateSurfaceOwnership,
     evaluateFrontendContract,
     applyFrontendContract,

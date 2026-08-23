@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Home 原生通知稳定接管
+
+- 首页顶部通知与 Hero/Composer 之间的原生推广卡改用独立语义适配器：仅对包含可见文字、
+  真实按钮/链接/输入/状态语义、相对首页宽而浅且计算绘制为浅色的表面添加
+  `.trskin-home-banner-surface`，不依赖通知文案、语言、CSS Module 哈希、子节点顺序或固定坐标。
+- Hero、建议区、首页工具栏、Composer、`data-feature="game-source"` 及包含这些核心节点的
+  祖先保持原生；每条逻辑通知只拥有一个外框，内部伪元素、控件与前景复用分层标记而不叠框。
+- 异步通知在 MutationObserver 微任务阶段立即接管，首个 RAF、稳定扫描、路由切换与清理
+  使用同一可逆归属结果；Windows 与 macOS renderer/CSS 和回归测试保持同步。
+
 ## 2.7.7 — Codex 前端稳定性与安全回退
 
 - 新增不依赖 Codex 版本号的前端能力契约：小范围 DOM 调整只要仍可通过语义或编辑器

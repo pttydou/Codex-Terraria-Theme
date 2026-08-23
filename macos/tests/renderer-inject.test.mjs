@@ -92,6 +92,7 @@ for (const { label, renderer, stylesheet, injectors } of [
   );
   assert.equal(
     [
+      "trskin-home-banner-surface",
       "trskin-task-light-surface",
       "trskin-floating-light-surface",
       "trskin-light-surface-pseudo",
@@ -103,6 +104,22 @@ for (const { label, renderer, stylesheet, injectors } of [
       && renderer.includes("syncImmediateSurfaceOwnership();"),
     true,
     `${label} must share layered, alpha-composited surface ownership before the first RAF.`,
+  );
+  assert.equal(
+    renderer.includes("syncHomeBannerSurfaceMarkers")
+      && renderer.includes('home.querySelector?.(\'[data-feature="game-source"]\')')
+      && renderer.includes("HOME_BANNER_SEMANTIC_SELECTOR")
+      && renderer.includes('button, a, input, [role="button"], [role="link"], [role="alert"], [role="status"]')
+      && stylesheet.includes(".trskin-home-banner-surface .trskin-light-surface-control")
+      && stylesheet.includes(".trskin-home-banner-surface .trskin-light-surface-foreground")
+      && stylesheet.includes(".trskin-home-banner-surface .trskin-light-surface-inset"),
+    true,
+    `${label} must own native Home notices by semantics, geometry, and computed paint with one outer frame.`,
+  );
+  assert.doesNotMatch(
+    renderer,
+    /快速模式|立即启用|语音|Fast mode|Enable now/,
+    `${label} Home notice discovery must not depend on localized product copy.`,
   );
   assert.match(
     renderer,
@@ -121,7 +138,7 @@ for (const { label, renderer, stylesheet, injectors } of [
   );
   assert.match(
     renderer,
-    /mutationTouchesComposerBoundary[\s\S]{0,2600}layout: mutationTouchesComposerBoundary\(mutations\)/,
+    /mutationTouchesComposerBoundary[\s\S]{0,5200}layout: mutationTouchesComposerBoundary\(mutations\)/,
     `${label} must request layout settling when complementary sidebars mutate.`,
   );
   assert.match(
@@ -937,6 +954,7 @@ function createFixture(theme, {
   composerScenario = null,
   homeUtility = false,
   homeSlots = null,
+  homeNotices = null,
   reviewRows = null,
   layeredSurfaces = null,
   animationFrame = false,
@@ -986,6 +1004,7 @@ function createFixture(theme, {
   let settingsPanel = null;
   let settingsSurfaces = [];
   let homeSlotElements = [];
+  let homeNoticeElements = [];
   let reviewRowElements = [];
   let taskSurfaceElements = [];
   let floatingSurfaceElements = [];
@@ -1139,8 +1158,8 @@ function createFixture(theme, {
   } : null;
   let homeSource = null;
   let homeContent = null;
-  if (homeSlots) {
-    homeSlotElements = homeSlots.map((slot) => ({
+  if (homeSlots || homeNotices) {
+    homeSlotElements = (homeSlots || []).map((slot) => ({
       classList: createClassList(),
       textContent: slot.text || "",
       children: [],
@@ -1167,16 +1186,114 @@ function createFixture(theme, {
     };
     homeHeroRail.parentElement = homeContent;
     homeSlotElements.push(homeContent);
+
+    const homeNoticeCandidateSelector =
+      'div, section, article, [role="alert"], [role="status"], [role="region"], [role="group"]';
+    const homeNoticeSemanticSelector =
+      'button, a, input, [role="button"], [role="link"], [role="alert"], [role="status"]';
+    const homeControlSelector =
+      'button, a, [role="button"], [role="link"], [role="option"], [role="menuitem"], [role="tab"]';
+    const homeForegroundSelector = 'span, p, strong, small, label, [role="heading"], svg';
+    const createHomeNoticeChild = (entry, type, noticeBox) => ({
+      nodeType: 1,
+      _backgroundColor: entry.backgroundColor ?? (type === "control" ? "rgb(250, 250, 250)" : "transparent"),
+      _color: entry.color ?? "rgb(24, 30, 36)",
+      classList: createClassList(),
+      parentElement: null,
+      closest(selector) { return entry.protected && selector ? this : null; },
+      getBoundingClientRect() {
+        const width = entry.width ?? (type === "control" ? 120 : 160);
+        const height = entry.height ?? 36;
+        return {
+          left: noticeBox.left + 20,
+          top: noticeBox.top + 12,
+          right: noticeBox.left + 20 + width,
+          bottom: noticeBox.top + 12 + height,
+          width,
+          height,
+        };
+      },
+    });
+    homeNoticeElements = (homeNotices || []).map((entry, index) => {
+      const width = entry.width ?? 760;
+      const height = entry.height ?? 88;
+      const left = entry.left ?? 400;
+      const top = entry.top ?? (entry.location === "content" ? 430 + index * 100 : 72 + index * 100);
+      const noticeBox = { left, top, right: left + width, bottom: top + height, width, height };
+      const controls = (entry.controls ?? (entry.interactive === false ? [] : [{}]))
+        .map((control) => createHomeNoticeChild(control, "control", noticeBox));
+      const foreground = (entry.foreground ?? [{}])
+        .map((text) => createHomeNoticeChild(text, "foreground", noticeBox));
+      const notice = {
+        nodeType: 1,
+        _backgroundColor: entry.backgroundColor ?? "rgb(250, 250, 250)",
+        _backgroundImage: entry.backgroundImage ?? "none",
+        _pseudoBeforeBackgroundColor: entry.pseudoBeforeBackgroundColor ?? "transparent",
+        _pseudoBeforeBackgroundImage: entry.pseudoBeforeBackgroundImage ?? "none",
+        _pseudoAfterBackgroundColor: entry.pseudoAfterBackgroundColor ?? "transparent",
+        _pseudoAfterBackgroundImage: entry.pseudoAfterBackgroundImage ?? "none",
+        _controls: controls,
+        _foreground: foreground,
+        classList: createClassList(),
+        parentElement: homeContent,
+        textContent: entry.text === undefined ? "Native Home notice" : entry.text,
+        closest(selector) {
+          if (entry.genericProtected && selector) return this;
+          if (entry.insideCore && selector.includes("dream-skin-home-hero")) return this;
+          return null;
+        },
+        matches(selector) {
+          if (selector === homeNoticeCandidateSelector) return true;
+          return selector === homeNoticeSemanticSelector && Boolean(entry.semanticSelf);
+        },
+        contains(candidate) {
+          return controls.includes(candidate) || foreground.includes(candidate)
+            || this._nested?.includes(candidate) || false;
+        },
+        querySelector(selector) {
+          if (selector === homeNoticeSemanticSelector) {
+            return entry.semanticSelf || controls.length === 0 ? null : controls[0];
+          }
+          if (selector.includes('[data-feature="game-source"]')
+            && selector.includes("dream-skin-home-hero")) {
+            return entry.containsCore ? {} : null;
+          }
+          return null;
+        },
+        querySelectorAll(selector) {
+          if (selector === homeControlSelector) return controls;
+          if (selector === homeForegroundSelector) return foreground;
+          return [];
+        },
+        getBoundingClientRect() { return noticeBox; },
+      };
+      for (const child of [...controls, ...foreground]) child.parentElement = notice;
+      return notice;
+    });
+    for (let index = 0; index < homeNoticeElements.length; index += 1) {
+      const parentIndex = homeNotices?.[index]?.parentIndex;
+      if (Number.isInteger(parentIndex) && homeNoticeElements[parentIndex]) {
+        const parent = homeNoticeElements[parentIndex];
+        parent._nested = [...(parent._nested || []), homeNoticeElements[index]];
+        homeNoticeElements[index].parentElement = parent;
+      }
+    }
   }
-  const homeRoute = homeUtility || homeSlots ? {
+  const homeRoute = homeUtility || homeSlots || homeNotices ? {
     classList: createClassList(),
-    children: homeSlotElements,
+    children: [...homeSlotElements, ...homeNoticeElements],
     querySelector(selector) {
       return selector === '[data-feature="game-source"]' ? homeSource : null;
     },
     querySelectorAll(selector) {
+      if (selector === 'div, section, article, [role="alert"], [role="status"], [role="region"], [role="group"]') {
+        return homeNoticeElements;
+      }
       return selector.includes("data-composer-home-utility-bar-position")
         ? [homeUtilityBar] : [];
+    },
+    getBoundingClientRect() {
+      return { ...shellBox, right: shellBox.left + shellBox.width, bottom: shellBox.top + shellBox.height };
     },
   } : null;
   const homeIndicator = homeRoute ? {
@@ -1243,7 +1360,7 @@ function createFixture(theme, {
         },
         contains(candidate) { return controls.includes(candidate) || foreground.includes(candidate); },
         querySelectorAll(selector) {
-          if (selector === 'button, [role="button"], [role="option"], [role="menuitem"], [role="tab"]') {
+          if (selector === 'button, a, [role="button"], [role="link"], [role="option"], [role="menuitem"], [role="tab"]') {
             return controls;
           }
           if (selector === 'span, p, strong, small, label, [role="heading"], svg') return foreground;
@@ -1480,9 +1597,10 @@ function createFixture(theme, {
       if (selector === 'dialog, [role="dialog"], [role="menu"], [role="listbox"], [role="tree"]') {
         return floatingSurfaceElements;
       }
-      if (/^\.trskin-(?:task-light-surface|floating-light-surface|light-surface-pseudo|light-surface-control|light-surface-foreground|task-route)$/.test(selector)) {
+      if (/^\.trskin-(?:home-banner-surface|task-light-surface|floating-light-surface|light-surface-pseudo|light-surface-control|light-surface-foreground|task-route)$/.test(selector)) {
         const className = selector.slice(1);
-        return [shellMain, ...taskSurfaceElements, ...floatingSurfaceElements,
+        return [shellMain, ...homeNoticeElements, ...taskSurfaceElements, ...floatingSurfaceElements,
+          ...homeNoticeElements.flatMap((surface) => [...surface._controls, ...surface._foreground]),
           ...taskSurfaceElements.flatMap((surface) => [...surface._controls, ...surface._foreground]),
           ...floatingSurfaceElements.flatMap((surface) => [...surface._controls, ...surface._foreground]),
           ...reviewRowElements]
@@ -1701,6 +1819,7 @@ function createFixture(theme, {
     settingsPanel,
     settingsSurfaces,
     homeSlotElements,
+    homeNoticeElements,
     reviewRowElements,
     taskSurfaceElements,
     floatingSurfaceElements,
@@ -1917,6 +2036,122 @@ assert.equal(
   homeSlotFixture.homeSlotElements[0].classList.contains("dream-skin-home-empty-slot"),
   false,
   "An asynchronously populated home slot must lose the empty marker.",
+);
+
+const homeNoticeFixture = createFixture({
+  id: "home-native-notice-ownership-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+}, {
+  homeNotices: [
+    { location: "top" },
+    {
+      location: "content",
+      backgroundColor: "transparent",
+      pseudoBeforeBackgroundColor: "rgb(250, 250, 250)",
+    },
+    { backgroundColor: "rgb(24, 24, 27)" },
+    { height: 260 },
+    { text: "" },
+    { interactive: false },
+    { containsCore: true },
+    { insideCore: true },
+    {
+      width: 820,
+      height: 108,
+      backgroundColor: "transparent",
+      backgroundImage: "linear-gradient(rgb(250, 250, 250), rgb(238, 242, 246))",
+    },
+    { parentIndex: 8, width: 640, height: 64 },
+  ],
+});
+vm.runInNewContext(homeNoticeFixture.payload, homeNoticeFixture.context);
+const homeNotices = homeNoticeFixture.homeNoticeElements;
+assert.equal(
+  homeNotices[0].classList.contains("trskin-home-banner-surface"),
+  true,
+  "A wide shallow native notice before Home content must receive renderer ownership.",
+);
+assert.equal(
+  homeNotices[1].classList.contains("trskin-home-banner-surface"),
+  true,
+  "A semantic promotion surface inside Home content must use the same ownership contract.",
+);
+assert.equal(
+  homeNotices[1].classList.contains("trskin-light-surface-pseudo"),
+  true,
+  "A light Home notice pseudo-paint must be neutralized with its reversible marker.",
+);
+for (const index of [2, 3, 4, 5, 6, 7]) {
+  assert.equal(
+    homeNotices[index].classList.contains("trskin-home-banner-surface"),
+    false,
+    "Dark, tall, empty, non-semantic, or core Home surfaces must remain native.",
+  );
+}
+assert.equal(
+  homeNotices[8].classList.contains("trskin-home-banner-surface"),
+  true,
+  "A light computed gradient may own the outer logical Home notice.",
+);
+assert.equal(
+  homeNotices[9].classList.contains("trskin-home-banner-surface"),
+  false,
+  "Nested candidates must not create a second overlapping outer frame.",
+);
+assert.equal(
+  homeNotices[0]._controls[0].classList.contains("trskin-light-surface-control"),
+  true,
+  "Controls may be repainted only inside an owned Home notice.",
+);
+assert.equal(
+  homeNotices[0]._foreground[0].classList.contains("trskin-light-surface-foreground"),
+  true,
+  "Dark foreground may be corrected only inside an owned Home notice.",
+);
+homeNoticeFixture.window.__CODEX_DREAM_SKIN_STATE__.cleanup();
+assert.equal(
+  homeNotices[0].classList.contains("trskin-home-banner-surface"),
+  false,
+  "Cleanup must revoke native Home notice ownership.",
+);
+
+const firstFrameHomeNoticeFixture = createFixture({
+  id: "first-frame-home-native-notice-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+}, {
+  animationFrame: true,
+  homeNotices: [{ backgroundColor: "rgb(24, 24, 27)" }],
+});
+vm.runInNewContext(firstFrameHomeNoticeFixture.payload, firstFrameHomeNoticeFixture.context);
+const firstFrameHomeNotice = firstFrameHomeNoticeFixture.homeNoticeElements[0];
+assert.equal(firstFrameHomeNotice.classList.contains("trskin-home-banner-surface"), false);
+firstFrameHomeNotice._backgroundColor = "rgb(250, 250, 250)";
+firstFrameHomeNoticeFixture.observers[0].callback([{
+  type: "childList",
+  target: { nodeType: 1, matches: () => false, querySelector: () => null },
+  addedNodes: [firstFrameHomeNotice],
+  removedNodes: [],
+}]);
+assert.equal(
+  firstFrameHomeNotice.classList.contains("trskin-home-banner-surface"),
+  true,
+  "MutationObserver microtask phase must own an async Home notice before RAF.",
+);
+assert.equal(firstFrameHomeNoticeFixture.animationFrames.size, 1);
+firstFrameHomeNoticeFixture.flushAnimationFrames();
+assert.equal(
+  firstFrameHomeNotice.classList.contains("trskin-home-banner-surface"),
+  true,
+  "First RAF must preserve Home notice ownership without a flash.",
+);
+firstFrameHomeNoticeFixture.window.__CODEX_DREAM_SKIN_STATE__
+  .ensure({ root: false, route: true, layout: false });
+assert.equal(
+  firstFrameHomeNotice.classList.contains("trskin-home-banner-surface"),
+  true,
+  "Stable Home route state must converge to the same ownership result.",
 );
 
 const reviewRowsFixture = createFixture({

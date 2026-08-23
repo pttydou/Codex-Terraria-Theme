@@ -76,6 +76,11 @@ pseudo paint, nested controls, foreground, and repeated review rows are themed o
 bounded renderer verification. Translucent paint is composited against its measured base,
 all ownership is revoked before remeasurement, and relevant MutationObserver batches claim
 new light paint in the same microtask checkpoint before the coalesced first animation frame.
+Home now has a separate native-notice adapter: wide, shallow, computed-light surfaces with
+visible text and real action/status semantics receive one renderer-owned outer frame, while
+Hero, suggestions, utility, Composer, game-source, and their ancestors remain untouched.
+Discovery never depends on notification copy, locale, CSS Module hashes, child order, or
+fixed coordinates, and asynchronous Home notices are claimed in the same microtask contract.
 macOS and Windows source tests cover these contracts. Windows
 native source tests pass. Windows managed-runtime verification confirms the pinned output
 summary and painted Composer remain 15px from the main-surface right edge; macOS real-app

@@ -2334,7 +2334,12 @@ html.codex-dream-skin[data-dream-style="terraria"]
   main.trskin-main-surface:not(.dream-skin-home-shell)
   :is(.trskin-task-light-surface, .trskin-light-surface-inset),
 html.codex-dream-skin[data-dream-style="terraria"]
-  .trskin-floating-light-surface {
+  .trskin-floating-light-surface,
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home :is(
+    .trskin-home-banner-surface,
+    .trskin-home-banner-surface .trskin-light-surface-inset
+  ) {
   color: var(--terraria-reading-text) !important;
   background: rgb(var(--ds-panel-rgb) / .96) !important;
   background-image: none !important;
@@ -2352,7 +2357,17 @@ html.codex-dream-skin[data-dream-style="terraria"]
 html.codex-dream-skin[data-dream-style="terraria"]
   .trskin-floating-light-surface.trskin-light-surface-pseudo::before,
 html.codex-dream-skin[data-dream-style="terraria"]
-  .trskin-floating-light-surface.trskin-light-surface-pseudo::after {
+  .trskin-floating-light-surface.trskin-light-surface-pseudo::after,
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home :is(
+    .trskin-home-banner-surface,
+    .trskin-home-banner-surface .trskin-light-surface-inset
+  ).trskin-light-surface-pseudo::before,
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-home :is(
+    .trskin-home-banner-surface,
+    .trskin-home-banner-surface .trskin-light-surface-inset
+  ).trskin-light-surface-pseudo::after {
   background: none !important;
   background-image: none !important;
   box-shadow: none !important;
@@ -2362,7 +2377,9 @@ html.codex-dream-skin[data-dream-style="terraria"]
   main.trskin-main-surface:not(.dream-skin-home-shell)
   .trskin-light-surface-foreground,
 html.codex-dream-skin[data-dream-style="terraria"]
-  .trskin-floating-light-surface .trskin-light-surface-foreground {
+  .trskin-floating-light-surface .trskin-light-surface-foreground,
+html.codex-dream-skin[data-dream-style="terraria"]
+  .trskin-home-banner-surface .trskin-light-surface-foreground {
   color: var(--terraria-reading-text) !important;
   fill: currentColor;
   text-shadow: none !important;
@@ -2372,13 +2389,23 @@ html.codex-dream-skin[data-dream-style="terraria"]
   main.trskin-main-surface:not(.dream-skin-home-shell)
   .trskin-light-surface-control,
 html.codex-dream-skin[data-dream-style="terraria"]
-  .trskin-floating-light-surface .trskin-light-surface-control {
+  .trskin-floating-light-surface .trskin-light-surface-control,
+html.codex-dream-skin[data-dream-style="terraria"]
+  .trskin-home-banner-surface .trskin-light-surface-control {
   color: var(--terraria-reading-text) !important;
   background: rgb(var(--ds-panel-2-rgb) / .98) !important;
   background-image: none !important;
   border-color: rgb(var(--ds-accent-rgb) / .5) !important;
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / .08) !important;
   text-shadow: none !important;
+}
+
+/* A logical Home notice owns one outer frame. Any verified nested light paint
+   may be recolored, but it cannot add a second inset frame or shadow. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  .trskin-home-banner-surface .trskin-light-surface-inset {
+  border-color: transparent !important;
+  box-shadow: none !important;
 }
 
 /* Spawn-specific variants added in 2.1 keep the same native controls but use
