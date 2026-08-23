@@ -62,6 +62,7 @@ $showEvent = [System.Threading.EventWaitHandle]::new(
   $showEventName
 )
 $acquired = $false
+$activePanelOperation = $null
 
 function Write-TRSkinPanelTrace {
   param([Parameter(Mandatory = $true)][string]$Message)
@@ -86,8 +87,65 @@ function Start-TRSkinPowerShell {
   $scriptToken = ConvertTo-DreamSkinProcessArgument -Value $Script
   $argumentLine = '-NoProfile -ExecutionPolicy Bypass -File ' + $scriptToken
   if ($Arguments.Count -gt 0) { $argumentLine += ' ' + ($Arguments -join ' ') }
-  Start-Process -FilePath $powershell -ArgumentList $argumentLine `
-    -WindowStyle Hidden | Out-Null
+  $stdoutPath = Join-Path $StateRoot 'control-panel-operation.log'
+  $stderrPath = Join-Path $StateRoot 'control-panel-operation-error.log'
+  Remove-Item -LiteralPath $stdoutPath,$stderrPath -Force -ErrorAction SilentlyContinue
+  $process = Start-Process -FilePath $powershell -ArgumentList $argumentLine `
+    -WindowStyle Hidden -PassThru -RedirectStandardOutput $stdoutPath `
+    -RedirectStandardError $stderrPath
+  return [pscustomobject]@{
+    Process = $process
+    StdoutPath = $stdoutPath
+    StderrPath = $stderrPath
+  }
+}
+
+function Start-TRSkinPanelOperation {
+  param(
+    [Parameter(Mandatory = $true)][string]$Script,
+    [string[]]$Arguments = @(),
+    [Parameter(Mandatory = $true)][string]$PendingText,
+    [Parameter(Mandatory = $true)][string]$SuccessText
+  )
+  if ($null -ne $script:activePanelOperation) {
+    throw '已有皮肤操作正在进行，请等待它完成。'
+  }
+  $launch = Start-TRSkinPowerShell -Script $Script -Arguments $Arguments
+  $script:activePanelOperation = [pscustomobject]@{
+    Process = $launch.Process
+    StdoutPath = $launch.StdoutPath
+    StderrPath = $launch.StderrPath
+    SuccessText = $SuccessText
+  }
+  $script:save.Enabled = $false
+  $script:restore.Enabled = $false
+  $script:status.Text = $PendingText
+  Write-TRSkinPanelTrace -Message "operation-started script=$([IO.Path]::GetFileName($Script)) pid=$($launch.Process.Id)"
+}
+
+function Get-TRSkinApplyRestartReason {
+  $currentCodex = Get-DreamSkinCodexInstall
+  if (@(Get-DreamSkinCodexProcesses -Codex $currentCodex).Count -eq 0) { return $null }
+  $identity = Get-DreamSkinVerifiedCdpIdentity -Port $Port -Codex $currentCodex
+  if ($null -ne $identity) { return $null }
+  $state = Read-DreamSkinState -Path (Join-Path $StateRoot 'state.json')
+  if ($null -ne $state -and "$($state.codexVersion)" -cne "$($currentCodex.Version)") {
+    return "Codex 已从 $($state.codexVersion) 更新到 $($currentCodex.Version)，旧皮肤连接已经失效。"
+  }
+  return '当前 Codex 没有可验证的 TR Skin 调试连接。'
+}
+
+function Confirm-TRSkinPanelRestart {
+  param([Parameter(Mandatory = $true)][string]$Reason)
+  $message = "$Reason`n`n应用皮肤需要重启一次 Codex，未发送的输入可能丢失。是否继续？"
+  return [System.Windows.Forms.MessageBox]::Show(
+    $script:form,
+    $message,
+    'TR Skin 需要重新连接',
+    [System.Windows.Forms.MessageBoxButtons]::YesNo,
+    [System.Windows.Forms.MessageBoxIcon]::Warning,
+    [System.Windows.Forms.MessageBoxDefaultButton]::Button2
+  ) -eq [System.Windows.Forms.DialogResult]::Yes
 }
 
 function Invoke-TRSkinRuntimeControl {
@@ -529,6 +587,16 @@ try {
 
   $save.add_Click({
     try {
+      $restartReason = Get-TRSkinApplyRestartReason
+      $restartExisting = $false
+      if ($restartReason) {
+        if (-not (Confirm-TRSkinPanelRestart -Reason $restartReason)) {
+          $status.Text = '已取消：未保存或应用任何更改'
+          Write-TRSkinPanelTrace -Message 'apply-restart-declined'
+          return
+        }
+        $restartExisting = $true
+      }
       $disabled = @()
       for ($index = 0; $index -lt $catalog.Count; $index += 1) {
         if (-not $environmentList.Items[$index].Checked) {
@@ -641,8 +709,11 @@ try {
       if ($runtimeWarning) {
         Write-TRSkinPanelTrace -Message "runtime-random-config-warning message=$runtimeWarning"
       }
-      Start-TRSkinPowerShell -Script $startScript -Arguments @('-Port', "$Port", '-PromptRestart')
-      $status.Text = "已保存，正在应用：$loadedName"
+      $startArguments = @()
+      if ($restartExisting) { $startArguments += '-RestartExisting' }
+      Start-TRSkinPanelOperation -Script $startScript -Arguments $startArguments `
+        -PendingText "已保存，正在验证并应用：$loadedName" `
+        -SuccessText "应用成功：$loadedName"
     } catch {
       Show-TRSkinPanelError -Message $_.Exception.Message
     }
@@ -650,10 +721,28 @@ try {
 
   $restore.add_Click({
     try {
-      Start-TRSkinPowerShell -Script $restoreScript -Arguments @(
-        '-Port', "$Port", '-RestoreBaseTheme', '-PromptRestart'
-      )
-      $status.Text = '正在恢复官方外观…'
+      $currentCodex = Get-DreamSkinCodexInstall
+      $restoreArguments = @('-RestoreBaseTheme')
+      if (@(Get-DreamSkinCodexProcesses -Codex $currentCodex).Count -gt 0) {
+        $restoreReason = '恢复官方外观需要关闭并重新打开 Codex，未发送的输入可能丢失。是否继续？'
+        $restoreConfirmed = [System.Windows.Forms.MessageBox]::Show(
+          $form,
+          $restoreReason,
+          '确认恢复官方外观',
+          [System.Windows.Forms.MessageBoxButtons]::YesNo,
+          [System.Windows.Forms.MessageBoxIcon]::Warning,
+          [System.Windows.Forms.MessageBoxDefaultButton]::Button2
+        ) -eq [System.Windows.Forms.DialogResult]::Yes
+        if (-not $restoreConfirmed) {
+          $status.Text = '已取消恢复'
+          Write-TRSkinPanelTrace -Message 'restore-restart-declined'
+          return
+        }
+        $restoreArguments += '-ForceRestart'
+      }
+      Start-TRSkinPanelOperation -Script $restoreScript -Arguments $restoreArguments `
+        -PendingText '正在恢复并验证官方外观…' `
+        -SuccessText '已恢复官方外观'
     } catch {
       Show-TRSkinPanelError -Message $_.Exception.Message
     }
@@ -712,6 +801,50 @@ try {
     }
   })
 
+  $operationTimer = [System.Windows.Forms.Timer]::new()
+  $operationTimer.Interval = 250
+  $operationTimer.add_Tick({
+    $operation = $script:activePanelOperation
+    if ($null -eq $operation) { return }
+    $completed = $false
+    try {
+      $operation.Process.Refresh()
+      if (-not $operation.Process.HasExited) { return }
+      $operation.Process.WaitForExit()
+      $completed = $true
+      $exitCode = $operation.Process.ExitCode
+      $stdout = if (Test-Path -LiteralPath $operation.StdoutPath) {
+        Get-Content -LiteralPath $operation.StdoutPath -Raw -ErrorAction SilentlyContinue
+      } else { '' }
+      $stderr = if (Test-Path -LiteralPath $operation.StderrPath) {
+        Get-Content -LiteralPath $operation.StderrPath -Raw -ErrorAction SilentlyContinue
+      } else { '' }
+      if ($exitCode -eq 0) {
+        $status.Text = $operation.SuccessText
+        Write-TRSkinPanelTrace -Message "operation-succeeded pid=$($operation.Process.Id)"
+      } else {
+        $status.Text = '操作失败，请查看错误提示'
+        $details = ("$stderr`n$stdout").Trim()
+        if (-not $details) { $details = "后台操作退出，代码：$exitCode" }
+        if ($details.Length -gt 4000) { $details = $details.Substring($details.Length - 4000) }
+        Write-TRSkinPanelTrace -Message "operation-failed pid=$($operation.Process.Id) exit=$exitCode"
+        Show-TRSkinPanelError -Message $details
+      }
+    } catch {
+      $status.Text = '操作状态检查失败'
+      Write-TRSkinPanelTrace -Message "operation-monitor-failed message=$($_.Exception.Message)"
+      Show-TRSkinPanelError -Message $_.Exception.Message
+    } finally {
+      if ($completed) {
+        $operation.Process.Dispose()
+        $script:activePanelOperation = $null
+        $save.Enabled = $true
+        $restore.Enabled = $true
+      }
+    }
+  })
+  $operationTimer.Start()
+
   $showTimer = [System.Windows.Forms.Timer]::new()
   $showTimer.Interval = 200
   $showTimer.add_Tick({
@@ -739,6 +872,8 @@ try {
     })
     [System.Windows.Forms.Application]::Run($form)
   } finally {
+    $operationTimer.Stop()
+    $operationTimer.Dispose()
     $showTimer.Stop()
     $showTimer.Dispose()
     $form.Icon.Dispose()

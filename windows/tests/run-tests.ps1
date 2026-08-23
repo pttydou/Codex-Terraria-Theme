@@ -30,7 +30,13 @@ try {
     'quick page contains only environment controls' = '\$quickPage\.Controls\.AddRange\(@\(\s*\$quickIntro,\s*\$themeLabel,\s*\$themeCombo\s*\)\)'
     'random toggle belongs to advanced rotation' = '\$rotationPage\.Controls\.AddRange\(@\(\s*\$randomToggle,\s*\$randomHint'
     'fixed selection turns random mode off' = '\$themeCombo\.add_DropDown\([\s\S]{0,160}\$randomToggle\.Checked\s*=\s*\$false'
-    'save action also applies the runtime' = '\$save\.add_Click\([\s\S]{0,7000}Start-TRSkinPowerShell\s+-Script\s+\$startScript'
+    'save action also applies the runtime' = '\$save\.add_Click\([\s\S]{0,9000}Start-TRSkinPanelOperation\s+-Script\s+\$startScript'
+    'visible update restart consent' = 'Get-TRSkinApplyRestartReason[\s\S]{0,1800}codexVersion[\s\S]{0,900}MessageBox\]::Show\([\s\S]{0,500}MessageBoxDefaultButton\]::Button2'
+    'explicit approved restart' = '\$startArguments\s*=\s*@\(\)[\s\S]{0,180}RestartExisting[\s\S]{0,260}Start-TRSkinPanelOperation'
+    'adaptive stale port recovery' = 'Start-TRSkinPanelOperation\s+-Script\s+\$startScript\s+-Arguments\s+\$startArguments'
+    'truthful async completion' = '\$operationTimer\.add_Tick\([\s\S]{0,500}HasExited[\s\S]{0,500}\$exitCode -eq 0[\s\S]{0,160}\$operation\.SuccessText'
+    'redirected operation errors' = 'control-panel-operation-error\.log'
+    'background failure surfaced' = 'operation-failed[\s\S]{0,180}Show-TRSkinPanelError'
   }
   foreach ($expectation in $controlPanelExpectations.GetEnumerator()) {
     if ($controlPanelSource -notmatch $expectation.Value) {
