@@ -46,7 +46,7 @@ try {
     (Test-DreamSkinPathEqual -Left $savedPathCandidate.PackageRoot -Right $currentCodex.PackageRoot) -and
     (Test-DreamSkinPathEqual -Left $savedPathCandidate.Executable -Right $currentCodex.Executable))
   if ($null -ne $savedPathCandidate -and $null -eq $savedCodex -and -not $candidateMatchesCurrent) {
-    $unverifiedSavedRunning = (Get-DreamSkinCodexProcesses -Codex $savedPathCandidate).Count -gt 0
+    $unverifiedSavedRunning = (Get-DreamSkinCodexProcessCount -Codex $savedPathCandidate) -gt 0
     $unverifiedSavedOwnsPort = Test-DreamSkinCodexPortOwner -Port $Port -Codex $savedPathCandidate
     if ($unverifiedSavedRunning -or $unverifiedSavedOwnsPort) {
       throw 'The saved Codex path is still active but no longer matches a registered OpenAI.Codex package. Close it manually; state and configuration were preserved.'
@@ -54,8 +54,8 @@ try {
   }
   $savedIsDifferent = [bool]($null -ne $savedCodex -and $null -ne $currentCodex -and
     -not (Test-DreamSkinPathEqual -Left $savedCodex.Executable -Right $currentCodex.Executable))
-  $currentRunning = $null -ne $currentCodex -and (Get-DreamSkinCodexProcesses -Codex $currentCodex).Count -gt 0
-  $savedRunning = $null -ne $savedCodex -and (Get-DreamSkinCodexProcesses -Codex $savedCodex).Count -gt 0
+  $currentRunning = $null -ne $currentCodex -and (Get-DreamSkinCodexProcessCount -Codex $currentCodex) -gt 0
+  $savedRunning = $null -ne $savedCodex -and (Get-DreamSkinCodexProcessCount -Codex $savedCodex) -gt 0
   $savedOwnsPort = $null -ne $savedCodex -and (Test-DreamSkinCodexPortOwner -Port $Port -Codex $savedCodex)
   if ($savedIsDifferent -and $currentRunning -and ($savedRunning -or $savedOwnsPort)) {
     throw 'Multiple Codex package versions are active. Close them manually before restore; state and configuration were preserved.'
@@ -71,7 +71,7 @@ try {
     }
   }
   $relaunchCodex = if ($null -ne $currentCodex) { $currentCodex } else { $codex }
-  $codexRunning = $null -ne $codex -and (Get-DreamSkinCodexProcesses -Codex $codex).Count -gt 0
+  $codexRunning = $null -ne $codex -and (Get-DreamSkinCodexProcessCount -Codex $codex) -gt 0
   $portOwnedByCodex = $null -ne $codex -and (Test-DreamSkinCodexPortOwner -Port $Port -Codex $codex)
   if ($portOwnedByCodex -and -not $codexRunning) {
     throw 'A Codex-owned listener exists without a manageable Codex process; state was preserved.'
@@ -174,7 +174,7 @@ try {
   } catch {
     $restoreError = $_
     if ($shouldCloseCodex -and -not $NoRelaunch -and $null -ne $relaunchCodex -and
-      (Get-DreamSkinCodexProcesses -Codex $codex).Count -eq 0 -and (Test-Path -LiteralPath $relaunchCodex.Executable)) {
+      (Get-DreamSkinCodexProcessCount -Codex $codex) -eq 0 -and (Test-Path -LiteralPath $relaunchCodex.Executable)) {
       try { $null = Start-DreamSkinCodex -Codex $relaunchCodex } catch {
         Write-Warning 'Restore failed and Codex could not be reopened automatically.'
       }
