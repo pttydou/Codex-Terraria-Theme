@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.7.9 — Windows 首次安装严格模式兼容修复
+
+- 修复 Windows 首次安装关闭 Codex 后，空进程查询在 PowerShell 严格模式下访问
+  `.Count` 导致安装后启动中断的问题；安装、启动、恢复、控制面板和 Store 更新恢复
+  统一使用显式集合与安全计数函数。
+- 新增 Windows 严格模式回归测试。macOS 本次仅同步发布版本号，运行逻辑不变。
+
 ## 2.7.8 — 异步浅色表面与 Home 原生通知稳定接管
 
 - 任务页、浮层、伪元素、内部控件、前景文字和 change-review 行分别使用 renderer-owned

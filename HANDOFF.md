@@ -2,7 +2,7 @@
 
 ## Current release line
 
-- Current release candidate: `2.7.8`
+- Current release candidate: `2.7.9`
 - Supported desktop platforms: Windows and macOS
 - Linux does not currently have an installation package.
 
@@ -17,6 +17,14 @@ home utility CSS Module class. TRSkin now discovers Composer surfaces through st
 The legacy `.composer-surface-chrome` path remains in renderer and injector discovery
 for older Codex builds. Visual CSS no longer depends on it. Re-injection and cleanup
 remove stale renderer-owned markers.
+
+## Windows strict-mode install repair
+
+The `v2.7.9` Windows repair keeps every process, listener, and CDP-target query explicitly
+array-shaped before reading `Count`. This matters because the one-click entry dot-sources the
+updater, which enables PowerShell strict mode, and a freshly closed Codex legitimately produces
+zero process objects. Do not replace the count helper with direct pipeline-property access;
+the Windows regression suite exercises the empty-process case under strict mode.
 
 Current Codex builds may add nested native Composer layout/rich-text surfaces inside
 the owned outer node. Those stable-attribute descendants are intentionally transparent:

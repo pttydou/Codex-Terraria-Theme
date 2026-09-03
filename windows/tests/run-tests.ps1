@@ -50,6 +50,25 @@ try {
     throw 'Save and apply must remain one primary action, not separate buttons.'
   }
 
+  $commonWindows = 'windows\TRSkin\core\scripts\common-windows.ps1'
+  . (Resolve-Path -LiteralPath $commonWindows).Path
+  . (Resolve-Path -LiteralPath 'windows\TRSkin\core\scripts\update-windows.ps1').Path
+  $missingCodex = [pscustomobject]@{ Executable = 'C:\TRSkin-test-does-not-exist\ChatGPT.exe' }
+  if ((Get-DreamSkinCodexProcessCount -Codex $missingCodex) -ne 0) {
+    throw 'Empty Codex process discovery must remain count-safe under strict mode.'
+  }
+  $processCountConsumers = Get-ChildItem -LiteralPath 'windows\TRSkin\core\scripts' -File -Filter '*.ps1' |
+    Select-String -Pattern '\(Get-DreamSkinCodexProcesses[^\r\n]*\)\.Count' |
+    Where-Object { $_.Line -notmatch 'return\s+@\(Get-DreamSkinCodexProcesses' }
+  if ($processCountConsumers) {
+    throw 'Codex process callers must use the strict-mode-safe process count helper.'
+  }
+  $unsafeProcessAssignments = Get-ChildItem -LiteralPath 'windows\TRSkin\core\scripts' -File -Filter '*.ps1' |
+    Select-String -Pattern '=\s*Get-DreamSkinCodexProcesses'
+  if ($unsafeProcessAssignments) {
+    throw 'Codex process collections must be explicitly array-wrapped before callers inspect Count.'
+  }
+
   $parseErrors = @()
   Get-ChildItem -LiteralPath 'windows','release' -Recurse -File -Filter '*.ps1' |
     ForEach-Object {

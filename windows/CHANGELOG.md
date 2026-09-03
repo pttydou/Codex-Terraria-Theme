@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.7.9 — strict-mode-safe Windows install and startup
+
+- Treat Codex process, CDP target, and port-listener results as explicit collections before
+  reading `Count`, including the zero-process state immediately after the installer closes Codex.
+- Centralize process counting so the one-click installer, start, restore, control panel, and
+  Store-update recovery paths remain safe after `update-windows.ps1` enables strict mode.
+- Add a Windows regression that exercises empty process discovery under strict mode and rejects
+  future direct or unwrapped process-count consumers.
+
 ## 2.7.8 — async surface ownership and Store-update recovery
 
 - Give task surfaces, floating panels, pseudo paint, nested controls, foreground, and

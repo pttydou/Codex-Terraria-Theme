@@ -86,7 +86,7 @@ try {
       if ($confirmed) {
         $registeredInstalls = @(Get-DreamSkinRegisteredCodexInstalls)
         foreach ($codex in $registeredInstalls) {
-          if ((Get-DreamSkinCodexProcesses -Codex $codex).Count -gt 0) {
+          if ((Get-DreamSkinCodexProcessCount -Codex $codex) -gt 0) {
             Stop-DreamSkinCodex -Codex $codex -AllowForce
           }
         }
@@ -104,7 +104,7 @@ try {
     }
     $runningInstalls = @(
       $registeredInstalls | Where-Object {
-        (Get-DreamSkinCodexProcesses -Codex $_).Count -gt 0
+        (Get-DreamSkinCodexProcessCount -Codex $_) -gt 0
       }
     )
     if ($runningInstalls.Count -gt 0) {

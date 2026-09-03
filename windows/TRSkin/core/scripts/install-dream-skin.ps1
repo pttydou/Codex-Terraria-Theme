@@ -19,7 +19,7 @@ try {
     throw 'The official OpenAI.Codex Store package is not installed or its identity cannot be validated.'
   }
   foreach ($registeredCodex in $registeredInstalls) {
-    if ((Get-DreamSkinCodexProcesses -Codex $registeredCodex).Count -gt 0) {
+    if ((Get-DreamSkinCodexProcessCount -Codex $registeredCodex) -gt 0) {
       throw 'Close Codex before installing TR Skin so config.toml cannot change during the transaction.'
     }
   }
@@ -32,7 +32,7 @@ try {
   $savedPathCandidate = Get-DreamSkinCodexStatePathCandidate -State $existingState
   $savedCodex = Resolve-DreamSkinCodexInstallFromState -State $existingState -RegisteredInstalls $registeredInstalls
   if ($null -ne $savedPathCandidate -and $null -eq $savedCodex -and
-    (Get-DreamSkinCodexProcesses -Codex $savedPathCandidate).Count -gt 0) {
+    (Get-DreamSkinCodexProcessCount -Codex $savedPathCandidate) -gt 0) {
     throw 'The saved Codex path is still running but no longer matches a registered Store package. Close it manually before installing.'
   }
   if (Test-DreamSkinTrayActive) {

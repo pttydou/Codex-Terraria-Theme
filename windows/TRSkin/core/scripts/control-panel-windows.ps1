@@ -125,7 +125,7 @@ function Start-TRSkinPanelOperation {
 
 function Get-TRSkinApplyRestartReason {
   $currentCodex = Get-DreamSkinCodexInstall
-  if (@(Get-DreamSkinCodexProcesses -Codex $currentCodex).Count -eq 0) { return $null }
+  if ((Get-DreamSkinCodexProcessCount -Codex $currentCodex) -eq 0) { return $null }
   $identity = Get-DreamSkinVerifiedCdpIdentity -Port $Port -Codex $currentCodex
   if ($null -ne $identity) { return $null }
   $state = Read-DreamSkinState -Path (Join-Path $StateRoot 'state.json')
@@ -723,7 +723,7 @@ try {
     try {
       $currentCodex = Get-DreamSkinCodexInstall
       $restoreArguments = @('-RestoreBaseTheme')
-      if (@(Get-DreamSkinCodexProcesses -Codex $currentCodex).Count -gt 0) {
+      if ((Get-DreamSkinCodexProcessCount -Codex $currentCodex) -gt 0) {
         $restoreReason = '恢复官方外观需要关闭并重新打开 Codex，未发送的输入可能丢失。是否继续？'
         $restoreConfirmed = [System.Windows.Forms.MessageBox]::Show(
           $form,

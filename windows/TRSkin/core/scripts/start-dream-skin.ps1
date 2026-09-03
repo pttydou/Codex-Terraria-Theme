@@ -42,20 +42,20 @@ try {
     (Test-DreamSkinPathEqual -Left $savedPathCandidate.PackageRoot -Right $currentCodex.PackageRoot) -and
     (Test-DreamSkinPathEqual -Left $savedPathCandidate.Executable -Right $currentCodex.Executable))
   if ($null -ne $savedPathCandidate -and $null -eq $savedCodex -and -not $candidateMatchesCurrent) {
-    $unverifiedSavedRunning = (Get-DreamSkinCodexProcesses -Codex $savedPathCandidate).Count -gt 0
+    $unverifiedSavedRunning = (Get-DreamSkinCodexProcessCount -Codex $savedPathCandidate) -gt 0
     $unverifiedSavedOwnsPort = Test-DreamSkinCodexPortOwner -Port $Port -Codex $savedPathCandidate
     if ($unverifiedSavedRunning -or $unverifiedSavedOwnsPort) {
       throw 'The saved Codex path is still active but no longer matches a registered OpenAI.Codex package. Close it manually; state was preserved.'
     }
   }
 
-  $currentProcesses = Get-DreamSkinCodexProcesses -Codex $currentCodex
+  $currentProcesses = @(Get-DreamSkinCodexProcesses -Codex $currentCodex)
   $codexToStop = $currentCodex
   $cdpIdentity = Get-DreamSkinVerifiedCdpIdentity -Port $Port -Codex $currentCodex
   $savedIsDifferent = [bool]($null -ne $savedCodex -and
     -not (Test-DreamSkinPathEqual -Left $savedCodex.Executable -Right $currentCodex.Executable))
   if ($savedIsDifferent) {
-    $savedProcesses = Get-DreamSkinCodexProcesses -Codex $savedCodex
+    $savedProcesses = @(Get-DreamSkinCodexProcesses -Codex $savedCodex)
     $savedOwnsPort = Test-DreamSkinCodexPortOwner -Port $Port -Codex $savedCodex
     if ($currentProcesses.Count -gt 0 -and ($savedProcesses.Count -gt 0 -or $savedOwnsPort)) {
       throw 'Multiple registered Codex package versions are active. Close them manually before starting TR Skin.'
@@ -77,11 +77,13 @@ try {
     }
   }
   $debugReady = $null -ne $cdpIdentity
-  $codexProcesses = if (Test-DreamSkinPathEqual -Left $codexToStop.Executable -Right $currentCodex.Executable) {
-    $currentProcesses
-  } else {
-    Get-DreamSkinCodexProcesses -Codex $codexToStop
-  }
+  $codexProcesses = @(
+    if (Test-DreamSkinPathEqual -Left $codexToStop.Executable -Right $currentCodex.Executable) {
+      $currentProcesses
+    } else {
+      Get-DreamSkinCodexProcesses -Codex $codexToStop
+    }
+  )
   $closedExistingCodex = $false
   if (-not $debugReady -and $codexProcesses.Count -gt 0) {
     $restartAuthorized = [bool]$RestartExisting
@@ -133,7 +135,7 @@ try {
       }
     }
     if (($closedExistingCodex -or $launchedWithCdp) -and
-      (Get-DreamSkinCodexProcesses -Codex $codex).Count -eq 0) {
+      (Get-DreamSkinCodexProcessCount -Codex $codex) -eq 0) {
       if ($launchedWithCdp) {
         Write-Warning 'TR Skin launch failed; reopening Codex without a debugging port.'
       }
