@@ -72,7 +72,7 @@ TRSkin 是一个面向 Windows 与 macOS 的非官方 Codex Desktop Terraria 主
 2. 完整解压 ZIP，不要直接在压缩包预览窗口中运行。
 3. 打开解压后的 `TRSkin` 文件夹。
 4. 双击 `START-TRSKIN.cmd`。
-5. 首次安装完成后，通过桌面的 **TR Skin Control Panel** 选择环境、随机模式和音乐设置。
+5. 首次安装完成后，通过桌面的 **TR Skin Control Panel** 进入皮肤模式并选择环境、随机模式和音乐设置。点击该入口会在需要时自动更新并重启 Codex，然后完成 CDP 验证和热注入。
 
 需要恢复 Codex 官方外观时，在 TR Skin 控制面板或托盘菜单中选择恢复；恢复不会删除已经保存的主题和音乐配置。
 

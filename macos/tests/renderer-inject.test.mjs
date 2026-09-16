@@ -128,6 +128,23 @@ for (const { label, renderer, stylesheet, injectors } of [
   );
   assert.match(
     renderer,
+    /style\?\.position !== "absolute" \|\| style\.bottom === "auto"[\s\S]{0,260}box\.width >= composerBox\.width/,
+    `${label} must recognize the bottom-anchored absolute footer introduced by current Codex builds.`,
+  );
+  assert.match(
+    renderer,
+    /paintedRailBox[\s\S]{0,180}alignmentDelta[\s\S]{0,180}appliedMovement[\s\S]{0,280}alignedShift/,
+    `${label} must correct post-layout Composer drift after removing the native width cap.`,
+  );
+  assert.equal(
+    renderer.includes('[data-local-conversation-user-anchor="true"]')
+      && renderer.includes('trskin-user-message-surface')
+      && stylesheet.includes('.trskin-user-message-surface'),
+    true,
+    `${label} must reclaim current Codex user bubbles through a renderer-owned marker.`,
+  );
+  assert.match(
+    renderer,
     /composerBandIsBlocked[\s\S]{0,2400}document\.elementsFromPoint/,
     `${label} must cap and repeatedly settle Composer against complementary sidebars.`,
   );

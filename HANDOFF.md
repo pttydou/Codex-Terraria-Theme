@@ -2,11 +2,22 @@
 
 ## Current release line
 
-- Current release candidate: `2.7.9`
+- Current release candidate: `2.7.10`
 - Supported desktop platforms: Windows and macOS
 - Linux does not currently have an installation package.
 
 ## Composer compatibility repair
+
+Codex 26.901 adds a bottom-anchored absolute task footer and a nested 768px message-width host.
+TRSkin treats that footer as the semantic dock, promotes the inner host to the measured rail,
+and performs one post-layout alignment correction after removing the native width cap. Current
+user turns are discovered from `[data-local-conversation-user-anchor="true"]`; the painted bubble
+receives `.trskin-user-message-surface`, so visual ownership remains renderer-controlled even
+though the older `[data-message-author-role]` attribute is no longer present.
+
+On Windows, clicking the desktop control entry is explicit restart authorization. The entry now
+updates if needed and always invokes start with `-RestartExisting`, so an ordinary Codex session
+is restarted into verified loopback CDP mode before the control panel opens.
 
 Codex 26.730 removed the native `.composer-surface-chrome` wrapper and renamed the
 home utility CSS Module class. TRSkin now discovers Composer surfaces through stable

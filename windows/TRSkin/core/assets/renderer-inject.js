@@ -23,6 +23,7 @@
   const COMPOSER_RAIL_CLASS = "dream-skin-composer-rail";
   const COMPOSER_DECORATION_CLASS = "dream-skin-composer-decoration";
   const COMPOSER_OVERFLOW_HOST_CLASS = "dream-skin-composer-overflow-host";
+  const USER_MESSAGE_SURFACE_CLASS = "trskin-user-message-surface";
   const FRONTEND_CONTRACT_SCHEMA = 1;
   const FRONTEND_COMPATIBILITY_ATTR = "data-dream-frontend-compatibility";
   const FRONTEND_CONTRACT_ATTR = "data-dream-frontend-contract";
@@ -2404,6 +2405,39 @@
     }));
   };
 
+  const syncUserMessageSurfaceMarkers = () => {
+    const surfaces = new Set();
+    for (const anchor of document.querySelectorAll?.(
+      '[data-local-conversation-user-anchor="true"]',
+    ) || []) {
+      const candidates = [anchor, ...(anchor.querySelectorAll?.("div") || [])];
+      for (const candidate of candidates) {
+        if (candidate === anchor || candidate.matches?.(
+          'button, input, textarea, select, a[href], [role="button"]',
+        )) continue;
+        let box = null;
+        let style = null;
+        try {
+          box = candidate.getBoundingClientRect?.();
+          style = getComputedStyle(candidate);
+        } catch {}
+        if (!box || box.width < 24 || box.height < 20 || !style
+          || style.display === "none" || style.visibility === "hidden") continue;
+        const paint = parseComputedColor(style.backgroundColor);
+        if ((!paint || paint.alpha < 0.12)
+          && (!style.backgroundImage || style.backgroundImage === "none")) {
+          continue;
+        }
+        surfaces.add(candidate);
+        break;
+      }
+    }
+    for (const candidate of document.querySelectorAll?.(`.${USER_MESSAGE_SURFACE_CLASS}`) || []) {
+      if (!surfaces.has(candidate)) candidate.classList?.remove?.(USER_MESSAGE_SURFACE_CLASS);
+    }
+    for (const candidate of surfaces) candidate.classList?.add?.(USER_MESSAGE_SURFACE_CLASS);
+  };
+
   const syncComposerGeometry = (shellMain, { settle = false } = {}) => {
     const legacyRail = document.querySelector(
       `.thread-scroll-container .sticky:has(.${COMPOSER_SURFACE_CLASS}) `
@@ -2419,8 +2453,12 @@
     const semanticDockIndex = ancestors.findIndex((candidate) => {
       let style = null;
       try { style = getComputedStyle(candidate); } catch {}
-      return ["sticky", "fixed"].includes(style?.position)
-        && candidate.contains?.(composer);
+      if (!candidate.contains?.(composer)) return false;
+      if (["sticky", "fixed"].includes(style?.position)) return true;
+      if (style?.position !== "absolute" || style.bottom === "auto") return false;
+      const box = candidate.getBoundingClientRect?.();
+      const composerBox = composer?.getBoundingClientRect?.();
+      return Boolean(box && composerBox && box.width >= composerBox.width);
     });
     const semanticDock = semanticDockIndex >= 0 ? ancestors[semanticDockIndex] : null;
     const semanticRail = (semanticDockIndex >= 0
@@ -2512,6 +2550,13 @@
     const shift = composerLeft - railBox.left;
     setStyleProperty(rail, COMPOSER_SAFE_WIDTH_STYLE, `${Math.round(composerWidth * 100) / 100}px`);
     setStyleProperty(rail, COMPOSER_SHIFT_STYLE, `${Math.round(shift * 100) / 100}px`);
+    const paintedRailBox = rail.getBoundingClientRect?.();
+    const alignmentDelta = paintedRailBox ? composerLeft - paintedRailBox.left : 0;
+    const appliedMovement = paintedRailBox ? paintedRailBox.left - railBox.left : 0;
+    if (Math.abs(appliedMovement) > 0.5 && Math.abs(alignmentDelta) > 0.5) {
+      const alignedShift = shift + alignmentDelta;
+      setStyleProperty(rail, COMPOSER_SHIFT_STYLE, `${Math.round(alignedShift * 100) / 100}px`);
+    }
     if (settle) {
       composerGeometryAttempts = 48;
       if (!composerGeometryTimer) {
@@ -2607,6 +2652,7 @@
       if (!homeUtilityBars.has(candidate)) candidate.classList.remove("dream-skin-home-utility");
     }
     for (const candidate of homeUtilityBars) candidate.classList.add("dream-skin-home-utility");
+    syncUserMessageSurfaceMarkers();
 
     const frontendContract = syncFrontendContract(
       root,
@@ -2833,6 +2879,7 @@
       COMPOSER_RAIL_CLASS,
       COMPOSER_DECORATION_CLASS,
       COMPOSER_OVERFLOW_HOST_CLASS,
+      USER_MESSAGE_SURFACE_CLASS,
     ]) {
       document.querySelectorAll(`.${className}`).forEach((node) => node.classList.remove(className));
     }

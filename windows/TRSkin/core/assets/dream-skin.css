@@ -1659,7 +1659,8 @@ html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
 }
 
 html.codex-dream-skin[data-dream-style="terraria"] main.trskin-main-surface:not(.dream-skin-home-shell) article,
-html.codex-dream-skin[data-dream-style="terraria"] [data-message-author-role] {
+html.codex-dream-skin[data-dream-style="terraria"] [data-message-author-role],
+html.codex-dream-skin[data-dream-style="terraria"] .trskin-user-message-surface {
   border: 2px solid rgb(255 255 255 / .20) !important;
   border-radius: 4px !important;
   color: var(--terraria-reading-text) !important;
@@ -1669,13 +1670,15 @@ html.codex-dream-skin[data-dream-style="terraria"] [data-message-author-role] {
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"]
-  :is(main.trskin-main-surface:not(.dream-skin-home-shell) article, [data-message-author-role]) {
+  :is(main.trskin-main-surface:not(.dream-skin-home-shell) article, [data-message-author-role],
+    .trskin-user-message-surface) {
   border-color: rgb(185 239 112 / .34) !important;
   box-shadow: inset 0 0 0 2px rgb(4 30 31 / .54), 3px 4px 0 rgb(3 20 23 / .32) !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
-  :is(main.trskin-main-surface:not(.dream-skin-home-shell) article, [data-message-author-role]) {
+  :is(main.trskin-main-surface:not(.dream-skin-home-shell) article, [data-message-author-role],
+    .trskin-user-message-surface) {
   border-color: rgb(255 189 85 / .36) !important;
   box-shadow: inset 0 0 0 2px rgb(16 8 23 / .66), 3px 4px 0 rgb(8 4 12 / .42) !important;
 }

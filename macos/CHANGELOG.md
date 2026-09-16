@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.7.10 — 当前 Codex 任务布局兼容修复
+
+- 识别当前 Codex 任务页底部的绝对定位 Composer footer，并接管其内部新增的 768px
+  限宽容器；移除限宽后再次校正实际坐标，使输入框与主内容左右边缘稳定保持 15px。
+- 通过稳定的 local-conversation user anchor 发现新版用户消息气泡，再添加 renderer-owned
+  标记恢复 Terraria 阅读卡配色，不把生成的 CSS Module 类作为视觉选择器。
+- Windows 桌面入口点击后自动完成更新、重启、CDP 验证和注入，不再重复询问；macOS 同步
+  renderer/CSS 和跨平台回归契约。
+
 ## 2.7.9 — Windows 首次安装严格模式兼容修复
 
 - 修复 Windows 首次安装关闭 Codex 后，空进程查询在 PowerShell 严格模式下访问
