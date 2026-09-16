@@ -74,27 +74,20 @@ try {
     return
   }
 
-  $performedInstall = $false
   if ($sourceIsInstalled -and $installedComplete -and $null -ne $installedVersion) {
     $availableUpdate = Get-DreamSkinAvailableUpdate -InstalledVersion $installedVersion -StateRoot $StateRoot
     if ($null -ne $availableUpdate) {
       $targetVersion = "$($availableUpdate.release.version)"
-      $confirmed = Confirm-DreamSkinRestart -Message (
-        "TR Skin $targetVersion is available. The update only replaces program files; " +
-        'music, themes, and settings will be preserved. Download and install it now?'
-      )
-      if ($confirmed) {
-        $registeredInstalls = @(Get-DreamSkinRegisteredCodexInstalls)
-        foreach ($codex in $registeredInstalls) {
-          if ((Get-DreamSkinCodexProcessCount -Codex $codex) -gt 0) {
-            Stop-DreamSkinCodex -Codex $codex -AllowForce
-          }
+      Write-Host "TR Skin $targetVersion is available. Updating before launch; music, themes, and settings are preserved."
+      $registeredInstalls = @(Get-DreamSkinRegisteredCodexInstalls)
+      foreach ($codex in $registeredInstalls) {
+        if ((Get-DreamSkinCodexProcessCount -Codex $codex) -gt 0) {
+          Stop-DreamSkinCodex -Codex $codex -AllowForce
         }
-        Install-DreamSkinAvailableUpdate -Manifest $availableUpdate -StateRoot $StateRoot
-        $installed = Get-DreamSkinRuntimeEnginePaths -StateRoot $StateRoot
-        $installedVersion = Read-DreamSkinVersion -Path $installed.Version
-        $performedInstall = $true
       }
+      Install-DreamSkinAvailableUpdate -Manifest $availableUpdate -StateRoot $StateRoot
+      $installed = Get-DreamSkinRuntimeEnginePaths -StateRoot $StateRoot
+      $installedVersion = Read-DreamSkinVersion -Path $installed.Version
     }
   }
   if ($needsInstall) {
@@ -108,14 +101,6 @@ try {
       }
     )
     if ($runningInstalls.Count -gt 0) {
-      $confirmed = Confirm-DreamSkinRestart -Message (
-        'Codex must close once to install or upgrade Terraria Skin. ' +
-        'Unsaved input may be lost. Close Codex and continue?'
-      )
-      if (-not $confirmed) {
-        Write-Host 'Installation was cancelled. Codex was not changed.'
-        exit 0
-      }
       $stoppedExecutables = @{}
       foreach ($codex in $runningInstalls) {
         $key = "$($codex.Executable)".ToLowerInvariant()
@@ -131,7 +116,6 @@ try {
     & $installer @installParameters
     if (-not $?) { throw 'The Terraria Skin installer did not finish.' }
     $installed = Get-DreamSkinRuntimeEnginePaths -StateRoot $StateRoot
-    $performedInstall = $true
   } elseif (-not $installedComplete) {
     throw 'The installed Terraria Skin runtime is incomplete. Run this entry from a newer complete package.'
   }
@@ -143,14 +127,12 @@ try {
     Start-Process -FilePath $powershell -ArgumentList $trayArguments -WindowStyle Hidden | Out-Null
   }
 
-  if ($performedInstall) {
-    $startParameters = @{
-      PromptRestart = $true
-    }
-    if ($PortExplicit) { $startParameters['Port'] = $Port }
-    & $installed.Start @startParameters
-    if (-not $?) { throw 'Codex Terraria Skin did not start.' }
+  $startParameters = @{
+    RestartExisting = $true
   }
+  if ($PortExplicit) { $startParameters['Port'] = $Port }
+  & $installed.Start @startParameters
+  if (-not $?) { throw 'Codex Terraria Skin did not start.' }
 
   $powershell = (Get-Command powershell.exe -ErrorAction Stop).Source
   $panelArguments = "-NoProfile -STA -ExecutionPolicy Bypass -File `"$($installed.ControlPanel)`""

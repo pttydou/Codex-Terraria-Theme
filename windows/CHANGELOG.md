@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.7.10 — current Codex task-layout compatibility
+
+- Recognize the bottom-anchored absolute Composer footer used by current Codex builds and
+  expand its inner message-width host to the measured main-surface safe bounds. Correct the
+  post-layout drift after the native 768px cap is removed, preserving an exact 15px edge gap.
+- Reclaim current user bubbles through the stable local-conversation user anchor and a
+  renderer-owned marker, restoring the environment reading-card palette without styling by a
+  generated CSS Module class.
+- Treat launching the Windows desktop entry as explicit restart authorization: update when
+  needed, restart an ordinary Codex session into verified loopback CDP mode, inject TRSkin, and
+  then open the control panel without a second confirmation dialog.
+- Extend the Windows and cross-platform regression suites for automatic entry startup, the new
+  Composer footer shape, post-layout alignment, and current user-message ownership.
+
 ## 2.7.9 — strict-mode-safe Windows install and startup
 
 - Treat Codex process, CDP target, and port-listener results as explicit collections before

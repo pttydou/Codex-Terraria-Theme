@@ -93,6 +93,22 @@ Windows also embeds equivalent probe and live-verification logic in
    status/progress content remains visible.
 9. Route mutation, resize, hot replacement, pause, restore, and cleanup must revoke
    stale markers and inline Composer geometry on both platforms.
+10. A bottom-anchored absolute task footer is a semantic Composer dock when it contains the
+    active Composer and spans at least its width. Its nearest relative child becomes the rail,
+    so a nested native message-width cap cannot keep the painted input narrow.
+11. After applying rail width and translation, remeasure once and correct any residual horizontal
+    drift caused by native container layout. The final painted rail must converge to the measured
+    safe left and right edges.
+
+## Current user-message ownership
+
+1. Discover current Codex user turns from the stable
+   `[data-local-conversation-user-anchor="true"]` attribute.
+2. Within each turn, mark the first visible, non-interactive descendant with real computed paint
+   as `.trskin-user-message-surface`; generated CSS Module classes are not visual selectors.
+3. Keep the older `[data-message-author-role]` path for compatible builds and remove stale owned
+   markers during route scans, hot replacement, restore, and cleanup.
+4. Windows and macOS renderer/CSS files must keep identical discovery and ownership behavior.
 
 ## Layered light-surface ownership
 

@@ -50,6 +50,18 @@ try {
     throw 'Save and apply must remain one primary action, not separate buttons.'
   }
 
+  $oneClickSource = Get-Content -LiteralPath `
+    'windows\TRSkin\core\scripts\one-click-dream-skin.ps1' -Raw
+  if ($oneClickSource -notmatch '\$startParameters\s*=\s*@\{[\s\S]{0,180}RestartExisting\s*=\s*\$true') {
+    throw 'The desktop entry must explicitly authorize the automatic Codex restart.'
+  }
+  if ($oneClickSource -match 'Confirm-DreamSkinRestart') {
+    throw 'The desktop entry click is the restart authorization and must not show a second confirmation.'
+  }
+  if ($oneClickSource -match 'if\s*\(\$performedInstall\)\s*\{[\s\S]{0,300}&\s*\$installed\.Start') {
+    throw 'The desktop entry must start TRSkin even when no program update was installed.'
+  }
+
   $commonWindows = 'windows\TRSkin\core\scripts\common-windows.ps1'
   . (Resolve-Path -LiteralPath $commonWindows).Path
   . (Resolve-Path -LiteralPath 'windows\TRSkin\core\scripts\update-windows.ps1').Path
