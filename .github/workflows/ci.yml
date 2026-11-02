@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  source-tests:
+  macos-checks:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -63,10 +63,6 @@ jobs:
           console.log(JSON.stringify(report.checks, null, 2));
           NODE
 
-  macos-native-build:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Compile native control panel
         run: macos/scripts/build-theme-console-binary-macos.sh "$RUNNER_TEMP/CodexThemeConsole"
       - name: Verify code signature
