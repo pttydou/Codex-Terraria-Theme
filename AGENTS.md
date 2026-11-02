@@ -1,8 +1,7 @@
 # TRSkin repository rules
 
-- macOS 与 Windows 的 Composer DOM 发现逻辑必须同步维护。涉及
-  `macos/assets/renderer-inject.js`、`windows/TRSkin/core/assets/renderer-inject.js`
-  或任一平台 `dream-skin.css` 的修改，必须检查另一平台镜像。
+- 从 v2.7.33 起只维护 macOS。Windows 源码与 v2.7.10 发行版作为历史版本保留，
+  不再同步功能、修复、版本号或构建发布；macOS 测试不得依赖 Windows 镜像。
 - Composer 优先通过 `data-composer-surface-variant`、
   `data-composer-utility-bar-variant`、`data-composer-layout` 和
   `data-composer-home-utility-bar-position` 等稳定属性发现。
@@ -13,6 +12,8 @@
   Composer 带有 `.dream-skin-composer-surface`。
 - 不修改官方 Codex `.app`、`app.asar`、代码签名、认证或业务项目源码。TRSkin 只管理
   仓库和用户目录中的独立皮肤运行时，并通过回环 CDP 连接执行热注入。
-- 提交前至少运行 `cd macos && npm test`；Windows 可用时同时运行
-  `powershell -File windows/tests/run-tests.ps1`。
+- 提交前运行 macOS 源码测试与隔离浏览器回归；交付前执行 `npm run checkup`，
+  非 Mac 设备明确记录未测项，并由 macOS CI 完成源码测试与原生编译。
+- 发布版本以 `macos/VERSION` 和 `macos/package.json` 为准；发布流程只生成
+  macOS 完整包、macOS Update 包、独立音乐包及校验/构建证明。
 

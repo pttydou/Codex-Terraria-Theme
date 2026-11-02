@@ -21,7 +21,7 @@ STATE_ROOT="${HOME}/Library/Application Support/CodexDreamSkinStudio"
 STATE_PATH="${STATE_ROOT}/state.json"
 THEME_DIR="${STATE_ROOT}/theme"
 
-PORT="9341"
+PORT="${CODEX_DREAM_SKIN_PORT:-9341}"
 SESSION="off"
 INJECTOR_ALIVE="false"
 CDP_OK="false"

@@ -2,11 +2,22 @@
 
 把 OpenAI Codex Desktop 变成一个会随 Terraria 世界变化的工作空间。
 
-TRSkin 是一个面向 Windows 与 macOS 的非官方 Codex Desktop Terraria 主题切换器：提供 **44 套环境与事件主题**、全环境随机、环境音乐、自动更新，以及 **524 个右侧伙伴候选**。伙伴池中包含 **449 个动态伙伴**和 **99 个动物或其他小动物候选**；同一时间只显示 1 个，约每 12 秒轮换且不会连续重复。
+TRSkin 是一个面向 macOS 的非官方 Codex Desktop Terraria 主题切换器：提供 **44 套环境与事件主题**、全环境随机、环境音乐、自动更新，以及 **524 个右侧伙伴候选**。伙伴池中包含 **449 个动态伙伴**和 **99 个动物或其他小动物候选**；同一时间只显示 1 个，约每 12 秒轮换且不会连续重复。
 
 [![Latest Release](https://img.shields.io/github/v/release/pttydou/Codex-Terraria-Theme?display_name=tag&sort=semver)](https://github.com/pttydou/Codex-Terraria-Theme/releases/latest)
 [![Release](https://img.shields.io/github/actions/workflow/status/pttydou/Codex-Terraria-Theme/release.yml?label=release)](https://github.com/pttydou/Codex-Terraria-Theme/actions/workflows/release.yml)
 [![License](https://img.shields.io/github/license/pttydou/Codex-Terraria-Theme)](LICENSE)
+
+## 维护状态
+
+**从 v2.7.33 起只维护 macOS；Windows 已停止维护。**
+
+| 平台 | 状态 | 下载 |
+| --- | --- | --- |
+| macOS | 持续更新，当前 2.7.33 | [最新 macOS Release](https://github.com/pttydou/Codex-Terraria-Theme/releases/latest) |
+| Windows | 停止功能更新与兼容性修复，源码和旧安装包保留 | [最后版本 v2.7.10](https://github.com/pttydou/Codex-Terraria-Theme/releases/tag/v2.7.10) |
+
+macOS 2.7.33 同步了新版 Codex 界面适配、地图背景、侧栏接缝/输入区/弹层文字修复，以及皮肤检验工具；详见 [更新日志](macos/CHANGELOG.md)。
 
 ## 视频演示
 
@@ -56,19 +67,21 @@ TRSkin 是一个面向 Windows 与 macOS 的非官方 Codex Desktop Terraria 主
 
 ## 下载
 
-普通用户请直接打开 [最新 Release](https://github.com/pttydou/Codex-Terraria-Theme/releases/latest)，按用途选择：
+普通用户请直接打开 [最新 Release](https://github.com/pttydou/Codex-Terraria-Theme/releases/latest)，选择 macOS 包：
 
-- 首次安装：`TRSkin-Windows-<版本>.zip` 或 `TRSkin-macOS-<版本>.zip` 完整包；
-- 已安装用户：程序自动提示下载对应平台的 `Update` 包；
+- 首次安装：`TRSkin-macOS-<版本>.zip` 完整包；
+- 已安装用户：macOS 程序自动提示下载 `TRSkin-macOS-Update-<版本>.zip`；
 - 只需补充音乐：`TRSkin-Music-Pack.zip`。
 
-从 `v2.7.0` 开始，Release 由 GitHub Actions 从版本标签对应的源码自动测试和构建。Windows/macOS 完整包与 Update 包均带源码 commit 信息，并发布 SHA-256 与 GitHub 构建证明；独立 Music Pack 作为固定哈希的外部内容输入管理。详细说明见[发布溯源与验证](docs/RELEASE-PROVENANCE.md)。
+从 `v2.7.0` 开始，Release 由 GitHub Actions 从版本标签对应的源码自动测试和构建。从 `v2.7.33` 起仅构建 macOS 完整包与 Update 包，均带源码 commit 信息，并发布 SHA-256 与 GitHub 构建证明；独立 Music Pack 作为固定哈希的外部内容输入管理。详细说明见[发布溯源与验证](docs/RELEASE-PROVENANCE.md)。
 
 ## 安装与使用
 
-### Windows
+### Windows（已停止维护）
 
-1. 从 Release 下载最新的 `TRSkin-Windows-<版本>.zip`。
+以下为历史版使用说明，后续 Codex 更新可能不再兼容。
+
+1. 从 [v2.7.10](https://github.com/pttydou/Codex-Terraria-Theme/releases/tag/v2.7.10) 下载 `TRSkin-Windows-2.7.10.zip`。
 2. 完整解压 ZIP，不要直接在压缩包预览窗口中运行。
 3. 打开解压后的 `TRSkin` 文件夹。
 4. 双击 `START-TRSKIN.cmd`。
@@ -96,7 +109,7 @@ TRSkin 是一个面向 Windows 与 macOS 的非官方 Codex Desktop Terraria 主
 
 ## 更新机制
 
-从 `2.7.0` 开始，Windows 桌面入口和 macOS 控制台每 24 小时最多检查一次最新版本。发现更新时会先询问用户，再执行以下流程：
+macOS 控制台每 24 小时最多检查一次最新版本。Windows 停留在历史版本，不再提供新的 Windows 更新包。发现更新时会先询问用户，再执行以下流程：
 
 1. 只下载当前平台的 `Update` 包，不下载完整包或 Music Pack；
 2. 校验下载大小、SHA-256、版本号、源码 commit 和包内构建身份；
@@ -114,7 +127,7 @@ TRSkin 是一个面向 Windows 与 macOS 的非官方 Codex Desktop Terraria 主
 
 ```text
 TRSkin/
-├─ windows/TRSkin/       Windows 启动器、PowerShell/Node 脚本和主题资源
+├─ windows/TRSkin/       Windows 历史源码（停止维护）
 ├─ macos/                macOS Shell/Node 脚本、Swift 控制台源码和测试
 ├─ docs/                 主题目录、素材来源和开发参考
 ├─ CONTRIBUTING.md       贡献指南
@@ -131,7 +144,9 @@ git clone https://github.com/pttydou/Codex-Terraria-Theme.git
 cd Codex-Terraria-Theme
 ```
 
-### Windows
+### Windows 历史源码（停止维护）
+
+以下仅供查看或自行维护旧版，当前 CI 不再构建 Windows。
 
 Windows 的发布包内置 x64/arm64 Node.js 运行时，源码仓库不追踪这些大型二进制文件。CI 会按照 [`NODE-RUNTIME.json`](windows/TRSkin/core/legal/NODE-RUNTIME.json) 中固定的官方地址和 SHA-256 下载 Node。若要直接从源码运行安装流程，可运行公开打包脚本，或者从对应 Release 包复制：
 
@@ -164,7 +179,7 @@ cd macos
 
 ## 参与修改
 
-欢迎 Fork 仓库、创建功能分支并提交 Pull Request。提交前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，不要提交音乐、用户图片、账号数据、日志或构建后的二进制文件。
+欢迎针对 macOS Fork 仓库、创建功能分支并提交 Pull Request。提交前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，不要提交音乐、用户图片、账号数据、日志或构建后的二进制文件。
 
 ## Bug 反馈与交流
 

@@ -27,11 +27,27 @@ const MAX_TOTAL_DECORATION_BYTES = 32 * 1024 * 1024;
 const MAX_COMPANION_COUNT = 64;
 const MAX_MUSIC_SLOTS_PER_ENVIRONMENT = 8;
 const CONTROL_CHARACTERS = /[\u0000-\u001f\u007f-\u009f\u2028\u2029]/u;
+const EARLY_FONT_STYLE_ID = "codex-dream-skin-early-style";
+const EARLY_FONT_FAMILY = '-apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei UI", "Segoe UI", system-ui, sans-serif';
+const DEFAULT_EARLY_FONT_CSS = `:root[data-dream-early-skin="true"],
+:root[data-dream-early-skin="true"] body {
+  color-scheme: dark !important;
+  background-color: #080d2b !important;
+}
+:root[data-dream-early-skin="true"] body,
+:root[data-dream-early-skin="true"] body *,
+:root[data-dream-early-skin="true"] button,
+:root[data-dream-early-skin="true"] input,
+:root[data-dream-early-skin="true"] textarea,
+:root[data-dream-early-skin="true"] select {
+  font-family: ${EARLY_FONT_FAMILY} !important;
+}`;
 let staticPayloadAssets = null;
 
 function parseArgs(argv) {
+  const configuredPort = Number(process.env.CODEX_DREAM_SKIN_PORT ?? 9341);
   const options = {
-    port: 9341,
+    port: Number.isFinite(configuredPort) ? configuredPort : 9341,
     mode: "watch",
     timeoutMs: 30000,
     screenshot: null,
@@ -45,6 +61,7 @@ function parseArgs(argv) {
     else if (arg === "--once") options.mode = "once";
     else if (arg === "--watch") options.mode = "watch";
     else if (arg === "--verify") options.mode = "verify";
+    else if (arg === "--compatibility-report") options.mode = "compatibility-report";
     else if (arg === "--remove") options.mode = "remove";
     else if (arg === "--check-payload") options.mode = "check";
     else if (arg === "--timeout-ms") options.timeoutMs = Number(argv[++i]);
@@ -80,9 +97,19 @@ function validatedDebuggerUrl(target, port) {
   return url.href;
 }
 
+// Shared by target discovery and serialized early hooks: native avatar and
+// detached utility windows can contain editors without being skin hosts.
+export function isSkinHostUrl(href) {
+  try {
+    const url = new URL(href);
+    return url.protocol === 'app:' && url.hostname === '-' && url.pathname === '/index.html'
+      && !/^\/avatar-overlay(?:\/|$)/.test(url.searchParams.get('initialRoute') || '');
+  } catch { return false; }
+}
+
 function isValidCdpPageTarget(item, port) {
   if (
-    item?.type !== "page" || !item.url?.startsWith("app://")
+    item?.type !== "page" || !isSkinHostUrl(item.url)
     || typeof item.id !== "string" || !CDP_ID_PATTERN.test(item.id)
     || !item.webSocketDebuggerUrl
   ) return false;
@@ -226,11 +253,13 @@ async function listAppTargets(port) {
 }
 
 export const CODEX_PROBE_EXPRESSION = `(() => {
+    const supportedHost = (${isSkinHostUrl.toString()})(globalThis.location?.href);
     const markers = {
       shell: Boolean(document.querySelector('main, [role="main"]')),
       sidebar: Boolean(document.querySelector(
-        'aside.app-shell-left-panel, aside, nav[aria-label], [data-testid*="sidebar"]'
+        '.app-shell-left-panel, aside, nav[aria-label], [data-testid*="sidebar"]'
       )),
+      settings: Boolean(document.querySelector('.app-shell-left-panel [data-settings-panel-slug]')),
       composer: Boolean(document.querySelector(
         '.dream-skin-composer-surface, [data-composer-surface-variant], [data-composer-utility-bar-variant], .composer-surface-chrome, textarea, [contenteditable="true"]'
       )),
@@ -240,7 +269,7 @@ export const CODEX_PROBE_EXPRESSION = `(() => {
       title: document.title,
       href: location.href,
       markers,
-      codex: Boolean(document.body) && markers.shell &&
+      codex: supportedHost && Boolean(document.body) && (markers.shell || markers.settings) &&
         (markers.sidebar || markers.composer),
     };
   })()`;
@@ -264,7 +293,7 @@ async function connectTarget(target, port) {
   return new CdpSession(target, port).open();
 }
 
-async function connectCodexTargets(port, timeoutMs) {
+export async function connectCodexTargets(port, timeoutMs) {
   const deadline = Date.now() + timeoutMs;
   let lastError;
   while (Date.now() < deadline) {
@@ -928,6 +957,7 @@ async function loadPayload(themeDir) {
   return {
     imageBytes: art.length,
     musicFiles: musicRuntime.files,
+    earlyFontCss: earlyFontCssFromStylesheet(css),
     payload,
     revision,
     theme,
@@ -955,7 +985,10 @@ export async function attachMusicFiles(session, musicFiles = []) {
   );
 }
 
-async function applyToSession(session, payload, musicFiles = []) {
+async function applyToSession(session, payload, musicFiles = [], earlyFontCss = DEFAULT_EARLY_FONT_CSS) {
+  // One-shot and hot-reload paths do not always execute the persistent
+  // new-document hook. Keep the font baseline consistent on those paths too.
+  await session.evaluate(earlyFontBootstrapFor(earlyFontCss));
   const result = await session.evaluate(payload);
   await attachMusicFiles(session, musicFiles);
   return result;
@@ -975,7 +1008,7 @@ async function removeFromSession(session) {
     }
     document.getElementById('codex-dream-skin-style')?.remove();
     document.getElementById('codex-dream-skin-chrome')?.remove();
-    document.querySelectorAll('main.trskin-main-surface, main[data-trskin-main-surface]')
+    document.querySelectorAll('main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]')
       .forEach((node) => {
         node.classList.remove('trskin-main-surface');
         node.removeAttribute('data-trskin-main-surface');
@@ -995,13 +1028,13 @@ async function verifyRemovedSession(session) {
     !document.documentElement.classList.contains('codex-dream-skin') &&
     !document.getElementById('codex-dream-skin-style') &&
     !document.getElementById('codex-dream-skin-chrome') &&
-    !document.querySelector('main.trskin-main-surface, main[data-trskin-main-surface]') &&
+    !document.querySelector('main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]') &&
     !document.querySelector('header.trskin-app-header, header[data-trskin-app-header]') &&
     !window.__CODEX_DREAM_SKIN_STATE__
   )()`);
 }
 
-async function verifySession(session) {
+export async function verifySession(session) {
   return session.evaluate(`(() => {
     const box = (node) => {
       if (!node) return null;
@@ -1017,11 +1050,13 @@ async function verifySession(session) {
           r.right > 0 && r.left < innerWidth,
       };
     };
-    const homeIndicator = document.querySelector('[data-testid="home-icon"]');
-    const homeSignal = homeIndicator ?? document.querySelector('[data-feature="game-source"]') ??
-      document.querySelector('.group\\\\/home-suggestions');
-    const homeRoute = homeSignal?.closest('[role="main"]') ?? null;
-    const home = document.querySelector('[role="main"].dream-skin-home');
+    const firstVisible = (selector) => [...document.querySelectorAll(selector)]
+      .find(candidate => box(candidate)?.visible) ?? null;
+    const settingsRoute = Boolean(firstVisible('[data-settings-panel-slug][aria-current="page"]')
+      || firstVisible('.app-shell-left-panel [data-settings-panel-slug]'));
+    const homeRoute = [...document.querySelectorAll('[role="main"]')].find(candidate =>
+      box(candidate)?.visible && candidate.querySelector('[data-testid="home-icon"], [data-feature="game-source"]')) ?? null;
+    const home = firstVisible('[role="main"].dream-skin-home');
     const suggestions = home?.querySelector('.dream-skin-home-suggestions') ??
       home?.querySelector('.group\\\\/home-suggestions') ?? null;
     const cardBoxes = suggestions ? [...suggestions.querySelectorAll('button')].map(box) : [];
@@ -1031,22 +1066,23 @@ async function verifySession(session) {
       hero = box(home?.querySelector('[data-feature="game-source"]'));
     }
     const projectButton = box(home?.querySelector('.group\\\\/project-selector > button'));
-    const shell = box(document.querySelector('main.trskin-main-surface'));
-    const nativeComposer = document.querySelector(
+    const shell = box(firstVisible('main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]'));
+    const nativeComposer = firstVisible(
       '[data-composer-surface-variant], [data-composer-utility-bar-variant]'
     );
-    const editor = document.querySelector('textarea, [contenteditable="true"]');
-    const composerNode = document.querySelector('.dream-skin-composer-surface') ??
+    const editor = firstVisible('textarea, [contenteditable="true"]');
+    const composerNode = settingsRoute ? null : firstVisible('.dream-skin-composer-surface') ??
       nativeComposer?.querySelector(':scope > [data-composer-layout]') ?? nativeComposer ??
-      document.querySelector('.composer-surface-chrome') ??
+      firstVisible('.composer-surface-chrome') ??
       editor?.closest('[data-composer-layout], form') ?? editor;
     const composer = box(composerNode);
     const composerMarkers = [...document.querySelectorAll('.dream-skin-composer-surface')];
     const visibleComposerMarkers = composerMarkers.filter((candidate) => box(candidate)?.visible);
     const composerStyle = getComputedStyle(composerNode || document.body);
-    const homeUtilityNode = document.querySelector('.dream-skin-home-utility');
+    const homeUtilityNode = firstVisible('.dream-skin-home-utility');
     const homeUtilityStyle = getComputedStyle(homeUtilityNode || document.body);
-    const sidebar = box(document.querySelector('aside.app-shell-left-panel'));
+    const sidebar = box(firstVisible('.app-shell-left-panel'));
+    const settingsContent = box(firstVisible('.trskin-settings-content'));
     const chrome = document.getElementById('codex-dream-skin-chrome');
     const frontendCompatibility = window.__CODEX_DREAM_SKIN_STATE__?.frontendContract ?? null;
     const skinStyle = document.getElementById('codex-dream-skin-style');
@@ -1054,6 +1090,8 @@ async function verifySession(session) {
       installed: document.documentElement.classList.contains('codex-dream-skin'),
       version: window.__CODEX_DREAM_SKIN_STATE__?.version ?? null,
       frontendCompatibility,
+      settingsRoute,
+      settingsContent,
       stylePresent: Boolean(skinStyle),
       styleEnabled: Boolean(skinStyle) && !skinStyle.disabled,
       chromePresent: Boolean(chrome),
@@ -1084,13 +1122,15 @@ async function verifySession(session) {
     const basePass = result.installed && result.version === ${JSON.stringify(SKIN_VERSION)} &&
       Boolean(result.frontendCompatibility) && !result.frontendCompatibility.updateRequired &&
       result.frontendCompatibility.safety?.mode === 'normal' &&
-      result.stylePresent && result.styleEnabled && result.chromePresent && result.chromePointerEvents === 'none' &&
-      Boolean(result.shell?.visible) && Boolean(result.sidebar?.visible) && !result.documentOverflow.x &&
+      result.stylePresent && result.styleEnabled &&
+      (result.settingsRoute || (result.chromePresent && result.chromePointerEvents === 'none')) &&
+      Boolean(result.settingsRoute ? result.settingsContent?.visible : result.shell?.visible) &&
+      Boolean(result.sidebar?.visible) && !result.documentOverflow.x &&
       (!result.composer?.visible || (result.composerOwned &&
         result.visibleComposerMarkerCount === 1 && result.composerOutlineStyle === 'none')) &&
       (!result.homeUtility?.visible || result.homeUtilityOwned);
     // Project selector markup varies across Codex builds — soft requirement.
-    const cardsPass = !suggestions || (
+    const cardsPass = !suggestions || cardBoxes.length === 0 || (
       cardBoxes.length >= 2 && cardBoxes.length <= 4 &&
       visibleCards.length === cardBoxes.length &&
       (!composer || cardBoxes.every((item) => item.y + item.height <= composer.y))
@@ -1163,14 +1203,14 @@ async function runOneShot(options) {
     try {
       if (options.mode === "remove") await removeFromSession(session);
       else if (options.mode === "once") {
-        await applyToSession(session, payload, loaded.musicFiles);
+        await applyToSession(session, payload, loaded.musicFiles, loaded.earlyFontCss);
       }
 
       if (options.reload) {
         await session.send("Page.reload", { ignoreCache: true });
         await new Promise((resolve) => setTimeout(resolve, 1600));
         if (options.mode !== "remove") {
-          await applyToSession(session, payload, loaded.musicFiles);
+          await applyToSession(session, payload, loaded.musicFiles, loaded.earlyFontCss);
         }
       }
 
@@ -1191,6 +1231,74 @@ async function runOneShot(options) {
   console.log(JSON.stringify({ mode: options.mode, version: SKIN_VERSION, port: options.port, targets: results }, null, 2));
   const failed = results.length === 0 || results.some((item) => options.mode === "remove" ? item.result !== true : !item.result?.pass);
   if (failed) process.exitCode = 2;
+}
+
+export function summarizeCompatibility(snapshot, expectedVersion = SKIN_VERSION) {
+  const contract = snapshot.frontendCompatibility;
+  const adapters = contract?.adapters || {};
+  const missingRequired = Object.entries(adapters)
+    .filter(([, adapter]) => adapter?.required && adapter.status === "missing")
+    .map(([name]) => name);
+  const fallbackAdapters = Object.entries(adapters)
+    .filter(([, adapter]) => adapter?.status === "fallback")
+    .map(([name, adapter]) => ({ name, selected: adapter.selected }));
+  let recommendedAction;
+  if (!snapshot.installed || !contract || snapshot.skinVersion !== expectedVersion
+    || contract.schema !== 2 || !contract.diagnostics || !adapters.main || !adapters.composer) {
+    recommendedAction = "refresh-runtime";
+  } else if (contract.safety?.mode === "confirming") {
+    recommendedAction = "wait-and-recheck";
+  } else if (contract.status === "incompatible" || contract.updateRequired
+    || missingRequired.length > 0 || contract.criticalMissing?.length > 0) {
+    recommendedAction = "update-adapter";
+  } else if (!snapshot.styleEnabled || contract.safety?.mode !== "normal"
+    || !["compatible", "adaptive"].includes(contract.status)) {
+    recommendedAction = "inspect-runtime";
+  } else {
+    recommendedAction = fallbackAdapters.length > 0 ? "inspect-fallback" : "none";
+  }
+  return {
+    ...snapshot,
+    scope: "current-renderer-structure",
+    missingRequired,
+    fallbackAdapters,
+    recommendedAction,
+  };
+}
+
+async function runCompatibilityReport(options) {
+  const connected = await connectCodexTargets(options.port, options.timeoutMs);
+  const results = [];
+  for (const { target, session, probe } of connected) {
+    try {
+      const snapshot = await session.evaluate(`(() => {
+        const state = window.__CODEX_DREAM_SKIN_STATE__ || {};
+        const contract = state.frontendContract || null;
+        return {
+          installed: document.documentElement.classList.contains("codex-dream-skin"),
+          skinVersion: state.version ?? null,
+          adapterRegistryVersion: contract?.adapterRegistryVersion ?? null,
+          frontendCompatibility: contract,
+          styleEnabled: Boolean(document.getElementById("codex-dream-skin-style")
+            && !document.getElementById("codex-dream-skin-style").disabled),
+          safety: contract?.safety || null,
+          diagnostics: contract?.diagnostics || null,
+          diagnosticFingerprint: contract?.diagnosticFingerprint || null,
+        };
+      })()`);
+      const result = summarizeCompatibility(snapshot);
+      results.push({ targetId: target.id, title: target.title, url: target.url, probe, result });
+    } finally {
+      session.close();
+    }
+  }
+  if (results.length < 1) throw new Error("No verified Codex renderer accepted the compatibility report");
+  console.log(JSON.stringify({
+    mode: options.mode,
+    version: SKIN_VERSION,
+    port: options.port,
+    targets: results,
+  }, null, 2));
 }
 
 async function runRuntimeControl(options) {
@@ -1257,11 +1365,82 @@ export function armOneShotExitFallback(delayMs = 750) {
   return timer;
 }
 
-export function earlyPayloadFor(payload, revision) {
+export function earlyFontCssFromStylesheet(css) {
+  const source = String(css || "");
+  const terrariaBodyRule = source.match(
+    /html\.codex-dream-skin\[data-dream-style="terraria"\]\s+body\s*\{([\s\S]*?)\}/,
+  );
+  const family = terrariaBodyRule?.[1]?.match(/font-family\s*:\s*([^;]+);/)?.[1]
+    ?.replace(/\s*!important\s*$/i, "")
+    ?.trim();
+  if (!family || family.includes("var(")) return DEFAULT_EARLY_FONT_CSS;
+  return `:root[data-dream-early-skin="true"],
+:root[data-dream-early-skin="true"] body {
+  color-scheme: dark !important;
+  background-color: #080d2b !important;
+}
+:root[data-dream-early-skin="true"] body,
+:root[data-dream-early-skin="true"] body *,
+:root[data-dream-early-skin="true"] button,
+:root[data-dream-early-skin="true"] input,
+:root[data-dream-early-skin="true"] textarea,
+:root[data-dream-early-skin="true"] select {
+  font-family: ${family} !important;
+}`;
+}
+
+export function earlyFontBootstrapFor(css = DEFAULT_EARLY_FONT_CSS, revision = "") {
+  const source = JSON.stringify(String(css || DEFAULT_EARLY_FONT_CSS));
+  const generation = JSON.stringify(String(revision || "early"));
   return `(() => {
+    const styleId = ${JSON.stringify(EARLY_FONT_STYLE_ID)};
+    const generationKey = "__CODEX_DREAM_SKIN_EARLY_GENERATION__";
+    const generation = ${generation};
+    if (!(${isSkinHostUrl.toString()})(globalThis.location?.href)) return false;
+    const root = document.documentElement;
+    if (!root) return false;
+    const title = String(document.title || "").toLowerCase();
+    const href = String(globalThis.location?.href || "").toLowerCase();
+    if (!/codex|chatgpt/.test(title) && !href.startsWith("app://-/")) return false;
+    if (generation !== "early" && window[generationKey] && window[generationKey] !== generation) return false;
+    try {
+      const stored = JSON.parse(window.localStorage?.getItem?.("__TRSKIN_FRONTEND_SAFE_MODE_V1__") || "null");
+      if (stored?.schema === 1 && stored.active === true) {
+        const existing = document.getElementById?.(styleId);
+        if (existing) existing.disabled = true;
+        root.removeAttribute?.("data-dream-early-skin");
+        return false;
+      }
+    } catch {}
+    root.setAttribute?.("data-dream-early-skin", "true");
+    let style = document.getElementById?.(styleId);
+    if (!style && typeof document.createElement === "function") {
+      style = document.createElement("style");
+      style.id = styleId;
+      style.setAttribute?.("data-dream-skin-baseline", "font");
+      (document.head || root).appendChild(style);
+    }
+    if (!style) return false;
+    const css = ${source};
+    if (style.textContent !== css) style.textContent = css;
+    style.disabled = false;
+    return true;
+  })()`;
+}
+
+export function earlyPayloadFor(payload, revision, earlyFontCss = DEFAULT_EARLY_FONT_CSS) {
+  return `(() => {
+    if (!(${isSkinHostUrl.toString()})(globalThis.location?.href)) return false;
     const generationKey = "__CODEX_DREAM_SKIN_EARLY_GENERATION__";
     const appliedKey = "__CODEX_DREAM_SKIN_EARLY_APPLIED__";
     const generation = ${JSON.stringify(revision)};
+    const installFontBaseline = () => {
+      try {
+        return (${earlyFontBootstrapFor(earlyFontCss, revision)});
+      } catch {
+        return false;
+      }
+    };
     window[generationKey] = generation;
     let observer = null;
     let timeout = null;
@@ -1273,20 +1452,23 @@ export function earlyPayloadFor(payload, revision) {
     };
     const install = () => {
       if (window[generationKey] !== generation) { stop(); return true; }
+      installFontBaseline();
       if (!document.documentElement || !document.body) return false;
       const shell = document.querySelector('main, [role="main"]');
       const sidebar = document.querySelector(
-        'aside.app-shell-left-panel, aside, nav[aria-label], [data-testid*="sidebar"]'
+        '.app-shell-left-panel, aside, nav[aria-label], [data-testid*="sidebar"]'
       );
+      const settings = document.querySelector('.app-shell-left-panel [data-settings-panel-slug]');
       const composer = document.querySelector(
         '.dream-skin-composer-surface, [data-composer-surface-variant], [data-composer-utility-bar-variant], .composer-surface-chrome, textarea, [contenteditable="true"]'
       );
-      if (!shell || (!sidebar && !composer)) return false;
+      if ((!shell && !settings) || (!sidebar && !composer)) return false;
       stop();
       ${payload};
       window[appliedKey] = generation;
       return true;
     };
+    installFontBaseline();
     if (install()) return;
     if (typeof MutationObserver === "function" && document.documentElement) {
       observer = new MutationObserver(install);
@@ -1338,9 +1520,9 @@ async function runWatch(options) {
   process.on("SIGINT", stop);
   process.on("SIGTERM", stop);
 
-  const registerEarly = async (session, payload, revision) => {
+  const registerEarly = async (session, payload, revision, earlyFontCss) => {
     const result = await session.send("Page.addScriptToEvaluateOnNewDocument", {
-      source: earlyPayloadFor(payload, revision),
+      source: earlyPayloadFor(payload, revision, earlyFontCss),
     });
     return result.identifier ?? null;
   };
@@ -1360,7 +1542,9 @@ async function runWatch(options) {
       const { session } = record;
       if (session.closed) continue;
       try {
-        const nextIdentifier = await registerEarly(session, current.payload, current.revision);
+        const nextIdentifier = await registerEarly(
+          session, current.payload, current.revision, current.earlyFontCss,
+        );
         if (record.earlyScriptId) {
           await session.send("Page.removeScriptToEvaluateOnNewDocument", {
             identifier: record.earlyScriptId,
@@ -1368,7 +1552,9 @@ async function runWatch(options) {
         }
         record.earlyScriptId = nextIdentifier;
         record.needsLoadFallback = !nextIdentifier;
-        await applyToSession(session, current.payload, current.musicFiles);
+        await applyToSession(
+          session, current.payload, current.musicFiles, current.earlyFontCss,
+        );
       } catch (error) {
         record.needsLoadFallback = true;
         console.error(`[dream-skin] theme refresh failed: ${error.message}`);
@@ -1421,8 +1607,12 @@ async function runWatch(options) {
           session = await connectTarget(target, options.port);
           record = { session, earlyScriptId: null, needsLoadFallback: false };
           try {
-            record.earlyScriptId = await registerEarly(session, current.payload, current.revision);
-            await session.evaluate(earlyPayloadFor(current.payload, current.revision));
+            record.earlyScriptId = await registerEarly(
+              session, current.payload, current.revision, current.earlyFontCss,
+            );
+            await session.evaluate(
+              earlyPayloadFor(current.payload, current.revision, current.earlyFontCss),
+            );
           } catch (error) {
             record.needsLoadFallback = true;
             console.error(`[dream-skin] early injection unavailable: ${error.message}`);
@@ -1438,15 +1628,45 @@ async function runWatch(options) {
             continue;
           }
           rejected.delete(target.id);
+          session.on("Page.frameNavigated", (frame) => {
+            if (frame?.parentId) return;
+            setTimeout(() => session.evaluate(
+              earlyFontBootstrapFor(current.earlyFontCss, `navigation:${current.revision}`),
+            ).catch(() => {}), 0);
+          });
           session.on("Page.loadEventFired", () => {
-            if (!record.needsLoadFallback) return;
-            setTimeout(() => applyToSession(
-              session,
-              current.payload,
-              current.musicFiles,
-            ).catch((error) => {
-              console.error(`[dream-skin] fallback reinject failed: ${error.message}`);
-            }), 0);
+            setTimeout(async () => {
+              try {
+                const nextIdentifier = await registerEarly(
+                  session,
+                  current.payload,
+                  current.revision,
+                  current.earlyFontCss,
+                );
+                if (nextIdentifier && record.earlyScriptId !== nextIdentifier) {
+                  const previousIdentifier = record.earlyScriptId;
+                  record.earlyScriptId = nextIdentifier;
+                  record.needsLoadFallback = false;
+                  if (previousIdentifier) {
+                    await session.send("Page.removeScriptToEvaluateOnNewDocument", {
+                      identifier: previousIdentifier,
+                    }).catch(() => {});
+                  }
+                }
+                const installed = await session.evaluate(
+                  "Boolean(document.documentElement?.classList.contains('codex-dream-skin'))",
+                );
+                if (installed && !record.needsLoadFallback) return;
+                await applyToSession(
+                  session,
+                  current.payload,
+                  current.musicFiles,
+                  current.earlyFontCss,
+                );
+              } catch (error) {
+                console.error(`[dream-skin] load recovery failed: ${error.message}`);
+              }
+            }, 0);
           });
           const earlyApplied = await session.evaluate(
             `window.__CODEX_DREAM_SKIN_EARLY_APPLIED__ === ${JSON.stringify(current.revision)}`,
@@ -1455,7 +1675,9 @@ async function runWatch(options) {
             await session.evaluate(
               `window.__CODEX_DREAM_SKIN_EARLY_GENERATION__ = ${JSON.stringify(`fallback:${current.revision}`)}`,
             );
-            await applyToSession(session, current.payload, current.musicFiles);
+            await applyToSession(
+              session, current.payload, current.musicFiles, current.earlyFontCss,
+            );
           } else {
             await attachMusicFiles(session, current.musicFiles);
           }
@@ -1497,6 +1719,7 @@ if (path.resolve(process.argv[1] || "") === path.resolve(scriptPath)) {
         timings: loaded.timings,
       }, null, 2));
     } else if (options.mode === "watch") await runWatch(options);
+    else if (options.mode === "compatibility-report") await runCompatibilityReport(options);
     else if (["runtime-random-config", "runtime-next-environment"].includes(options.mode)) {
       await runRuntimeControl(options);
     } else await runOneShot(options);

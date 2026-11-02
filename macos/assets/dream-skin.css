@@ -1,5 +1,6 @@
 :root.codex-dream-skin {
   color-scheme: dark !important;
+  background: var(--ds-bg) !important;
   --ds-bg: #111318;
   --ds-panel: #191c22;
   --ds-panel-2: #20242b;
@@ -59,6 +60,7 @@
 
 html.codex-dream-skin[data-dream-shell="light"] {
   color-scheme: light !important;
+  background: var(--ds-bg) !important;
   --ds-bg: #f3f5f6;
   --ds-panel: #fafbfb;
   --ds-panel-2: #e9edef;
@@ -189,6 +191,17 @@ html.codex-dream-skin body::before {
   content: none;
 }
 
+/* New Codex home routes keep an unmarked outer <main> around the real
+   [role="main"] surface. During the empty-state layout pass that wrapper can
+   be wider or taller than the inner surface, exposing Codex's native white
+   background as a top strip or right edge. Keep the compatibility wrapper on
+   the same skin canvas; the renderer-owned surface still controls the art and
+   layout below it. */
+html.codex-dream-skin main:not(.trskin-main-surface):not([role="main"]) {
+  background: var(--ds-bg) !important;
+  color: var(--ds-text) !important;
+}
+
 html.codex-dream-skin aside.app-shell-left-panel {
   background:
     linear-gradient(180deg,
@@ -263,7 +276,7 @@ html.codex-dream-skin aside.app-shell-left-panel [aria-current="page"] svg {
   color: var(--ds-accent) !important;
 }
 
-html.codex-dream-skin main.trskin-main-surface {
+html.codex-dream-skin :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]) {
   position: relative !important;
   isolation: isolate;
   overflow: hidden !important;
@@ -275,7 +288,7 @@ html.codex-dream-skin main.trskin-main-surface {
   box-shadow: -8px 0 28px rgb(var(--ds-bg-rgb) / .18) !important;
 }
 
-html.codex-dream-skin main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+html.codex-dream-skin :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -288,23 +301,23 @@ html.codex-dream-skin main.trskin-main-surface:not(.dream-skin-home-shell)::befo
   opacity: .78;
 }
 
-html.codex-dream-skin[data-dream-shell="light"] main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+html.codex-dream-skin[data-dream-shell="light"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::before {
   opacity: .72;
 }
 
 html.codex-dream-skin:is([data-dream-art-wide="true"], [data-dream-art-aspect="wide"], [data-dream-art-aspect="ultrawide"])
-  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::before {
   background-position: center, center, var(--ds-art-position);
   background-size: 100% 100%, 100% 100%, cover;
 }
 
 html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])
-  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::before {
   inset: 0;
   height: auto;
 }
 
-html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(main.trskin-main-surface:not(.dream-skin-home-shell)) body {
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(:is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)) body {
   background-image: var(--dream-skin-art) !important;
   background-position: var(--ds-art-position) !important;
   background-size: cover !important;
@@ -312,7 +325,7 @@ html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-
   background-attachment: fixed !important;
 }
 
-html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(main.trskin-main-surface:not(.dream-skin-home-shell))
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(:is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell))
   aside.app-shell-left-panel {
   background: linear-gradient(90deg,
     var(--ds-task-immersive-sidebar),
@@ -323,15 +336,15 @@ html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-
   backdrop-filter: none !important;
 }
 
-/* Native sidebar resize chrome inherits the sidebar background and extends
-   20px into the main surface. Keeping it clear preserves one continuous image. */
-html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(main.trskin-main-surface:not(.dream-skin-home-shell))
-  aside.app-shell-left-panel::after {
+/* Native sidebar chrome extends 20px over the main surface and inherits the
+   panel's entire wallpaper. Clear its paint for every route/art mode and both
+   aside/div hosts. Keep its geometry and the separate resize handle intact. */
+html.codex-dream-skin .app-shell-left-panel::after {
   background: transparent !important;
 }
 
-html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(main.trskin-main-surface:not(.dream-skin-home-shell))
-  main.trskin-main-surface:not(.dream-skin-home-shell) {
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(:is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell))
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) {
   background: linear-gradient(90deg,
     var(--ds-task-immersive-edge),
     var(--ds-task-immersive-mid) 64%,
@@ -342,11 +355,11 @@ html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-
 }
 
 html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::before {
   content: none;
 }
 
-html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(main.trskin-main-surface:not(.dream-skin-home-shell))
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(:is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell))
   .dream-skin-composer-surface {
   background: var(--ds-immersive-composer-solid) !important;
   border: 0 !important;
@@ -357,8 +370,8 @@ html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-
   backdrop-filter: none !important;
 }
 
-html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(main.trskin-main-surface:not(.dream-skin-home-shell))
-  main.trskin-main-surface > header.trskin-app-header {
+html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]:has(:is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell))
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]) > header.trskin-app-header {
   background: transparent !important;
   border-bottom: 0 !important;
   box-shadow: none !important;
@@ -366,7 +379,7 @@ html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-
 }
 
 html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]
-  main.trskin-main-surface:not(.dream-skin-home-shell) [class*="_markdown"] {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) [class*="_markdown"] {
   color: var(--ds-text) !important;
   text-shadow:
     0 1px 2px rgb(var(--ds-bg-rgb) / .82),
@@ -374,14 +387,14 @@ html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-
 }
 
 html.codex-dream-skin[data-dream-shell="light"]:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"], [data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])[data-dream-art-wide="true"]
-  main.trskin-main-surface:not(.dream-skin-home-shell) [class*="_markdown"] {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) [class*="_markdown"] {
   text-shadow:
     0 1px 2px rgb(var(--ds-panel-rgb) / .92),
     0 0 10px rgb(var(--ds-panel-rgb) / .72);
 }
 
 html.codex-dream-skin:is([data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"])
-  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::before {
   inset: 0 0 auto;
   height: clamp(280px, 46vh, 520px);
   background-position: center top, center top, var(--ds-art-position);
@@ -389,7 +402,7 @@ html.codex-dream-skin:is([data-dream-task-mode="banner"], [data-dream-art-task-m
 }
 
 html.codex-dream-skin:is([data-dream-task-mode="banner"], [data-dream-art-task-mode="banner"]):is([data-dream-art-wide="true"], [data-dream-art-aspect="wide"], [data-dream-art-aspect="ultrawide"])
-  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::before {
   inset: 0;
   height: auto;
   background-position: center, center, var(--ds-art-position);
@@ -397,16 +410,16 @@ html.codex-dream-skin:is([data-dream-task-mode="banner"], [data-dream-art-task-m
 }
 
 html.codex-dream-skin:is([data-dream-task-mode="off"], [data-dream-art-task-mode="off"])
-  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::before {
   content: none;
 }
 
-html.codex-dream-skin main.trskin-main-surface:not(.dream-skin-home-shell) > :not(header.trskin-app-header) {
+html.codex-dream-skin :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) > :not(header.trskin-app-header) {
   position: relative;
   z-index: 1;
 }
 
-html.codex-dream-skin main.trskin-main-surface:not(.dream-skin-home-shell) [role="main"] {
+html.codex-dream-skin :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) [role="main"] {
   background: transparent !important;
   color: var(--ds-text) !important;
   text-shadow:
@@ -414,22 +427,22 @@ html.codex-dream-skin main.trskin-main-surface:not(.dream-skin-home-shell) [role
     0 0 10px rgb(var(--ds-bg-rgb) / .46);
 }
 
-html.codex-dream-skin[data-dream-shell="light"] main.trskin-main-surface:not(.dream-skin-home-shell) [role="main"] {
+html.codex-dream-skin[data-dream-shell="light"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) [role="main"] {
   text-shadow: none;
 }
 
-html.codex-dream-skin main.trskin-main-surface:not(.dream-skin-home-shell) article {
+html.codex-dream-skin :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) article {
   border: 1px solid rgb(var(--ds-muted-rgb) / .12);
   background: rgb(var(--ds-panel-rgb) / .44);
   box-shadow: 0 8px 24px rgb(var(--ds-bg-rgb) / .10);
   backdrop-filter: blur(7px) saturate(105%);
 }
 
-html.codex-dream-skin[data-dream-shell="light"] main.trskin-main-surface:not(.dream-skin-home-shell) article {
+html.codex-dream-skin[data-dream-shell="light"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) article {
   background: rgb(var(--ds-panel-rgb) / .72);
 }
 
-html.codex-dream-skin main.trskin-main-surface > header.trskin-app-header {
+html.codex-dream-skin :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]) > header.trskin-app-header {
   /* Preserve Codex's native fixed header geometry and side-panel controls. */
   background: rgb(var(--ds-panel-rgb) / .90) !important;
   border-bottom: 1px solid var(--ds-line) !important;
@@ -520,7 +533,7 @@ html.codex-dream-skin [role="main"] {
 html.codex-dream-skin .dream-skin-home {
   --thread-content-max-width: min(1180px, calc(100cqw - 44px)) !important;
   overflow-x: hidden !important;
-  overflow-y: hidden !important;
+  overflow-y: auto !important;
   overscroll-behavior: none;
 }
 
@@ -547,7 +560,10 @@ html.codex-dream-skin .dream-skin-home {
 }
 
 .dream-skin-home .dream-skin-home-hero-rail {
-  flex: 0 0 440px !important;
+  /* Reserve vertical space explicitly: the native parent can be a row or a column. */
+  flex: none !important;
+  width: 100% !important;
+  min-width: 0 !important;
   min-height: 440px !important;
   align-items: flex-start !important;
   padding-bottom: 0 !important;
@@ -558,8 +574,8 @@ html.codex-dream-skin .dream-skin-home {
   isolation: isolate;
   width: calc(100% - 44px) !important;
   max-width: none !important;
-  height: clamp(248px, 31cqw, 376px) !important;
-  min-height: 248px !important;
+  height: auto !important;
+  min-height: clamp(248px, 31cqw, 376px) !important;
   flex: 0 1 auto !important;
   overflow: visible !important;
   padding: 0 !important;
@@ -606,10 +622,12 @@ html.codex-dream-skin:is([data-dream-art-safe="none"], [data-dream-art-safe-area
 .dream-skin-home .dream-skin-home-hero-inner {
   position: relative;
   z-index: 1;
-  height: 100%;
+  height: auto;
+  width: 100%;
+  min-width: 0;
   align-items: center !important;
   justify-content: flex-start !important;
-  padding: 0 38px;
+  padding: 24px 38px;
 }
 
 html.codex-dream-skin:is([data-dream-art-safe="right"], [data-dream-art-safe-area="right"])
@@ -623,7 +641,9 @@ html.codex-dream-skin:is([data-dream-art-safe="center"], [data-dream-art-safe-ar
 }
 
 .dream-skin-home .dream-skin-home-copy {
-  width: min(46%, 520px) !important;
+  width: min(100%, max(46%, 360px)) !important;
+  max-width: 520px;
+  min-width: 0;
   align-items: flex-start !important;
   gap: 0 !important;
 }
@@ -673,6 +693,8 @@ html.codex-dream-skin:is([data-dream-art-safe="center"], [data-dream-art-safe-ar
 
 .dream-skin-home [data-feature="game-source"] button {
   margin: 0 5px;
+  max-width: calc(100% - 10px) !important;
+  overflow-wrap: anywhere;
   padding: 2px 9px 3px;
   border: 1px solid rgb(var(--ds-accent-rgb) / .36);
   border-radius: 999px;
@@ -779,7 +801,7 @@ html.codex-dream-skin .dream-skin-composer-surface::before { content: none !impo
 
 /* A wide image can carry the home screen too. The native hero remains live,
    but the artwork is painted once on the window instead of repeated in a card. */
-html.codex-dream-skin[data-dream-art-wide="true"]:has(main.trskin-main-surface.dream-skin-home-shell) body {
+html.codex-dream-skin[data-dream-art-wide="true"]:has(:is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).dream-skin-home-shell) body {
   background-image: var(--dream-skin-art) !important;
   background-position: var(--ds-art-position) !important;
   background-size: cover !important;
@@ -787,7 +809,7 @@ html.codex-dream-skin[data-dream-art-wide="true"]:has(main.trskin-main-surface.d
   background-attachment: fixed !important;
 }
 
-html.codex-dream-skin[data-dream-art-wide="true"]:has(main.trskin-main-surface.dream-skin-home-shell)
+html.codex-dream-skin[data-dream-art-wide="true"]:has(:is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).dream-skin-home-shell)
   aside.app-shell-left-panel {
   background: linear-gradient(90deg,
     var(--ds-immersive-sidebar),
@@ -798,12 +820,7 @@ html.codex-dream-skin[data-dream-art-wide="true"]:has(main.trskin-main-surface.d
   backdrop-filter: none !important;
 }
 
-html.codex-dream-skin[data-dream-art-wide="true"]:has(main.trskin-main-surface.dream-skin-home-shell)
-  aside.app-shell-left-panel::after {
-  background: transparent !important;
-}
-
-html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface.dream-skin-home-shell {
+html.codex-dream-skin[data-dream-art-wide="true"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).dream-skin-home-shell {
   background: linear-gradient(90deg,
     var(--ds-immersive-edge),
     var(--ds-immersive-mid) 64%,
@@ -813,7 +830,7 @@ html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface.dream
   box-shadow: none !important;
 }
 
-html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface.dream-skin-home-shell
+html.codex-dream-skin[data-dream-art-wide="true"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).dream-skin-home-shell
   > header.trskin-app-header {
   background: transparent !important;
   border-bottom: 0 !important;
@@ -821,7 +838,7 @@ html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface.dream
   backdrop-filter: none !important;
 }
 
-html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface
+html.codex-dream-skin[data-dream-art-wide="true"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface])
   > header.trskin-app-header {
   color: var(--ds-text) !important;
   text-shadow:
@@ -829,13 +846,13 @@ html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface
     0 0 8px rgb(var(--ds-bg-rgb) / .52) !important;
 }
 
-html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface
+html.codex-dream-skin[data-dream-art-wide="true"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface])
   > header.trskin-app-header svg {
   color: rgb(var(--ds-muted-rgb) / .96) !important;
   filter: drop-shadow(0 1px 2px rgb(var(--ds-bg-rgb) / .72));
 }
 
-html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface.dream-skin-home-shell
+html.codex-dream-skin[data-dream-art-wide="true"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).dream-skin-home-shell
   .dream-skin-home .dream-skin-home-hero {
   border: 0 !important;
   border-radius: 0 !important;
@@ -843,12 +860,12 @@ html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface.dream
   box-shadow: none !important;
 }
 
-html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface.dream-skin-home-shell
+html.codex-dream-skin[data-dream-art-wide="true"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).dream-skin-home-shell
   .dream-skin-home .dream-skin-home-hero::before {
   content: none !important;
 }
 
-html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface.dream-skin-home-shell
+html.codex-dream-skin[data-dream-art-wide="true"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).dream-skin-home-shell
   .dream-skin-home .dream-skin-home-suggestions button {
   background: rgb(var(--ds-panel-rgb) / .56) !important;
   box-shadow:
@@ -966,17 +983,17 @@ html.codex-dream-skin .dream-skin-composer-surface p.placeholder::after {
 /* Search routes ship an opaque sticky band and input surface. Keep the
    control legible while allowing the selected image to remain continuous. */
 html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"])[data-dream-art-wide="true"]
-  main.trskin-main-surface:not(.dream-skin-home-shell) div.sticky:has(input[type="text"]) {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) div.sticky:has(input[type="text"]) {
   background: transparent !important;
 }
 
 html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"])[data-dream-art-wide="true"]
-  main.trskin-main-surface:not(.dream-skin-home-shell) div.sticky:has(input[type="text"])::after {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) div.sticky:has(input[type="text"])::after {
   background: transparent !important;
 }
 
 html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"])[data-dream-art-wide="true"]
-  main.trskin-main-surface:not(.dream-skin-home-shell) div.no-drag:has(> input[type="text"]) {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) div.no-drag:has(> input[type="text"]) {
   background: var(--ds-immersive-composer) !important;
   border: 0 !important;
   box-shadow:
@@ -988,17 +1005,17 @@ html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-
 /* Pull Requests and similar utility routes wrap their content in a native
    full-size opaque surface. Only clear full-window wrappers, not cards. */
 html.codex-dream-skin:is([data-dream-task-mode="ambient"], [data-dream-art-task-mode="ambient"])[data-dream-art-wide="true"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   [class~="bg-token-main-surface-primary"][class~="h-full"][class~="w-full"] {
   background: transparent !important;
 }
 
-html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface
+html.codex-dream-skin[data-dream-art-wide="true"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface])
   .app-shell-main-content-frame {
   border-top: 0 !important;
 }
 
-html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface
+html.codex-dream-skin[data-dream-art-wide="true"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface])
   .app-shell-main-content-top-fade {
   display: none !important;
   background: transparent !important;
@@ -1007,7 +1024,7 @@ html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface
 /* Codex paints a second opaque fade behind the sticky composer. The composer
    already owns its readable surface, so retaining this layer creates a false
    bottom panel and makes the control look duplicated. */
-html.codex-dream-skin[data-dream-art-wide="true"] main.trskin-main-surface
+html.codex-dream-skin[data-dream-art-wide="true"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface])
   .thread-scroll-container .bg-gradient-to-t.from-token-main-surface-primary {
   background: transparent !important;
 }
@@ -1069,6 +1086,48 @@ html.codex-dream-skin[data-dream-style="terraria"] {
   --terraria-reading-link: #68d8ff;
   --biome-sidebar-art-position: var(--ds-art-position);
   --biome-task-art-position: var(--ds-art-position);
+  /* Codex 26.1021 moved shell/fade and Markdown paint from token-* to
+     surface/text aliases. Map the neutral family once at the root; keep
+     semantic warning/success colors and native geometry intact. */
+  --color-text: var(--terraria-reading-text) !important;
+  --color-text-primary: var(--terraria-reading-text) !important;
+  --color-text-secondary: var(--terraria-reading-muted) !important;
+  --color-text-tertiary: #a9c3d2 !important;
+  --color-text-prose: var(--terraria-reading-text) !important;
+  --color-text-user-message: var(--terraria-reading-text) !important;
+  --color-text-info: var(--terraria-reading-link) !important;
+  --user-message-text-color: var(--terraria-reading-text) !important;
+  --input-text-color: var(--terraria-reading-text) !important;
+  --color-surface: var(--ds-bg) !important;
+  --color-surface-primary: var(--ds-bg) !important;
+  --color-surface-secondary: var(--ds-panel) !important;
+  --color-surface-tertiary: var(--ds-panel) !important;
+  --color-surface-canvas: var(--ds-bg) !important;
+  --color-surface-elevated-primary: var(--ds-panel) !important;
+  --color-surface-elevated-secondary: var(--ds-panel) !important;
+  --color-surface-elevated-tertiary: var(--ds-panel-2) !important;
+  --app-color-background-surface: var(--ds-bg) !important;
+  --app-color-background-surface-under: var(--ds-bg) !important;
+  --app-color-background-editor-opaque: var(--ds-bg) !important;
+  --app-color-background-elevated-primary: var(--ds-panel) !important;
+  --app-color-background-elevated-primary-opaque: var(--ds-panel) !important;
+  --app-color-background-elevated-secondary: var(--ds-panel) !important;
+  --app-color-background-elevated-secondary-opaque: var(--ds-panel) !important;
+  --app-color-background-elevated-tertiary-opaque: var(--ds-panel-2) !important;
+  --app-color-text-foreground: var(--terraria-reading-text) !important;
+  --app-color-text-foreground-secondary: var(--terraria-reading-muted) !important;
+  --app-color-text-foreground-tertiary: #a9c3d2 !important;
+  /* Description labels (including quota menu headings) resolve through a
+     separate alias in Codex 26.1023. Native light mode uses half-alpha black. */
+  --color-codex-description: var(--terraria-reading-muted) !important;
+  --app-color-icon-primary: var(--terraria-reading-muted) !important;
+  --color-background-panel: var(--ds-panel) !important;
+  --color-background-composer-action-bar: var(--ds-panel) !important;
+  --color-background-execution-output: var(--ds-panel) !important;
+  --color-background-artifact-preview: var(--ds-bg) !important;
+  --color-token-side-bar-background: var(--ds-panel) !important;
+  --composer-background-color: var(--ds-panel) !important;
+  --codeblock-background-color: var(--ds-bg) !important;
   /* Codex may remain in its native light appearance while a dark wallpaper is
      active. Remap the native semantic tokens at their source so even layered
      Tailwind !text-token-* utilities inherit a dark-theme-safe value. */
@@ -1152,8 +1211,173 @@ html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"] 
 }
 
 html.codex-dream-skin[data-dream-style="terraria"] body {
-  font-family: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas,
-    "PingFang SC", "Microsoft YaHei UI", monospace !important;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+    "Microsoft YaHei UI", "Segoe UI", system-ui, sans-serif !important;
+}
+
+/* Codex 26.901 moved the account menu to a portal with role="menu". Its
+   native light surface bypasses the older token-only remap and paints the
+   lower-left corner white. Keep the portal in the same Terraria palette and
+   restore readable contrast for every menu item. */
+html.codex-dream-skin[data-dream-style="terraria"] [role="menu"] {
+  color: var(--terraria-reading-text) !important;
+  background: rgb(var(--ds-panel-rgb) / .98) !important;
+  background-image: none !important;
+  border: 2px solid rgb(var(--ds-accent-rgb) / .72) !important;
+  border-radius: 5px !important;
+  box-shadow:
+    inset 0 0 0 2px rgb(255 255 255 / .10),
+    4px 5px 0 rgb(5 12 28 / .48),
+    0 0 18px rgb(var(--ds-accent-rgb) / .16) !important;
+  color-scheme: dark !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] [role="menu"]
+  :is([role="menuitem"], button, a, span, svg) {
+  color: var(--terraria-reading-text) !important;
+  text-shadow: 1px 1px 0 rgb(5 12 28 / .64) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] [role="menu"]
+  :is([role="menuitem"], button, a):is(:hover, [data-state="open"], :focus-visible) {
+  background: rgb(var(--ds-accent-rgb) / .22) !important;
+  color: var(--terraria-reading-text) !important;
+}
+
+/* Codex portals inherit the native light appearance even when Home is
+   skinned. Map the current semantic token families together: surface + text,
+   inset/input + text, and primary action + its inverse foreground. This is
+   route-independent and takes effect on the first frame of nested dialogs. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is([role="dialog"], [role="alertdialog"], [role="menu"], [role="listbox"],
+    [data-slot="popover-content"], [data-slot="dialog-content"], .trskin-settings-content,
+    [role="presentation"][class*="bg-surface-elevated-secondary"]:has(> button)) {
+  --color-surface: rgb(var(--ds-panel-rgb)) !important;
+  --color-surface-secondary: rgb(var(--ds-panel-2-rgb)) !important;
+  --color-surface-tertiary: rgb(var(--ds-panel-2-rgb)) !important;
+  --color-surface-elevated: rgb(var(--ds-panel-rgb)) !important;
+  --color-surface-elevated-secondary: rgb(var(--ds-panel-rgb)) !important;
+  --color-background-elevated-primary: rgb(var(--ds-panel-rgb)) !important;
+  --color-background-elevated-primary-opaque: rgb(var(--ds-panel-rgb)) !important;
+  --color-background-surface: rgb(var(--ds-panel-rgb)) !important;
+  --color-background-surface-under: rgb(var(--ds-panel-2-rgb)) !important;
+  /* Bright biome inset colors need the darker panel underneath to retain
+     contrast with secondary labels and input placeholders (all 44 palettes). */
+  --color-background-primary-soft: rgb(var(--ds-panel-2-rgb) / .6) !important;
+  --color-background-primary-soft-alpha: rgb(var(--ds-panel-2-rgb) / .6) !important;
+  --color-background-callout-surface: rgb(var(--ds-panel-2-rgb)) !important;
+  --color-background-primary-solid: var(--ds-accent) !important;
+  --color-background-button-primary: var(--ds-accent) !important;
+  --color-text-primary-solid: var(--ds-on-accent) !important;
+  --color-text-button-primary: var(--ds-on-accent) !important;
+  --color-text-inverse: var(--ds-on-accent) !important;
+  --color-background-primary-ghost-hover: rgb(var(--ds-accent-rgb) / .18) !important;
+  --color-background-primary-soft-active: rgb(var(--ds-accent-rgb) / .22) !important;
+  --color-border: rgb(var(--ds-accent-rgb) / .28) !important;
+  --color-border-heavy: rgb(var(--ds-accent-rgb) / .5) !important;
+  --color-border-focus: var(--ds-accent) !important;
+  --color-text: var(--terraria-reading-text) !important;
+  --color-text-secondary: var(--terraria-reading-muted) !important;
+  --color-text-tertiary: var(--terraria-reading-muted) !important;
+  --app-color-text-foreground-tertiary: var(--terraria-reading-muted) !important;
+  --color-codex-description: var(--terraria-reading-muted) !important;
+  --color-text-button-secondary: var(--terraria-reading-text) !important;
+  --color-text-button-tertiary: var(--terraria-reading-muted) !important;
+  --color-codex-icon: var(--terraria-reading-text) !important;
+  color: var(--terraria-reading-text) !important;
+  color-scheme: dark !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(.codex-dialog, [data-slot="dialog-content"], [data-slot="popover-content"],
+    [role="presentation"][class*="bg-surface-elevated-secondary"]:has(> button)) {
+  background: rgb(var(--ds-panel-rgb)) !important;
+  border: 2px solid rgb(var(--ds-accent-rgb) / .62) !important;
+  border-radius: 4px !important;
+  box-shadow: inset 0 0 0 2px rgb(var(--ds-accent-rgb) / .12),
+    4px 5px 0 rgb(5 12 28 / .55) !important;
+  backdrop-filter: none !important;
+}
+
+/* Text-selection actions are a body portal with presentation semantics.
+   Theme the whole surface from its first frame, independent of the selection
+   text, current route, or translated button labels. Keep native positioning. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  [role="presentation"][class*="bg-surface-elevated-secondary"]:has(> button)
+  > button {
+  background: transparent !important;
+  color: var(--terraria-reading-text) !important;
+  -webkit-text-fill-color: var(--terraria-reading-text) !important;
+  text-shadow: none !important;
+  border-radius: 2px !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  [role="presentation"][class*="bg-surface-elevated-secondary"]:has(> button)
+  > button:is(:hover, :focus-visible, [data-state="open"]) {
+  background: rgb(var(--ds-panel-2-rgb)) !important;
+  box-shadow: inset 0 -2px rgb(var(--ds-accent-rgb) / .8) !important;
+}
+
+/* Global legacy text overrides must not turn primary action labels pale on
+   their pale accent fill. Keep background and text as one semantic pair. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is([role="dialog"], [role="alertdialog"], [role="menu"], [data-slot="popover-content"], .trskin-settings-content)
+  :is(button.bg-primary-solid, [role="button"].bg-primary-solid) {
+  background: var(--ds-accent) !important;
+  color: var(--ds-on-accent) !important;
+  -webkit-text-fill-color: var(--ds-on-accent) !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is([role="dialog"], [role="alertdialog"], [role="menu"], [data-slot="popover-content"], .trskin-settings-content)
+  :is(button.bg-primary-solid, [role="button"].bg-primary-solid) :is(span, svg) {
+  color: var(--ds-on-accent) !important;
+  -webkit-text-fill-color: var(--ds-on-accent) !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is([role="dialog"], [role="alertdialog"], [data-slot="popover-content"], .trskin-settings-content)
+  :is(input, textarea)::placeholder {
+  color: var(--terraria-reading-muted) !important;
+  -webkit-text-fill-color: currentColor !important;
+  opacity: 1 !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  [data-slot="popover-content"]:has([cmdk-root])
+  :is([cmdk-root], [cmdk-list], [cmdk-item], input, span, svg, [cmdk-empty]) {
+  color: var(--terraria-reading-text) !important;
+  -webkit-text-fill-color: var(--terraria-reading-text) !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  [data-slot="popover-content"]:has([cmdk-root]) [cmdk-item] {
+  background: transparent !important;
+  border-radius: 2px !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  [data-slot="popover-content"]:has([cmdk-root])
+  [cmdk-item]:is(:hover, :focus-visible, [aria-selected="true"], [data-selected="true"]) {
+  background: rgb(var(--ds-accent-rgb) / .18) !important;
+  box-shadow: inset 2px 0 0 rgb(var(--ds-accent-rgb) / .8) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  [data-slot="popover-content"]:has([cmdk-root]) input::placeholder {
+  color: color-mix(in srgb, var(--terraria-reading-text) 76%, rgb(var(--ds-panel-rgb))) !important;
+  -webkit-text-fill-color: currentColor !important;
+  opacity: 1 !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  [data-slot="popover-content"]:has([cmdk-root])
+  :is([role="separator"], [cmdk-separator], .bg-border) {
+  background: rgb(var(--ds-accent-rgb) / .25) !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"] aside.app-shell-left-panel {
@@ -1219,7 +1443,7 @@ html.codex-dream-skin[data-dream-style="terraria"] aside.app-shell-left-panel [a
     2px 3px 0 rgb(5 12 28 / .42) !important;
 }
 
-html.codex-dream-skin[data-dream-style="terraria"] main.trskin-main-surface {
+html.codex-dream-skin[data-dream-style="terraria"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]) {
   border: 2px solid rgb(255 255 255 / .17) !important;
   border-right: 0 !important;
   border-bottom: 0 !important;
@@ -1266,6 +1490,22 @@ html.codex-dream-skin[data-dream-style="terraria"]
     transparent 100%);
 }
 
+/* Keep the active environment visible across the home surface. Older Codex
+   builds left this area on the solid biome color unless the artwork was
+   classified as "wide", which made the green layer look like an empty panel.
+   The translucent Terraria wash preserves readable controls while the live
+   background pool remains visible behind the hero and composer. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).dream-skin-home-shell {
+  background:
+    linear-gradient(90deg,
+      rgb(var(--ds-bg-rgb) / .84),
+      rgb(var(--ds-bg-rgb) / .48) 58%,
+      rgb(var(--ds-bg-rgb) / .76)),
+    var(--dream-skin-art) var(--ds-art-position) / cover no-repeat !important;
+  background-attachment: local !important;
+}
+
 html.codex-dream-skin[data-dream-style="terraria"]
   .dream-skin-home [data-feature="game-source"] {
   color: #fff7d2 !important;
@@ -1280,6 +1520,7 @@ html.codex-dream-skin[data-dream-style="terraria"]
   content: "";
   display: block;
   width: min(300px, 36vw);
+  max-width: 100%;
   aspect-ratio: 421 / 140;
   margin-bottom: 10px;
   background: var(--dream-asset-logo) center / contain no-repeat;
@@ -1432,7 +1673,7 @@ html.codex-dream-skin[data-dream-style="terraria"] button[class~="bg-token-foreg
   box-shadow: inset 0 0 0 2px rgb(82 53 8 / .35), 2px 3px 0 rgb(5 12 28 / .38) !important;
 }
 
-html.codex-dream-skin[data-dream-style="terraria"] main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+html.codex-dream-skin[data-dream-style="terraria"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::before {
   content: "" !important;
   image-rendering: pixelated;
   background-image: var(--dream-skin-art) !important;
@@ -1445,7 +1686,7 @@ html.codex-dream-skin[data-dream-style="terraria"] main.trskin-main-surface:not(
 /* Stable reading layer: scenery remains visible, but text never depends on
    the brightness of a forest, cave, snow, or future day/night wallpaper. */
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)::after {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -1455,19 +1696,19 @@ html.codex-dream-skin[data-dream-style="terraria"]
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)::after {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::after {
   background: linear-gradient(180deg, rgb(4 24 31 / .58), rgb(4 27 29 / .76));
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)::after {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::after {
   background:
     radial-gradient(circle at 12% 82%, rgb(255 156 61 / .14), transparent 26%),
     linear-gradient(180deg, rgb(17 10 25 / .58), rgb(18 11 25 / .78));
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell) > header.trskin-app-header {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) > header.trskin-app-header {
   color: var(--terraria-reading-text) !important;
   background: rgb(7 24 43 / .90) !important;
   border-bottom: 2px solid rgb(var(--ds-accent-rgb) / .46) !important;
@@ -1548,19 +1789,19 @@ html.codex-dream-skin[data-dream-style="terraria"]
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"]
-  main.trskin-main-surface:not(.dream-skin-home-shell) > header.trskin-app-header {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) > header.trskin-app-header {
   background: rgb(6 37 48 / .92) !important;
   border-bottom-color: rgb(185 239 112 / .52) !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
-  main.trskin-main-surface:not(.dream-skin-home-shell) > header.trskin-app-header {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) > header.trskin-app-header {
   background: rgb(28 17 38 / .95) !important;
   border-bottom-color: rgb(255 189 85 / .56) !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   :is([role="main"], [class*="text-token-foreground"],
     [class*="text-token-text-primary"], [class*="_markdown"],
     [data-message-author-role]) {
@@ -1568,7 +1809,7 @@ html.codex-dream-skin[data-dream-style="terraria"]
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   :is([class*="text-token-text-secondary"],
     [class*="text-token-input-placeholder-foreground"], time) {
   color: var(--terraria-reading-muted) !important;
@@ -1578,7 +1819,7 @@ html.codex-dream-skin[data-dream-style="terraria"]
    text directly in otherwise-unclassified spans. Keep the whole native row
    legible, then restore brighter semantic diff colors below. */
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   :is([class*="activity-header"] :is(span, p),
     [class*="text-token-conversation-"],
     [class*="text-token-description-foreground"],
@@ -1587,19 +1828,19 @@ html.codex-dream-skin[data-dream-style="terraria"]
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   [class*="git-decoration-added"] {
   color: #72e89a !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   [class*="git-decoration-deleted"] {
   color: #ff8a84 !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   :is([class*="_markdown"], [data-message-author-role])
   :where(h1, h2, h3, h4, h5, h6, p, li, blockquote, strong, em) {
   color: inherit !important;
@@ -1609,11 +1850,11 @@ html.codex-dream-skin[data-dream-style="terraria"]
 /* Mermaid may render labels either in foreignObject HTML or native SVG
    text/tspan nodes. Both forms must keep contrast on light diagram nodes. */
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   svg[aria-roledescription]
   :is(.nodeLabel, .edgeLabel),
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   svg[aria-roledescription]
   :is(.nodeLabel, .edgeLabel) :where(p, span, strong, em) {
   color: #172033 !important;
@@ -1621,7 +1862,7 @@ html.codex-dream-skin[data-dream-style="terraria"]
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   svg[aria-roledescription]
   g.node g.label :is(text, tspan) {
   color: #172033 !important;
@@ -1630,7 +1871,7 @@ html.codex-dream-skin[data-dream-style="terraria"]
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   :is([class*="_markdown"], [data-message-author-role])
   :where(li)::marker {
   color: var(--terraria-reading-muted) !important;
@@ -1638,27 +1879,27 @@ html.codex-dream-skin[data-dream-style="terraria"]
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   :is([class*="_markdown"], [data-message-author-role]) a {
   color: var(--terraria-reading-link) !important;
   text-decoration-color: rgb(104 216 255 / .70) !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   :is(textarea, input, [contenteditable="true"]) {
   color: var(--terraria-reading-text) !important;
   caret-color: var(--terraria-gold) !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::before {
   background-repeat: repeat !important;
   background-position: center !important;
   background-size: 640px 384px !important;
 }
 
-html.codex-dream-skin[data-dream-style="terraria"] main.trskin-main-surface:not(.dream-skin-home-shell) article,
+html.codex-dream-skin[data-dream-style="terraria"] :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) article,
 html.codex-dream-skin[data-dream-style="terraria"] [data-message-author-role],
 html.codex-dream-skin[data-dream-style="terraria"] .trskin-user-message-surface {
   border: 2px solid rgb(255 255 255 / .20) !important;
@@ -1670,14 +1911,14 @@ html.codex-dream-skin[data-dream-style="terraria"] .trskin-user-message-surface 
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"]
-  :is(main.trskin-main-surface:not(.dream-skin-home-shell) article, [data-message-author-role],
+  :is(:is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) article, [data-message-author-role],
     .trskin-user-message-surface) {
   border-color: rgb(185 239 112 / .34) !important;
   box-shadow: inset 0 0 0 2px rgb(4 30 31 / .54), 3px 4px 0 rgb(3 20 23 / .32) !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
-  :is(main.trskin-main-surface:not(.dream-skin-home-shell) article, [data-message-author-role],
+  :is(:is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) article, [data-message-author-role],
     .trskin-user-message-surface) {
   border-color: rgb(255 189 85 / .36) !important;
   box-shadow: inset 0 0 0 2px rgb(16 8 23 / .66), 3px 4px 0 rgb(8 4 12 / .42) !important;
@@ -1688,6 +1929,86 @@ html.codex-dream-skin[data-dream-style="terraria"] [class*="_diff"] {
   border: 2px solid rgb(var(--ds-accent-rgb) / .46) !important;
   border-radius: 3px !important;
   box-shadow: inset 0 0 0 2px rgb(5 12 28 / .36) !important;
+}
+
+/* Fenced Markdown/code viewers are semantic `pre` elements in older builds,
+   while newer Codex builds wrap them in a generated CodeBlock component. The
+   native light editor token can otherwise paint a white rounded slab above
+   the Terraria wallpaper. Keep the outer code surface dark and let syntax
+   spans keep their own foreground colors. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(pre, [data-code-block], [data-markdown-code-block],
+    [class*="code-block"], [class*="CodeBlock"], [class*="_CodeBlock"]) {
+  color: var(--terraria-reading-text) !important;
+  background: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98),
+    rgb(var(--ds-bg-rgb) / .98)) !important;
+  background-color: rgb(var(--ds-bg-rgb) / .98) !important;
+  background-image: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98),
+    rgb(var(--ds-bg-rgb) / .98)) !important;
+  border-color: rgb(var(--ds-accent-rgb) / .56) !important;
+  box-shadow:
+    inset 0 0 0 2px rgb(5 12 28 / .42),
+    3px 4px 0 rgb(5 12 28 / .28) !important;
+}
+
+/* Current Codex CodeBlock keeps a sticky action bar as the first child of
+   the code surface. Its `data-theme="light"` token bypasses the outer dark
+   CodeBlock rule and paints the language row white. Scope the correction to
+   a code surface's own first child so regular message/toolbars keep their
+   native palette while the whole code block remains one dark surface. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is([data-markdown-copy="code-block"], [data-code-block], [data-markdown-code-block],
+    [class*="code-block"], [class*="CodeBlock"], [class*="_CodeBlock"]) > :first-child {
+  color: var(--terraria-reading-text) !important;
+  background: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98),
+    rgb(var(--ds-bg-rgb) / .98)) !important;
+  background-color: rgb(var(--ds-bg-rgb) / .98) !important;
+  background-image: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98),
+    rgb(var(--ds-bg-rgb) / .98)) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is([data-markdown-copy="code-block"], [data-code-block], [data-markdown-code-block],
+    [class*="code-block"], [class*="CodeBlock"], [class*="_CodeBlock"]) > :first-child
+  :is(button, [role="button"], svg) {
+  color: var(--terraria-reading-text) !important;
+  fill: currentColor !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(pre, [data-code-block], [data-markdown-code-block],
+    [class*="code-block"], [class*="CodeBlock"], [class*="_CodeBlock"])
+  :is(code, [class*="token"], [class*="syntax"]) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Codex 2.7 adds a sticky footer spacer as a sibling of the Composer rail.
+   Its `from-surface` gradient resolves to opaque white in the light shell and
+   is the lower-right white band seen during edits/streaming. The stable
+   aria-hidden + utility-token shape survives generated class renames. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface,
+    [data-trskin-main-surface]).trskin-task-route:not(.dream-skin-home-shell)
+  [aria-hidden="true"][class~="pointer-events-none"][class~="absolute"]
+  [class*="bg-gradient-to-t"],
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface,
+    [data-trskin-main-surface]).trskin-task-route:not(.dream-skin-home-shell)
+  [aria-hidden="true"][class~="pointer-events-none"][class~="absolute"][class*="bg-gradient-to-t"] {
+  background: none !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"] #codex-dream-skin-chrome {
@@ -1791,6 +2112,14 @@ html.codex-dream-skin[data-dream-style="terraria"] .dream-skin-orbit {
   image-rendering: pixelated;
   filter: drop-shadow(2px 3px 0 rgb(4 10 22 / .48));
   animation: terraria-slime-bob 2.4s steps(2, jump-none) infinite;
+}
+
+/* A fallback theme can retain a companion marker after an upgrade while its
+   asset pack is unavailable. Keep the empty img from painting Chromium's
+   broken-image white box at the lower-right edge. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  .dream-skin-orbit[data-dream-companion-empty="true"] {
+  display: none !important;
 }
 
 /*
@@ -2251,7 +2580,7 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
    environment artwork became visible behind the native input. A blurred
    glow has the same effect over darker biomes, so the final frame is sharp. */
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
-  main.trskin-main-surface .dream-skin-composer-surface {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]) .dream-skin-composer-surface {
   box-shadow:
     inset 0 0 0 1px rgb(255 255 255 / .18),
     0 0 0 2px rgb(var(--ds-accent-rgb) / .48) !important;
@@ -2300,6 +2629,19 @@ html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
   box-shadow: none !important;
 }
 
+/* Native workspace geometry bypasses the legacy dock markers. Newer Codex
+   splits its paint into an empty footer backplate and a fade in the sticky
+   spacer. Clear only those noninteractive layers; keep status rows, controls,
+   footer spacing and native measurement untouched. No generated module names. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  [data-thread-scroll-footer] > div.absolute.pointer-events-none:empty,
+html.codex-dream-skin[data-dream-style="terraria"]
+  .thread-scroll-container:has(> [data-thread-scroll-footer])
+  .sticky.pointer-events-none > div.absolute.pointer-events-none:empty {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
 html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
   .dream-skin-composer-rail {
   background: transparent !important;
@@ -2324,7 +2666,7 @@ html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant]
 /* A task route gets a small token-level guard before async content settles.
    Element paint is still owned only through the measured markers below. */
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface.trskin-task-route:not(.dream-skin-home-shell) {
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).trskin-task-route:not(.dream-skin-home-shell) {
   --color-surface-elevated-secondary: rgb(var(--ds-panel-rgb) / .98) !important;
   --color-surface-secondary: rgb(var(--ds-panel-rgb) / .96) !important;
   --color-background-primary-soft: rgb(var(--ds-bg-rgb) / .92) !important;
@@ -2334,10 +2676,12 @@ html.codex-dream-skin[data-dream-style="terraria"]
    while their renderer-owned classes are removed. Markdown/Diff, Composer,
    Home, Settings, media and forms never enter this ownership layer. */
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   :is(.trskin-task-light-surface, .trskin-light-surface-inset),
 html.codex-dream-skin[data-dream-style="terraria"]
   .trskin-floating-light-surface,
+html.codex-dream-skin[data-dream-style="terraria"]
+  [role="dialog"][data-pip-obstacle="quick-chat"],
 html.codex-dream-skin[data-dream-style="terraria"]
   .dream-skin-home :is(
     .trskin-home-banner-surface,
@@ -2349,13 +2693,56 @@ html.codex-dream-skin[data-dream-style="terraria"]
   border-color: rgb(var(--ds-accent-rgb) / .44) !important;
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / .08) !important;
   text-shadow: none !important;
+  --color-surface: rgb(var(--ds-panel-rgb) / .96) !important;
+  --color-background-surface: rgb(var(--ds-panel-rgb) / .96) !important;
+  --color-background-surface-under: rgb(var(--ds-bg-rgb) / .96) !important;
+  --color-codex-editor-inline-code-background: rgb(var(--ds-panel-2-rgb) / .98) !important;
+  --color-codex-editor-inline-code-foreground: var(--terraria-reading-text) !important;
+  --color-background-secondary-soft-alpha: rgb(var(--ds-panel-2-rgb) / .48) !important;
+  --color-border-subtle: rgb(var(--ds-accent-rgb) / .24) !important;
+  --color-border-strong: rgb(var(--ds-accent-rgb) / .44) !important;
+}
+
+/* Model-capacity and similar renderer errors are currently emitted as an
+   `aside` inside the conversation item instead of a role=alert. The stable
+   local-conversation item anchor still identifies the message boundary, so
+   recolor only that notification surface and leave ordinary sidebars alone. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
+  [data-local-conversation-item-target-ids]:has(aside) aside {
+  color: var(--terraria-reading-text) !important;
+  background: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98),
+    rgb(var(--ds-panel-rgb) / .98)) !important;
+  background-color: rgb(var(--ds-panel-rgb) / .98) !important;
+  background-image: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98),
+    rgb(var(--ds-panel-rgb) / .98)) !important;
+  border-color: rgb(var(--ds-accent-rgb) / .56) !important;
+  border-radius: 4px !important;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / .10),
+    2px 3px 0 rgb(var(--ds-bg-rgb) / .34) !important;
+  text-shadow: none !important;
+  --color-surface: rgb(var(--ds-panel-rgb) / .98) !important;
+  --color-background-surface: rgb(var(--ds-panel-rgb) / .98) !important;
+  --color-border-strong: rgb(var(--ds-accent-rgb) / .56) !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
+  [data-local-conversation-item-target-ids]:has(aside) aside
+  :is(span, p, strong, small, label, svg) {
+  color: var(--terraria-reading-text) !important;
+  fill: currentColor !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   :is(.trskin-task-light-surface, .trskin-light-surface-inset).trskin-light-surface-pseudo::before,
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   :is(.trskin-task-light-surface, .trskin-light-surface-inset).trskin-light-surface-pseudo::after,
 html.codex-dream-skin[data-dream-style="terraria"]
   .trskin-floating-light-surface.trskin-light-surface-pseudo::before,
@@ -2377,7 +2764,7 @@ html.codex-dream-skin[data-dream-style="terraria"]
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   .trskin-light-surface-foreground,
 html.codex-dream-skin[data-dream-style="terraria"]
   .trskin-floating-light-surface .trskin-light-surface-foreground,
@@ -2389,7 +2776,7 @@ html.codex-dream-skin[data-dream-style="terraria"]
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)
   .trskin-light-surface-control,
 html.codex-dream-skin[data-dream-style="terraria"]
   .trskin-floating-light-surface .trskin-light-surface-control,
@@ -2401,6 +2788,64 @@ html.codex-dream-skin[data-dream-style="terraria"]
   border-color: rgb(var(--ds-accent-rgb) / .5) !important;
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / .08) !important;
   text-shadow: none !important;
+}
+
+/* Quick Chat owns a separate Composer inside its floating dialog. It must
+   inherit the dialog palette without receiving the task-route geometry shift;
+   the renderer deliberately leaves it unmarked as the active Composer. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  .trskin-floating-light-surface
+  :is([data-composer-layout], [data-composer-surface-variant]) {
+  color: var(--terraria-reading-text) !important;
+  border: 2px solid rgb(var(--ds-accent-rgb) / .56) !important;
+  border-radius: 4px !important;
+  background: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98),
+    rgb(var(--ds-panel-rgb) / .98)) !important;
+  background-image: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98),
+    rgb(var(--ds-panel-rgb) / .98)) !important;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .10),
+    2px 3px 0 rgb(var(--ds-bg-rgb) / .42) !important;
+}
+
+/* Quick Chat's portal can paint its Composer before the renderer-owned
+   floating marker arrives. Keep the stable obstacle hook covered during that
+   first frame too, so a light token cannot flash in the lower-right corner. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  [role="dialog"][data-pip-obstacle="quick-chat"]
+  :is([data-composer-layout], [data-composer-surface-variant]) {
+  color: var(--terraria-reading-text) !important;
+  border: 2px solid rgb(var(--ds-accent-rgb) / .56) !important;
+  border-radius: 4px !important;
+  background: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98),
+    rgb(var(--ds-panel-rgb) / .98)) !important;
+  background-image: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98),
+    rgb(var(--ds-panel-rgb) / .98)) !important;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .10),
+    2px 3px 0 rgb(var(--ds-bg-rgb) / .42) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  [role="dialog"][data-pip-obstacle="quick-chat"]
+  :is([data-composer-layout], [data-composer-surface-variant])
+  :is([data-composer-layout], [data-composer-surface-variant], [data-composer-utility-bar-variant]) {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  .trskin-floating-light-surface
+  :is([data-composer-layout], [data-composer-surface-variant])
+  :is([data-composer-layout], [data-composer-surface-variant], [data-composer-utility-bar-variant]) {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 /* A logical Home notice owns one outer frame. Any verified nested light paint
@@ -2483,7 +2928,7 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
   [data-dream-variant="underground-jungle"], [data-dream-variant="underground-hallow"],
   [data-dream-variant="underground-corruption"], [data-dream-variant="underground-crimson"],
   [data-dream-variant="underground-glowing-mushroom"]
-) main.trskin-main-surface:not(.dream-skin-home-shell)::before,
+) :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::before,
 html.codex-dream-skin[data-dream-style="terraria"]:is(
   [data-dream-variant="underground"], [data-dream-variant="ice-biome"],
   [data-dream-variant="underground-jungle"], [data-dream-variant="underground-hallow"],
@@ -2495,14 +2940,6 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
   background-repeat: repeat !important;
 }
 
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="underground-desert"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)::before,
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="underground-desert"]
-  .dream-skin-home .dream-skin-home-hero {
-  background-position: center !important;
-  background-size: 128px 128px !important;
-  background-repeat: repeat !important;
-}
 
 html.codex-dream-skin[data-dream-style="terraria"]:is(
   [data-dream-variant="space"], [data-dream-variant="underworld"],
@@ -2564,7 +3001,7 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
   [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
   [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
   [data-dream-variant="marble-cave"]
-) main.trskin-main-surface:not(.dream-skin-home-shell)::after {
+) :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::after {
   background:
     radial-gradient(circle at 78% 18%, var(--biome-glow), transparent 34%),
     linear-gradient(180deg,
@@ -2580,7 +3017,7 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
   [data-dream-variant="solar-eclipse"],
   [data-dream-variant="goblin-invasion"],
   [data-dream-variant="pirate-invasion"]
-) main.trskin-main-surface:not(.dream-skin-home-shell)::after {
+) :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::after {
   background: linear-gradient(180deg,
     rgb(var(--ds-bg-rgb) / .64),
     rgb(var(--ds-bg-rgb) / .82));
@@ -2589,7 +3026,7 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
 html.codex-dream-skin[data-dream-style="terraria"]:is(
   [data-dream-variant="dungeon"],
   [data-dream-variant="jungle-temple"]
-) main.trskin-main-surface:not(.dream-skin-home-shell)::after {
+) :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell)::after {
   background: linear-gradient(180deg,
     rgb(var(--ds-bg-rgb) / .68),
     rgb(var(--ds-bg-rgb) / .84));
@@ -2612,104 +3049,79 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
   [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
   [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
   [data-dream-variant="marble-cave"]
-) main.trskin-main-surface:not(.dream-skin-home-shell) > header.trskin-app-header {
+) :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]):not(.dream-skin-home-shell) > header.trskin-app-header {
   background: rgb(var(--ds-bg-rgb) / .94) !important;
   border-bottom-color: rgb(var(--ds-accent-rgb) / .58) !important;
 }
 
-/* Official wallpaper tiles remain crisp instead of being enlarged into blur. */
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="space"]
-  .dream-skin-home .dream-skin-home-hero {
-  background-size: 128px 128px !important;
-  background-repeat: repeat !important;
-}
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="space"]
-  aside.app-shell-left-panel {
-  background-size: 100% 100%, 128px 128px !important;
-  background-repeat: no-repeat, repeat !important;
-}
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="space"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
-  background-size: 128px 128px !important;
-  background-repeat: repeat !important;
-}
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="martian-invasion"]
-  .dream-skin-home .dream-skin-home-hero {
-  background-size: 128px 128px !important;
-  background-repeat: repeat !important;
-}
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="martian-invasion"]
-  aside.app-shell-left-panel {
-  background-size: 100% 100%, 128px 128px !important;
-  background-repeat: no-repeat, repeat !important;
-}
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="martian-invasion"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
-  background-size: 128px 128px !important;
-  background-repeat: repeat !important;
-}
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="dungeon"]
-  .dream-skin-home .dream-skin-home-hero {
-  background-size: 160px 450px !important;
-  background-repeat: repeat !important;
-}
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="dungeon"]
-  aside.app-shell-left-panel {
-  background-size: 100% 100%, 160px 450px !important;
-  background-repeat: no-repeat, repeat !important;
-}
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="dungeon"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
-  background-size: 160px 450px !important;
-  background-repeat: repeat !important;
-}
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="jungle-temple"]
-  .dream-skin-home .dream-skin-home-hero {
-  background-size: 128px 128px !important;
-  background-repeat: repeat !important;
-}
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="jungle-temple"]
-  aside.app-shell-left-panel {
-  background-size: 100% 100%, 128px 128px !important;
-  background-repeat: no-repeat, repeat !important;
-}
-html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="jungle-temple"]
-  main.trskin-main-surface:not(.dream-skin-home-shell)::before {
-  background-size: 128px 128px !important;
-  background-repeat: repeat !important;
+/* Full-screen map artwork replaces placed-wall previews. One complete image
+   covers each surface; keep pixels crisp without repeating a framed tile.
+   The same variant is used by fixed presets and the random environment pool. */
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="space"],
+  [data-dream-variant="underground-desert"],
+  [data-dream-variant="dungeon"],
+  [data-dream-variant="jungle-temple"],
+  [data-dream-variant="martian-invasion"],
+  [data-dream-variant="aether"],
+  [data-dream-variant="lunar-solar"],
+  [data-dream-variant="lunar-vortex"],
+  [data-dream-variant="lunar-nebula"],
+  [data-dream-variant="lunar-stardust"],
+  [data-dream-variant="meteorite"],
+  [data-dream-variant="spider-nest"],
+  [data-dream-variant="bee-hive"],
+  [data-dream-variant="granite-cave"],
+  [data-dream-variant="marble-cave"]
+) :is(
+  .dream-skin-home .dream-skin-home-hero,
+  main[data-app-shell-main-surface]:has(.dream-skin-home-shell)
+),
+html.codex-dream-skin[data-dream-style="terraria"]:is(
+  [data-dream-variant="space"],
+  [data-dream-variant="underground-desert"],
+  [data-dream-variant="dungeon"],
+  [data-dream-variant="jungle-temple"],
+  [data-dream-variant="martian-invasion"],
+  [data-dream-variant="aether"],
+  [data-dream-variant="lunar-solar"],
+  [data-dream-variant="lunar-vortex"],
+  [data-dream-variant="lunar-nebula"],
+  [data-dream-variant="lunar-stardust"],
+  [data-dream-variant="meteorite"],
+  [data-dream-variant="spider-nest"],
+  [data-dream-variant="bee-hive"],
+  [data-dream-variant="granite-cave"],
+  [data-dream-variant="marble-cave"]
+) :is(main.trskin-main-surface, [role="main"].trskin-main-surface,
+  [data-trskin-main-surface]):not(.dream-skin-home-shell)::before {
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-position: var(--ds-art-position) !important;
+  image-rendering: pixelated;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]:is(
-  [data-dream-variant="lunar-solar"], [data-dream-variant="lunar-vortex"],
-  [data-dream-variant="lunar-nebula"], [data-dream-variant="lunar-stardust"],
-  [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
-  [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
-  [data-dream-variant="marble-cave"], [data-dream-variant="aether"]
-) .dream-skin-home .dream-skin-home-hero {
-  background-size: 128px 128px !important;
-  background-repeat: repeat !important;
-}
-
-html.codex-dream-skin[data-dream-style="terraria"]:is(
-  [data-dream-variant="lunar-solar"], [data-dream-variant="lunar-vortex"],
-  [data-dream-variant="lunar-nebula"], [data-dream-variant="lunar-stardust"],
-  [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
-  [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
-  [data-dream-variant="marble-cave"], [data-dream-variant="aether"]
-) aside.app-shell-left-panel {
-  background-size: 100% 100%, 128px 128px !important;
-  background-repeat: no-repeat, repeat !important;
-}
-
-html.codex-dream-skin[data-dream-style="terraria"]:is(
-  [data-dream-variant="lunar-solar"], [data-dream-variant="lunar-vortex"],
-  [data-dream-variant="lunar-nebula"], [data-dream-variant="lunar-stardust"],
-  [data-dream-variant="meteorite"], [data-dream-variant="spider-nest"],
-  [data-dream-variant="bee-hive"], [data-dream-variant="granite-cave"],
-  [data-dream-variant="marble-cave"], [data-dream-variant="aether"]
-) main.trskin-main-surface:not(.dream-skin-home-shell)::before {
-  background-size: 128px 128px !important;
-  background-repeat: repeat !important;
+  [data-dream-variant="space"],
+  [data-dream-variant="underground-desert"],
+  [data-dream-variant="dungeon"],
+  [data-dream-variant="jungle-temple"],
+  [data-dream-variant="martian-invasion"],
+  [data-dream-variant="aether"],
+  [data-dream-variant="lunar-solar"],
+  [data-dream-variant="lunar-vortex"],
+  [data-dream-variant="lunar-nebula"],
+  [data-dream-variant="lunar-stardust"],
+  [data-dream-variant="meteorite"],
+  [data-dream-variant="spider-nest"],
+  [data-dream-variant="bee-hive"],
+  [data-dream-variant="granite-cave"],
+  [data-dream-variant="marble-cave"]
+) .app-shell-left-panel {
+  background-size: 100% 100%, cover !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: center, var(--ds-art-position) !important;
+  image-rendering: pixelated;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"]:is(
@@ -2877,16 +3289,14 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
   .dream-skin-brand { left: 15px; }
   .dream-skin-brand b { font-size: 12px; }
   .dream-skin-home .dream-skin-home-hero-rail {
-    flex-basis: 408px !important;
     min-height: 408px !important;
   }
   .dream-skin-home .dream-skin-home-hero {
-    height: 232px !important;
     min-height: 232px !important;
   }
-  .dream-skin-home .dream-skin-home-hero-inner { padding: 0 26px; }
+  .dream-skin-home .dream-skin-home-hero-inner { padding: 20px 26px; }
   .dream-skin-home .dream-skin-home-copy {
-    width: min(58%, 460px) !important;
+    width: min(100%, 460px) !important;
   }
   .dream-skin-home [data-feature="game-source"] { font-size: 18px !important; }
   .dream-skin-home [data-feature="game-source"]::before { margin-bottom: 7px; font-size: 10px; }
@@ -2899,12 +3309,10 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
    composer dock to leave the viewport. */
 @media (max-height: 760px) {
   .dream-skin-home .dream-skin-home-hero-rail {
-    flex-basis: 350px !important;
     min-height: 350px !important;
   }
 
   .dream-skin-home .dream-skin-home-hero {
-    height: 248px !important;
     min-height: 248px !important;
   }
 
@@ -2916,12 +3324,10 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
 
 @media (max-height: 640px) {
   .dream-skin-home .dream-skin-home-hero-rail {
-    flex-basis: 300px !important;
     min-height: 300px !important;
   }
 
   .dream-skin-home .dream-skin-home-hero {
-    height: 200px !important;
     min-height: 200px !important;
   }
 
@@ -2930,23 +3336,66 @@ html.codex-dream-skin[data-dream-style="terraria"]:is(
   }
 }
 
+/* The standalone settings route no longer has a <main>. Reuse the biome
+   backdrop on its owned content shell while keeping native form cards clear. */
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  [data-avatar-overlay-material="css"] {
+  background: var(--ds-panel) !important;
+  color: var(--terraria-reading-text) !important;
+  border-color: var(--ds-line) !important;
+}
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-content {
+  background:
+    linear-gradient(90deg,
+      rgb(var(--ds-bg-rgb) / .84),
+      rgb(var(--ds-bg-rgb) / .48) 58%,
+      rgb(var(--ds-bg-rgb) / .76)),
+    var(--dream-skin-art) var(--ds-art-position) / cover no-repeat !important;
+  color: var(--terraria-reading-text) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-content
+  :is(div, span, p, small, label, legend, h1, h2, h3, h4, h5, h6,
+    button, a, input, textarea, select, option, [class*="text-"]):not(.bg-primary-solid, .bg-primary-solid *) {
+  color: var(--terraria-reading-text) !important;
+  text-shadow: 1px 2px 0 rgb(5 12 28 / .75) !important;
+}
+
 /* Codex settings keep native opaque light cards even while the surrounding
    Terraria route uses a dark wallpaper. Renderer-owned markers constrain the
    light semantic palette to verified settings surfaces only, so task text,
    navigation and other dark regions retain their normal Terraria colors. */
 html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
   .trskin-settings-light-surface {
-  --color-text-foreground: #18212b !important;
-  --color-text-foreground-secondary: #4b5966 !important;
-  --color-text-foreground-tertiary: #66727d !important;
-  --color-token-foreground: #18212b !important;
-  --color-token-description-foreground: #4b5966 !important;
-  --color-token-disabled-foreground: #66727d !important;
-  --color-token-input-foreground: #18212b !important;
-  --color-token-input-placeholder-foreground: #66727d !important;
-  --color-token-icon-foreground: #4b5966 !important;
-  --color-token-link: #0867b8 !important;
-  color: #18212b !important;
+  --color-text: #fff5d8 !important;
+  --color-text-foreground: #fff5d8 !important;
+  --color-text-foreground-secondary: #b7c7dd !important;
+  --color-text-foreground-tertiary: #8297b2 !important;
+  --color-token-foreground: #fff5d8 !important;
+  --color-token-description-foreground: #b7c7dd !important;
+  --color-token-disabled-foreground: #8297b2 !important;
+  --color-token-input-foreground: #fff5d8 !important;
+  --color-token-input-placeholder-foreground: #8297b2 !important;
+  --color-token-icon-foreground: #b7c7dd !important;
+  --color-token-link: #7fe8ff !important;
+  color: #fff5d8 !important;
+  text-shadow: none !important;
+}
+
+/* Settings 2.7 uses utility classes such as text-default/text-secondary and
+   resolves their foreground directly from the global Terraria tokens. The
+   older token-only selectors above cannot override those declarations, so
+   pin every textual settings control to the light-card palette first; the
+   semantic secondary/link/disabled rules below then refine it. */
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface
+  :is(div, span, p, small, label, legend, h1, h2, h3, h4, h5, h6,
+    button, a, input, textarea, select, option,
+    [role="button"], [role="link"], [role="option"], [role="menuitem"],
+    [class*="text-"]) {
+  color: #fff5d8 !important;
   text-shadow: none !important;
 }
 
@@ -2955,21 +3404,21 @@ html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
   :is(h1, h2, h3, h4, h5, h6, label, legend, button, select, option, input, textarea,
     [class*="text-token-foreground"], [class*="text-token-text-primary"],
     [class*="text-token-input-foreground"]) {
-  color: #18212b !important;
+  color: #fff5d8 !important;
   text-shadow: none !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
   .trskin-settings-light-surface
-  :is(p, small, [class*="text-token-text-secondary"],
-    [class*="text-token-description-foreground"]) {
-  color: #4b5966 !important;
+  :is(p, small, [class*="text-secondary"], [class*="text-tertiary"],
+    [class*="text-token-text-secondary"], [class*="text-token-description-foreground"]) {
+  color: #b7c7dd !important;
   text-shadow: none !important;
 }
 
 html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
   .trskin-settings-light-surface :is(a, [role="link"], [class*="text-token-link"]) {
-  color: #0867b8 !important;
+  color: #7fe8ff !important;
   text-shadow: none !important;
 }
 
@@ -2977,8 +3426,160 @@ html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
   .trskin-settings-light-surface
   :is([disabled], [aria-disabled="true"], [class*="text-token-disabled"],
     [class*="text-token-text-tertiary"], [class*="text-token-input-placeholder"]) {
-  color: #66727d !important;
+  color: #8297b2 !important;
   text-shadow: none !important;
+}
+
+/* Settings 2.7 inherits the Terraria mono stack from body. Latin glyphs then
+   use a different rhythm from the CJK fallback, so one sentence looks like
+   two fonts. Keep this route on the same UI stack as the native Codex shell. */
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-content,
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-content * {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+    "Microsoft YaHei UI", "Segoe UI", system-ui, sans-serif !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active body,
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active body * {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+    "Microsoft YaHei UI", "Segoe UI", system-ui, sans-serif !important;
+}
+
+/* Native settings cards are pure white in the current renderer. A muted
+   blue-green surface keeps the page legible while letting the biome backdrop
+   remain visible around the cards. */
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface {
+  background:
+    linear-gradient(180deg, rgb(26 55 73 / .98), rgb(15 34 52 / .98)) !important;
+  background-image:
+    linear-gradient(180deg, rgb(26 55 73 / .98), rgb(15 34 52 / .98)) !important;
+  /* Keep the semantic light-surface marker stable across route scans; the
+     gradient above still supplies the visibly muted card tone. */
+  background-color: rgb(26 55 73 / .98) !important;
+  border-color: rgb(127 232 255 / .42) !important;
+  color: #fff5d8 !important;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / .28),
+    3px 4px 0 rgb(5 24 32 / .20) !important;
+}
+
+/* The older route-wide text rule also matches the card's root div. Match its
+   class specificity so the light-card foreground is dark at every level. */
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-content .trskin-settings-light-surface:is(div, [class*="text-"]) {
+  color: #fff5d8 !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface > *:not(:last-child)::after {
+  background: rgb(42 91 101 / .20) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface
+  :is(button[class~="bg-primary-soft-alpha"], button[class~="bg-surface"],
+    button[class*="bg-surface/"], input, textarea, select) {
+  background-color: rgb(190 211 211 / .78) !important;
+  background-image: none !important;
+  border-color: rgb(42 91 101 / .30) !important;
+}
+
+/* The card text baseline above intentionally uses a warm light foreground for
+   headings and fields. Primary actions use pale surfaces, though, so inheriting
+   that foreground makes their labels disappear against their own background.
+   Give both current action tokens a dark ink color and pin nested labels too;
+   the explicit text fill also wins over native button rendering on Electron. */
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface
+  :is(button[class~="bg-primary-soft-alpha"], button[class~="bg-primary-solid"],
+    button[class~="bg-surface"], button[class*="bg-surface/"],
+    [role="button"]) {
+  color: #102335 !important;
+  -webkit-text-fill-color: #102335 !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface
+  :is(button[class~="bg-primary-soft-alpha"], button[class~="bg-primary-solid"],
+    button[class~="bg-surface"], button[class*="bg-surface/"],
+    [role="button"])
+  :is(span, strong, small, label, svg, [class*="text-"]) {
+  color: #102335 !important;
+  -webkit-text-fill-color: #102335 !important;
+  text-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface
+  :is(button[class~="bg-primary-soft-alpha"], button[class~="bg-surface"],
+    button[class*="bg-surface/"]):is(:hover, [data-state="open"], :focus-visible) {
+  background-color: rgb(169 197 198 / .92) !important;
+  border-color: rgb(42 91 101 / .56) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
+  .trskin-settings-light-surface
+  :is(span[class~="bg-chart-blue"], [class*="bg-chart-blue"]) {
+  background-color: rgb(45 119 132 / .86) !important;
+  background-image: none !important;
+}
+
+/* Codex mounts the session preview in a portal. Its old
+   bg-surface-elevated-secondary token resolves to near-white under the
+   current light shell, so target the stable tooltip role and data-side hook. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  [role="tooltip"][data-side] {
+  border: 1px solid rgb(var(--ds-accent-rgb) / .64) !important;
+  border-radius: 5px !important;
+  background:
+    linear-gradient(180deg, rgb(22 61 104 / .97), rgb(10 35 68 / .98)) !important;
+  background-image:
+    linear-gradient(180deg, rgb(22 61 104 / .97), rgb(10 35 68 / .98)) !important;
+  color: var(--terraria-reading-text) !important;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / .10),
+    3px 4px 0 rgb(5 12 28 / .42),
+    0 0 12px rgb(12 51 84 / .24) !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  [role="tooltip"][data-side]
+  :is(button, [role="button"], span, div, svg) {
+  color: var(--terraria-reading-text) !important;
+  text-shadow: 1px 1px 0 rgb(5 12 28 / .58) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  [role="tooltip"][data-side]
+  :is(.text-codex-description, [class*="text-secondary"], [class*="text-tertiary"]) {
+  color: #b8d4df !important;
+}
+
+/* The row itself is a div[role=button] in Codex 2.7, so button/a hover rules
+   alone leave the native pale ghost background exposed. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(.app-shell-left-panel, aside.app-shell-left-panel)
+  [data-app-action-sidebar-thread-row]:hover {
+  border: 1px solid rgb(var(--ds-accent-rgb) / .55) !important;
+  background:
+    linear-gradient(180deg, rgb(22 61 104 / .92), rgb(11 35 68 / .94)) !important;
+  color: var(--terraria-reading-text) !important;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / .08),
+    2px 3px 0 rgb(5 12 28 / .35) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(.app-shell-left-panel, aside.app-shell-left-panel)
+  [data-app-action-sidebar-thread-row]:hover
+  :is(span, div, button, svg) {
+  color: var(--terraria-reading-text) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2990,4 +3591,271 @@ html.codex-dream-skin[data-dream-style="terraria"].trskin-settings-active
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
   }
+}
+
+/* The current Electron shell keeps a native light top rule on the home
+   surface. Let the themed window run continuously beneath the fixed header. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).dream-skin-home-shell {
+  border-top: 0 !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).dream-skin-home-shell > header.trskin-app-header {
+  border-bottom: 0 !important;
+}
+
+/* Native workspace sizes are measured independently from our decoration.
+   Added layout borders make the reversed split frame wider than its viewport.
+   Keep the separator as inset paint, without changing the measured box. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  main[data-app-shell-main-surface].trskin-main-surface {
+  border-width: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: inset 2px 0 rgb(var(--ds-accent-rgb) / .22) !important;
+}
+
+/* Let native workspace containment size the footer. The stock reading-column
+   cap is too narrow on large windows; CSS percentages expand within the chat
+   pane without measuring and feeding pixel widths back into container queries. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  [data-app-shell-workspace-layout] [data-thread-scroll-footer]
+  > [data-pip-obstacle="thread-footer"] {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+  padding-inline: 24px !important;
+}
+
+/* Home is clipped by the skin and has no scrollbar, so stable both-edges
+   reserves two empty strips for a scrollbar that cannot appear. Paint the
+   environment once on the native outer canvas, including its titlebar. */
+html.codex-dream-skin[data-dream-style="terraria"] .dream-skin-home-shell {
+  scrollbar-gutter: auto !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main[data-app-shell-main-surface]:has(.dream-skin-home-shell) {
+  background:
+    linear-gradient(90deg,
+      rgb(var(--ds-bg-rgb) / .84),
+      rgb(var(--ds-bg-rgb) / .48) 58%,
+      rgb(var(--ds-bg-rgb) / .76)),
+    var(--dream-skin-art) var(--ds-art-position) / cover no-repeat !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main[data-app-shell-main-surface]:has(.dream-skin-home-shell)::before {
+  background: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main[data-app-shell-main-surface]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).dream-skin-home-shell {
+  background: transparent !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  main[data-app-shell-main-surface]:has(.dream-skin-home-shell) > header {
+  background: rgb(var(--ds-bg-rgb) / .24) !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"] .dream-skin-native-top-fade {
+  background: none !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Codex 2.7 renders the left navigation as a div.app-shell-left-panel.
+   Keep the legacy aside selectors above for older builds and mirror the
+   sidebar skin onto the new host so the update cannot expose its native gray
+   panel or wash out the navigation labels. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(.app-shell-left-panel, aside.app-shell-left-panel) {
+  border: 2px solid rgb(255 255 255 / .18) !important;
+  border-left: 0 !important;
+  border-radius: 0 5px 5px 0 !important;
+  background:
+    linear-gradient(180deg, rgb(var(--ds-panel-2-rgb) / .76), rgb(var(--ds-panel-rgb) / .88)),
+    var(--dream-skin-art) var(--biome-sidebar-art-position) / cover no-repeat !important;
+  box-shadow:
+    inset -3px 0 rgb(7 15 34 / .62),
+    5px 0 0 rgb(8 14 28 / .28) !important;
+  color: var(--terraria-reading-text) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(.app-shell-left-panel, aside.app-shell-left-panel)
+  :is(nav, button, a, div, span, p, [class*="text-"]) {
+  color: var(--terraria-reading-text) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(.app-shell-left-panel, aside.app-shell-left-panel) svg {
+  color: var(--terraria-reading-muted) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(.app-shell-left-panel, aside.app-shell-left-panel)
+  :is(button:hover, a:hover, [aria-current="page"]) {
+  border-color: rgb(var(--ds-accent-rgb) / .74) !important;
+  background: linear-gradient(180deg,
+    rgb(var(--ds-panel-2-rgb) / .98),
+    rgb(var(--ds-panel-rgb) / .96)) !important;
+  color: var(--terraria-reading-text) !important;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / .14),
+    2px 3px 0 rgb(5 12 28 / .42) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="forest-day"]
+  :is(.app-shell-left-panel, aside.app-shell-left-panel) {
+  border-right-color: rgb(141 221 85 / .56) !important;
+  background:
+    linear-gradient(180deg, rgb(38 111 155 / .70) 0%, rgb(25 91 117 / .78) 58%, rgb(18 75 65 / .88) 100%),
+    var(--dream-skin-art) var(--biome-sidebar-art-position) / cover no-repeat !important;
+  box-shadow:
+    inset -3px 0 rgb(8 40 48 / .72),
+    inset 0 -5px rgb(88 147 55 / .28),
+    5px 0 0 rgb(8 31 35 / .30) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"][data-dream-variant="cavern"]
+  :is(.app-shell-left-panel, aside.app-shell-left-panel) {
+  border-right-color: rgb(255 189 85 / .48) !important;
+  background:
+    linear-gradient(180deg, rgb(48 31 62 / .70), rgb(28 18 38 / .88)),
+    var(--dream-asset-track) left bottom / 32px 32px repeat-x,
+    var(--dream-skin-art) center / 640px 384px repeat !important;
+  box-shadow:
+    inset -3px 0 rgb(10 6 16 / .82),
+    inset 0 -8px rgb(255 173 67 / .12),
+    5px 0 0 rgb(8 5 13 / .42) !important;
+}
+
+/* Review/resource actions in Codex 2.7 are generic buttons whose native
+   bg-primary-soft-alpha/bg-surface utilities stay opaque white and bypass the
+   measured light-surface markers. Scope the fix to task routes so settings
+   controls keep their native light cards. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).trskin-task-route:not(.dream-skin-home-shell)
+  :is(button[class~="bg-primary-soft-alpha"], button[class~="bg-surface"],
+    button[class*="bg-surface/"]) {
+  color: var(--terraria-reading-text) !important;
+  background: rgb(var(--ds-panel-2-rgb) / .98) !important;
+  background-image: none !important;
+  border-color: rgb(var(--ds-accent-rgb) / .46) !important;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .08) !important;
+  text-shadow: none !important;
+}
+
+/* Codex 2.7 mounts MCP suggestions in a guest webview. The guest shell keeps
+   a light inline background even when the host is dark, which leaves a white
+   strip across the thread while the card is positioned above the viewport.
+   The renderer bridge also applies the same rules inside the guest iframe;
+   these host rules cover the native webview surface and its clipping wrapper. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).trskin-task-route:not(.dream-skin-home-shell)
+  :is(webview[title*="Codex Apps MCP"],
+      webview[partition^="codex-mcp-app-sandbox:"]) {
+  background: transparent !important;
+  background-color: transparent !important;
+  color-scheme: dark !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).trskin-task-route:not(.dream-skin-home-shell)
+  :is(.group\/mcp-app, [class*="group/mcp-app"]) {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* The new floating output/source summary uses generated utility classes and
+   no semantic dialog role. Scope the pixel frame to its two stable inset
+   tokens so other menus and dialogs keep their native behavior. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).trskin-task-route:not(.dream-skin-home-shell)
+  [class~="pointer-events-none"][class~="absolute"]:has(> [class*="max-h-full"])
+  :is(div[class*="bg-surface-elevated-secondary"]) {
+  border: 2px solid rgb(var(--ds-accent-rgb) / .78) !important;
+  border-radius: 4px !important;
+  background:
+    linear-gradient(180deg, rgb(18 34 48 / .98), rgb(8 22 34 / .98)) !important;
+  background-image:
+    linear-gradient(180deg, rgb(18 34 48 / .98), rgb(8 22 34 / .98)) !important;
+  box-shadow:
+    inset 0 0 0 2px rgb(255 255 255 / .10),
+    inset 0 -5px rgb(5 12 28 / .58),
+    4px 5px 0 rgb(5 12 28 / .48) !important;
+  image-rendering: pixelated;
+  color: var(--terraria-reading-text) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).trskin-task-route:not(.dream-skin-home-shell)
+  [class~="pointer-events-none"][class~="absolute"]:has(> [class*="max-h-full"])
+  :is(header, section) {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).trskin-task-route:not(.dream-skin-home-shell)
+  [class~="pointer-events-none"][class~="absolute"]:has(> [class*="max-h-full"])
+  :is(button, [role="button"], [role="listitem"], span, svg) {
+  color: var(--terraria-reading-text) !important;
+  text-shadow: 1px 1px 0 rgb(5 12 28 / .72) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).trskin-task-route:not(.dream-skin-home-shell)
+  [class~="pointer-events-none"][class~="absolute"]:has(> [class*="max-h-full"])
+  :is(button, [role="button"]):is(:hover, [data-state="open"], :focus-visible) {
+  border-color: var(--terraria-gold) !important;
+  background: rgb(var(--ds-accent-rgb) / .22) !important;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .16), 2px 2px 0 rgb(5 12 28 / .42) !important;
+}
+
+/* User bubbles in the current Markdown renderer use generated class names;
+   their paragraphs otherwise inherit a deep navy foreground that disappears
+   against the biome wallpaper. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).trskin-task-route:not(.dream-skin-home-shell)
+  :is(.trskin-user-message-surface, [data-user-message-bubble="true"])
+  :is(p, li, span, strong, em, code, a) {
+  color: var(--terraria-reading-text) !important;
+  text-shadow: 1px 2px 0 rgb(3 9 18 / .72) !important;
+}
+
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).trskin-task-route:not(.dream-skin-home-shell)
+  :is(.trskin-user-message-surface, [data-user-message-bubble="true"])
+  :is(a, [data-inline-mention-interactive]) {
+  color: #9be7ff !important;
+  text-decoration-color: rgb(155 231 255 / .82) !important;
+}
+
+/* 2.7's Markdown renderer capitalizes its generated class names
+   (_MarkdownRoot_, _ExternalMarkdownLink_). The legacy lowercase matcher
+   misses those links and leaves them in the native deep blue foreground. */
+html.codex-dream-skin[data-dream-style="terraria"]
+  :is(main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]).trskin-task-route:not(.dream-skin-home-shell)
+  :is([class*="_Markdown"], [data-markdown-han-text], [class*="text-size-chat"])
+  a[href],
+  :is([class*="_Markdown"], [data-markdown-han-text], [class*="text-size-chat"]) a[href] * {
+  color: #d8f4ff !important;
+  fill: currentColor !important;
+  text-decoration-color: rgb(155 231 255 / .82) !important;
+  text-shadow: 1px 1px 0 rgb(3 9 18 / .72) !important;
 }

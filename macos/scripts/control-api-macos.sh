@@ -10,6 +10,8 @@ usage() {
   /usr/bin/printf '%s\n' \
     'Usage:' \
     '  control-api-macos.sh snapshot' \
+    '  control-api-macos.sh inspect' \
+    '  control-api-macos.sh inspect-overlays' \
     '  control-api-macos.sh apply <official|random|environment-variant>' \
     '  control-api-macos.sh random-save <environment-minutes> <fixed|rotate> <background-minutes> [excluded-variant ...]' \
     '  control-api-macos.sh random-next' \
@@ -39,11 +41,21 @@ if [ "$COMMAND" = "snapshot" ]; then
   exit 0
 fi
 
+# Inspection records app/CDP failures in a report and lets the UI open it.
+if [ "$COMMAND" = "inspect" ]; then
+  [ "$#" -eq 0 ] || fail "inspect does not accept arguments."
+  exec "$SCRIPT_DIR/inspect-skin-macos.sh" --console
+fi
+if [ "$COMMAND" = "inspect-overlays" ]; then
+  [ "$#" -eq 0 ] || fail "inspect-overlays does not accept arguments."
+  exec "$SCRIPT_DIR/inspect-overlays-macos.sh" --console
+fi
+
 discover_codex_app
 require_macos_runtime
 
 reapply_music_if_active() {
-  local port="9341"
+  local port="${CODEX_DREAM_SKIN_PORT:-9341}"
   local saved_port=""
   [ -f "$STATE_PATH" ] || return 0
   [ -f "$THEME_DIR/theme.json" ] || return 0
@@ -54,12 +66,11 @@ reapply_music_if_active() {
     *) port="$saved_port" ;;
   esac
   verified_cdp_endpoint "$port" || return 0
-  "$NODE" "$INJECTOR" --once --port "$port" --theme-dir "$THEME_DIR" \
-    --timeout-ms 8000 >/dev/null
+  apply_skin_once "$port" 8000
 }
 
 runtime_skin_command() {
-  local port="9341"
+  local port="${CODEX_DREAM_SKIN_PORT:-9341}"
   local saved_port=""
   [ -f "$STATE_PATH" ] || return 1
   [ -f "$THEME_DIR/theme.json" ] || return 1

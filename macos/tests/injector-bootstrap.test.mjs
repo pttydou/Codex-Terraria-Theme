@@ -7,7 +7,9 @@ import {
   armOneShotExitFallback,
   attachMusicFiles,
   CODEX_PROBE_EXPRESSION,
+  earlyFontBootstrapFor,
   earlyPayloadFor,
+  isSkinHostUrl,
 } from "../scripts/injector.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -26,6 +28,8 @@ function createFixture() {
   let nextTimer = 1;
   const markers = { shell: false, sidebar: false };
   const context = {
+    URL,
+    location: { href: 'app://-/index.html' },
     window: { installs: [] },
     document: {
       documentElement: {},
@@ -78,7 +82,41 @@ assert.deepEqual(
 );
 assert.equal(generations.context.window.__CODEX_DREAM_SKIN_EARLY_APPLIED__, "new");
 
+const earlyStyles = new Map();
+const earlyRoot = {
+  setAttribute(name, value) { this[name] = value; },
+};
+const earlyStyleContext = {
+  URL,
+  window: {},
+  location: { href: "app://-/index.html" },
+  document: {
+    title: "ChatGPT",
+    documentElement: earlyRoot,
+    head: { appendChild(node) { earlyStyles.set(node.id, node); } },
+    getElementById(id) { return earlyStyles.get(id) || null; },
+    createElement() {
+      return {
+        setAttribute() {},
+        textContent: "",
+        disabled: false,
+      };
+    },
+  },
+};
+const earlyFontResult = vm.runInNewContext(
+  earlyFontBootstrapFor("body { font-family: TestFont !important; }", "font-test"),
+  earlyStyleContext,
+);
+assert.equal(earlyFontResult, true, "Codex renderer should accept the early font baseline");
+assert.equal(earlyRoot["data-dream-early-skin"], "true");
+assert.match(
+  earlyStyles.get("codex-dream-skin-early-style")?.textContent || "",
+  /TestFont/,
+  "The early baseline should be applied before the full skin payload");
+
 const renamedShell = {
+  URL,
   document: {
     title: "Codex",
     body: {},
@@ -97,6 +135,38 @@ assert.equal(
   true,
   "Renderer discovery must survive removal of Codex's legacy main-surface class.",
 );
+
+for (const href of ['app://-/index.html', 'app://-/index.html?initialRoute=%2Fquick-chat']) {
+  assert.equal(isSkinHostUrl(href), true);
+  assert.equal(vm.runInNewContext(CODEX_PROBE_EXPRESSION, {
+    ...renamedShell, location: { href },
+  }).codex, true, 'Conversation and Quick Chat hosts must retain discovery');
+}
+for (const href of ['https://example.com/index.html', 'app://other/index.html', 'not a URL']) {
+  assert.equal(isSkinHostUrl(href), false);
+}
+
+// Codex 26.1021 adds a contenteditable to the native avatar overlay. Its
+// main + editor must not be treated as a conversation or affect launch verify.
+for (const href of [
+  'app://-/index.html?initialRoute=%2Favatar-overlay',
+  'app://-/detached-window.html?initialRoute=%2Fdetached-window',
+]) {
+  const auxiliary = { ...renamedShell, URL, location: { href } };
+  assert.equal(vm.runInNewContext(CODEX_PROBE_EXPRESSION, auxiliary).codex, false,
+    `Native auxiliary window must be excluded even with shell/editor: ${href}`);
+  const fixture = createFixture();
+  fixture.context.URL = URL;
+  fixture.context.location = { href };
+  fixture.markers.shell = true; fixture.markers.sidebar = true;
+  vm.runInNewContext(earlyPayloadFor('window.installs.push("unexpected")', 'auxiliary'), fixture.context);
+  assert.deepEqual(fixture.context.window.installs, [], 'Early hooks must also exclude auxiliary windows');
+  const fontRoot = {};
+  const fontContext = { ...earlyStyleContext, URL, location: { href },
+    document: { ...earlyStyleContext.document, documentElement: fontRoot } };
+  assert.equal(vm.runInNewContext(earlyFontBootstrapFor(), fontContext), false);
+  assert.equal(fontRoot['data-dream-early-skin'], undefined);
+}
 
 const discoveryStart = source.indexOf("record.earlyScriptId = await registerEarly");
 const probeStart = source.indexOf("const probe = await waitForCodexProbe", discoveryStart);

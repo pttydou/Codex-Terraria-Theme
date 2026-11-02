@@ -71,6 +71,32 @@ ensure_state_root() {
   /bin/chmod 700 "$STATE_ROOT"
 }
 
+# Manual injection used to discard the verification JSON, so exit 2 reached
+# the control panel with no explanation. Keep each attempt separate from old
+# watcher logs, including failures before a renderer accepts the payload.
+apply_skin_once() {
+  local port="$1"
+  local timeout_ms="$2"
+  local report_dir=""
+  local apply_status=0
+  /bin/mkdir -p "$STATE_ROOT/reports/apply"
+  report_dir="$(/usr/bin/mktemp -d "$STATE_ROOT/reports/apply/$(/bin/date -u '+%Y-%m-%dT%H-%M-%SZ')-XXXXXX")"
+  if "$NODE" "$INJECTOR" --once --port "$port" --theme-dir "$THEME_DIR" \
+    --timeout-ms "$timeout_ms" >"$report_dir/result.json" 2>"$report_dir/stderr.log"; then
+    apply_status=0
+  else
+    apply_status=$?
+  fi
+  /usr/bin/printf '%s\n' "$apply_status" >"$report_dir/exit-code.txt"
+  if [ "$apply_status" -ne 0 ]; then
+    /bin/cat "$report_dir/stderr.log" >&2
+    local message="皮肤应用失败（退出码 ${apply_status}）。本次诊断：${report_dir}"
+    /usr/bin/printf '%s %s\n' "$(/bin/date -u '+%Y-%m-%dT%H:%M:%SZ')" "$message" >>"$START_ERROR_LOG"
+    /usr/bin/printf '%s\n' "$message" >&2
+  fi
+  return "$apply_status"
+}
+
 # Seed bundled music files into the user's music library so a fresh install
 # ships with ready-to-play Terraria OST. Idempotent — existing music files are
 # preserved; the bundled music.json is only written when the user does not yet
@@ -537,10 +563,13 @@ launch_injector_daemon() {
   : > "$INJECTOR_ERROR_LOG"
   /bin/launchctl remove "$INJECTOR_JOB_LABEL" >/dev/null 2>&1 || true
 
-  # Prefer a direct background process — launchctl submit is unreliable on newer macOS.
-  /usr/bin/nohup "$NODE" "$INJECTOR" --watch --port "$port" --theme-dir "$THEME_DIR" \
-    >>"$INJECTOR_LOG" 2>>"$INJECTOR_ERROR_LOG" &
-  pid="$!"
+  # Spawn a detached session through Node so closing the launching terminal or
+  # a VS Code task cannot send SIGINT to the watcher. `nohup` only ignores
+  # SIGHUP; it leaves the child in the terminal's process group on macOS.
+  if ! pid="$("$NODE" "$SCRIPT_DIR/spawn-detached-injector.mjs" \
+    "$NODE" "$INJECTOR" "$port" "$THEME_DIR" "$INJECTOR_LOG" "$INJECTOR_ERROR_LOG")"; then
+    pid=""
+  fi
   /bin/sleep 0.08
   if [ -n "$pid" ] && /bin/kill -0 "$pid" 2>/dev/null; then
     printf '%s\n' "$pid"
@@ -614,7 +643,7 @@ ensure_node_runtime() {
 # Fast path when CDP is already open: restart injector + one-shot inject.
 # Returns 0 on success, 1 if CDP is not ready (caller should full-start).
 hot_reapply_theme() {
-  local port="${1:-9341}"
+  local port="${1:-${CODEX_DREAM_SKIN_PORT:-9341}}"
   local timeout_ms="${2:-8000}"
   local inj_pid=""
   local injector_protocol=""

@@ -51,7 +51,7 @@ progress "已收到点击…"
   exit 1
 }
 
-PORT=9341
+PORT="${CODEX_DREAM_SKIN_PORT:-9341}"
 if [ -f "$STATE_PATH" ]; then
   saved_port="$(state_field port 2>/dev/null || true)"
   [ -n "${saved_port:-}" ] && PORT="$saved_port"

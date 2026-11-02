@@ -1,6 +1,6 @@
 # Contributing to TRSkin
 
-感谢你帮助改进 TRSkin。
+感谢你帮助改进 TRSkin。从 v2.7.33 起仅维护 macOS；Windows 源码和 v2.7.10 下载作为历史版本保留，不再同步功能或兼容性修复。
 
 ## 开发流程
 
@@ -19,12 +19,15 @@ cd macos
 ./tests/run-tests.sh
 ```
 
-Windows 修改至少应验证：
+完整自动检查在 macOS 上执行：
 
-- `START-TRSKIN.cmd` 能识别完整运行时；
-- 安装、应用、恢复和卸载路径不需要管理员权限；
-- 调试端口只绑定到 `127.0.0.1`；
-- 不修改 Codex 认证、提供商配置、应用签名或 `app.asar`。
+```bash
+npm run checkup -- --offline
+```
+
+源码与隔离浏览器检查必须通过；离线检查因未连接真实 Codex 返回 2，不代表全应用验收。浏览器依赖和实机补测见 [升级体检流程](macos/UPGRADE_CHECKUP.md)。发布工具修改另运行 `node --test release/tests/*.test.mjs`（仓库根目录）。
+
+当前 CI 在 macOS 上执行源码/浏览器测试及 Swift 控制台编译；不要求同步或测试 Windows 镜像。
 
 ## 素材与版权
 

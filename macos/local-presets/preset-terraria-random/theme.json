@@ -631,6 +631,7 @@
     "fm-build": "fm-build.png",
     "fm-review": "fm-review.png",
     "fm-fix": "fm-fix.png",
+    "ls-art": "ls-art.png",
     "ls-drakomire": "ls-drakomire.apng",
     "ls-drakomire-rider": "ls-drakomire-rider.apng",
     "ls-sroller": "ls-sroller.apng",
@@ -642,6 +643,7 @@
     "ls-build": "ls-build.png",
     "ls-review": "ls-review.png",
     "ls-fix": "ls-fix.png",
+    "lv-art": "lv-art.png",
     "lv-vortex-pillar": "lv-vortex-pillar.png",
     "lv-storm-diver": "lv-storm-diver.apng",
     "lv-alien-queen": "lv-alien-queen.apng",
@@ -652,6 +654,7 @@
     "lv-build": "lv-build.png",
     "lv-review": "lv-review.png",
     "lv-fix": "lv-fix.png",
+    "ln-art": "ln-art.png",
     "ln-nebula-floater": "ln-nebula-floater.apng",
     "ln-brain-suckler": "ln-brain-suckler.apng",
     "ln-evolution-beast": "ln-evolution-beast.apng",
@@ -661,6 +664,7 @@
     "ln-build": "ln-build.png",
     "ln-review": "ln-review.png",
     "ln-fix": "ln-fix.png",
+    "ld-art": "ld-art.png",
     "ld-star-cell": "ld-star-cell.apng",
     "ld-mini-star-cell": "ld-mini-star-cell.apng",
     "ld-flow-invader": "ld-flow-invader.apng",
@@ -3603,9 +3607,9 @@
         "safeArea": "none",
         "taskMode": "ambient"
       },
-      "backgroundKey": "sp-art",
+      "backgroundKey": "ls-art",
       "backgroundPool": [
-        "sp-art"
+        "ls-art"
       ],
       "companionPool": [
         "ls-drakomire",
@@ -3666,9 +3670,9 @@
         "safeArea": "none",
         "taskMode": "ambient"
       },
-      "backgroundKey": "sp-art",
+      "backgroundKey": "lv-art",
       "backgroundPool": [
-        "sp-art"
+        "lv-art"
       ],
       "companionPool": [
         "lv-vortex-pillar",
@@ -3727,9 +3731,9 @@
         "safeArea": "none",
         "taskMode": "ambient"
       },
-      "backgroundKey": "sp-art",
+      "backgroundKey": "ln-art",
       "backgroundPool": [
-        "sp-art"
+        "ln-art"
       ],
       "companionPool": [
         "ln-nebula-floater",
@@ -3786,9 +3790,9 @@
         "safeArea": "none",
         "taskMode": "ambient"
       },
-      "backgroundKey": "sp-art",
+      "backgroundKey": "ld-art",
       "backgroundPool": [
-        "sp-art"
+        "ld-art"
       ],
       "companionPool": [
         "ld-star-cell",
