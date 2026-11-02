@@ -3,7 +3,7 @@
 set -euo pipefail
 . "$(cd "$(dirname "$0")" && pwd -P)/common-macos.sh"
 
-PORT=9341
+PORT="${CODEX_DREAM_SKIN_PORT:-9341}"
 PORT_EXPLICIT="false"
 RESTORE_BASE_THEME="false"
 RESTART_CODEX="false"

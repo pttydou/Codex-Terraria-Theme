@@ -6,34 +6,15 @@ import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const macosRoot = path.resolve(here, "..");
-const windowsRoot = path.resolve(macosRoot, "../windows/TRSkin/core");
 const template = await fs.readFile(path.join(macosRoot, "assets", "renderer-inject.js"), "utf8");
 const css = await fs.readFile(path.join(macosRoot, "assets", "dream-skin.css"), "utf8");
 const macosInjector = await fs.readFile(path.join(macosRoot, "scripts", "injector.mjs"), "utf8");
-const windowsTemplate = await fs.readFile(
-  path.join(windowsRoot, "assets", "renderer-inject.js"),
-  "utf8",
-);
-const windowsCss = await fs.readFile(path.join(windowsRoot, "assets", "dream-skin.css"), "utf8");
-const windowsInjector = await fs.readFile(path.join(windowsRoot, "scripts", "injector.mjs"), "utf8");
-const windowsThemePayload = await fs.readFile(
-  path.join(windowsRoot, "scripts", "theme-payload.mjs"),
-  "utf8",
-);
-const windowsChromeConfig = await fs.readFile(
-  path.resolve(macosRoot, "../windows/TRSkin/core/scripts/config-utf8.ps1"),
-  "utf8",
-);
-
-for (const { label, renderer, stylesheet, injectors } of [
+const fixtures = [
   { label: "macOS", renderer: template, stylesheet: css, injectors: [macosInjector] },
-  {
-    label: "Windows",
-    renderer: windowsTemplate,
-    stylesheet: windowsCss,
-    injectors: [windowsInjector, windowsThemePayload],
-  },
-]) {
+];
+// Only macOS is maintained; the archived Windows source is not a test fixture.
+
+for (const { label, renderer, stylesheet, injectors } of fixtures) {
   assert.equal(
     renderer.includes('"[data-composer-surface-variant]"')
       && renderer.includes('"[data-composer-utility-bar-variant]"'),
@@ -42,7 +23,7 @@ for (const { label, renderer, stylesheet, injectors } of [
   );
   assert.match(
     renderer,
-    /directComposerLayout[\s\S]{0,500}:scope > \[data-composer-layout\][\s\S]{0,20000}elementIsVisible\(surface\)[\s\S]{0,200}active = surface/,
+    /directComposerLayout[\s\S]{0,500}:scope > \[data-composer-layout\][\s\S]{0,24000}elementIsVisible\(surface\)[\s\S]{0,200}active = surface/,
     `${label} must descend to the visible direct data-composer-layout surface.`,
   );
   assert.match(
@@ -69,6 +50,11 @@ for (const { label, renderer, stylesheet, injectors } of [
     stylesheet,
     /\.dream-skin-composer-surface\s*\{[\s\S]{0,120}outline:\s*none !important;/,
     `${label} must suppress the native canvastext Composer outline.`,
+  );
+  assert.match(
+    stylesheet,
+    /main:not\(\.trskin-main-surface\):not\(\[role="main"\]\)\s*\{[\s\S]{0,180}background:\s*var\(--ds-bg\) !important;[\s\S]{0,120}color:\s*var\(--ds-text\) !important;/,
+    `${label} must cover the unmarked Codex outer main during the empty-state layout pass.`,
   );
   assert.match(
     stylesheet,
@@ -150,8 +136,8 @@ for (const { label, renderer, stylesheet, injectors } of [
   );
   assert.match(
     renderer,
-    /!composerBandIsBlocked\(candidate, blockerBox, widthBox\)[\s\S]{0,1800}composerGeometryAttempts = 48/,
-    `${label} must ignore transparent summary shells and settle the complete transition.`,
+    /!composerBandIsBlocked\(candidate, blockerBox, widthBox\)[\s\S]{0,4200}composerGeometryAttempts = 8/,
+    `${label} must ignore transparent summary shells and settle a bounded transition.`,
   );
   assert.match(
     renderer,
@@ -164,13 +150,26 @@ for (const { label, renderer, stylesheet, injectors } of [
     `${label} must decide frontend maintenance from capabilities instead of Codex versions.`,
   );
   assert.equal(
+    renderer.includes("FRONTEND_ADAPTER_REGISTRY_VERSION")
+      && renderer.includes("FRONTEND_ADAPTERS")
+      && renderer.includes("adapterRegistryVersion")
+      && renderer.includes("queryDiscoveryCandidates")
+      && renderer.includes("diagnosticFingerprint"),
+    true,
+    `${label} must publish named adapter ownership, fallback and hit-count diagnostics.`,
+  );
+  assert.equal(
     renderer.includes('const FRONTEND_FAILURE_CONFIRM_MS = 1200')
+      && renderer.includes('const FRONTEND_STARTUP_GRACE_MS = 8000')
       && renderer.includes('const FRONTEND_SAFE_MODE_STORAGE_KEY = "__TRSKIN_FRONTEND_SAFE_MODE_V1__"')
       && renderer.includes('style.disabled = frontendSafety.active')
       && renderer.includes('action: "confirming-frontend-contract"')
+      && renderer.includes('const startupGraceRemaining = Math.max(')
+      && renderer.includes('const confirmationDelay = Math.max(')
+      && renderer.includes('startupGraceUntil: previous')
       && renderer.includes('retryFrontendCompatibility'),
     true,
-    `${label} must confirm persistent breakage, enter a durable safe mode, and support recovery.`,
+    `${label} must tolerate slow first-document mounting, confirm persistent breakage, enter a durable safe mode, and support recovery.`,
   );
   assert.match(
     renderer,
@@ -211,6 +210,9 @@ for (const { label, renderer, stylesheet, injectors } of [
         && injector.includes("composerOutlineStyle")
         && injector.includes("visibleComposerMarkerCount")
         && injector.includes("frontendCompatibility")
+        && injector.includes("diagnosticFingerprint")
+        && injector.includes("--compatibility-report")
+        && injector.includes("fallbackAdapters")
         && injector.includes("!result.frontendCompatibility.updateRequired")
         && injector.includes("result.frontendCompatibility.safety?.mode === 'normal'")
         && injector.includes("result.styleEnabled"),
@@ -227,6 +229,14 @@ assert.equal(
   true,
   "macOS settings discovery must use stable attributes and renderer-owned markers.",
 );
+assert.equal(
+  template.includes('const MAIN_SURFACE_SELECTOR = \'main, [role="main"]\'')
+    && template.includes('[role="main"].${MAIN_SURFACE_CLASS}')
+    && css.includes('[role="main"].trskin-main-surface')
+    && macosInjector.includes('[role="main"].trskin-main-surface'),
+  true,
+  "Main-surface compatibility must cover semantic role containers in discovery, CSS, cleanup, and verify.",
+);
 assert.match(
   template,
   /syncSettingsContrastMarkers\(root\)[\s\S]{0,120}findComposerSurface\(\{ mark: true \}\)/,
@@ -236,6 +246,11 @@ assert.match(
   template,
   /width < 140[\s\S]{0,100}height < 36[\s\S]{0,120}width \* box\.height < 4500[\s\S]{0,300}alpha >= 0\.82[\s\S]{0,80}luminance >= 0\.82/,
   "Settings surfaces must satisfy stable size, opacity and luminance thresholds.",
+);
+assert.match(
+  template,
+  /isSettingsLightSurface[\s\S]{0,500}dialog[\s\S]{0,250}thread-summary-panel/,
+  "Settings scanning must leave portal dialogs and summary panels on their floating palette.",
 );
 assert.match(
   template,
@@ -249,25 +264,31 @@ assert.doesNotMatch(
 );
 assert.match(
   css,
-  /trskin-settings-active[\s\S]{0,160}trskin-settings-light-surface[\s\S]{0,800}--color-token-foreground:\s*#18212b !important;[\s\S]{0,500}--color-token-description-foreground:\s*#4b5966 !important;[\s\S]{0,500}--color-token-link:\s*#0867b8 !important;/,
-  "Verified light settings cards must receive the dedicated dark semantic palette.",
+  /trskin-settings-active[\s\S]{0,160}trskin-settings-light-surface[\s\S]{0,800}--color-token-foreground:\s*#fff5d8 !important;[\s\S]{0,500}--color-token-description-foreground:\s*#b7c7dd !important;[\s\S]{0,500}--color-token-link:\s*#7fe8ff !important;/,
+  "Verified settings cards must receive the dedicated high-contrast Terraria palette.",
 );
 assert.match(
   css,
-  /trskin-settings-light-surface[\s\S]{0,1800}:is\(a, \[role="link"\],[\s\S]{0,180}color:\s*#0867b8 !important;/,
-  "Settings links must remain distinguishable on native white cards.",
+  /trskin-settings-light-surface[\s\S]{0,1800}:is\(a, \[role="link"\],[\s\S]{0,180}color:\s*#7fe8ff !important;/,
+  "Settings links must remain distinguishable on the dark Terraria cards.",
+);
+assert.match(
+  css,
+  /trskin-settings-light-surface[\s\S]{0,1800}:is\(button\[class~="bg-primary-soft-alpha"\],[\s\S]{0,260}button\[class~="bg-primary-solid"\][\s\S]{0,420}color:\s*#102335 !important;[\s\S]{0,120}-webkit-text-fill-color:\s*#102335 !important;/,
+  "Settings primary-action buttons must use dark ink against their pale surfaces.",
+);
+assert.equal(
+  css.includes('[role="dialog"][data-pip-obstacle="quick-chat"]')
+    && css.includes('Quick Chat\'s portal can paint its Composer before'),
+  true,
+  "Quick Chat must have a stable portal selector for the first frame.",
+);
+assert.match(
+  css,
+  /data-local-conversation-item-target-ids\]\:has\(aside\) aside[\s\S]{0,650}background:\s*linear-gradient[\s\S]{0,500}border-color:/,
+  "Task model-capacity notifications must be darkened through their stable conversation-item anchor.",
 );
 
-assert.match(
-  windowsChromeConfig,
-  /appearanceLightChromeTheme[^\r\n]*ink = "#F8FAFC"/,
-  "Windows native caption glyphs must use a light ink color above the dark Terraria title bar.",
-);
-assert.doesNotMatch(
-  windowsChromeConfig,
-  /appearanceLightChromeTheme[^\r\n]*ink = "#4A235F"/,
-  "Windows native caption glyphs must not reuse the old low-contrast purple ink.",
-);
 
 assert.doesNotMatch(
   css,
@@ -336,8 +357,8 @@ assert.match(
 );
 assert.match(
   css,
-  /html\.codex-dream-skin\s+\.dream-skin-home\s*\{[\s\S]{0,240}overflow-y:\s*hidden !important;/,
-  "The new-task home must keep its composer dock in the viewport instead of exposing a page scrollbar.",
+  /html\.codex-dream-skin\s+\.dream-skin-home\s*\{[\s\S]{0,240}overflow-y:\s*auto !important;/,
+  "Short home windows must allow scrolling rather than clip overflowing content.",
 );
 assert.doesNotMatch(
   css,
@@ -346,7 +367,7 @@ assert.doesNotMatch(
 );
 assert.match(
   css,
-  /@media\s*\(max-height:\s*760px\)[\s\S]{0,300}\.dream-skin-home\s+\.dream-skin-home-hero-rail\s*\{[\s\S]{0,120}flex-basis:\s*350px !important;/,
+  /@media\s*\(max-height:\s*760px\)[\s\S]{0,300}\.dream-skin-home\s+\.dream-skin-home-hero-rail\s*\{[\s\S]{0,120}min-height:\s*350px !important;/,
   "Short windows must shrink decorative home artwork before clipping the composer.",
 );
 assert.doesNotMatch(
@@ -404,17 +425,17 @@ assert.match(
 );
 assert.match(
   css,
-  /data-dream-art-wide="true"\]:has\(main\.trskin-main-surface\.dream-skin-home-shell\)[\s\S]{0,100}body\s*\{[\s\S]{0,300}background-image:\s*var\(--dream-skin-art\) !important;/,
+  /data-dream-art-wide="true"\][\s\S]{0,260}:has\([\s\S]{0,260}dream-skin-home-shell[\s\S]{0,500}body\s*\{[\s\S]{0,300}background-image:\s*var\(--dream-skin-art\) !important;/,
   "Wide home artwork should use the same full-window image as utility routes.",
 );
 assert.match(
   css,
-  /data-dream-art-wide="true"\]:has\(main\.trskin-main-surface\.dream-skin-home-shell\)[\s\S]{0,120}body\s*\{[\s\S]{0,260}background-position:\s*var\(--ds-art-position\) !important;/,
+  /data-dream-art-wide="true"\][\s\S]{0,260}:has\([\s\S]{0,260}dream-skin-home-shell[\s\S]{0,500}body\s*\{[\s\S]{0,260}background-position:\s*var\(--ds-art-position\) !important;/,
   "Wide home artwork must honor the configured focal point instead of forcing a centered crop.",
 );
 assert.match(
   css,
-  /data-dream-art-task-mode="ambient"[\s\S]{0,260}data-dream-art-wide="true"\]:has\(main\.trskin-main-surface:not\(\.dream-skin-home-shell\)\)[\s\S]{0,120}body\s*\{[\s\S]{0,260}background-position:\s*var\(--ds-art-position\) !important;/,
+  /data-dream-art-task-mode="ambient"[\s\S]{0,260}data-dream-art-wide="true"\][\s\S]{0,300}:has\([\s\S]{0,300}dream-skin-home-shell[\s\S]{0,500}body\s*\{[\s\S]{0,260}background-position:\s*var\(--ds-art-position\) !important;/,
   "Wide task artwork must retain the same focal point as the home route.",
 );
 assert.match(
@@ -494,17 +515,32 @@ assert.match(
 );
 assert.match(
   css,
+  /:is\(pre, \[data-code-block\], \[data-markdown-code-block\],[\s\S]{0,650}background:\s*linear-gradient\([\s\S]{0,220}--ds-bg-rgb[\s\S]{0,160}background-image:\s*linear-gradient/,
+  "Code viewers must keep a dark Terraria surface instead of inheriting the native light editor background.",
+);
+assert.match(
+  css,
+  /\[data-markdown-copy="code-block"\][\s\S]{0,360}> :first-child\s*\{[\s\S]{0,260}background:\s*linear-gradient\([\s\S]{0,180}--ds-bg-rgb[\s\S]{0,160}background-image:\s*linear-gradient[\s\S]{0,180}border-color:\s*transparent !important;/,
+  "CodeBlock sticky action bars must not retain the native light white strip.",
+);
+assert.match(
+  css,
+  /\[aria-hidden="true"\]\[class~="pointer-events-none"\]\[class~="absolute"\]\[class\*="bg-gradient-to-t"\][\s\S]{0,260}background:\s*none !important;[\s\S]{0,120}background-image:\s*none !important;/,
+  "The native sticky footer gradient must not expose a white band above the themed Composer.",
+);
+assert.match(
+  css,
   /--color-token-foreground:\s*var\(--terraria-reading-text\) !important;/,
   "Terraria themes should remap native foreground tokens at their source.",
 );
 assert.match(
   css,
-  /main\.trskin-main-surface:not\(\.dream-skin-home-shell\)::after\s*\{[\s\S]{0,260}background:\s*linear-gradient/,
+  /dream-skin-home-shell\)\s*::after\s*\{[\s\S]{0,260}background:\s*linear-gradient/,
   "Terraria task routes should retain a stable contrast scrim above every wallpaper.",
 );
 assert.match(
   css,
-  /data-dream-style="terraria"\] main\.trskin-main-surface:not\(\.dream-skin-home-shell\)::before\s*\{[\s\S]{0,220}background-image:\s*var\(--dream-skin-art\) !important;[\s\S]{0,180}opacity:\s*\.96;/,
+  /data-dream-style="terraria"\][\s\S]{0,1200}dream-skin-home-shell\)\s*::before\s*\{[\s\S]{0,220}background-image:\s*var\(--dream-skin-art\) !important;[\s\S]{0,180}opacity:\s*\.96;/,
   "Terraria task routes should expose the environment artwork as a dedicated image layer.",
 );
 assert.match(
@@ -516,11 +552,6 @@ assert.match(
   css,
   /radial-gradient\(circle at 78% 18%, var\(--biome-glow\), transparent 34%\)[\s\S]{0,180}rgb\(var\(--ds-bg-rgb\) \/ \.78\)/,
   "Biome task artwork should keep a stable lower reading shade without hiding the image.",
-);
-assert.match(
-  css,
-  /data-dream-variant="dungeon"\][\s\S]{0,180}aside\.app-shell-left-panel\s*\{[\s\S]{0,120}160px 450px !important;[\s\S]{0,100}no-repeat, repeat !important;/,
-  "Dungeon sidebars should keep their original wall tile crisp instead of stretching it.",
 );
 assert.match(
   css,
@@ -582,21 +613,6 @@ assert.match(
   css,
   /data-dream-companion\*="blood-eel"[\s\S]{0,180}width:\s*150px;[\s\S]{0,80}height:\s*56px;/,
   "The complete Blood Eel sprite should use a wide safe companion box.",
-);
-assert.match(
-  css,
-  /data-dream-variant="space"[\s\S]{0,240}background-size:\s*128px 128px !important;/,
-  "The 64px space wallpaper should remain crisp at an exact 2x pixel multiple.",
-);
-assert.match(
-  css,
-  /data-dream-variant="dungeon"[\s\S]{0,240}background-size:\s*160px 450px !important;/,
-  "The 80x225 dungeon tile should remain crisp at an exact 2x pixel multiple.",
-);
-assert.match(
-  css,
-  /data-dream-variant="jungle-temple"[\s\S]{0,240}background-size:\s*128px 128px !important;/,
-  "The 64px temple wall should remain crisp at an exact 2x pixel multiple.",
 );
 assert.match(
   template,
@@ -687,12 +703,12 @@ assert.match(
 );
 assert.match(
   css,
-  /data-dream-style="terraria"\]\[data-dream-variant\][\s\S]{0,80}main\.trskin-main-surface \.dream-skin-composer-surface\s*\{[\s\S]{0,220}inset 0 0 0 1px[\s\S]{0,140}0 0 0 2px rgb\(var\(--ds-accent-rgb\) \/ \.48\) !important;/,
+  /data-dream-style="terraria"\]\[data-dream-variant\][\s\S]{0,220}dream-skin-composer-surface\s*\{[\s\S]{0,220}inset 0 0 0 1px[\s\S]{0,140}0 0 0 2px rgb\(var\(--ds-accent-rgb\) \/ \.48\) !important;/,
   "The Terraria composer should use a sharp accent frame without a dark offset shell or blur.",
 );
 assert.doesNotMatch(
   css,
-  /main\.trskin-main-surface \.dream-skin-composer-surface\s*\{[\s\S]{0,260}var\(--biome-glow\)/,
+  /dream-skin-composer-surface\s*\{[\s\S]{0,260}var\(--biome-glow\)/,
   "The Terraria composer frame should not blur over dark biome artwork.",
 );
 assert.match(
@@ -966,6 +982,7 @@ function createFixture(theme, {
   conversation = null,
   composerRail = null,
   rightSidebar = null,
+  workspaceLayout = null,
   audioPlay = null,
   nativeHeader = false,
   composerScenario = null,
@@ -977,9 +994,10 @@ function createFixture(theme, {
   animationFrame = false,
   settings = null,
   frontendStorage = null,
+  initialMainAvailable = true,
 } = {}) {
   let fixtureShell = nativeShell;
-  let mainAvailable = true;
+  let mainAvailable = Boolean(initialMainAvailable);
   const nodes = new Map();
   const attributes = new Map();
   const bodyAttributes = new Map();
@@ -1067,6 +1085,9 @@ function createFixture(theme, {
   const shellBox = { left: 280, top: 36, width: 1000, height: 764 };
   const shellMain = {
     classList: createClassList(),
+    matches(selector) {
+      return selector === "main" || selector === 'main, [role="main"]';
+    },
     contains(candidate) {
       return taskSurfaceElements.some((surface) => surface === candidate
         || surface._controls?.includes(candidate) || surface._foreground?.includes(candidate));
@@ -1154,6 +1175,7 @@ function createFixture(theme, {
     querySelector(selector) {
       return selector === ":scope > [data-composer-layout]" ? composerLayout : null;
     },
+    contains(candidate) { return candidate === composerLayout; },
     closest(selector) { return selector === "main" ? shellMain : null; },
     getBoundingClientRect() { return composerRect; },
   } : null;
@@ -1424,7 +1446,10 @@ function createFixture(theme, {
     classList: createClassList(["composer-surface-chrome"]),
     children: [],
     matches(selector) { return selector === ".composer-surface-chrome"; },
-    closest(selector) { return selector === "main" ? shellMain : null; },
+    closest(selector) {
+      if (selector === "[data-app-shell-workspace-layout]") return workspaceLayout?.active ? workspaceLayout : null;
+      return selector === "main" ? shellMain : null;
+    },
     getBoundingClientRect() {
       return { x: 360, y: 680, left: 360, top: 680, right: 1160, bottom: 760, width: 800, height: 80 };
     },
@@ -1489,6 +1514,7 @@ function createFixture(theme, {
   } : null;
   if (composerRailElement) composerRailElement.parentElement = composerOverflowHost;
   const composerDock = composerRail ? {
+    classList: createClassList(),
     style: createStyleDeclaration(),
     parentElement: composerRailElement,
     getBoundingClientRect() {
@@ -1599,6 +1625,13 @@ function createFixture(theme, {
       if (selector === "[data-settings-panel-slug]") {
         return settings && settings.active !== false ? [settingsPanel] : [];
       }
+      if (selector === 'main, [role="main"]') {
+        return mainAvailable ? [shellMain] : [];
+      }
+      if (selector === 'main.trskin-main-surface, [role="main"].trskin-main-surface, [data-trskin-main-surface]') {
+        return mainAvailable && shellMain.classList.contains("trskin-main-surface")
+          ? [shellMain] : [];
+      }
       if (selector === ".trskin-settings-light-surface") {
         return settingsSurfaces.filter((candidate) =>
           candidate.classList.contains("trskin-settings-light-surface"));
@@ -1648,6 +1681,9 @@ function createFixture(theme, {
       if (selector === ".dream-skin-composer-surface") {
         return [composerLayout, legacyComposer, staleComposer]
           .filter((candidate) => candidate?.classList.contains("dream-skin-composer-surface"));
+      }
+      if (selector === ".dream-skin-composer-rail") {
+        return composerDock?.classList?.contains("dream-skin-composer-rail") ? [composerDock] : [];
       }
       if (selector === ".dream-skin-composer-overflow-host") {
         return composerOverflowHost?.classList.contains("dream-skin-composer-overflow-host")
@@ -1890,8 +1926,17 @@ const defaultContract = defaults.window.__CODEX_DREAM_SKIN_STATE__.frontendContr
 assert.equal(defaultContract.policy, "capabilities-not-codex-version");
 assert.equal(defaultContract.status, "compatible");
 assert.equal(defaultContract.updateRequired, false);
+assert.equal(defaultContract.adapters.main.status, "ready");
+assert.equal(defaultContract.adapters.composer.status, "missing");
+assert.equal(defaultContract.adapters.composer.required, false,
+  "Routes without a visible editor must not require a Composer.");
+assert.equal(defaultContract.diagnostics.main.primaryVisibleCount, 1);
+assert.equal(defaultContract.diagnostics.composer.primaryVisibleCount, 0);
+assert.equal(defaultContract.diagnostics.composer.markerVisibleCount, 0);
+assert.match(defaultContract.diagnosticFingerprint, /main:1:0:1/);
+assert.match(defaultContract.diagnosticFingerprint, /composer:0:0:0/);
 assert.equal(defaults.attributes.get("data-dream-frontend-compatibility"), "compatible");
-assert.equal(defaults.attributes.get("data-dream-frontend-contract"), "1");
+assert.equal(defaults.attributes.get("data-dream-frontend-contract"), "2");
 const brokenContract = defaults.window.__CODEX_DREAM_SKIN_STATE__.evaluateFrontendContract({
   main: null,
   composer: null,
@@ -1900,6 +1945,41 @@ const brokenContract = defaults.window.__CODEX_DREAM_SKIN_STATE__.evaluateFronte
 assert.equal(brokenContract.status, "incompatible");
 assert.equal(brokenContract.updateRequired, true);
 assert.deepEqual([...brokenContract.criticalMissing], ["main-surface"]);
+assert.equal(brokenContract.adapters.main.status, "missing");
+assert.equal(brokenContract.adapters.composer.status, "missing");
+assert.equal(brokenContract.diagnostics.main.markerVisibleCount, 1);
+
+const slowStartupFixture = createFixture({
+  id: "slow-startup-contract",
+  appearance: "dark",
+  stylePreset: "terraria",
+}, { initialMainAvailable: false });
+vm.runInNewContext(slowStartupFixture.payload, slowStartupFixture.context);
+let slowStartupState = slowStartupFixture.window.__CODEX_DREAM_SKIN_STATE__;
+assert.equal(
+  slowStartupState.frontendContract.safety.mode,
+  "confirming",
+  "A document whose Codex shell has not mounted must remain in confirming mode.",
+);
+const startupTimer = [...slowStartupFixture.timers.values()]
+  .find((timer) => timer.callback && timer.delay >= 7000);
+assert.ok(
+  startupTimer,
+  "The first document must use the bounded startup grace instead of the 1200ms route timer.",
+);
+slowStartupFixture.flushTimers(1200);
+slowStartupState = slowStartupFixture.window.__CODEX_DREAM_SKIN_STATE__;
+assert.equal(
+  slowStartupState.frontendSafety.active,
+  false,
+  "Slow native mounting must not enter safe mode during the normal route confirmation window.",
+);
+slowStartupFixture.setMainAvailable(true);
+const slowStartupRecovery = slowStartupState.retryFrontendCompatibility();
+assert.equal(slowStartupRecovery.status, "compatible");
+assert.equal(slowStartupRecovery.safety.mode, "normal");
+assert.equal(slowStartupState.frontendSafety.startupGraceUntil, 0);
+slowStartupState.cleanup();
 
 const safetyStorage = new Map();
 const safetyFixture = createFixture({
@@ -1990,6 +2070,18 @@ for (const composerScenario of ["stable-surface", "stable-utility"]) {
     true,
     `${composerScenario} must mark its visible direct data-composer-layout child.`,
   );
+  const stableContract = stableComposer.window.__CODEX_DREAM_SKIN_STATE__.frontendContract;
+  assert.equal(stableContract.adapters.composer.status, "ready");
+  assert.equal(stableContract.diagnostics.composer.primaryVisibleCount, 1);
+  assert.equal(stableContract.diagnostics.composer.markerVisibleCount, 1);
+  stableComposer.composerLayout.classList.remove("dream-skin-composer-surface");
+  const unmarkedContract = stableComposer.window.__CODEX_DREAM_SKIN_STATE__.evaluateFrontendContract({
+    main: stableComposer.shellMain, composer: stableComposer.composerLayout,
+  });
+  assert.equal(unmarkedContract.diagnostics.composer.primaryVisibleCount, 1);
+  assert.equal(unmarkedContract.diagnostics.composer.markerVisibleCount, 0,
+    "A present native Composer must be distinguishable from a missing skin marker.");
+  stableComposer.window.__CODEX_DREAM_SKIN_STATE__.ensure({ route: true });
   assert.equal(
     stableComposer.staleComposer.classList.contains("dream-skin-composer-surface"),
     false,
@@ -2356,6 +2448,11 @@ const settingsFixture = createFixture({
   },
 });
 vm.runInNewContext(settingsFixture.payload, settingsFixture.context);
+const standaloneSettingsContract = settingsFixture.window.__CODEX_DREAM_SKIN_STATE__
+  .evaluateFrontendContract({ main: null, composer: null });
+assert.equal(standaloneSettingsContract.status, "compatible");
+assert.equal(standaloneSettingsContract.adapters.main.required, false);
+assert.equal(standaloneSettingsContract.adapters.composer.required, false);
 assert.equal(
   settingsFixture.root.classList.contains("trskin-settings-active"),
   true,
@@ -2365,6 +2462,13 @@ assert.equal(
   settingsFixture.settingsSurfaces[0].classList.contains("trskin-settings-light-surface"),
   true,
   "A large opaque white settings card must receive the light-surface marker.",
+);
+settingsFixture.settingsSurfaces[0]._backgroundColor = "rgb(28, 54, 88)";
+settingsFixture.window.__CODEX_DREAM_SKIN_STATE__.ensure({ route: true });
+assert.equal(
+  settingsFixture.settingsSurfaces[0].classList.contains("trskin-settings-light-surface"),
+  true,
+  "A settings card must keep its marker after the theme darkens its computed background.",
 );
 for (const surface of settingsFixture.settingsSurfaces.slice(1)) {
   assert.equal(
@@ -2452,6 +2556,9 @@ let responsiveState = responsiveTask.window.__CODEX_DREAM_SKIN_STATE__;
 assert.equal(responsiveState.frontendContract.status, "adaptive");
 assert.equal(responsiveState.frontendContract.composerDiscovery, "legacy-fallback");
 assert.equal(responsiveState.frontendContract.updateRequired, false);
+assert.equal(responsiveState.frontendContract.adapters.composer.status, "fallback");
+assert.equal(responsiveState.frontendContract.diagnostics.composer.primaryVisibleCount, 0);
+assert.equal(responsiveState.frontendContract.diagnostics.composer.fallbackVisibleCount, 1);
 assert.equal(
   responsiveTask.threadScroller.scrollTop,
   -420,
@@ -2507,6 +2614,32 @@ assert.equal(
   true,
   "A second geometry pass must retain its owned overflow marker after CSS makes overflow visible.",
 );
+// Narrow side panes previously escaped the width-ratio heuristic. Entering
+// workspace layout must remove existing corrections, on either side, and
+// leaving it must restore the non-workspace behavior.
+for (const side of ["left", "right"]) {
+  const workspaceLayout = { active: false, side };
+  const fixture = createFixture({ id: `workspace-${side}`, appearance: "dark", stylePreset: "terraria", variant: "hallow" }, {
+    workspaceLayout,
+    conversation: { scrollTop: 0, scrollHeight: 900, clientHeight: 900, flexDirection: "column-reverse" },
+    composerRail: { left: 200, top: 800, width: 1000, height: 120 },
+  });
+  vm.runInNewContext(fixture.payload, fixture.context);
+  const state = fixture.window.__CODEX_DREAM_SKIN_STATE__;
+  assert.ok(fixture.composerDock.style.values.has("--dream-skin-composer-safe-width"));
+  workspaceLayout.active = true;
+  state.ensure({ route:true, layout:true });
+  assert.equal(fixture.composerDock.style.values.has("--dream-skin-composer-safe-width"), false);
+  assert.equal(fixture.composerDock.style.values.has("--dream-skin-composer-shift-x"), false);
+  assert.equal(fixture.composerDock.classList.contains("dream-skin-composer-rail"), false);
+  assert.equal(fixture.composerOverflowHost.classList.contains("dream-skin-composer-overflow-host"), false);
+  assert.equal(state.composerGeometryTimer, null);
+  fixture.flushTimers(1000);
+  assert.equal(fixture.composerDock.style.values.has("--dream-skin-composer-safe-width"), false);
+  workspaceLayout.active = false;
+  state.ensure({ route:true, layout:true });
+  assert.ok(fixture.composerDock.style.values.has("--dream-skin-composer-safe-width"));
+}
 const narrowNativeComposer = createFixture({
   id: "narrow-native-composer-contract",
   appearance: "dark",

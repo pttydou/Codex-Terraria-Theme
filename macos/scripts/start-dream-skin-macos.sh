@@ -12,7 +12,7 @@ record_start_error() {
 }
 trap 'code=$?; record_start_error "$code" "$LINENO"' ERR
 
-PORT=9341
+PORT="${CODEX_DREAM_SKIN_PORT:-9341}"
 PORT_EXPLICIT="false"
 RESTART_EXISTING="false"
 PROMPT_RESTART="false"

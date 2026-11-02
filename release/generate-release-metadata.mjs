@@ -22,8 +22,6 @@ if (!Array.isArray(release.assets) || release.tag_name !== tag || release.draft 
   throw new Error("GitHub release metadata does not describe the expected draft release");
 }
 const names = {
-  windowsUpdate: `TRSkin-Windows-Update-${version}.zip`,
-  windowsFull: `TRSkin-Windows-${version}.zip`,
   macosUpdate: `TRSkin-macOS-Update-${version}.zip`,
   macosFull: `TRSkin-macOS-${version}.zip`,
   music: config.music.assetName,
@@ -56,7 +54,6 @@ const manifest = {
   repository: config.repository,
   release: { version, tag, sourceCommit },
   platforms: {
-    windows: { version, update: assets.windowsUpdate, full: assets.windowsFull },
     macos: { version, update: assets.macosUpdate, full: assets.macosFull },
   },
   music: { version: config.music.version, ...assets.music },
@@ -79,12 +76,14 @@ await fs.writeFile(
   "utf8",
 );
 
-const notes = `# TRSkin ${version}\n\n`
+const notes = `# TRSkin ${version} for macOS\n\n`
   + `本 Release 由 GitHub Actions 从标签 \`${tag}\`（commit \`${sourceCommit}\`）自动测试和构建。\n\n`
-  + `- 首次安装：下载对应平台的完整包。\n`
-  + `- 已安装用户：程序会提示下载对应平台的 Update 包，不会重复下载音乐。\n`
+  + `从 v2.7.33 起，本项目只维护 macOS。Windows 停止功能更新和兼容性修复，最后版本为 [v2.7.10](https://github.com/${config.repository}/releases/tag/v2.7.10)，旧源码和下载继续保留。\n\n`
+  + `- 首次安装：下载 \`${names.macosFull}\`，解压后打开 \`START-CODEX-TERRARIA.app\`。\n`
+  + `- 已安装 macOS 用户：程序会提示下载 \`${names.macosUpdate}\`，不会重复下载音乐。\n`
   + `- 音乐单独安装：下载 \`${names.music}\`。\n\n`
-  + `校验：\`sha256sum -c SHA256SUMS.txt\`\n\n`
+  + `本版变化与验证范围见[更新说明](https://github.com/${config.repository}/blob/${tag}/macos/CHANGELOG.md)。自动测试不替代真实 Codex 全页面交互验收。\n\n`
+  + `校验：\`shasum -a 256 -c SHA256SUMS.txt\`（需下载清单内全部文件；单个文件可与清单逐项比对）。\n\n`
   + `构建证明：\`gh attestation verify <文件> -R ${config.repository}\`\n`;
 await fs.writeFile(path.join(dist, "RELEASE-NOTES.md"), notes, "utf8");
 console.log(`Generated manifest and checksums for ${tag}.`);

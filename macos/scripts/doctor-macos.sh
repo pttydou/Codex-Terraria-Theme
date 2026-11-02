@@ -4,9 +4,12 @@ set -euo pipefail
 . "$(cd "$(dirname "$0")" && pwd -P)/common-macos.sh"
 
 REQUIRE_LIVE="false"
+PORT="${CODEX_DREAM_SKIN_PORT:-9341}"
+PORT_EXPLICIT="false"
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --require-live) REQUIRE_LIVE="true"; shift ;;
+    --port) [ "$#" -ge 2 ] || fail '--port requires a value'; PORT="$2"; PORT_EXPLICIT="true"; shift 2 ;;
     *) fail "Unknown doctor argument: $1" ;;
   esac
 done
@@ -23,12 +26,14 @@ for required in \
 done
 
 PAYLOAD_JSON="$("$NODE" "$INJECTOR" --check-payload --theme-dir "$THEME_DIR")"
-PORT=9341
-if [ -f "$STATE_PATH" ]; then
-  PORT="$(state_field port)"
+if [ "$PORT_EXPLICIT" = "false" ] && [ "${CODEX_DREAM_SKIN_PORT:-}" = "" ] && [ -f "$STATE_PATH" ]; then
+  saved_port="$(state_field port 2>/dev/null || true)"
+  [ -z "$saved_port" ] || PORT="$saved_port"
 fi
+case "$PORT" in ''|*[!0-9]*) fail 'Port must be 1–65535' ;; esac
+[ "$PORT" -ge 1 ] && [ "$PORT" -le 65535 ] || fail 'Port must be 1–65535'
 LIVE="false"
-if [ -f "$STATE_PATH" ] && verified_cdp_endpoint "$PORT"; then
+if verified_cdp_endpoint "$PORT"; then
   "$NODE" "$INJECTOR" --verify --port "$PORT" --theme-dir "$THEME_DIR" --timeout-ms 12000 >/dev/null
   LIVE="true"
 fi

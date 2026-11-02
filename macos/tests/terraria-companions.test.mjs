@@ -227,6 +227,21 @@ for (const environment of randomTheme.environmentPool) {
 }
 
 assert.deepEqual(new Set(Object.keys(randomTheme.assets)), referencedAssets);
+// Placed-wall previews must not return through fixed presets or deduplicated
+// random keys after regenerating the pack (the four pillars used to share space).
+const mapSources = JSON.parse(fs.readFileSync(
+  path.join(randomDir, "..", "MAP_BACKGROUND_SOURCES.json"), "utf8",
+));
+for (const entry of mapSources.environments) {
+  const { dir, theme } = fixedThemes.get(entry.variant);
+  const environment = randomTheme.environmentPool.find(e => e.variant === entry.variant);
+  const files = [path.join(dir, theme.image),
+    ...environment.backgroundPool.map(key => path.join(randomDir, randomTheme.assets[key]))];
+  for (const file of files) {
+    assert.equal(crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex"),
+      entry.sha256, `${entry.variant} must use its verified map background`);
+  }
+}
 console.log(
   `Terraria companion presets passed: ${totalCompanions} slots, `
   + `${totalAnimated} animated, ${totalCritters} critters.`,

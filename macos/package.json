@@ -1,11 +1,17 @@
 {
   "name": "codex-dream-skin-studio",
-  "version": "2.7.10",
+  "version": "2.7.33",
   "private": true,
   "type": "module",
   "scripts": {
     "test": "./tests/run-tests.sh",
-    "doctor": "./scripts/doctor-macos.sh"
+    "test:browser": "node tests/run-browser-tests.mjs",
+    "checkup": "node scripts/checkup.mjs",
+    "doctor": "./scripts/doctor-macos.sh",
+    "inspect": "./scripts/inspect-skin-macos.sh",
+    "compatibility-report": "./scripts/compatibility-report-macos.sh",
+    "inspect:overlays": "./scripts/inspect-overlays-macos.sh",
+    "inspect:pages": "node scripts/inspect-pages.mjs"
   },
   "engines": {
     "node": ">=20"

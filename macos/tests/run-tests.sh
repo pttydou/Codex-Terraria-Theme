@@ -17,6 +17,11 @@ done
 for test_file in \
   image-metadata.test.mjs \
   injector-bootstrap.test.mjs \
+  manual-injection.test.mjs \
+  compatibility-report.test.mjs \
+  checkup.test.mjs \
+  inspection.test.mjs \
+  inspection-pages.test.mjs \
   renderer-inject.test.mjs \
   theme-stage.test.mjs \
   terraria-companions.test.mjs; do

@@ -117,7 +117,7 @@ release_console_lock() {
 acquire_console_lock
 trap release_console_lock EXIT
 
-PORT=9341
+PORT="${CODEX_DREAM_SKIN_PORT:-9341}"
 if [ -f "$STATE_PATH" ]; then
   saved_port="$(state_field port 2>/dev/null || true)"
   case "$saved_port" in
@@ -166,8 +166,7 @@ apply_manual_theme() {
   ensure_codex_skin_port_once "$PORT"
   PORT="$CODEX_SKIN_PORT"
 
-  "$NODE" "$INJECTOR" --once --port "$PORT" --theme-dir "$THEME_DIR" \
-    --timeout-ms 15000 >/dev/null
+  apply_skin_once "$PORT" 15000
   codex_pid="$(codex_main_pids | /usr/bin/head -n 1)"
   write_state "$PORT" 0 "" "${codex_pid:-0}" "manual"
   notify_user "已应用 ${theme_name}；普通启动时最多重启一次，没有后台重启任务。"
@@ -240,8 +239,7 @@ reapply_music_config() {
   [ -f "$THEME_DIR/theme.json" ] || return 0
   codex_is_running || return 0
   verified_cdp_endpoint "$PORT" || return 0
-  "$NODE" "$INJECTOR" --once --port "$PORT" --theme-dir "$THEME_DIR" \
-    --timeout-ms 8000 >/dev/null
+  apply_skin_once "$PORT" 8000
 }
 
 configure_music() {

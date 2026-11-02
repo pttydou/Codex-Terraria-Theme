@@ -1,6 +1,7 @@
 ((cssText, artDataUrl, themeConfig) => {
   const STATE_KEY = "__CODEX_DREAM_SKIN_STATE__";
   const DISABLED_KEY = "__CODEX_DREAM_SKIN_DISABLED__";
+  const EARLY_STYLE_ID = "codex-dream-skin-early-style";
   const STYLE_ID = "codex-dream-skin-style";
   const CHROME_ID = "codex-dream-skin-chrome";
   const HUD_ID = "codex-dream-skin-hud";
@@ -9,6 +10,12 @@
   const MUSIC_ATTACH_KEY = "__CODEX_DREAM_SKIN_ATTACH_MUSIC__";
   const MAIN_SURFACE_CLASS = "trskin-main-surface";
   const MAIN_SURFACE_ATTR = "data-trskin-main-surface";
+  // Codex has used both a semantic <main> element and a role=main shell.
+  // Keep discovery, cleanup, verification, and CSS ownership on one adapter
+  // contract so a tag-only refactor does not silently lose the skin.
+  const MAIN_SURFACE_SELECTOR = 'main, [role="main"]';
+  const MARKED_MAIN_SURFACE_SELECTOR =
+    `main.${MAIN_SURFACE_CLASS}, [role="main"].${MAIN_SURFACE_CLASS}, [${MAIN_SURFACE_ATTR}]`;
   const APP_HEADER_CLASS = "trskin-app-header";
   const APP_HEADER_ATTR = "data-trskin-app-header";
   const SHELL_ATTR = "data-dream-shell";
@@ -23,13 +30,18 @@
   const COMPOSER_RAIL_CLASS = "dream-skin-composer-rail";
   const COMPOSER_DECORATION_CLASS = "dream-skin-composer-decoration";
   const COMPOSER_OVERFLOW_HOST_CLASS = "dream-skin-composer-overflow-host";
+  const TOP_FADE_MARKER_CLASS = "dream-skin-native-top-fade";
   const USER_MESSAGE_SURFACE_CLASS = "trskin-user-message-surface";
-  const FRONTEND_CONTRACT_SCHEMA = 1;
+  const FRONTEND_CONTRACT_SCHEMA = 2;
   const FRONTEND_COMPATIBILITY_ATTR = "data-dream-frontend-compatibility";
   const FRONTEND_CONTRACT_ATTR = "data-dream-frontend-contract";
   const FRONTEND_SAFE_MODE_ATTR = "data-dream-frontend-safe-mode";
   const FRONTEND_SAFE_MODE_STORAGE_KEY = "__TRSKIN_FRONTEND_SAFE_MODE_V1__";
   const FRONTEND_FAILURE_CONFIRM_MS = 1200;
+  // A renderer document can be ready before Codex has mounted its route shell.
+  // Give the first document install one bounded mount window, while keeping
+  // later route failures on the short confirmation path above.
+  const FRONTEND_STARTUP_GRACE_MS = 8000;
   const COMPOSER_STABLE_SELECTORS = [
     "[data-composer-surface-variant]",
     "[data-composer-utility-bar-variant]",
@@ -38,6 +50,7 @@
   const COMPOSER_EDITOR_SELECTOR = 'textarea, [contenteditable="true"]';
   const SETTINGS_ACTIVE_CLASS = "trskin-settings-active";
   const SETTINGS_LIGHT_SURFACE_CLASS = "trskin-settings-light-surface";
+  const SETTINGS_CONTENT_CLASS = "trskin-settings-content";
   const TASK_ROUTE_CLASS = "trskin-task-route";
   const TASK_LIGHT_SURFACE_CLASS = "trskin-task-light-surface";
   const FLOATING_LIGHT_SURFACE_CLASS = "trskin-floating-light-surface";
@@ -50,9 +63,21 @@
   const LIGHT_SURFACE_CANDIDATE_SELECTOR =
     'button, [role="button"], [role="row"], [role="listitem"], li, tr';
   const TASK_LIGHT_SURFACE_SELECTOR =
-    'section, article, [role="region"], [role="group"], [role="list"], [role="grid"], [role="tree"], [role="table"]';
+    'section, article, [role="region"], [role="group"], [role="list"], [role="grid"], '
+    + '[role="tree"], [role="table"]';
+  // Codex 2.7's file/editor pane is a generic div whose utility class carries
+  // the panel token instead of a semantic section/region role.
+  const TASK_LIGHT_SURFACE_COMPAT_SELECTOR =
+    '[class*="bg-[var(--app-shell-panel-background"]';
   const FLOATING_LIGHT_SURFACE_SELECTOR =
     'dialog, [role="dialog"], [role="menu"], [role="listbox"], [role="tree"]';
+  // Quick Chat and the thread summary panel are rendered through portals. The
+  // former owns a real Composer, while the latter uses a generic div instead
+  // of a dialog role. Keep both discoveries on stable renderer-owned tokens so
+  // CSS-module renames do not make the surfaces fall back to white.
+  const QUICK_CHAT_DIALOG_SELECTOR = '[role="dialog"][data-pip-obstacle="quick-chat"]';
+  const FLOATING_LIGHT_SURFACE_COMPAT_SELECTOR =
+    '[data-pip-obstacle="thread-summary-panel"] ~ div [class~="bg-surface-elevated-secondary"]';
   const LIGHT_SURFACE_CONTROL_SELECTOR =
     'button, a, [role="button"], [role="link"], [role="option"], [role="menuitem"], [role="tab"]';
   const LIGHT_SURFACE_FOREGROUND_SELECTOR =
@@ -66,11 +91,110 @@
     ".dream-skin-home-hero", ".dream-skin-home-hero-rail",
     ".dream-skin-home-suggestions", ".group\\/home-suggestions",
     ".dream-skin-home-utility", '[data-composer-home-utility-bar-position]',
+    '[data-composer-placement="home"][data-composer-rail-placement="above"]',
+    '[class*="_ComposerHomeUtilityBar_"]',
     '[class*="_homeUtilityBar_"]', '[data-composer-surface-variant]',
     '[data-composer-utility-bar-variant]', '[data-composer-layout]',
-    `.${COMPOSER_SURFACE_CLASS}`, `.${COMPOSER_DOCK_CLASS}`,
+    `.${COMPOSER_SURFACE_CLASS}`,
     ".composer-surface-chrome", "textarea", '[contenteditable="true"]',
   ].join(",");
+  const MCP_WEBVIEW_SELECTOR =
+    'webview[title*="Codex Apps MCP"], webview[partition^="codex-mcp-app-sandbox:"]';
+  const MCP_GUEST_STYLE_ID = "codex-dream-skin-mcp-guest-style";
+  const MCP_GUEST_STYLE = `
+    :root, html, body, #root, [class*="_Shell_"] {
+      color-scheme: dark !important;
+      background: transparent !important;
+      background-color: transparent !important;
+    }
+    [class*="_Root_"] {
+      color-scheme: dark !important;
+      background: linear-gradient(180deg, rgb(18 34 48 / .98), rgb(8 22 34 / .98)) !important;
+      border: 2px solid rgb(130 152 163 / .78) !important;
+      border-radius: 4px !important;
+      box-shadow: inset 0 0 0 2px rgb(255 255 255 / .10), inset 0 -5px rgb(5 12 28 / .58), 4px 5px 0 rgb(5 12 28 / .48) !important;
+      image-rendering: pixelated;
+    }
+    [class*="_Card_"] {
+      background: rgb(25 52 64 / .94) !important;
+      border: 1px solid rgb(160 173 179 / .62) !important;
+      border-radius: 3px !important;
+    }
+    [class*="_Heading_"], [class*="_Title_"], [class*="_Description_"] {
+      color: #fff5d8 !important;
+      text-shadow: 1px 1px 0 rgb(5 12 28 / .72) !important;
+    }
+    [class*="_Description_"] { color: #c8dce8 !important; }
+    [class*="_PrimaryAction_"] {
+      color: #111318 !important;
+      background: #a0adb3 !important;
+      border: 2px solid #f4d65e !important;
+      border-radius: 3px !important;
+      box-shadow: inset 0 0 0 1px rgb(255 255 255 / .18), 2px 3px 0 rgb(5 12 28 / .42) !important;
+    }
+    [class*="_PrimaryAction_"]:hover,
+    [class*="_PrimaryAction_"]:focus-visible {
+      background: #c8dce8 !important;
+    }
+  `;
+  const MCP_GUEST_SCRIPT = `(() => {
+    const css = ${JSON.stringify(MCP_GUEST_STYLE)};
+    const apply = (doc) => {
+      if (!doc?.documentElement) return false;
+      let style = doc.getElementById(${JSON.stringify(MCP_GUEST_STYLE_ID)});
+      if (!style) {
+        style = doc.createElement("style");
+        style.id = ${JSON.stringify(MCP_GUEST_STYLE_ID)};
+        (doc.head || doc.documentElement).appendChild(style);
+      }
+      if (style.textContent !== css) style.textContent = css;
+      doc.documentElement.style.setProperty("background", "transparent", "important");
+      doc.documentElement.style.setProperty("background-color", "transparent", "important");
+      if (doc.body) {
+        doc.body.style.setProperty("background", "transparent", "important");
+        doc.body.style.setProperty("background-color", "transparent", "important");
+      }
+      return true;
+    };
+    apply(document);
+    const frame = document.querySelector("#root");
+    if (frame) {
+      apply(frame.contentDocument);
+      if (!frame.dataset.codexDreamSkinGuestHooked) {
+        frame.dataset.codexDreamSkinGuestHooked = "true";
+        frame.addEventListener("load", () => apply(frame.contentDocument));
+      }
+    }
+    return true;
+  })()`;
+  const mcpWebviewListeners = new WeakMap();
+  const styleMcpWebview = (webview) => {
+    if (!webview) return;
+    try {
+      webview.style?.setProperty?.("background", "transparent", "important");
+      webview.style?.setProperty?.("background-color", "transparent", "important");
+      webview.style?.setProperty?.("color-scheme", "dark", "important");
+    } catch {}
+    if (typeof webview.executeJavaScript !== "function") return;
+    let listener = mcpWebviewListeners.get(webview);
+    if (!listener) {
+      listener = () => {
+        try {
+          const result = webview.executeJavaScript(MCP_GUEST_SCRIPT, true);
+          result?.catch?.(() => {});
+        } catch {}
+      };
+      mcpWebviewListeners.set(webview, listener);
+      try { webview.addEventListener?.("dom-ready", listener); } catch {}
+    }
+    listener();
+  };
+  const syncMcpWebviews = () => {
+    if (typeof document?.querySelectorAll !== "function") return 0;
+    const webviews = document.querySelectorAll(MCP_WEBVIEW_SELECTOR);
+    webviews.forEach(styleMcpWebview);
+    return webviews.length;
+  };
   const LIGHT_SURFACE_MARKER_CLASSES = [
     HOME_BANNER_SURFACE_CLASS,
     TASK_LIGHT_SURFACE_CLASS,
@@ -82,6 +206,51 @@
   ];
   const SETTINGS_PANEL_SELECTOR = "[data-settings-panel-slug]";
   const SETTINGS_SURFACE_SELECTOR = "div, section, article, form, fieldset";
+  const NAVIGATION_SELECTOR =
+    '.app-shell-left-panel, aside.app-shell-left-panel, aside, nav[aria-label], [data-testid*="sidebar"]';
+  const HEADER_DISCOVERY_SELECTOR = 'main > header, [role="main"] > header';
+  // Keep the renderer's discovery boundary explicit.  CSS owns the visual
+  // contract; this registry owns the names, markers and fallback policy that
+  // the compatibility report exposes after a Codex update.
+  const FRONTEND_ADAPTER_REGISTRY_VERSION = 1;
+  const FRONTEND_ADAPTERS = Object.freeze({
+    main: Object.freeze({
+      required: true,
+      marker: MAIN_SURFACE_ATTR,
+      primary: MAIN_SURFACE_SELECTOR,
+      fallback: "semantic-score",
+    }),
+    composer: Object.freeze({
+      required: true,
+      marker: COMPOSER_SURFACE_CLASS,
+      primary: [...COMPOSER_STABLE_SELECTORS],
+      fallback: [".composer-surface-chrome", COMPOSER_EDITOR_SELECTOR],
+    }),
+    navigation: Object.freeze({
+      required: false,
+      marker: null,
+      primary: NAVIGATION_SELECTOR,
+      fallback: "optional",
+    }),
+    header: Object.freeze({
+      required: false,
+      marker: APP_HEADER_ATTR,
+      primary: ":scope > header",
+      fallback: "optional",
+    }),
+    settings: Object.freeze({
+      required: false,
+      marker: SETTINGS_LIGHT_SURFACE_CLASS,
+      primary: SETTINGS_PANEL_SELECTOR,
+      fallback: "optional",
+    }),
+    home: Object.freeze({
+      required: false,
+      marker: HOME_BANNER_SURFACE_CLASS,
+      primary: '[data-feature="game-source"]',
+      fallback: "optional",
+    }),
+  });
   const IDLE_THREAD_MESSAGES_CLASS = "dream-skin-idle-thread-messages";
   const IDLE_THREAD_SPACER_CLASS = "dream-skin-idle-thread-spacer";
   const HOME_LAYOUT_CLASSES = [
@@ -211,10 +380,20 @@
   };
   const computedPaintIsLight = (candidate) => computedPaintAudit(candidate).light;
   const isSettingsLightSurface = (candidate) => {
+    // Settings and quick-chat are both portal-mounted below #root. A quick
+    // chat dialog can therefore look like a large opaque form card while the
+    // settings route is active. Keep portal surfaces on their own palette.
+    if (candidate?.closest?.([
+      "dialog", '[role="dialog"]', '[role="menu"]', '[role="listbox"]',
+      `.${FLOATING_LIGHT_SURFACE_CLASS}`,
+      '[data-pip-obstacle="thread-summary-panel"]',
+    ].join(","))) return false;
     if (!candidate?.matches?.(SETTINGS_SURFACE_SELECTOR) || !elementIsVisible(candidate)) return false;
     const box = candidate.getBoundingClientRect?.();
     if (!box || box.width < 140 || box.height < 36 || box.width * box.height < 4500) return false;
     const color = computedSurfaceColor(candidate);
+    // Theme CSS darkens owned cards; retain ownership across discovery passes.
+    if (candidate.classList?.contains?.(SETTINGS_LIGHT_SURFACE_CLASS)) return true;
     return Boolean(color && color.alpha >= 0.82 && color.luminance >= 0.82);
   };
   const syncSettingsContrastMarkers = (root = document.documentElement) => {
@@ -222,14 +401,34 @@
       .filter(elementIsVisible);
     const active = panels.length > 0;
     root?.classList?.toggle?.(SETTINGS_ACTIVE_CLASS, active);
+    // Standalone settings replaced <main> with a sibling of the stable app
+    // sidebar. Claim its content shell independently from white form cards.
+    const nativeContents = active ? [...(document.querySelectorAll?.(
+      '[data-app-shell-focus-area="main"]',
+    ) || [])].filter(elementIsVisible) : [];
+    const contents = new Set(nativeContents.length ? nativeContents : panels.map((panel) =>
+      panel.closest?.(".app-shell-left-panel")?.nextElementSibling?.firstElementChild)
+      .filter((candidate) => candidate && !candidate.matches?.("main, header")
+        && elementIsVisible(candidate)));
+    for (const candidate of document.querySelectorAll?.(`.${SETTINGS_CONTENT_CLASS}`) || []) {
+      if (!contents.has(candidate)) candidate.classList?.remove?.(SETTINGS_CONTENT_CLASS);
+    }
+    for (const candidate of contents) candidate.classList?.add?.(SETTINGS_CONTENT_CLASS);
     const lightSurfaces = new Set();
     if (active) {
+      // The current settings route renders its sidebar and content below the
+      // app root while the normal conversation <main> remains mounted as an
+      // invisible transition surface. Prefer that route root so the scanner
+      // cannot accidentally inspect the hidden conversation shell.
+      const settingsRoot = panels.find((panel) => panel.closest?.("#root"))
+        ?.closest?.("#root") || null;
       const settingsMain = panels.find((panel) =>
         panel.closest?.('[role="main"], main'))?.closest?.('[role="main"], main') ||
         findCodexMainSurface();
-      const scope = settingsMain || document.body || document;
+      const scope = settingsRoot || settingsMain || document.body || document;
       const candidates = [scope, ...(scope.querySelectorAll?.(SETTINGS_SURFACE_SELECTOR) || [])];
       for (const candidate of candidates) {
+        if (contents.has(candidate)) continue;
         if (isSettingsLightSurface(candidate)) lightSurfaces.add(candidate);
       }
     }
@@ -241,7 +440,8 @@
   };
   const lightSurfaceIsProtected = (candidate, { allowHome = false } = {}) => Boolean(
     candidate?.closest?.([
-    "header", `.${COMPOSER_SURFACE_CLASS}`, `.${COMPOSER_DOCK_CLASS}`,
+    "header", `.${COMPOSER_SURFACE_CLASS}`,
+    ...(!allowHome ? [`.${COMPOSER_DOCK_CLASS}`] : []),
     ...(!allowHome ? [".dream-skin-home"] : []), SETTINGS_PANEL_SELECTOR,
     '[class*="_markdown"]', '[class*="_diff"]', '[class*="diff-"]',
     '[data-message-author-role]', '[data-diff]', '[role="code"]',
@@ -342,10 +542,14 @@
     return ownership;
   };
   const findHomeRoute = () => {
+    // Codex caches the homepage while another conversation or settings is active.
+    // The icon is intentionally hidden by our CSS; test the route container instead.
     const indicator = document.querySelector?.('[data-testid="home-icon"]');
-    return indicator?.closest?.('[role="main"]') ||
-      [...(document.querySelectorAll?.('[role="main"]') || [])].find((candidate) =>
-        candidate.querySelector?.('[data-feature="game-source"]')) || null;
+    const indicatedRoute = indicator?.closest?.('[role="main"]');
+    if (elementIsVisible(indicatedRoute)) return indicatedRoute;
+    return [...(document.querySelectorAll?.('[role="main"]') || [])].find((candidate) =>
+      elementIsVisible(candidate)
+      && candidate.querySelector?.('[data-feature="game-source"]')) || null;
   };
   const homeBannerIsProtected = (candidate) => {
     try {
@@ -381,7 +585,10 @@
     const ownership = createLightSurfaceOwnership();
     if (!home || !home.querySelector?.('[data-feature="game-source"]')
       || document.documentElement?.classList?.contains?.(SETTINGS_ACTIVE_CLASS)) return ownership;
-    const candidates = [...(home.querySelectorAll?.(HOME_BANNER_CANDIDATE_SELECTOR) || [])]
+    const candidates = [
+      ...(home.querySelectorAll?.(HOME_BANNER_CANDIDATE_SELECTOR) || []),
+      ...(home.querySelectorAll?.("aside") || []),
+    ]
       .filter((candidate) => homeBannerIsEligible(candidate, home))
       .sort((left, right) => {
         const leftBox = left.getBoundingClientRect();
@@ -413,7 +620,11 @@
     if (!scope || scope.classList?.contains?.("dream-skin-home-shell")
       || document.documentElement?.classList?.contains?.(SETTINGS_ACTIVE_CLASS)) return ownership;
 
-    for (const candidate of [...(scope.querySelectorAll?.(TASK_LIGHT_SURFACE_SELECTOR) || [])]
+    const taskCandidates = [
+      ...(scope.querySelectorAll?.(TASK_LIGHT_SURFACE_SELECTOR) || []),
+      ...(scope.querySelectorAll?.(TASK_LIGHT_SURFACE_COMPAT_SELECTOR) || []),
+    ];
+    for (const candidate of taskCandidates
       .slice(0, 240)) {
       if (!surfaceCandidateIsEligible(candidate)) continue;
       const paint = computedPaintAudit(candidate);
@@ -421,13 +632,28 @@
       ownership.task.add(candidate);
       if (paint.pseudoLight) ownership.pseudo.add(candidate);
     }
-    for (const candidate of [...(document.querySelectorAll?.(FLOATING_LIGHT_SURFACE_SELECTOR) || [])]
-      .slice(0, 80)) {
-      if (scope.contains?.(candidate) || !surfaceCandidateIsEligible(candidate, { floating: true })) {
+    const floatingCompatCandidates = new Set(
+      document.querySelectorAll?.(FLOATING_LIGHT_SURFACE_COMPAT_SELECTOR) || [],
+    );
+    const floatingCandidates = [
+      ...(document.querySelectorAll?.(FLOATING_LIGHT_SURFACE_SELECTOR) || []),
+      ...floatingCompatCandidates,
+    ];
+    for (const candidate of [...new Set(floatingCandidates)].slice(0, 120)) {
+      const quickChat = candidate.matches?.(QUICK_CHAT_DIALOG_SELECTOR);
+      const summaryPanel = floatingCompatCandidates.has(candidate);
+      if ((scope.contains?.(candidate) && !quickChat && !summaryPanel)
+        || !surfaceCandidateIsEligible(candidate, { floating: true })) {
         continue;
       }
       const paint = computedPaintAudit(candidate);
-      if (!paint.light) continue;
+      // The compat selector is also covered by a static CSS fallback. Once
+      // that fallback paints the panel dark, a second pass must retain its
+      // semantic ownership even though the luminance probe is no longer white.
+      // Quick Chat is often mounted with a transparent portal shell. Its
+      // own inner surface supplies the paint after ownership is applied, so
+      // discovery must not depend on the pre-theme luminance probe.
+      if (!paint.light && !summaryPanel && !quickChat) continue;
       ownership.floating.add(candidate);
       if (paint.pseudoLight) ownership.pseudo.add(candidate);
     }
@@ -481,6 +707,13 @@
     return emptySlots;
   };
   const findComposerSurface = ({ mark = false } = {}) => {
+    // Settings contains live pet/editor previews, not conversation composers.
+    if (document.documentElement?.classList?.contains?.(SETTINGS_ACTIVE_CLASS)) {
+      if (mark) for (const node of document.querySelectorAll?.(`.${COMPOSER_SURFACE_CLASS}`) || []) {
+        node.classList?.remove?.(COMPOSER_SURFACE_CLASS);
+      }
+      return null;
+    }
     const candidates = [];
     const addCandidate = (candidate) => {
       if (candidate && !candidates.includes(candidate)) candidates.push(candidate);
@@ -491,16 +724,23 @@
     for (const candidate of document.querySelectorAll?.(".composer-surface-chrome") || []) {
       addCandidate(candidate);
     }
-    const editor = document.querySelector?.(COMPOSER_EDITOR_SELECTOR) || null;
+    const editor = [...(document.querySelectorAll?.(COMPOSER_EDITOR_SELECTOR) || [])]
+      .find(elementIsVisible) || null;
     addCandidate(editor?.closest?.(
       '[data-composer-layout], [data-composer-surface-variant], '
       + '[data-composer-utility-bar-variant], .composer-surface-chrome, form',
     ) || editor?.parentElement || editor);
-    if (editor) {
-      candidates.sort((left, right) =>
-        Number(right === editor || right.contains?.(editor)) -
-        Number(left === editor || left.contains?.(editor)));
-    }
+    // Quick Chat mounts a second Composer inside a role=dialog portal before
+    // the real task Composer in the document. Prefer the non-dialog surface so
+    // task geometry never translates a 560px floating window across the page.
+    candidates.sort((left, right) => {
+      const leftFloating = Boolean(left.closest?.('dialog, [role="dialog"]'));
+      const rightFloating = Boolean(right.closest?.('dialog, [role="dialog"]'));
+      if (leftFloating !== rightFloating) return Number(leftFloating) - Number(rightFloating);
+      if (!editor) return 0;
+      return Number(right === editor || right.contains?.(editor)) -
+        Number(left === editor || left.contains?.(editor));
+    });
 
     let active = null;
     for (const candidate of candidates) {
@@ -521,11 +761,11 @@
   };
   const findCodexMainSurface = ({ mark = false } = {}) => {
     const composer = findComposerSurface();
-    const composerMain = composer?.closest?.("main") || null;
+    const composerMain = composer?.closest?.(MAIN_SURFACE_SELECTOR) || null;
     const legacyHeader = document.querySelector("header.app-header-tint");
     const nativeHeader = legacyHeader ||
       composerMain?.querySelector?.(":scope > header") ||
-      [...(document.querySelectorAll?.("main > header") || [])].find((candidate) => {
+      [...(document.querySelectorAll?.(HEADER_DISCOVERY_SELECTOR) || [])].find((candidate) => {
         const box = candidate.getBoundingClientRect?.();
         return !box || (box.width > 0 && box.height > 0);
       }) || null;
@@ -534,18 +774,16 @@
     const addCandidate = (candidate) => {
       if (candidate && !candidates.includes(candidate)) candidates.push(candidate);
     };
-    addCandidate(composer?.closest?.("main"));
-    addCandidate(nativeHeader?.closest?.("main"));
+    addCandidate(composer?.closest?.(MAIN_SURFACE_SELECTOR));
+    addCandidate(nativeHeader?.closest?.(MAIN_SURFACE_SELECTOR));
     addCandidate(document.querySelector(`main.${MAIN_SURFACE_CLASS}`));
     addCandidate(legacyMain);
-    for (const candidate of document.querySelectorAll?.("main") || []) addCandidate(candidate);
-    addCandidate(document.querySelector("main"));
+    for (const candidate of document.querySelectorAll?.(MAIN_SURFACE_SELECTOR) || []) addCandidate(candidate);
+    addCandidate(document.querySelector(MAIN_SURFACE_SELECTOR));
 
-    const sidebar = document.querySelector(
-      'aside.app-shell-left-panel, aside, nav[aria-label], [data-testid*="sidebar"]',
-    );
+    const sidebar = document.querySelector(NAVIGATION_SELECTOR);
     const sidebarBox = sidebar?.getBoundingClientRect?.();
-    const headerMain = nativeHeader?.closest?.("main") || null;
+    const headerMain = nativeHeader?.closest?.(MAIN_SURFACE_SELECTOR) || null;
     const score = (candidate) => {
       let value = 0;
       if (candidate === composerMain) value += 1000;
@@ -569,7 +807,7 @@
     const selected = candidates.sort((left, right) => score(right) - score(left))[0] || null;
     if (mark) {
       for (const candidate of document.querySelectorAll?.(
-        `main.${MAIN_SURFACE_CLASS}, main[${MAIN_SURFACE_ATTR}]`,
+        MARKED_MAIN_SURFACE_SELECTOR,
       ) || []) {
         if (candidate === selected) continue;
         candidate.classList?.remove?.(MAIN_SURFACE_CLASS);
@@ -578,7 +816,7 @@
       selected?.classList?.add?.(MAIN_SURFACE_CLASS);
       selected?.setAttribute?.(MAIN_SURFACE_ATTR, "true");
       const selectedHeader = selected?.querySelector?.(":scope > header") ||
-        (nativeHeader?.closest?.("main") === selected ? nativeHeader : null);
+        (nativeHeader?.closest?.(MAIN_SURFACE_SELECTOR) === selected ? nativeHeader : null);
       for (const candidate of document.querySelectorAll?.(
         `header.${APP_HEADER_CLASS}, header[${APP_HEADER_ATTR}]`,
       ) || []) {
@@ -591,20 +829,47 @@
     }
     return selected;
   };
+  const queryDiscoveryCandidates = (selectors) => {
+    const candidates = new Set();
+    for (const selector of (Array.isArray(selectors) ? selectors : [selectors])) {
+      if (!selector) continue;
+      try {
+        for (const candidate of document.querySelectorAll?.(selector) || []) {
+          if (candidate) candidates.add(candidate);
+        }
+      } catch {
+        // Diagnostics must not interrupt rendering if a selector is invalid.
+      }
+    }
+    return [...candidates];
+  };
+  const discoveryStats = (primary, fallback, marker) => {
+    const primaryCandidates = queryDiscoveryCandidates(primary);
+    const fallbackCandidates = queryDiscoveryCandidates(fallback);
+    const markerCandidates = marker ? queryDiscoveryCandidates(marker) : [];
+    return {
+      primaryCount: primaryCandidates.length,
+      primaryVisibleCount: primaryCandidates.filter(elementIsVisible).length,
+      fallbackCount: fallbackCandidates.length,
+      fallbackVisibleCount: fallbackCandidates.filter(elementIsVisible).length,
+      markerCount: marker ? markerCandidates.length : null,
+      markerVisibleCount: marker
+        ? markerCandidates.filter(elementIsVisible).length : null,
+    };
+  };
   const evaluateFrontendContract = ({ main = null, composer = null, home = null } = {}) => {
     const stableComposer = COMPOSER_STABLE_SELECTORS
       .flatMap((selector) => [...(document.querySelectorAll?.(selector) || [])])
       .find(elementIsVisible) || null;
     const legacyComposer = [...(document.querySelectorAll?.(".composer-surface-chrome") || [])]
       .find(elementIsVisible) || null;
-    const editor = document.querySelector?.(COMPOSER_EDITOR_SELECTOR) || null;
-    const navigation = document.querySelector?.(
-      'aside.app-shell-left-panel, aside, nav[aria-label], [data-testid*="sidebar"]',
-    ) || null;
+    const editor = [...(document.querySelectorAll?.(COMPOSER_EDITOR_SELECTOR) || [])]
+      .find(elementIsVisible) || null;
+    const navigation = document.querySelector?.(NAVIGATION_SELECTOR) || null;
     const header = main?.querySelector?.(`:scope > header.${APP_HEADER_CLASS}`)
       || main?.querySelector?.(":scope > header") || null;
     const settings = document.documentElement?.classList?.contains?.(SETTINGS_ACTIVE_CLASS) || false;
-    const editorVisible = elementIsVisible(editor);
+    const editorVisible = !settings && elementIsVisible(editor);
     let composerDiscovery = "absent";
     if (composer) {
       if (stableComposer && (composer === stableComposer || stableComposer.contains?.(composer)
@@ -617,7 +882,11 @@
     }
     const criticalMissing = [];
     if (!document.body) criticalMissing.push("document-body");
-    if (!main) criticalMissing.push("main-surface");
+    // Settings is a separate native route and deliberately has no
+    // conversation <main>. Treat its stable settings panel as a valid shell
+    // so the compatibility circuit breaker does not disable the theme after
+    // its grace period and flash the whole page white.
+    if (!main && !settings) criticalMissing.push("main-surface");
     if (editorVisible && !composer) criticalMissing.push("visible-composer");
     const fallbacks = [];
     if (composerDiscovery.endsWith("-fallback")) fallbacks.push(composerDiscovery);
@@ -626,9 +895,85 @@
     const status = criticalMissing.length
       ? "incompatible"
       : fallbacks.some((entry) => !entry.endsWith("-optional")) ? "adaptive" : "compatible";
+    const matches = (node, selector) => Boolean(node?.matches?.(selector));
+    const discovery = {
+      main: !main ? "none" : matches(main, "main") ? "main"
+        : matches(main, '[role="main"]') ? "role-main" : "semantic-fallback",
+      composer: composerDiscovery,
+      composerStable: stableComposer
+        ? COMPOSER_STABLE_SELECTORS.find((selector) => matches(stableComposer, selector)) || "stable"
+        : "none",
+      editor: !editorVisible ? "none" : matches(editor, "textarea") ? "textarea" : "contenteditable",
+      navigation: !navigation ? "none"
+        : matches(navigation, ".app-shell-left-panel") ? "panel-class"
+          : matches(navigation, "aside.app-shell-left-panel") ? "panel-aside"
+            : matches(navigation, 'nav[aria-label]') ? "aria-nav" : "fallback",
+      header: header ? "direct-header" : "none",
+      settings: settings ? "data-settings-panel-slug" : "none",
+      home: home ? "game-source" : "none",
+    };
+    const adapterEntry = (name, ready, selected, required = FRONTEND_ADAPTERS[name].required) => {
+      const definition = FRONTEND_ADAPTERS[name];
+      const selectedName = selected || "none";
+      return {
+        required,
+        status: ready ? (selectedName.includes("fallback") ? "fallback" : "ready") : "missing",
+        selected: selectedName,
+        marker: definition.marker,
+        primary: definition.primary,
+        fallback: definition.fallback,
+      };
+    };
+    const adapters = {
+      main: adapterEntry("main", Boolean(main), discovery.main, !settings),
+      composer: adapterEntry("composer", Boolean(composer), discovery.composer, editorVisible),
+      navigation: adapterEntry("navigation", Boolean(navigation), discovery.navigation),
+      header: adapterEntry("header", Boolean(header), discovery.header),
+      settings: adapterEntry("settings", settings, discovery.settings),
+      home: adapterEntry("home", Boolean(home), discovery.home),
+    };
+    const diagnostics = {
+      main: discoveryStats(
+        MAIN_SURFACE_SELECTOR,
+        [],
+        MARKED_MAIN_SURFACE_SELECTOR,
+      ),
+      composer: discoveryStats(
+        COMPOSER_STABLE_SELECTORS,
+        [".composer-surface-chrome", COMPOSER_EDITOR_SELECTOR],
+        `.${COMPOSER_SURFACE_CLASS}`,
+      ),
+      navigation: discoveryStats(NAVIGATION_SELECTOR, [], null),
+      header: discoveryStats(
+        HEADER_DISCOVERY_SELECTOR,
+        [],
+        `header.${APP_HEADER_CLASS}, header[${APP_HEADER_ATTR}]`,
+      ),
+      settings: discoveryStats(
+        SETTINGS_PANEL_SELECTOR,
+        [],
+        `.${SETTINGS_LIGHT_SURFACE_CLASS}`,
+      ),
+      home: discoveryStats(
+        '[data-feature="game-source"]',
+        [],
+        `.${HOME_BANNER_SURFACE_CLASS}`,
+      ),
+    };
+    const diagnosticFingerprint = Object.entries(diagnostics)
+      .map(([name, values]) => [
+        name,
+        values.primaryVisibleCount,
+        values.fallbackVisibleCount,
+        values.markerVisibleCount ?? "-",
+      ].join(":"))
+      .join(";");
     return {
       schema: FRONTEND_CONTRACT_SCHEMA,
+      adapterRegistryVersion: FRONTEND_ADAPTER_REGISTRY_VERSION,
       policy: "capabilities-not-codex-version",
+      skinVersion: VERSION,
+      adapterRevision: STYLE_REVISION,
       status,
       updateRequired: status === "incompatible",
       action: status === "incompatible" ? "frontend-adapter-update"
@@ -647,8 +992,13 @@
       },
       criticalMissing,
       fallbacks,
+      discovery,
+      adapters,
+      diagnostics,
+      diagnosticFingerprint,
       fingerprint: [
         `contract-${FRONTEND_CONTRACT_SCHEMA}`,
+        `adapters-${FRONTEND_ADAPTER_REGISTRY_VERSION}`,
         `main:${main ? "yes" : "no"}`,
         `composer:${composerDiscovery}`,
         `navigation:${navigation ? "yes" : "no"}`,
@@ -908,6 +1258,10 @@
     pendingFingerprint: null,
     confirmationReady: false,
     confirmationTimer: null,
+    // `previous` exists for hot reinjection on the same document. Only a
+    // genuinely new renderer document gets the mount grace window.
+    startupGraceUntil: previous
+      ? 0 : now() + FRONTEND_STARTUP_GRACE_MS,
   };
   const previousScrollPinned = previous?.conversationScrollState?.pinned;
   const previousMusicWantsPlayback = previous?.music?.wantsPlayback === true || Boolean(
@@ -1012,13 +1366,17 @@
     activatedAt: frontendSafety.activatedAt,
     failureFingerprint: frontendSafety.failureFingerprint,
     confirmationMs: FRONTEND_FAILURE_CONFIRM_MS,
+    startupGraceActive: frontendSafety.startupGraceUntil > now(),
+    startupGraceMsRemaining: Math.max(0, frontendSafety.startupGraceUntil - now()),
   });
 
   const syncFrontendVisualState = () => {
     const active = frontendSafety.active;
     const root = document.documentElement;
     const style = document.getElementById(STYLE_ID);
+    const earlyStyle = document.getElementById(EARLY_STYLE_ID);
     if (style) style.disabled = active;
+    if (earlyStyle) earlyStyle.disabled = active;
     for (const id of [CHROME_ID, HUD_ID]) {
       const node = document.getElementById(id);
       if (!node) continue;
@@ -1075,6 +1433,9 @@
 
   const applyFrontendContract = (contract) => {
     if (contract.status !== "incompatible") {
+      // Once the native shell has mounted, future route changes must use the
+      // normal 1200ms confirmation window instead of the startup grace.
+      frontendSafety.startupGraceUntil = 0;
       clearFrontendConfirmation();
       if (frontendSafety.active) setFrontendSafeMode(false);
       else syncFrontendVisualState();
@@ -1090,13 +1451,20 @@
     if (frontendSafety.pendingFingerprint !== contract.fingerprint) {
       clearFrontendConfirmation();
       frontendSafety.pendingFingerprint = contract.fingerprint;
+      const startupGraceRemaining = Math.max(
+        0, frontendSafety.startupGraceUntil - now(),
+      );
+      const confirmationDelay = Math.max(
+        FRONTEND_FAILURE_CONFIRM_MS,
+        startupGraceRemaining,
+      );
       frontendSafety.confirmationTimer = setTimeout(() => {
         const state = window[STATE_KEY];
         if (state?.installToken !== installToken) return;
         frontendSafety.confirmationTimer = null;
         frontendSafety.confirmationReady = true;
         state.ensure({ root: false, route: true, layout: false });
-      }, FRONTEND_FAILURE_CONFIRM_MS);
+      }, confirmationDelay);
       return confirmingFrontendContract(contract);
     }
 
@@ -1280,7 +1648,7 @@
       const samples = [
         body,
         findCodexMainSurface(),
-        document.querySelector("aside.app-shell-left-panel"),
+        document.querySelector(".app-shell-left-panel, aside.app-shell-left-panel"),
       ].filter(Boolean);
       let votesLight = 0;
       let votesDark = 0;
@@ -1596,6 +1964,7 @@
   let observedComposerDock = null;
   let composerGeometryTimer = null;
   let composerGeometryAttempts = 0;
+  let composerGeometryMain = null;
   let conversationScrollState = null;
   let inheritedScrollPinned = previousScrollPinned;
   let motionMediaQuery = null;
@@ -1609,10 +1978,12 @@
     if (typeof dataUrl !== "string" || !dataUrl.startsWith("data:image/")) {
       orbit.removeAttribute("src");
       orbit.removeAttribute("data-dream-companion-key");
+      setAttribute(orbit, "data-dream-companion-empty", "true");
       return false;
     }
     setAttribute(orbit, "src", dataUrl);
     setAttribute(orbit, "data-dream-companion-key", companionKey);
+    orbit.removeAttribute("data-dream-companion-empty");
     return true;
   };
 
@@ -2054,7 +2425,17 @@
   };
 
   const rotateCompanion = () => {
-    if (window[DISABLED_KEY] || companionPool.length < 1) return null;
+    if (window[DISABLED_KEY] || companionPool.length < 1) {
+      companionKey = null;
+      const root = document.documentElement;
+      root?.removeAttribute("data-dream-companion");
+      root?.removeAttribute("data-dream-companion-frame");
+      root?.removeAttribute("data-dream-companion-animated");
+      root?.removeAttribute("data-dream-companion-size");
+      root?.style?.removeProperty?.("--dream-active-companion");
+      syncCompanionImage();
+      return null;
+    }
     const root = document.documentElement;
     if (!root) return null;
     const current = root.getAttribute("data-dream-companion");
@@ -2407,12 +2788,18 @@
 
   const syncUserMessageSurfaceMarkers = () => {
     const surfaces = new Set();
-    for (const anchor of document.querySelectorAll?.(
-      '[data-local-conversation-user-anchor="true"]',
-    ) || []) {
+    const anchors = [
+      ...(document.querySelectorAll?.('[data-local-conversation-user-anchor="true"]') || []),
+      // Codex 2.7 replaced the conversation-local anchor with a direct,
+      // renderer-owned bubble marker. Keep the legacy path above for older
+      // builds, but treat the new marker as the authoritative surface.
+      ...(document.querySelectorAll?.('[data-user-message-bubble="true"]') || []),
+    ];
+    for (const anchor of anchors) {
       const candidates = [anchor, ...(anchor.querySelectorAll?.("div") || [])];
       for (const candidate of candidates) {
-        if (candidate === anchor || candidate.matches?.(
+        if ((candidate === anchor && !anchor.matches?.('[data-user-message-bubble="true"]'))
+          || candidate.matches?.(
           'button, input, textarea, select, a[href], [role="button"]',
         )) continue;
         let box = null;
@@ -2423,6 +2810,10 @@
         } catch {}
         if (!box || box.width < 24 || box.height < 20 || !style
           || style.display === "none" || style.visibility === "hidden") continue;
+        if (anchor.matches?.('[data-user-message-bubble="true"]') && candidate === anchor) {
+          surfaces.add(candidate);
+          break;
+        }
         const paint = parseComputedColor(style.backgroundColor);
         if ((!paint || paint.alpha < 0.12)
           && (!style.backgroundImage || style.backgroundImage === "none")) {
@@ -2438,14 +2829,67 @@
     for (const candidate of surfaces) candidate.classList?.add?.(USER_MESSAGE_SURFACE_CLASS);
   };
 
+  const syncTopFadeMarkers = () => {
+    const fades = new Set(
+      [...(document.querySelectorAll?.('[class*="_MainContentTopFade_"]') || [])]
+        .filter(elementIsVisible),
+    );
+    for (const candidate of document.querySelectorAll?.(`.${TOP_FADE_MARKER_CLASS}`) || []) {
+      if (!fades.has(candidate)) candidate.classList?.remove?.(TOP_FADE_MARKER_CLASS);
+    }
+    for (const candidate of fades) candidate.classList?.add?.(TOP_FADE_MARKER_CLASS);
+    return fades;
+  };
+
   const syncComposerGeometry = (shellMain, { settle = false } = {}) => {
-    const legacyRail = document.querySelector(
+    // Settings/navigation can replace <main> while a geometry settle timer is
+    // still pending. Never measure the detached route or resize the new page
+    // against its zero-sized bounds.
+    const settingsActive = document.documentElement?.classList?.contains?.(SETTINGS_ACTIVE_CLASS);
+    const composer = settingsActive ? null : findComposerSurface();
+    shellMain = settingsActive ? null : composer?.closest?.(MAIN_SURFACE_SELECTOR) || findCodexMainSurface();
+    if (shellMain !== composerGeometryMain) {
+      if (composerGeometryTimer) clearTimeout(composerGeometryTimer);
+      composerGeometryTimer = null;
+      composerGeometryAttempts = 0;
+      composerGeometryMain = shellMain;
+      if (window[STATE_KEY]?.installToken === installToken) {
+        window[STATE_KEY].composerGeometryTimer = null;
+      }
+    }
+    const clearOverflowHosts = () => {
+      for (const candidate of document.querySelectorAll?.(`.${COMPOSER_OVERFLOW_HOST_CLASS}`) || []) {
+        candidate.classList?.remove?.(COMPOSER_OVERFLOW_HOST_CLASS);
+      }
+    };
+    // A native workspace owns the conversation viewport independently of the
+    // outer shell. Its editor can be on either side and can be very narrow:
+    // width-ratio guesses miss those cases and feed our expanded rail back
+    // into Codex's container queries. Release geometry before any measurement.
+    if (composer?.closest?.('[data-app-shell-workspace-layout]')) {
+      for (const candidate of document.querySelectorAll?.(`.${COMPOSER_RAIL_CLASS}`) || []) {
+        candidate.style?.removeProperty(COMPOSER_SAFE_WIDTH_STYLE);
+        candidate.style?.removeProperty(COMPOSER_SHIFT_STYLE);
+        candidate.classList?.remove?.(COMPOSER_RAIL_CLASS);
+      }
+      clearOverflowHosts();
+      if (composerGeometryTimer) clearTimeout(composerGeometryTimer);
+      composerGeometryTimer = null;
+      composerGeometryAttempts = 0;
+      observedComposerDock = null;
+      if (window[STATE_KEY]?.installToken === installToken) {
+        window[STATE_KEY].composerGeometryTimer = null;
+      }
+      return;
+    }
+    const legacyRail = composer && shellMain ? document.querySelector(
       `.thread-scroll-container .sticky:has(.${COMPOSER_SURFACE_CLASS}) `
       + `> .relative.z-10:has(.${COMPOSER_SURFACE_CLASS})`,
-    );
-    const composer = findComposerSurface();
+    ) : null;
     const ancestors = [];
-    for (let candidate = composer?.parentElement; candidate && candidate !== shellMain;
+    for (let candidate = shellMain && composer?.parentElement;
+      candidate && candidate !== shellMain && candidate !== document.body
+        && candidate !== document.documentElement;
       candidate = candidate.parentElement) {
       ancestors.push(candidate);
       if (ancestors.length >= 12) break;
@@ -2479,19 +2923,6 @@
     }
     rail?.classList?.add?.(COMPOSER_RAIL_CLASS);
     dock?.classList?.add?.(COMPOSER_DOCK_CLASS);
-    const overflowHosts = new Set();
-    for (let candidate = dock?.parentElement; candidate && candidate !== shellMain;
-      candidate = candidate.parentElement) {
-      if (candidate.matches?.(".thread-scroll-container")) break;
-      let style = null;
-      try { style = getComputedStyle(candidate); } catch {}
-      if (candidate.classList?.contains?.(COMPOSER_OVERFLOW_HOST_CLASS)
-        || ["hidden", "clip"].includes(style?.overflowX)) overflowHosts.add(candidate);
-    }
-    for (const candidate of document.querySelectorAll?.(`.${COMPOSER_OVERFLOW_HOST_CLASS}`) || []) {
-      if (!overflowHosts.has(candidate)) candidate.classList?.remove?.(COMPOSER_OVERFLOW_HOST_CLASS);
-    }
-    for (const candidate of overflowHosts) candidate.classList?.add?.(COMPOSER_OVERFLOW_HOST_CLASS);
     const decorations = new Set();
     for (const candidate of [...(dock?.children || []), ...(rail?.querySelectorAll?.("*") || [])]) {
       if (candidate === rail || candidate === composer || candidate.contains?.(composer)
@@ -2520,10 +2951,15 @@
     const dockBox = dock?.getBoundingClientRect?.() || null;
     const railBox = rail.getBoundingClientRect?.() || dockBox;
     const widthBox = dockBox || railBox;
-    if (!railBox || !widthBox) return;
+    if (!railBox || !widthBox || shellBox.width <= 0 || shellBox.height <= 0
+      || widthBox.width <= 0 || railBox.width <= 0) {
+      clearOverflowHosts();
+      return;
+    }
     metrics.composerGeometryReads += 1;
     const safeLeft = shellBox.left + 15;
     let safeRight = shellBox.right - 15;
+    let hasBlockingPanel = false;
     for (const candidate of document.querySelectorAll?.(COMPOSER_BLOCKER_SELECTOR) || []) {
       if (candidate === rail || candidate === dock || candidate.contains?.(rail)
         || rail.contains?.(candidate) || dock?.contains?.(candidate)) continue;
@@ -2539,11 +2975,44 @@
         || blockerBox.bottom <= widthBox.top || blockerBox.top >= widthBox.bottom
         || style?.display === "none" || style?.visibility === "hidden" || style?.opacity === "0"
         || !composerBandIsBlocked(candidate, blockerBox, widthBox)) continue;
+      hasBlockingPanel = true;
       safeRight = Math.min(safeRight, blockerBox.left - 15);
     }
+    const nativeDockWidth = Math.max(0, widthBox.width);
+    // Codex 2.7 can render the conversation beside an editor or a tool pane.
+    // Expanding that narrow flex item to the full shell makes its container
+    // query alternate between the split and full layouts. Leave that route on
+    // native geometry unless a real complementary panel blocks the Composer.
+    if (!hasBlockingPanel && shellBox.width >= 1200
+      && nativeDockWidth < shellBox.width * 0.72) {
+      clearOverflowHosts();
+      rail.style?.removeProperty(COMPOSER_SAFE_WIDTH_STYLE);
+      rail.style?.removeProperty(COMPOSER_SHIFT_STYLE);
+      if (composerGeometryTimer) clearTimeout(composerGeometryTimer);
+      composerGeometryTimer = null;
+      composerGeometryAttempts = 0;
+      if (window[STATE_KEY]?.installToken === installToken) {
+        window[STATE_KEY].composerGeometryTimer = null;
+      }
+      return;
+    }
+    const overflowHosts = new Set();
+    for (let candidate = dock?.parentElement;
+      candidate && candidate !== shellMain && candidate !== document.body
+        && candidate !== document.documentElement;
+      candidate = candidate.parentElement) {
+      if (candidate.matches?.(".thread-scroll-container")) break;
+      let style = null;
+      try { style = getComputedStyle(candidate); } catch {}
+      if (candidate.classList?.contains?.(COMPOSER_OVERFLOW_HOST_CLASS)
+        || ["hidden", "clip"].includes(style?.overflowX)) overflowHosts.add(candidate);
+    }
+    for (const candidate of document.querySelectorAll?.(`.${COMPOSER_OVERFLOW_HOST_CLASS}`) || []) {
+      if (!overflowHosts.has(candidate)) candidate.classList?.remove?.(COMPOSER_OVERFLOW_HOST_CLASS);
+    }
+    for (const candidate of overflowHosts) candidate.classList?.add?.(COMPOSER_OVERFLOW_HOST_CLASS);
     safeRight = Math.max(safeLeft, safeRight);
     const availableWidth = Math.max(0, safeRight - safeLeft);
-    const nativeDockWidth = Math.max(0, widthBox.width);
     const readableCap = Math.max(nativeDockWidth, shellBox.height * 1.5);
     const composerWidth = Math.min(availableWidth, readableCap);
     const composerLeft = safeLeft + (availableWidth - composerWidth) / 2;
@@ -2558,12 +3027,12 @@
       setStyleProperty(rail, COMPOSER_SHIFT_STYLE, `${Math.round(alignedShift * 100) / 100}px`);
     }
     if (settle) {
-      composerGeometryAttempts = 48;
       if (!composerGeometryTimer) {
+        composerGeometryAttempts = 8;
         const settleGeometry = () => {
           composerGeometryTimer = null;
           if (window[STATE_KEY]?.installToken !== installToken || window[DISABLED_KEY]) return;
-          syncComposerGeometry(shellMain);
+          syncComposerGeometry(null);
           composerGeometryAttempts -= 1;
           if (composerGeometryAttempts > 0) {
             composerGeometryTimer = setTimeout(settleGeometry, 100);
@@ -2580,6 +3049,20 @@
     }
   };
 
+  const syncHomeUtilityMarkers = (home) => {
+    const homeUtilityBars = new Set(home
+      ? [...home.querySelectorAll(
+        '[data-composer-home-utility-bar-position], '
+        + '[data-composer-placement="home"][data-composer-rail-placement="above"], '
+        + '[class*="_homeUtilityBar_"], [class*="_ComposerHomeUtilityBar_"]',
+      )].filter(elementIsVisible)
+      : []);
+    for (const candidate of document.querySelectorAll(".dream-skin-home-utility")) {
+      if (!homeUtilityBars.has(candidate)) candidate.classList.remove("dream-skin-home-utility");
+    }
+    for (const candidate of homeUtilityBars) candidate.classList.add("dream-skin-home-utility");
+  };
+
   const syncRouteState = (shell, { layout = false } = {}) => {
     metrics.routePasses += 1;
     const root = document.documentElement;
@@ -2588,6 +3071,7 @@
     syncSettingsContrastMarkers(root);
     const activeComposer = findComposerSurface({ mark: true });
     const shellMain = findCodexMainSurface({ mark: true });
+    syncTopFadeMarkers();
     const home = findHomeRoute();
     for (const candidate of document.querySelectorAll('[role="main"].dream-skin-home')) {
       if (candidate !== home) candidate.classList.remove("dream-skin-home");
@@ -2643,15 +3127,7 @@
       setAttribute(candidate, CARD_INDEX_ATTR, String(suggestionIndex));
     }
     applyFixedCardIcons();
-    const homeUtilityBars = new Set(home
-      ? [...home.querySelectorAll(
-        '[data-composer-home-utility-bar-position], [class*="_homeUtilityBar_"]',
-      )].filter(elementIsVisible)
-      : []);
-    for (const candidate of document.querySelectorAll(".dream-skin-home-utility")) {
-      if (!homeUtilityBars.has(candidate)) candidate.classList.remove("dream-skin-home-utility");
-    }
-    for (const candidate of homeUtilityBars) candidate.classList.add("dream-skin-home-utility");
+    syncHomeUtilityMarkers(home);
     syncUserMessageSurfaceMarkers();
 
     const frontendContract = syncFrontendContract(
@@ -2659,6 +3135,9 @@
       { main: shellMain, composer: activeComposer, home },
     );
 
+    if (!shellMain || root.classList?.contains?.(SETTINGS_ACTIVE_CLASS)) {
+      syncComposerGeometry(null);
+    }
     if (frontendContract.safety?.active || !shellMain || !document.body) return;
     shellMain.classList.toggle("dream-skin-home-shell", Boolean(home));
     shellMain.classList.toggle(TASK_ROUTE_CLASS, !home
@@ -2832,6 +3311,7 @@
     metrics.ensureCalls += 1;
     const shell = rootPass ? applyRootState(root) : null;
     if (route) syncRouteState(shell, { layout });
+    syncMcpWebviews();
   };
 
   const cleanup = () => {
@@ -2845,8 +3325,12 @@
     document.documentElement?.removeAttribute(FRONTEND_COMPATIBILITY_ATTR);
     document.documentElement?.removeAttribute(FRONTEND_CONTRACT_ATTR);
     document.documentElement?.removeAttribute(FRONTEND_SAFE_MODE_ATTR);
+    document.documentElement?.removeAttribute("data-dream-early-skin");
     for (const name of ART_ATTRS) document.documentElement?.removeAttribute(name);
     document.documentElement?.style.removeProperty("--dream-skin-art");
+    // Remove the temporary white-surface workaround used during 2.7 rollout;
+    // the scoped renderer markers now own that background state.
+    document.getElementById("tmp-white-fix")?.remove();
     for (const name of THEME_VARIABLES) document.documentElement?.style.removeProperty(name);
     for (const name of THEME_ASSET_VARIABLES) document.documentElement?.style.removeProperty(name);
     materializedAssetKeys.clear();
@@ -2856,7 +3340,7 @@
     }
     document.querySelectorAll(".dream-skin-home").forEach((node) => node.classList.remove("dream-skin-home"));
     document.querySelectorAll(".dream-skin-home-shell").forEach((node) => node.classList.remove("dream-skin-home-shell"));
-    document.querySelectorAll?.(`main.${MAIN_SURFACE_CLASS}, main[${MAIN_SURFACE_ATTR}]`)
+    document.querySelectorAll?.(MARKED_MAIN_SURFACE_SELECTOR)
       .forEach((node) => {
         node.classList?.remove?.(MAIN_SURFACE_CLASS);
         node.removeAttribute?.(MAIN_SURFACE_ATTR);
@@ -2871,6 +3355,8 @@
       node.classList.remove(COMPOSER_SURFACE_CLASS));
     document.querySelectorAll(`.${SETTINGS_LIGHT_SURFACE_CLASS}`).forEach((node) =>
       node.classList.remove(SETTINGS_LIGHT_SURFACE_CLASS));
+    document.querySelectorAll(`.${SETTINGS_CONTENT_CLASS}`).forEach((node) =>
+      node.classList.remove(SETTINGS_CONTENT_CLASS));
     for (const className of [
       TASK_ROUTE_CLASS,
       ...LIGHT_SURFACE_MARKER_CLASSES,
@@ -2879,6 +3365,7 @@
       COMPOSER_RAIL_CLASS,
       COMPOSER_DECORATION_CLASS,
       COMPOSER_OVERFLOW_HOST_CLASS,
+      TOP_FADE_MARKER_CLASS,
       USER_MESSAGE_SURFACE_CLASS,
     ]) {
       document.querySelectorAll(`.${className}`).forEach((node) => node.classList.remove(className));
@@ -2902,7 +3389,19 @@
       node.removeAttribute(CARD_INDEX_ATTR);
       clearCardIcon(node);
     });
+    document.querySelectorAll?.(MCP_WEBVIEW_SELECTOR).forEach((webview) => {
+      const listener = mcpWebviewListeners.get(webview);
+      if (listener) {
+        try { webview.removeEventListener?.("dom-ready", listener); } catch {}
+      }
+      try {
+        webview.style?.removeProperty?.("background");
+        webview.style?.removeProperty?.("background-color");
+        webview.style?.removeProperty?.("color-scheme");
+      } catch {}
+    });
     document.getElementById(STYLE_ID)?.remove();
+    document.getElementById(EARLY_STYLE_ID)?.remove();
     document.getElementById(HUD_ID)?.remove();
     document.getElementById(CHROME_ID)?.remove();
     state?.music?.cleanup?.();
@@ -2977,8 +3476,10 @@
     '[data-composer-surface-variant]',
     '[data-composer-utility-bar-variant]',
     '[data-composer-layout]',
+    '[class*="_homeUtilityBar_"], [class*="_ComposerHomeUtilityBar_"]',
+    '[data-composer-placement="home"][data-composer-rail-placement="above"]',
     SETTINGS_PANEL_SELECTOR,
-    '[class*="_homeUtilityBar_"]',
+    '[data-user-message-bubble="true"]',
     `.${HOME_EMPTY_SLOT_CLASS}`,
     `.${LIGHT_SURFACE_INSET_CLASS}`,
     `.${COMPOSER_SURFACE_CLASS}`,
@@ -2991,6 +3492,8 @@
     "data-composer-utility-bar-variant",
     "data-composer-layout",
     "data-settings-panel-slug",
+    "data-user-message-bubble",
+    "data-app-shell-workspace-layout",
   ]);
   const nodeTouchesRouteSurface = (node) => {
     if (!node) return false;
@@ -3013,18 +3516,32 @@
         || node.querySelector?.(TASK_LIGHT_SURFACE_SELECTOR)
         || node.matches?.(FLOATING_LIGHT_SURFACE_SELECTOR)
         || node.querySelector?.(FLOATING_LIGHT_SURFACE_SELECTOR)
+        || node.matches?.(FLOATING_LIGHT_SURFACE_COMPAT_SELECTOR)
+        || node.querySelector?.(FLOATING_LIGHT_SURFACE_COMPAT_SELECTOR)
+        || node.matches?.('[data-user-message-bubble="true"]')
+        || node.querySelector?.('[data-user-message-bubble="true"]')
         || node.matches?.(HOME_BANNER_SEMANTIC_SELECTOR)
         || node.querySelector?.(HOME_BANNER_SEMANTIC_SELECTOR));
     } catch {
       return false;
     }
   };
+  // React can replace className without changing the stable composer data
+  // attributes. Repair only removed ownership markers, ignoring our own adds
+  // and unrelated native class updates so the observer cannot feed itself.
+  const mutationLostComposerOwnership = (mutation) => {
+    if (mutation.type !== "attributes" || mutation.attributeName !== "class") return false;
+    const previousClasses = String(mutation.oldValue || "").split(/\s+/);
+    return [COMPOSER_SURFACE_CLASS, "dream-skin-home-utility"].some((className) =>
+      previousClasses.includes(className) && !mutation.target?.classList?.contains?.(className));
+  };
   const mutationNeedsRouteSync = (mutations) => mutations.some((mutation) => {
     if (mutation.type === "characterData") {
       return Boolean(mutation.target?.parentElement?.closest?.(`.${HOME_EMPTY_SLOT_CLASS}`));
     }
     if (mutation.type === "attributes") {
-      return ROUTE_MUTATION_ATTRIBUTES.has(mutation.attributeName);
+      return ROUTE_MUTATION_ATTRIBUTES.has(mutation.attributeName)
+        || mutationLostComposerOwnership(mutation);
     }
     if (mutation.type !== "childList") return false;
     if (nodeTouchesRouteSurface(mutation.target)) return true;
@@ -3032,6 +3549,8 @@
       .some((node) => nodeTouchesRouteSurface(node) || insertedNodeTouchesLightSurface(node));
   });
   const mutationTouchesComposerBoundary = (mutations) => mutations.some((mutation) => {
+    if (mutation.type === "attributes"
+      && mutation.attributeName === "data-app-shell-workspace-layout") return true;
     const candidates = mutation.type === "childList"
       ? [mutation.target, ...(mutation.addedNodes || []), ...(mutation.removedNodes || [])]
       : [mutation.target];
@@ -3041,7 +3560,7 @@
         if (node.matches?.(COMPOSER_BLOCKER_SELECTOR)
           || node.closest?.(COMPOSER_BLOCKER_SELECTOR)
           || node.querySelector?.(COMPOSER_BLOCKER_SELECTOR)) return true;
-        const shellMain = document.querySelector?.(`main.${MAIN_SURFACE_CLASS}`)
+        const shellMain = document.querySelector?.(MARKED_MAIN_SURFACE_SELECTOR)
           || findCodexMainSurface();
         const shellBox = shellMain?.getBoundingClientRect?.();
         if (!shellBox) return false;
@@ -3063,11 +3582,23 @@
   const syncImmediateSurfaceOwnership = () => {
     if (window[DISABLED_KEY] || window[STATE_KEY]?.frontendSafety?.active) return false;
     const root = document.documentElement;
-    const shellMain = document.querySelector?.(`main.${MAIN_SURFACE_CLASS}`)
-      || findCodexMainSurface();
-    if (!root || !shellMain) return false;
+    if (!root) return false;
+    const wasSettings = root.classList?.contains?.(SETTINGS_ACTIVE_CLASS);
     syncSettingsContrastMarkers(root);
+    const shellMain = findCodexMainSurface({ mark: true });
+    if (!shellMain) {
+      syncComposerGeometry(null);
+      return root.classList?.contains?.(SETTINGS_ACTIVE_CLASS) || false;
+    }
+    // A new route needs its layout and backdrop before the first paint, not
+    // in the next RAF after Chromium has already painted the native surface.
+    if (wasSettings || shellMain !== observedShellMain) {
+      syncRouteState(null, { layout: true });
+      return true;
+    }
+    findComposerSurface({ mark: true });
     const home = findHomeRoute();
+    syncHomeUtilityMarkers(home);
     shellMain.classList?.toggle?.("dream-skin-home-shell", Boolean(home));
     const taskRoute = !home && !root.classList?.contains?.(SETTINGS_ACTIVE_CLASS);
     shellMain.classList?.toggle?.(TASK_ROUTE_CLASS, taskRoute);
@@ -3259,7 +3790,8 @@
     characterData: true,
     subtree: true,
     attributes: true,
-    attributeFilter: [...ROUTE_MUTATION_ATTRIBUTES],
+    attributeOldValue: true,
+    attributeFilter: [...ROUTE_MUTATION_ATTRIBUTES, "class"],
   });
   rootObserver.observe(document.documentElement, {
     attributes: true,

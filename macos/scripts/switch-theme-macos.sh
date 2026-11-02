@@ -92,7 +92,7 @@ if [ "$APPLY_NOW" != "true" ]; then
   exit 0
 fi
 
-PORT=9341
+PORT="${CODEX_DREAM_SKIN_PORT:-9341}"
 if [ -f "$STATE_PATH" ]; then
   saved="$(state_field port 2>/dev/null || true)"
   [ -n "${saved:-}" ] && PORT="$saved"

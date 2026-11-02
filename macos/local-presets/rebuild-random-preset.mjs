@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import "./apply-map-backgrounds.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const randomRoot = path.join(root, "preset-terraria-random");

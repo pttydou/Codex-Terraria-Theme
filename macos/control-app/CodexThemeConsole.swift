@@ -27,6 +27,18 @@ private struct ActiveTheme: Decodable {
   let variant: String
 }
 
+private struct InspectionResult: Decodable {
+  let verdict: String
+  let score: Int
+  let reportPath: String
+}
+
+private struct OverlayInspectionResult: Decodable {
+  let completed: Int
+  let total: Int
+  let reportPath: String
+}
+
 private struct Environment: Decodable {
   let variant: String
   let name: String
@@ -484,6 +496,18 @@ private final class AppDelegate: NSObject, NSApplicationDelegate, NSSearchFieldD
     content.addSubview(homeBody)
     homeBody.addSubview(intro)
 
+    let inspect = makeActionButton("皮肤检验", symbol: "checkmark.shield")
+    inspect.target = self
+    inspect.action = #selector(inspectSkin)
+    inspect.translatesAutoresizingMaskIntoConstraints = false
+    homeBody.addSubview(inspect)
+    let walk = makeActionButton("交互巡检", symbol: "cursorarrow.click")
+    walk.target = self
+    walk.action = #selector(inspectOverlays)
+    walk.toolTip = "从项目首页依次打开并关闭菜单和创建表单，不提交更改"
+    walk.translatesAutoresizingMaskIntoConstraints = false
+    homeBody.addSubview(walk)
+
     let environment = DashboardCard(
       title: "选择环境",
       subtitle: "44 套环境 · 随机主题 · 恢复原版",
@@ -599,7 +623,11 @@ private final class AppDelegate: NSObject, NSApplicationDelegate, NSSearchFieldD
       homeBody.bottomAnchor.constraint(lessThanOrEqualTo: content.bottomAnchor, constant: -8),
       intro.topAnchor.constraint(equalTo: homeBody.topAnchor),
       intro.leadingAnchor.constraint(equalTo: homeBody.leadingAnchor, constant: 2),
-      intro.trailingAnchor.constraint(equalTo: homeBody.trailingAnchor, constant: -2),
+      intro.trailingAnchor.constraint(lessThanOrEqualTo: inspect.leadingAnchor, constant: -12),
+      inspect.trailingAnchor.constraint(equalTo: walk.leadingAnchor, constant: -8),
+      inspect.centerYAnchor.constraint(equalTo: intro.centerYAnchor),
+      walk.trailingAnchor.constraint(equalTo: homeBody.trailingAnchor),
+      walk.centerYAnchor.constraint(equalTo: intro.centerYAnchor),
       cards.topAnchor.constraint(equalTo: intro.bottomAnchor, constant: 9),
       cards.leadingAnchor.constraint(equalTo: homeBody.leadingAnchor),
       cards.trailingAnchor.constraint(equalTo: homeBody.trailingAnchor),
@@ -1123,6 +1151,54 @@ private final class AppDelegate: NSObject, NSApplicationDelegate, NSSearchFieldD
       randomIncluded.insert(variant)
     } else {
       randomIncluded.remove(variant)
+    }
+  }
+
+  @objc private func inspectSkin() {
+    guard !process.isRunning else { return }
+    setBusy(true, message: "正在检验当前 Codex 页面，请保持页面不动…")
+    process.run(arguments: ["inspect"]) { [weak self] result in
+      guard let self else { return }
+      switch result {
+      case .success(let data):
+        do {
+          let report = try self.decoder.decode(InspectionResult.self, from: data)
+          self.setBusy(false, message: "\(report.verdict) · 自动抽检 \(report.score)/100，完整验收见报告")
+          if !NSWorkspace.shared.open(URL(fileURLWithPath: report.reportPath)) {
+            self.showError("报告已保存，请打开：\(report.reportPath)")
+          }
+        } catch {
+          self.setBusy(false, message: "检验报告读取失败")
+          self.showError(error.localizedDescription)
+        }
+      case .failure(let error):
+        self.setBusy(false, message: "检验工具未完成")
+        self.showError(error.localizedDescription)
+      }
+    }
+  }
+
+  @objc private func inspectOverlays() {
+    guard !process.isRunning else { return }
+    setBusy(true, message: "正在依次打开菜单和表单，请暂时不要操作 Codex…")
+    process.run(arguments: ["inspect-overlays"]) { [weak self] result in
+      guard let self else { return }
+      switch result {
+      case .success(let data):
+        do {
+          let report = try self.decoder.decode(OverlayInspectionResult.self, from: data)
+          self.setBusy(false, message: "巡检完成 · \(report.completed)/\(report.total) 入口未发现浅色问题；详情见报告")
+          if !NSWorkspace.shared.open(URL(fileURLWithPath: report.reportPath)) {
+            self.showError("报告已保存，请打开：\(report.reportPath)")
+          }
+        } catch {
+          self.setBusy(false, message: "巡检报告读取失败")
+          self.showError(error.localizedDescription)
+        }
+      case .failure(let error):
+        self.setBusy(false, message: "交互巡检未完成")
+        self.showError(error.localizedDescription)
+      }
     }
   }
 

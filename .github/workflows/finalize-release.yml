@@ -30,7 +30,7 @@ jobs:
         shell: bash
         run: |
           node release/validate-release.mjs --tag '${{ inputs.tag }}'
-          printf 'version=%s\n' "$(tr -d '[:space:]' < windows/TRSkin/core/VERSION)" >> "$GITHUB_OUTPUT"
+          printf 'version=%s\n' "$(tr -d '[:space:]' < macos/VERSION)" >> "$GITHUB_OUTPUT"
           printf 'commit=%s\n' "$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
       - name: Read draft Release asset digests by ID
         env:
@@ -65,6 +65,6 @@ jobs:
             --repo "$GITHUB_REPOSITORY" --clobber
           gh release edit '${{ inputs.tag }}' \
             --repo "$GITHUB_REPOSITORY" \
-            --title "TRSkin ${{ steps.identity.outputs.version }}" \
+            --title "TRSkin ${{ steps.identity.outputs.version }} for macOS" \
             --notes-file dist/RELEASE-NOTES.md \
             --draft=false

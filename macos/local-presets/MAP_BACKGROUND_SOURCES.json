@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-10-21",
+  "sourcePage": "https://terraria.wiki.gg/wiki/Minimap#Full-screen_map_backgrounds",
+  "rendering": "cover, no-repeat, pixelated",
+  "environments": [
+    {
+      "variant": "space",
+      "name": "Terraria · 太空",
+      "file": "map-backgrounds/Space.png",
+      "title": "Map Background Space.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Space.png?68bb09",
+      "sha256": "f90d3885545c54668df67fac01b449e6c72727df742deeb700d3d87ecc470b83",
+      "previousSha256": "61a3223de47ff8807d97ed52e6ed621bfb6d2f4c0b73b8ebc79272eb58bd7929",
+      "note": null
+    },
+    {
+      "variant": "underground-desert",
+      "name": "Terraria · 地下沙漠",
+      "file": "map-backgrounds/Underground_Desert.png",
+      "title": "Map Background Underground Desert.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Underground_Desert.png?dd2dd0",
+      "sha256": "ebef11ee1599aa46b9b4d7e5651d3c589a465f773cda2b4b410e76b607b52f35",
+      "previousSha256": "011786630d0264b70cd37aaabfd87e56c8f838c772e31fda41367f1d44593192",
+      "note": null
+    },
+    {
+      "variant": "dungeon",
+      "name": "Terraria · 地牢",
+      "file": "map-backgrounds/Dungeon.png",
+      "title": "Map Background Dungeon.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Dungeon.png?14ce99",
+      "sha256": "508bf19918445e715640f623d297413ee0c234d5d504394416d07160e82f8b91",
+      "previousSha256": "6a0a4a27c784c543fc30b3b9578ab37428d8f95b300cfd84f387c60fb355c586",
+      "note": null
+    },
+    {
+      "variant": "jungle-temple",
+      "name": "Terraria · 丛林神庙",
+      "file": "map-backgrounds/Lihzahrd_Temple.png",
+      "title": "Map Background Lihzahrd Temple.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Lihzahrd_Temple.png?26c7a2",
+      "sha256": "128041ff91dc344695414fe384c42ea1fbf7c671ed8eeb8bdec5786ba6cd3c28",
+      "previousSha256": "7d9fa39aa97b1ae3fa832e3f7b6ad07466e5461dc6c3323814da22642aacb7c6",
+      "note": null
+    },
+    {
+      "variant": "martian-invasion",
+      "name": "Terraria · 火星人入侵",
+      "file": "map-backgrounds/Space.png",
+      "title": "Map Background Space.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Space.png?68bb09",
+      "sha256": "f90d3885545c54668df67fac01b449e6c72727df742deeb700d3d87ecc470b83",
+      "previousSha256": "61a3223de47ff8807d97ed52e6ed621bfb6d2f4c0b73b8ebc79272eb58bd7929",
+      "note": "No separate Martian map in verified gallery; reuse Space."
+    },
+    {
+      "variant": "aether",
+      "name": "Terraria · 以太",
+      "file": "map-backgrounds/Cavern.png",
+      "title": "Map Background Cavern.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Cavern.png?e4f372",
+      "sha256": "dfa321edf13ef2fbfc219254ef42902c575df3ab96fe4aee20c04ae5af8d6f18",
+      "previousSha256": "9220d75e0ac20a8b8d0f73f95501e03131ab181f33e41b866e914ac6c0120289",
+      "note": "No separate Aether map in verified gallery; reuse Cavern with existing Aether palette."
+    },
+    {
+      "variant": "lunar-solar",
+      "name": "Terraria · 日耀柱",
+      "file": "map-backgrounds/Solar_Pillar.png",
+      "title": "Map Background Solar Pillar.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Solar_Pillar.png?d1917d",
+      "sha256": "156b87b8e6996a6f441eee566925f9c46da40c6da674e26b1b126d5589d87340",
+      "previousSha256": "61a3223de47ff8807d97ed52e6ed621bfb6d2f4c0b73b8ebc79272eb58bd7929",
+      "note": "Gallery labels pillar maps as not shown in-game."
+    },
+    {
+      "variant": "lunar-vortex",
+      "name": "Terraria · 星旋柱",
+      "file": "map-backgrounds/Vortex_Pillar.png",
+      "title": "Map Background Vortex Pillar.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Vortex_Pillar.png?5e8377",
+      "sha256": "1d9b60a38df4c7c72e1afb01271e86019f4554fbbfbeb6704d1032ddcde09320",
+      "previousSha256": "61a3223de47ff8807d97ed52e6ed621bfb6d2f4c0b73b8ebc79272eb58bd7929",
+      "note": "Gallery labels pillar maps as not shown in-game."
+    },
+    {
+      "variant": "lunar-nebula",
+      "name": "Terraria · 星云柱",
+      "file": "map-backgrounds/Nebula_Pillar.png",
+      "title": "Map Background Nebula Pillar.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Nebula_Pillar.png?aae47b",
+      "sha256": "0bdc112074476951adb1a5379e6b5816e2816f868ae4960a4c0923eaa4fdd86a",
+      "previousSha256": "61a3223de47ff8807d97ed52e6ed621bfb6d2f4c0b73b8ebc79272eb58bd7929",
+      "note": "Gallery labels pillar maps as not shown in-game."
+    },
+    {
+      "variant": "lunar-stardust",
+      "name": "Terraria · 星尘柱",
+      "file": "map-backgrounds/Stardust_Pillar.png",
+      "title": "Map Background Stardust Pillar.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Stardust_Pillar.png?1a3d90",
+      "sha256": "cd9a5aa6d2304cd28e6f58f603b539fff603159f981be4a873c1e37205516ee9",
+      "previousSha256": "61a3223de47ff8807d97ed52e6ed621bfb6d2f4c0b73b8ebc79272eb58bd7929",
+      "note": "Gallery labels pillar maps as not shown in-game."
+    },
+    {
+      "variant": "meteorite",
+      "name": "Terraria · 陨石",
+      "file": "map-backgrounds/Forest.png",
+      "title": "Map Background Forest.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Forest.png?def011",
+      "sha256": "fb23296c9f72b253f6cc0aba96df61515f74aa4cc1d7d6212ec437b3288a6039",
+      "previousSha256": "a0f5653a0dee6adf67aa764c29b903d47126619831d7fabf538e86b2174260ee",
+      "note": "No separate Meteorite map in verified gallery; reuse surface Forest with existing meteor palette."
+    },
+    {
+      "variant": "spider-nest",
+      "name": "Terraria · 蜘蛛洞",
+      "file": "map-backgrounds/Spider_Nest.png",
+      "title": "Map Background Spider Nest.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Spider_Nest.png?23b3c0",
+      "sha256": "5ae86a311ca3a4cc9eac7f24b1b5997161038f912e214a4f57ffc99530da3bd0",
+      "previousSha256": "f3ff730665cb04bdd48dafcb230a2927cbf8b3153ccef578bb48030d25df5916",
+      "note": null
+    },
+    {
+      "variant": "bee-hive",
+      "name": "Terraria · 蜂巢",
+      "file": "map-backgrounds/Hive.png",
+      "title": "Map Background Hive.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Hive.png?f98838",
+      "sha256": "ae1478551affbbb88106dea12fbfd5634e17be4405d8b412a992347490ac14e9",
+      "previousSha256": "1b97c58bfc322e2bf14ed31570db8746344ce40c060db4c50b2fa6105a2d99ae",
+      "note": null
+    },
+    {
+      "variant": "granite-cave",
+      "name": "Terraria · 花岗岩洞",
+      "file": "map-backgrounds/Granite_Cave.png",
+      "title": "Map Background Granite Cave.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Granite_Cave.png?914dee",
+      "sha256": "1c281d94fec9b957229db1ef48dad839ff8810edb5b94efa8e3f7cc0e0e4c4b4",
+      "previousSha256": "27a17af4dc46d4741ccf45868f196e28cf560d4680276f4dd7a3b1c93159efc5",
+      "note": null
+    },
+    {
+      "variant": "marble-cave",
+      "name": "Terraria · 大理石洞",
+      "file": "map-backgrounds/Marble_Cave.png",
+      "title": "Map Background Marble Cave.png",
+      "url": "https://terraria.wiki.gg/images/Map_Background_Marble_Cave.png?fae7c7",
+      "sha256": "528158ff485d1cb6c2b23893d53e5be10f90356f4cb1546b46cecde8ac3dffaf",
+      "previousSha256": "a4a8dbf24b334f0f33ce430e9826155556625547373be308acb868bb11c59a2e",
+      "note": null
+    }
+  ]
+}

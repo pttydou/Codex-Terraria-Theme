@@ -1,0 +1,31 @@
+import assert from 'node:assert/strict';
+import { assessPageSamples, SETTINGS_PAGES, hasBlockingPopup } from '../scripts/inspect-pages.mjs';
+const samples = (route='home', slug=null) => [0,500,1200,2500].map(elapsedMs=>({elapsedMs,
+  page:{route,settingsPage:slug,homeLayout:route==='home'?{status:'pass'}:null,insetSurfaces:[]},
+  verify:{pass:true,documentOverflow:{x:false,y:false}},text:[]}));
+assert.equal(assessPageSamples(samples()).status,'pass');
+assert.equal(assessPageSamples(samples('settings','pets'),'pets').status,'pass');
+assert.equal(assessPageSamples(samples('conversation')).status,'fail');
+assert.equal(assessPageSamples(samples('settings','pets'),'usage').status,'fail');
+const changed=samples();changed[2].page.route='conversation';
+assert.equal(assessPageSamples(changed).status,'fail');
+const squeezed=samples();squeezed[1].page.homeLayout.status='warn';
+assert.equal(assessPageSamples(squeezed).status,'fail');
+assert.equal(assessPageSamples(samples().slice(0,3)).status,'fail');
+const fast=samples();fast[3].elapsedMs=2000;
+assert.equal(assessPageSamples(fast).status,'fail');
+const invalid=samples();invalid[0].verify.pass=false;
+assert.equal(assessPageSamples(invalid).status,'fail');
+const unknown=samples();unknown[0].text=[{status:'unknown'}];
+assert.equal(assessPageSamples(unknown).status,'review');
+const low=samples();low[0].text=[{status:'warn'}];
+assert.equal(assessPageSamples(low).status,'warn');
+const seam=samples();seam[0].page.sidebarEdge={status:'warn',overhang:20};
+assert.equal(assessPageSamples(seam).status,'warn');
+const footer=samples();footer[0].page.footerDecorations={status:'warn'};
+assert.equal(assessPageSamples(footer).status,'warn');
+assert.equal(SETTINGS_PAGES.includes('profile'),false,'external profile must not be followed');
+assert.equal(new Set(SETTINGS_PAGES).size,SETTINGS_PAGES.length);
+assert.equal(hasBlockingPopup({popovers:[{kind:'toolbar'}]}),false);
+assert.equal(hasBlockingPopup({popovers:[{kind:'toolbar'},{kind:'dialog'}]}),true);
+console.log('PASS: 17 page inspection assertions; route changes, missing/short evidence, layout, sidebar/footer seams, verification and contrast cannot pass silently.');

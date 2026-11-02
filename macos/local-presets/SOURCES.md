@@ -24,10 +24,32 @@ Source pages:
 
 `BACKGROUND_SOURCES.json` records the exact official Wiki page, source URL,
 destination environment, and local asset key for 81 unique background images
-used by 29 of the 44 themes. Themes without an official independent background
-variant retain their existing accurate fixed image. Background selection does
+used by 29 of the 44 themes. The remaining 15 formerly used placed-wall or
+wallpaper previews; since 2.7.31 they use the full-screen map artwork documented
+in `MAP_BACKGROUND_SOURCES.json`. Background selection does
 not preload the pool: fixed mode chooses once per environment entry, while
 rotate mode replaces only the current CSS asset at the configured interval.
+
+### Full-screen map replacements (2.7.31)
+
+`MAP_BACKGROUND_SOURCES.json` is the current source of truth for the 15 map
+replacements, including exact Wiki URLs, content hashes, old-image hashes and
+fallback notes. `map-backgrounds/` preserves the downloaded originals. Earlier
+wall references below and in the historical generated manifests describe the
+previous assets, not the current background choice.
+
+The source gallery is <https://terraria.wiki.gg/wiki/Minimap#Full-screen_map_backgrounds>.
+The four pillar images are listed by the Wiki as not displayed in-game; they
+are still distinct map resources and replace the shared space wallpaper here.
+No separate Aether, Meteorite or Martian map entry was found in that gallery:
+these reuse Cavern, Forest and Space respectively, retaining the theme palette.
+
+After regenerating any fixed presets, run `node local-presets/rebuild-random-preset.mjs`
+from the project root. It first runs `apply-map-backgrounds.mjs`, verifies all
+source hashes and restores the 15 fixed images, then remaps/deduplicates random
+assets. Do not run an old fixed-preset generator alone and publish its wall
+previews. `npm test` checks every fixed/random map reference against the source
+hashes; `tests/map-backgrounds-browser.test.mjs` checks actual CSS rendering.
 
 ## Generated companion and gem-torch source record
 
