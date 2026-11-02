@@ -37,12 +37,29 @@ try {
     }
   }
   console.log('PASS: 18 full/split/left/right/wide/narrow cases keep composer within its pane with 24px margins; no layout border.');
-  const stable=await page.evaluate(GEOMETRY_EXPRESSION);
-  assert.equal(assessGeometry(stable).status,'pass');
+  // Hosted macOS browsers can pause rAF briefly. Retry only incomplete evidence,
+  // never a layout warning or context change; the production probe stays strict.
+  async function observeGeometry(expected) {
+    let observation, result;
+    for (let attempt=1; attempt<=3; attempt++) {
+      await page.bringToFront();
+      await page.waitForTimeout(200);
+      observation=await page.evaluate(GEOMETRY_EXPRESSION);
+      result=assessGeometry(observation);
+      const frames=observation.frames || [];
+      const gaps=frames.slice(1).map((f,i)=>f.elapsedMs-frames[i].elapsedMs);
+      const evidence={attempt,expected,...result,frames:frames.length,
+        durationMs:(frames.at(-1)?.elapsedMs || 0)-(frames[0]?.elapsedMs || 0),
+        maxGapMs:Math.max(0,...gaps),changedContext:observation.changedContext};
+      console.log('Geometry evidence:',JSON.stringify(evidence));
+      if (result.status!=='unknown' || observation.changedContext) break;
+    }
+    assert.equal(result.status,expected,JSON.stringify({result,observation}));
+  }
+  await observeGeometry('pass');
   await page.evaluate(()=>{let on=false;window.fixtureTimer=setInterval(()=>{on=!on;document.querySelector('.dream-skin-composer-surface').style.width=on?'736px':'1866px'},50)});
-  const oscillation=await page.evaluate(GEOMETRY_EXPRESSION);
-  await page.evaluate(()=>clearInterval(window.fixtureTimer));
-  assert.equal(assessGeometry(oscillation).status,'warn');
+  try { await observeGeometry('warn'); }
+  finally { await page.evaluate(()=>clearInterval(window.fixtureTimer)); }
   console.log('PASS: real animation-frame probe passes a stable layout and detects 736/1866px oscillation.');
   await page.evaluate(()=>{document.querySelector('#native').innerHTML='<header>Titlebar</header><div id="home" role="main" class="trskin-main-surface dream-skin-home-shell"></div>';});
   const home=await page.evaluate(()=>({gutter:getComputedStyle(document.querySelector('#home')).scrollbarGutter,inner:getComputedStyle(document.querySelector('#home')).backgroundImage,outer:getComputedStyle(document.querySelector('#native')).backgroundImage}));
